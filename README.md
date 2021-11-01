@@ -50,10 +50,10 @@ Installation Suggestions:
 
              Name                              Website
     ---------------------------  ---------------------------------------
-    Nico Rizzuto (Creator)       http://www.rizzuto.it
+    Nico Rizzuto (Creator)       https://www.rizzuto.it
     Bruce Koss
-    John Kalinich                http://www.cbttape.org/
-    Lionel B. Dyck               http://www.lbdsoftware.com/
-                                 http://github.com/lbdyck
-                                 http://www.cbttape.org/
+    John Kalinich                https://www.cbttape.org/
+    Lionel B. Dyck               https://www.lbdsoftware.com/
+                                 https://github.com/lbdyck
+                                 https://www.cbttape.org/
     Bill Smith
