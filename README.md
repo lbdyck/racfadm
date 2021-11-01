@@ -47,12 +47,13 @@ Installation Suggestions:
      ISPF Panel          Panel option
 
 ## Contributors
+
              Name                              Website
-  ---------------------------  ---------------------------------------
-  Nico Rizzuto (Creator)       http://www.rizzuto.it
-  Bruce Koss
-  John Kalinich                http://www.cbttape.org/
-  Lionel B. Dyck               http://www.lbdsoftware.com/
-                               http://github.com/lbdyck
-                               http://www.cbttape.org/
-  Bill Smith
+    ---------------------------  ---------------------------------------
+    Nico Rizzuto (Creator)       http://www.rizzuto.it
+    Bruce Koss
+    John Kalinich                http://www.cbttape.org/
+    Lionel B. Dyck               http://www.lbdsoftware.com/
+                                 http://github.com/lbdyck
+                                 http://www.cbttape.org/
+    Bill Smith
