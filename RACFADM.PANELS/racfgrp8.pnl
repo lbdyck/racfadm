@@ -1,0 +1,74 @@
+)ATTR DEFAULT(%+_)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRGROU)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRSUPG)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLROWNE)
+   @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
+   $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   ¬  AREA(DYNAMIC) EXTEND(OFF)
+   ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
+   Ý  TYPE(DATAOUT) INTENS(HIGH)
+   ~  TYPE(PS)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Group Profiles+)\-\
+%Command ===>_ZCMD                                              +Scroll==>_SAMT+
+%
++FILTER: $RFILTER
++SELECT: ¬SELCMDS                                                              ¬
+%
+%S  ~Group    ~SupGrp   ~Owner    ~Description
+%-------------------------------------------------------------------------------
+)MODEL CLEAR(OPTA)
+_Z+ Z        Z        Z        Z                                         @z
+)INIT
+  .ZVARS   = '(OPTA GROUP SUPGRP OWNER DATA SCIND)'
+  .HELP    = #RACGRP8
+  &ZCMD    = ' '
+  IF (&SAMT = ' ')
+      &SAMT = &ZSCED
+)PROC
+  &SROW = &Z
+  IF (&ZCMD = &Z)
+     IF (&ZTDSELS = 0)
+        &SROW = .CSRROW
+        IF (&SROW ^= 0)
+           &OPTA = S
+
+  IF (&SETMADMN = YES)
+     IF (&SETMIRRX = YES)
+        VER (&OPTA,LIST,S,L,C,A,R,P,X)
+  ELSE
+     IF (&SETMIRRX = YES)
+        VER (&OPTA,LIST,S,L,P)
+     ELSE
+        VER (&OPTA,LIST,S,L)
+)PNTS
+  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT GROUP')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT SUPGRP')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT OWNER')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT DESC')
+)Field
+  FIELD(DATA) IND(SCIND,'<>') LEN(255)
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The 'SELECT' field is a dynamic field, allowing the REXX       */
+/*     program to display only the commands accessable/useable        */
+/*     depending on the below users Settings (menu option 0):         */
+/*       Administrator ..... Y or N                                   */
+/*       Admin RACF API .... Y or N                                   */
+/*                                                                    */
+/*  2) In the )PROC section there is code (&SROW) to determine if     */
+/*     the user tabbed down to a row and pressed ENTER to select      */
+/*     an entry                                                       */
+/*                                                                    */
+/*  3) The column headers are point-n-shoot fields to sort the data   */
+/*     in ascending or descending order                               */
+/*                                                                    */
+/*  4) The 'DATA' field is a scrollable field                         */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

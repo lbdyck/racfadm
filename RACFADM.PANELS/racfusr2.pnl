@@ -1,0 +1,88 @@
+)ATTR DEFAULT(%+_)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRUSER)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRNAME)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRDEFG)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRDATE)
+  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLROWNE)
+  06  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRREVO)
+  07  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRATTR)
+  08  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRTSOU)
+   $  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(TURQ)     JUST(LEFT)
+   ^  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(RED)      JUST(LEFT)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)      HILITE(USCORE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ¬  AREA(DYNAMIC) EXTEND(OFF)
+   ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
+   Ý  TYPE(DATAOUT) INTENS(HIGH)
+   ~  TYPE(PS)
+)BODY EXPAND(\\)
++\-\(%RACFADM - User Profiles+)\-\
+%Command ===>_ZCMD                                              +Scroll==>_SAMT+
+%
++FILTER: $RFILTER                                      ¬SELCMD2B               ¬
++SELECT: ¬SELCMD2A                                                             ¬
+%
+%S         ~Userid  ~Name                ~Group   ~Logon   ~Owner   ~Rev~Att~TSO
+%-------------------------------------------------------------------------------
+)MODEL CLEAR(OPTA)
+_Z ^Z      Z       Z                   Z       Z       	Z       Z  Z  Z
+)INIT
+  .ZVARS = '(OPTA ACTION USER NAME DEFGRP DATELGN OWNER REVOKED +
+             ATTR2 TSOUSER)'
+  .HELP  = #RACUSR2
+  &ZCMD  = ' '
+  IF (&SAMT = ' ')
+      &SAMT = &ZSCED
+)PROC
+  &SROW = &Z
+  IF (&ZCMD = &Z)
+     IF (&ZTDSELS = 0)
+        &SROW = .CSRROW
+        IF (&SROW ^= 0)
+           &OPTA = S
+
+  /* Line command: X & XR are not displayed (hidden) */
+  IF (&SETMADMN = YES)
+     IF (&SETMIRRX = YES)
+        VER (&OPTA,LIST,S,SE,L,P,D,C,A,R,RS,RV,PW,X,XR,AL)
+     ELSE
+        VER (&OPTA,LIST,S,SE,L,D,C,A,R,RS,RV,PW,X,XR,AL)
+  ELSE
+     IF (&SETMIRRX = YES)
+        VER (&OPTA,LIST,S,SE,L,P,D)
+     ELSE
+        VER (&OPTA,LIST,S,SE,L,D)
+)PNTS
+  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT USERID')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT NAME')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT GROUP')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT LOGON')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT OWNER')
+  FIELD(ZPS00006) VAR(ZCMD) VAL('SORT REV')
+  FIELD(ZPS00007) VAR(ZCMD) VAL('SORT ATT')
+  FIELD(ZPS00008) VAR(ZCMD) VAL('SORT TSO')
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The 'SELECT' field is a dynamic field, allowing the REXX       */
+/*     program to display only the commands accessable/useable        */
+/*     depending on the below users Settings (menu option 0):         */
+/*       Administrator ..... Y or N                                   */
+/*       Admin RACF API .... Y or N                                   */
+/*                                                                    */
+/*  2) In the )PROC section there is code (&SROW) to determine if     */
+/*     the user tabbed down to a row and pressed ENTER to select      */
+/*     an entry                                                       */
+/*                                                                    */
+/*  3) Line command 'X/XR', Cross Reference Report, are not displayed */
+/*     - Reason for this is sites with a large RACF database, the     */
+/*       time for 'IRRUT100' to read/obtain the data is significant   */
+/*     - This command can only be accessed/used when Settings         */
+/*       (option 0) 'Administration=Y'                                */
+/*                                                                    */
+/*  4) The column headers are point-n-shoot fields to sort the data   */
+/*     in ascending or descending order                               */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

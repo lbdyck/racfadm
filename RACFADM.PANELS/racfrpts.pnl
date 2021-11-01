@@ -1,0 +1,98 @@
+)ATTR DEFAULT(%+_)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRREC)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRNAME)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRPGM)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRDESC)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)  HILITE(USCORE)
+   %  TYPE(TEXT)    INTENS(HIGH) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+   ~  TYPE(PS)
+)BODY EXPAND(\\)
++\-\(%RACFADM - RACF Reports+)\-\
+%Command ==>_ZCMD                                                  %Scr =>_Z   +
++
++SELECT: %S+Select,%R+Reset                               %F3+- Edit/Submit Job
++
++IRRDBU00 Dsn:_SETDRPTU                                    + Edit JCL:_Z{ (Y/N)
++
+%S  ~Rec  ~Name   ~Program  ~                   Description
+%-------------------------------------------------------------------------------
+)MODEL CLEAR(OPTA)
+_ZZZ    Z      Z        Z
+)INIT
+  .CURSOR = ZCMD
+  .HELP   = #RACRPT1
+  .ZVARS  = '(ZSCROLLD RACFRJCL OPTA DOIT REC NAME PGM DESC)'
+)PROC
+  &SROW = &Z
+  IF (&ZCMD = &Z)
+     IF (&ZTDSELS = 0)
+        &SROW = .CSRROW
+        IF (&SROW ^= 0)
+           &OPTA = S
+
+  IF (.MSG = &Z | .RESP NE END)
+     &RACFSMSG = &Z
+     &RACFLMSG = &Z
+     &TMPDRPTU = &Z
+     &BADDSN   = N
+     *REXX (ZCMD SETDRPTU SETGPREF BADDSN RACFSMSG RACFLMSG TMPDRPTU)
+        X = MSG("OFF")
+        IF (SETGPREF = "YES") THEN DO
+           IF (SUBSTR(SETDRPTU,1,1) <> "'") THEN
+              TMPDRPTU = SYSVAR('SYSPREF')"."SETDRPTU
+           ELSE
+              TMPDRPTU = STRIP(SETDRPTU,,"'")
+        END
+        ELSE
+           TMPDRPTU = STRIP(SETDRPTU,,"'")
+        IF (ABBREV("UNLOAD",ZCMD,1) = 1) THEN
+           RETURN
+        PARSE VAR TMPDRPTU DSN1 "&" SYMBOL "." DSN2
+        SYMBVAL = MVSVAR("SYMDEF",SYMBOL)
+        TMPDSN  = DSN1""SYMBVAL""DSN2
+        PARSE VAR TMPDSN DSN "(" GDGNO ")" .
+        IF (DATATYPE(GDGNO,'N') = 1) THEN DO
+           X = OUTTRAP("LC.")
+           "LISTCAT ENT('"DSN"')"
+           X = OUTTRAP("OFF")
+           IF (LC.0 > (2 - 2 * GDGNO)) THEN DO
+              A   = LC.0 - 1 + 2 * GDGNO
+              TMPDSN = SUBWORD(LC.A,3,1)
+           END
+           DROP LC.
+        END
+        TMPDSN = "'"TMPDSN"'"
+        IF (SYSDSN(TMPDSN) <> "OK") THEN DO
+           RACFSMSG = 'DSN does not exist'
+           RACFLMSG = 'The dataset does not reside in the catalog',
+                      'or on a disk pack, please investigate.',
+                      'DSN = 'TMPDSN
+           BADDSN   = "Y"
+        END
+     *ENDREXX
+
+  IF (&BADDSN = Y)
+     .CURSOR = SETDRPTU
+     .MSG    = RACF011
+
+  VER (&RACFRJCL,NB,LIST,Y,N)
+)PNTS
+  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT REC')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT NAME')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT PROGRAM')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT DESC')
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The column headers are point-n-shoot fields to sort the data   */
+/*     in ascending or descending order                               */
+/*                                                                    */
+/*  2) The )PROC section executes REXX code to:                       */
+/*     - Validate validate a sequential and relative GDG dataset      */
+/*       exists, unless the primary command UNLOAD is typed in        */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

@@ -1,0 +1,32 @@
+)ATTR DEFAULT(%+_)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRDESC)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRVALU)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(PS)
+)BODY EXPAND(\\)
++\-\(%RACFADM - RACF Parameters+)\-\
+%Command ===>_ZCMD                                              +Scroll==>_SAMT+
++
+~Description                        ~Value
+%-------------------------------------------------------------------------------
+)Model
+desc                               value
+)INIT
+  &ZCMD = ' '
+  IF (&SAMT = ' ')
+     &SAMT = &ZSCED
+  .HELP = #RACPRMS
+)PROC
+)PNTS
+  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT DESC')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT VALUE')
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The column headers are point-n-shoot fields to sort the data   */
+/*     in ascending or descending order                               */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

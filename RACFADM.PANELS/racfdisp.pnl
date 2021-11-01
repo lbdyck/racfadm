@@ -1,0 +1,193 @@
+)PANEL KEYLIST(ISRSPEC,ISR)
+)ATTR DEFAULT() FORMAT(MIX)            /* ISREDDE2 - ENGLISH - 7.3 */
+ 15 TYPE(AB)
+ 2A TYPE(ABSL) GE(ON)
+ 2B TYPE(PT)
+ 2F TYPE(FP)
+ 14 TYPE(NT)
+ 1B TYPE(NEF) PADC(USER)
+ 1C TYPE(VOI) PADC(USER)
+ 26 AREA(DYNAMIC) EXTEND(ON) SCROLL(ON) USERMOD('20')
+ 01 TYPE(DATAOUT) INTENS(LOW)
+ 02 TYPE(DATAOUT)
+ 03 TYPE(DATAOUT) SKIP(ON)
+ 04 TYPE(DATAIN) INTENS(LOW) CAPS(OFF) FORMAT(&MIXED)
+ 05 TYPE(DATAIN) CAPS(OFF) FORMAT(&MIXED)
+ 06 TYPE(DATAIN) INTENS(LOW) CAPS(IN) FORMAT(&MIXED)
+ 07 TYPE(DATAIN) CAPS(IN) FORMAT(&MIXED)
+ 08 TYPE(DATAIN) INTENS(LOW) FORMAT(DBCS) OUTLINE(L)
+ 09 TYPE(DATAIN) INTENS(LOW) FORMAT(EBCDIC) OUTLINE(L)
+ 0A TYPE(DATAIN) INTENS(LOW) FORMAT(&MIXED) OUTLINE(L)
+ 0B TYPE(DATAIN) INTENS(LOW) CAPS(IN) COLOR(&ZPLEXCLR) FORMAT(&MIXED)
+ 0C TYPE(DATAIN) INTENS(LOW) CAPS(OFF) COLOR(&ZPLEXCLR) FORMAT(&MIXED)
+ 0D TYPE(DATAIN) INTENS(LOW) CAPS(IN) COLOR(BLUE) FORMAT(&MIXED)
+ 13 TYPE(DATAOUT) SKIP(ON) HILITE(USCORE)
+ 16 TYPE(DATAIN) INTENS(LOW) CAPS(IN) HILITE(USCORE) FORMAT(&MIXED)
+ 17 TYPE(DATAIN) CAPS(IN) HILITE(USCORE) FORMAT(&MIXED)
+ 1D TYPE(DATAIN) INTENS(LOW) CAPS(IN) COLOR(BLUE) HILITE(USCORE)
+      FORMAT(&MIXED)
+ 20 TYPE(DATAIN) INTENS(LOW) CAPS(IN) FORMAT(&MIXED)
+ Z  TYPE(CHAR) COLOR(WHITE) HILITE(REVERSE)
+ R  TYPE(CHAR) COLOR(RED)
+ G  TYPE(CHAR) COLOR(GREEN)
+ B  TYPE(CHAR) COLOR(BLUE)
+ W  TYPE(CHAR) COLOR(WHITE)
+ P  TYPE(CHAR) COLOR(PINK)
+ Y  TYPE(CHAR) COLOR(YELLOW)
+ T  TYPE(CHAR) COLOR(TURQ)
+ L  TYPE(CHAR) COLOR(RED)
+ U  TYPE(CHAR) HILITE(USCORE)
+ K  TYPE(CHAR) COLOR(&ZCK) HILITE(&ZHK)
+ O  TYPE(CHAR) COLOR(&ZCO) HILITE(&ZHO)
+ Q  TYPE(CHAR) COLOR(&ZCQ) HILITE(&ZHQ)
+ C  TYPE(CHAR) COLOR(&ZCC) HILITE(&ZHC)
+ V  TYPE(CHAR) COLOR(&ZCV) HILITE(&ZHV)
+ D  TYPE(CHAR) COLOR(&ZCD) HILITE(&ZHD)
+ F  TYPE(CHAR) COLOR(&ZCF) HILITE(&ZHF)
+ S  TYPE(CHAR) COLOR(&ZCS) HILITE(&ZHS)
+ Ü  TYPE(NEF) CAPS(ON) PADC(USER)
+)BODY  EXPAND(//) WIDTH(&ZWIDTH)  CMD(ZCMD)
+--/-/-------------------------------------------------------------------------
+Z         Z/ /                                           ColumnsZ    Z    
+Command ===>Z/ /                                            Scroll ===>ÜZ   
+ZDATA,ZSHADOW/ /                                                              
+/ /                                                                           
+)INIT
+  .HELP = #RACMENU
+  .ZVARS  = '(ZVMODET ZTITLE ZCL ZCR ZCMD ZSCED)'
+  &ZHIDEX = 'Y'
+  VGET (ZSCED) PROFILE                /* Fill Scroll Vars if */
+  IF (&ZSCED = ' ') &ZSCED = 'PAGE'      /* Blank with page  */
+  &MIXED = TRANS(&ZPDMIX N,EBCDIC *,MIX) /* set mixed format */
+  vget (vtype) shared
+  *REXX(* zdata zshadow zwidth vtype)
+    colorb = left('B',zwidth,'B')
+    colorg = left('G',zwidth,'G')
+    colorr = left('R',zwidth,'R')
+    colort = left('T',zwidth,'T')
+    colorw = left('W',zwidth,'W')
+    colory = left('Y',zwidth,'Y')
+    blank  = left(' ',zwidth,' ')
+    if (length(zshadow) /= length(zdata)) then
+       zshadow = left('G',length(zdata),'G')
+    do i = 1 to length(zshadow) by zwidth
+       color  = ''
+       titlec = colort                /* Color for the title section */
+       Select
+          When substr(zdata,i+8,5)  = '*****' then     /* Top/Bottom */
+               nop
+          When substr(zdata,i+8,10) = 'RACF DATA ' then /* GrpTre 1st*/
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,3) = '---' then      /* GrpTree - 4rd*/
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,7) = 'R A C F' then  /* GrpTree - 2nd*/
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+31,5) = 'DATE:' then   /* GrpTree - 1st*/
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,5) = 'LEVEL' then    /* GrpTree - 3rd*/
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,5) = '*    ' then    /* Chgs/Iss/etc */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,5) = '*----' then    /* Chgs/Iss/etc */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,6) = '%InUse' then    /* OMVS FLIST  */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,7) = ' Userid ' then  /* OMVS ULIST  */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,9) = 'Specified' then /* OMVS FLIST  */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,8) = 'Resolved' then  /* OMVS FLIST  */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,3) = 'UGO' then       /* OMVS FLIST  */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,5) = 'Total' then     /* OMVS FLIST  */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,11) = '1      Time' then /* ISPLog   */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,11) = 'og ***     ' then /* ISPLog   */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,6) = ' Enqs ' then       /* Enqueues */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+8,6) = ' ---- ' then       /* Enqueues */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+          When substr(zdata,i+64,7) = 'ICH408I' then     /* Errors   */
+               call hlite_errs
+          When substr(zdata,i+9,7)  = 'ICH408I' then     /* Errors   */
+               call hlite_errs
+          Otherwise do
+             if vtype = 'TREE' then
+                zshadow = overlay(colorr,zshadow,i+8,5)
+             if vtype = 'TREE' then
+                if substr(zdata,i+8+8,1) /= '|' then
+                   zshadow = overlay(colorw,zshadow,i+8+8,9)
+             do li = 0 to 50
+                if (substr(zdata,i+8+li,1) = '|') then do
+                   select
+                      when color = '' then
+                           color = colorw       /* White  */
+                      when color = colorw then
+                           color = colorr       /* Red    */
+                      when color = colorr then
+                           color = colort       /* Turq   */
+                      when color = colort then
+                           color = colorb       /* Blue   */
+                      when color = colorb then
+                           color = colorg       /* Green  */
+                      when color = colorg then
+                           color = colorw       /* White  */
+                      when color = colorw then
+                           color = colory       /* Yellow */
+                      otherwise
+                           color = colory
+                   end /* Select */
+                   zshadow = overlay(color,zshadow,i+8+li,1)
+                   if substr(zdata,i+8+li+2) /= '|' then   /*GrpTree */
+                      zshadow = overlay(colorw,zshadow,i+8+li+2,10)
+                end /* if */
+             end /* Do li */
+          end /* Otherwise */
+       end /* Select */
+    end  /* Do i */
+    RETURN
+    HLITE_ERRS:                          /* Highlite ICH408I message */
+      zshadow = overlay(colort,zshadow,i+8,zwidth-8)
+      If (substr(zdata,i+72,5) = 'USER(') then
+         zshadow = overlay(colorr,zshadow,i+77,3)
+      If (substr(zdata,i+17,5) = 'USER(') then
+         zshadow = overlay(colorr,zshadow,i+22,8)
+      If (substr(zdata,i+32,6) = 'GROUP(') then
+         zshadow = overlay(colorr,zshadow,i+38,8)
+      If (substr(zdata,i+48,5) = 'NAME(') then
+         zshadow = overlay(colorr,zshadow,i+53,20)
+    RETURN
+  *ENDREXX
+)REINIT
+  REFRESH(*)
+)PROC
+  REFRESH(*)
+  &ZCURSOR = .CURSOR
+  &ZCSROFF = .CSRPOS
+  VPUT (ZSCED) PROFILE
+  &ZLVLINE = LVLINE(ZDATA)
+)FIELD
+  FIELD(ZTITLE)
+  FIELD(ZCMD) LEN(255)
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) Copied from IBM's ISREDDE2 panel                               */
+/*     - Added REXX to the )INIT section                              */
+/*                                                                    */
+/*  2) This panel changes the color of the report header and bar      */
+/*     lines (|) when selecting the following menu options:           */
+/*       6  GrpTree    Group tree report                              */
+/*       8  RACFdb    RACF databases                                  */
+/*       E  Enqueues   Dataset enqueues                               */
+/*       I  Issues     Known issues                                   */
+/*       L  ISPLog     ISPF log file                                  */
+/*       S  Standards  Coding/design                                  */
+/*       U  Updates    Version/updates                                */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

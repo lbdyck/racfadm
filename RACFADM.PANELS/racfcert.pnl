@@ -1,0 +1,61 @@
+)ATTR DEFAULT(%+_)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRLABE)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTDA)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRENDA)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTAT)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   ¬  AREA(DYNAMIC) EXTEND(OFF)
+   ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
+   Ý  TYPE(DATAOUT) INTENS(HIGH)
+   ~  TYPE(PS)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Digital Certificates+)\-\
+%Command ===>_ZCMD                                              +Scroll==>_SAMT+
+%
++SELECT: ¬SELCMDS                                                              ¬
+%
+%S  ~Label                           ~StDate    ~EnDate    ~Status    State
+%-------------------------------------------------------------------------------
+)MODEL CLEAR(OPTA)
+_Z+ Z                               Z         Z         Z        Z
+)INIT
+  .ZVARS   = '(OPTA LABEL STDATE ENDATE STATUS State)'
+  .HELP    = #RACCERT
+  &ZCMD    = ' '
+  IF (&SAMT = ' ')
+      &SAMT = &ZSCED
+)PROC
+  &SROW = &Z
+  IF (&ZCMD = &Z)
+     IF (&ZTDSELS = 0)
+        &SROW = .CSRROW
+        IF (&SROW ^= 0)
+           &OPTA = S
+  VER (&OPTA,LIST,S,L,X)
+)PNTS
+  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT LABEL')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT STDATE')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT ENDATE')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT STATUS')
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The 'SELECT' field is a dynamic field, allowing the REXX       */
+/*     program to display only the commands accessable/useable        */
+/*     depending on the below users Settings (menu option 0):         */
+/*       Administrator ..... Y or N                                   */
+/*       Admin RACF API .... Y or N                                   */
+/*                                                                    */
+/*  2) In the )PROC section there is code (&SROW) to determine if     */
+/*     the user tabbed down to a row and pressed ENTER to select      */
+/*     an entry                                                       */
+/*                                                                    */
+/*  3) The column headers are point-n-shoot fields to sort the data   */
+/*     in ascending or descending order                               */
+/*                                                                    */
+/*--------------------------------------------------------------------*/
