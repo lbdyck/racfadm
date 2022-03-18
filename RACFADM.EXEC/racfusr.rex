@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @EW  220318  LBD      Clean up opened Tables (LBD)                 */
 /* @EV  201220  RACFA    Display action for Xref line command         */
 /* @EU  201201  RACFA    Unhide line command X for ADMIN users        */
 /* @ET  201130  TRIDJK   Added hidden line commands X and XR          */
@@ -283,7 +284,7 @@ EXIT
 PROFL:
   call CREATE_TABLEA                                          /* @BE */
   if (USER = 'INVALID') | (USER = 'NONE') THEN DO             /* @EP */
-     "TBEND" tbla
+     "TBEND" tablea                                           /* @EW */
      call racfmsgs 'ERR16' msg.1                              /* @X1 */
      rc=8                                                     /* @EP */
      return
@@ -300,7 +301,12 @@ PROFL:
         "TBDISPL" TABLEA "PANEL("PANEL02")"                   /* @EE */
      end                                                      /* @EE */
      else 'tbdispl' tablea                                    /* @EE */
-     if (rc > 4) then leave                                   /* @EE */
+        if (rc > 4) then do                                   /* @EW */
+           src = rc                                           /* @EW */
+           'tbclose' tablea                                   /* @EW */
+            rc = src                                          /* @EW */
+            leave                                             /* @EW */
+            end                                               /* @EW */
      xtdtop   = ztdtop                                        /* @EE */
      rsels    = ztdsels                                       /* @EE */
      radmrfnd = null                                          /* @EE */
@@ -779,7 +785,12 @@ DISD:
            "TBDISPL" TABLEB "PANEL("PANEL03")"                /* @EE */
         end                                                   /* @EE */
         else 'tbdispl' tableb                                 /* @EE */
-        if (rc > 4) then leave                                /* @EE */
+        if (rc > 4) then do                                   /* @EW */
+           src = rc                                           /* @EW */
+           'tbclose' tableb                                   /* @EW */
+            rc = src                                          /* @EW */
+            leave                                             /* @EW */
+            end                                               /* @EW */
         xtdtop   = ztdtop                                     /* @EE */
         rsels    = ztdsels                                    /* @EE */
         radmrfnd = null                                       /* @EE */

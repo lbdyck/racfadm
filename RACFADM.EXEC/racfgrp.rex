@@ -3,7 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @D1  210512  TRIDJK   Adding, place in order, prior was at bottom  */
+/* @D2  2200318 LBD      Clean up open tables                         */
 /* @CZ  201201  RACFA    Unhide line command 'X' for ADMIN users      */
 /* @CY  201130  TRIDJK   Added hidden line command 'X'                */
 /* @CV  200708  TRIDJK   Msg if selection list has no entries ('NONE')*/
@@ -186,7 +186,7 @@ EXIT
 PROFL:
   call CREATE_TABLEA                                          /* @AP */
   if (group = 'INVALID') | (group = 'NONE') then do           /* @CV */
-     "TBEND" tbla
+     "TBEND" tablea                                           /* @D2 */
      call racfmsgs 'ERR16'                                    /* @C5 */
      rc=8                                                     /* @CV */
      return
@@ -302,6 +302,9 @@ PROFL:
      End /* Select */
      'control display restore'                                /* @CJ */
   end  /* Do forever) */                                      /* @CJ */
+  src = rc                                                    /* @D2 */
+  'tbclose' tablea                                            /* @D2 */
+  rc = src                                                    /* @D2 */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Process primary command FIND for TABLEA                      @CH  */

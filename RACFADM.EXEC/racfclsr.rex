@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMhDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @BC  220317  LBD      Close table on exit                          */
 /* @BB  200618  RACFA    Chged SYSDA to SYSALLDA                      */
 /* @BA  200617  RACFA    Added comments to right of variables         */
 /* @B9  200616  RACFA    Added capability to SAve file as TXT/CSV     */
@@ -170,7 +171,12 @@ DISPLAY_TABLE:
         "TBDISPL" TABLEA "PANEL("PANEL27")"                   /* @B6 */
      end                                                      /* @B6 */
      else 'tbdispl' tablea                                    /* @B6 */
-     if (rc > 4) then leave                                   /* @B6 */
+     if (rc > 4) then do                                      /* @BC */
+        src = rc                                              /* @BC */
+        'tbclose' tablea                                      /* @BC */
+         rc = src                                             /* @BC */
+         leave                                                /* @BC */
+         end                                                  /* @BC */
      xtdtop   = ztdtop                                        /* @B6 */
      rsels    = ztdsels                                       /* @B6 */
      radmrfnd = null                                          /* @B6 */

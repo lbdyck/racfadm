@@ -3,6 +3,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @C9  220317  LBD      Close table on exit                          */
+/* @C8  220317  TRIDJK   Intialize OPTB in Do Forever,rsels < 2 logic */
+/* @C7  220317  TRIDJK   Fix Add literal in SELCMDS                   */
 /* @C6  200618  RACFA    Chged SYSDA to SYSALLDA                      */
 /* @C5  200617  RACFA    Added comments to right of variables         */
 /* @C4  200616  RACFA    Added capability to SAve file as TXT/CSV     */
@@ -187,7 +190,12 @@ PROFL:
         "TBDISPL" TABLEA "PANEL("Pnl_list_prof")"             /* @BW */
      end                                                      /* @BW */
      else 'tbdispl' tablea                                    /* @BW */
-     if (rc > 4) then leave                                   /* @BW */
+     if (rc > 4) then do                                      /* @C9 */
+        src = rc                                              /* @C9 */
+        'tbclose' tablea                                      /* @C9 */
+        rc = src                                              /* @C9 */
+        leave                                                 /* @C9 */
+        end                                                   /* @C9 */
      xtdtop   = ztdtop                                        /* @BW */
      rsels    = ztdsels                                       /* @BW */
      radmrfnd = null                                          /* @BW */
@@ -497,6 +505,7 @@ DISM:
   rsels = 0                                                   /* @BW */
   do forever                                                  /* @BW */
      if (rsels < 2) then do                                   /* @BW */
+        optb = ' '                                            /* @C8 */
         "TBTOP " TABLEB                                       /* @BW */
         'tbskip' tableb 'number('xtdtop')'                    /* @BW */
         radmrfnd = 'PASSTHRU'                                 /* @BW */
@@ -504,7 +513,12 @@ DISM:
         "TBDISPL" TABLEB "PANEL("PANEL12")"                   /* @BW */
      end                                                      /* @BW */
      else 'tbdispl' tablea                                    /* @BW */
-     if (rc > 4) then leave                                   /* @BW */
+     if (rc > 4) then do                                      /* @C9 */
+        src = rc                                              /* @C9 */
+        'tbclose' tablea                                      /* @C9 */
+        rc = src                                              /* @C9 */
+        leave                                                 /* @C9 */
+        end                                                   /* @C9 */
      xtdtop   = ztdtop                                        /* @BW */
      rsels    = ztdsels                                       /* @BW */
      radmrfnd = null                                          /* @BW */
@@ -616,7 +630,12 @@ DISD:
         end                                                   /* @BW */
         else 'tbdispl' tableb                                 /* @BW */
         retb = rc                                             /* @BW */
-        if (retb > 4) then leave                              /* @BW */
+        if (retb > 4) then do                                 /* @C9 */
+           src = rc                                           /* @C9 */
+           'tbclose' tableb                                   /* @C9 */
+           rc = src                                           /* @C9 */
+           leave                                              /* @C9 */
+           end                                                /* @C9 */
         xtdtop   = ztdtop                                     /* @BW */
         rsels    = ztdsels                                    /* @BW */
         radmrfnd = null                                       /* @BW */
@@ -881,7 +900,7 @@ GETD:
            memcls        = subword(getd_temp,1,1)
            If (SETMADMN = "YES") then                         /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,      /* @AL */
-                         "ÝA¨dd,ÝR¨Remove,ÝM¨Member"          /* @AL */
+                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member"         /* @C7 */
            else                                               /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list"                    /* @AL */
         end

@@ -7,7 +7,7 @@
    {  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF)
    ~  TYPE(PS)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - RACF Administration - V35R2+)\-\
++\-\(%RACFADM - RACF Administration - V35R3+)\-\
 %Option ===>_ZCMD
 %
 %   0 ~Settings +Customize options      %C ~Command   +Execute RACF commands

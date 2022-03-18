@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CN  220318  LBD      Close open table on exit                     */
 /* @CM  200708  TRIDJK   Msg if selection list has no entries ('NONE')*/
 /* @CL  200624  RACFA    Allow passing fully qual. dsn with quotes    */
 /* @CK  200624  RACFA    Chg line cmd L, added datasets               */
@@ -186,7 +187,7 @@ EXIT
 PROFL:
   call CREATE_TABLEA
   if (dataset = 'INVALID') | (dataset = 'NONE') THEN DO       /* @CM */
-     "TBEND" tbla
+     "TBEND" tablea                                           /* @CN */
      call racfmsgs 'ERR16'                                    /* @C5 */
      rc=8                                                     /* @CM */
      return
@@ -203,7 +204,12 @@ PROFL:
         "TBDISPL" TABLEA "PANEL("PANEL02")"                   /* @CA */
      end                                                      /* @CA */
      else 'tbdispl' tablea                                    /* @CA */
-     if (rc > 4) then leave                                   /* @CA */
+     if (rc > 4) then do                                      /* @CN */
+        src = rc                                              /* @CN */
+        'tbclose' tablea                                      /* @CN */
+        rc = src                                              /* @CN */
+        leave                                                 /* @CN */
+        end                                                   /* @CN */
      xtdtop   = ztdtop                                        /* @CA */
      rsels    = ztdsels                                       /* @CA */
      radmrfnd = null                                          /* @CA */
@@ -523,7 +529,12 @@ DISD:
            "TBDISPL" TABLEB "PANEL("PANEL05")"                /* @CA */
         end                                                   /* @CA */
         else 'tbdispl' tableb                                 /* @CA */
-        if (rc > 4) then leave                                /* @CA */
+        if (rc > 4) then do                                   /* @CN */
+           src = rc                                           /* @CN */
+           'tbclose' tableb                                   /* @CN */
+           rc = src                                           /* @CN */
+           leave                                              /* @CN */
+           end                                                /* @CN */
         xtdtop   = ztdtop                                     /* @CA */
         rsels    = ztdsels                                    /* @CA */
         radmrfnd = null                                       /* @CA */

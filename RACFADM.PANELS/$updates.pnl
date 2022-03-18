@@ -2,6 +2,26 @@
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
 
+  18 Mar 2022 - V35R3
+     - General resources (Option 4)
+       -- Updated panels RACFCLSB and RACFCLSC to expand the
+          member field to 17 characters
+       -- Updated exec RACFCLSG to correct Add literal in SELCMDS
+       -- Updated exec RACFCLSG to initialize OPTB variable in loop
+       -- Updated exec RACFCERT to close tables on exit
+       -- Updated exec RACFCLSG to close tables on exit
+       -- Updated exec RACFCLSR to close tables on exit
+       -- Updated exec RACFCLSS to close tables on exit
+       -- Updated exec RACFDSN to correct invalid tbla to tablea
+       -- Updated exec RACFGRP to correct invalid tbla to tablea
+       -- Updated exec RACFUSR to correct invalid tbla to tablea
+     - Dataset profiles (Option 3)
+       -- Updated exec RACFDSN  to close tables on exit
+     - Group profiles (Option 2)
+       -- Updated exec RACFGRP  to close tables on exit
+     - User profiles (Option 1)
+       -- Updated exec RACFUSR  to close tables on exit
+
   01 Nov 2021 - V35R2
      - Reports (option  R)
        * Correct Edit on temp dataset

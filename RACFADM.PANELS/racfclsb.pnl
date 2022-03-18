@@ -15,10 +15,10 @@
 +                                           +
 +SELECT: %A+Add,%R+Remove
 +
-%S    MEMBER
+%S    Member
 %-------------------------------------------------------------------------------
 )MODEL
-_Z+  $Z           +
+_Z+  $Z                +
 )INIT
   .ZVARS   = '(OPTB ID)'
   .CURSOR  = OPTB

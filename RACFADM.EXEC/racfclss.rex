@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @BP  220317  LBD      Close table on exit                          */
 /* @BO  200618  RACFA    Chged SYSDA to SYSALLDA                      */
 /* @BN  200617  RACFA    Added comments to right of variables         */
 /* @BM  200616  RACFA    Added primary command 'SAVE' when SEarching  */
@@ -169,7 +170,12 @@ DISPLAY_TABLE_PERMIT:
         "TBDISPL" TABLEB "PANEL("PANEL08")"                   /* @BI */
      end                                                      /* @BI */
      else 'tbdispl' tableb                                    /* @BI */
-     if (rc > 4) then leave                                   /* @BI */
+     if (rc > 4) then do                                      /* @BP */
+        src = rc                                              /* @BP */
+        'tbclose' tablea                                      /* @BP */
+         rc = src                                             /* @BP */
+         leave                                                /* @BP */
+         end                                                  /* @BP */
      xtdtop   = ztdtop                                        /* @BI */
      rsels    = ztdsels                                       /* @BI */
      radmrfnd = null                                          /* @BI */
@@ -442,7 +448,12 @@ DISPLAY_TABLE:
         "TBDISPL" TABLEA "PANEL("PANEL13")"                   /* @BI */
      end                                                      /* @BI */
      else 'tbdispl' tablea                                    /* @BI */
-     if (rc > 4) then leave                                   /* @BI */
+     if (rc > 4) then do                                      /* @BP */
+        src = rc                                              /* @BP */
+        'tbclose' tablea                                      /* @BP */
+         rc = src                                             /* @BP */
+         leave                                                /* @BP */
+         end                                                  /* @BP */
      xtdtop   = ztdtop                                        /* @BI */
      rsels    = ztdsels                                       /* @BI */
      radmrfnd = null                                          /* @BI */

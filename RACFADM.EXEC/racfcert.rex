@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMhDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A3  220317  LBD      Close open table on exit                     */
 /* @A2  210309  LBD      Add State (expired) to table                 */
 /* @A1  201118  TRIDJK   Add X (CA Export) line command               */
 /* @A0  200929  TRIDJK   Created REXX                                 */
@@ -128,7 +129,15 @@ DISPLAY_TABLE:
         "TBDISPL" TABLEA "PANEL("PANEL27")"
      end
      else 'tbdispl' tablea
+     /* Comment Start
      if (rc > 4) then leave
+        Comment End */
+     if (rc > 4) then do                                      /* @A3 */
+        src = rc                                              /* @A3 */
+        'tbclose' tablea                                      /* @A3 */
+        rc = src                                              /* @A3 */
+        leave                                                 /* @A3 */
+        end                                                   /* @A3 */
      xtdtop   = ztdtop
      rsels    = ztdsels
      radmrfnd = null
