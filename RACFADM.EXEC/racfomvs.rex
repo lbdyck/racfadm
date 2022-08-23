@@ -13,6 +13,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AR  220822  GRZ027   UID/GID right justified                      */
 /* @AQ  200616  RACFA    Chg panel name RACFRPTS to RACFDISP          */
 /* @AP  200611  RACFA    Fix, duplicate entries, was MODE||RESULT     */
 /* @AO  200611  RACFA    Expanded dashes                              */
@@ -215,7 +216,7 @@ ULIST:                                                        /* @A1 */
      if (pw.1 <> previd) then do                              /* @A1 */
         IF (CHKPRM = "") THEN do                              /* @A1 */
            NO = NO + 1                                        /* @A1 */
-           cmdrec.NO = pw.1 left(pw.2,10) left(pw.3,7),       /* @A1 */
+           cmdrec.NO = pw.1 right(pw.2,10) right(pw.3,7),     /* @AR */
                             left(pw.5,8)  left(pw.4,50)       /* @A1 */
         end                                                   /* @A1 */
         ELSE DO                                               /* @A1 */
@@ -225,7 +226,7 @@ ULIST:                                                        /* @A1 */
             | ((SHELL <> "") & (SHELL = PW.5)),               /* @A6 */
             | ((HOME  <> "") & (HOME  = PW.4)) THEN DO        /* @A6 */
               NO = NO + 1                                     /* @A1 */
-              cmdrec.NO = pw.1 left(pw.2,10) left(pw.3,7),    /* @A1 */
+              cmdrec.NO = pw.1 right(pw.2,10) right(pw.3,7),  /* @AR */
                                left(pw.5,8)  left(pw.4,50)    /* @A1 */
            END                                                /* @A1 */
         end /* If CHKPRM */                                   /* @A1 */
