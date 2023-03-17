@@ -2,6 +2,17 @@
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
 
+  17 Mar 2023 - V35R5
+     - RACFCLOG added
+     - RACFMSG  (Option M)
+       - updated to remove site specific tests and to call
+         RACFCLOG to dynamically determine if OPERLOG or SYSLOG
+         are used
+     - RACFMENU updated for version change
+       - added numeric digits 10 to the panel rexx
+       $DEFSETG removed operlog/syslog default setting
+       RACFMSG  removed operlog/syslog setting
+
   23 Aug 2022 - V35R4
      - OMVSCmds (Option O)
        -- UID/GID Report update for improved sorting

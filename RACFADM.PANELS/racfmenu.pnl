@@ -7,7 +7,7 @@
    {  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF)
    ~  TYPE(PS)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - RACF Administration - V35R4+)\-\
++\-\(%RACFADM - RACF Administration - V35R5+)\-\
 %Option ===>_ZCMD
 %
 %   0 ~Settings +Customize options      %C ~Command   +Execute RACF commands
@@ -97,6 +97,7 @@
   *REXX (RACFVER PRMDBASE BKPDBASE ZOSVER RACFGRP  RACFNAM RACFLMSG
          SECSOFT RACFFMID USADATE UTYPE SETMADMN UATT RACFMENU
          SETMPHRA)
+    Numeric Digits 10
     CVT      = C2D(STORAGE(10,4))               /* Get RACF FMID     */
     RACFFMID = "HRF"STORAGE(D2X(CVT - 29),4)
     x         = storage(d2x(cvt - 38),5)

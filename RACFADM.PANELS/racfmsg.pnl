@@ -20,9 +20,9 @@
 +  Edit JCL!....._Z{        (Y=Yes, N=No)
 +
 %File:
-+  Log!.........._Z{        (O=Operlog, S=Syslog)
 +  Scan!........._Z{        (A=Active log, B=Backup DSN)
 +  Backup DSN!..._SETDMSG                                     +
++
 +
 %Job card:
 _ZLLGJOB1
@@ -32,7 +32,7 @@ _ZLLGJOB4
 )INIT
   .CURSOR = RACFMID
   .HELP   = #RACMSG
-  .ZVARS  = '(RACFMTYP RACFMUSS RACFMMOD RACFMJCL SETLMSG RACFMSCN)'
+  .ZVARS  = '(RACFMTYP RACFMUSS RACFMMOD RACFMJCL RACFMSCN)'
 )PROC
    IF (&RACFMID EQ &Z)
       &RACFMID = *
@@ -62,7 +62,6 @@ _ZLLGJOB4
    VER (&RACFMUSS,NB,LIST,Y,N)
    VER (&RACFMMOD,NB,LIST,F,B)
    VER (&RACFMJCL,NB,LIST,Y,N)
-   VER (&SETLMSG,NB,LIST,O,S)
    VER (&RACFMSCN,NB,LIST,A,B)
 
    IF (&RACFMSCN = B)

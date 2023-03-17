@@ -102,6 +102,5 @@ SETJRPTS = (CYL,(100,100))                  /* Temporary DSN SPACE=  */
 *  RACFMSG - Log, program and bkp dsn (No quotes, if SETGPREF=N)      *
 *---------------------------------------------------------------------*
 SETRMSG  = N /* Force refresh of 'Messages' variables (Y=Yes, N=No)  */
-SETLMSG  = O                                /* O=Operlog, S=Syslog   */
 SETPMSG  = SDSF                             /* EJES or SDSF          */
 SETDMSG  =                                  /* Oper/syslog bkp dsn   */

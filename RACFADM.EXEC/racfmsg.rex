@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
+/* @L1  230316  LBD      Fix Message Scan                             */
 /* @AJ  200918  RACFA    Fix 'Type=A', was displaying same msg        */
 /* @AI  200903  RACFA    Added 'OMVS' to USS messages                 */
 /* @AH  200903  RACFA    Display all ICH408I msgs, except pswd invalid*/
@@ -29,6 +31,10 @@ ENV        = SYSVAR(SYSENV)
 USERID     = USERID()                                         /* @A8 */
 LPAR       = MVSVAR("SYMDEF","SYSNAME")                       /* @A8 */
 
+rc = racfclog()   /* Get Operlog or SYSLOG */                 /* @L2 */
+if rc = 0 then setlmsg = 'S'                                  /* @L2 */
+else setlmsg = 'O'                                            /* @L2 */
+
 ADDRESS ISPEXEC
   ADDRESS TSO "PROFILE VARSTORAGE(HIGH)"
   IF (ENV = "FORE") THEN
@@ -47,7 +53,7 @@ FOREGROUND:
 
   "VGET (RACFMID  RACFMLPR RACFMDAT RACFMTYP",
         "RACFMUSS RACFMMOD RACFMJCL RACFMSCN",                /* @A6 */
-        "SETGPREF SETMTRAC SETLMSG  SETPMSG  SETDMSG",        /* @AD */
+        "SETGPREF SETMTRAC SETPMSG  SETDMSG",                 /* @L2 */
         "ZLLGJOB1 ZLLGJOB2 ZLLGJOB3 ZLLGJOB4) PROFILE"
   If (SETMTRAC <> 'NO') then do
      Say "*"COPIES("-",70)"*"
@@ -67,7 +73,6 @@ FOREGROUND:
   IF (RACFMUSS = "") THEN RACFMUSS = "N"
   RACFMMOD = "F"                                              /* @AA */
   IF (RACFMJCL = "") THEN RACFMJCL = "Y"
-  IF (SETLMSG  = "") THEN SETLMSG  = "O"                      /* @A6 */
   IF (SETPMSG  = "") THEN SETPMSG  = "SDSF"                   /* @A6 */
   RACFMSCN = "A"                                              /* @A5 */
 
@@ -111,7 +116,7 @@ FOREGROUND:
 
   "VPUT (RACFMID  RACFMLPR RACFMDAT RACFMTYP",                /* @AA */
         "RACFMUSS RACFMMOD RACFMJCL RACFMSCN",                /* @A6 */
-        "SETGPREF SETMTRAC SETLMSG  SETPMSG  SETDMSG",        /* @AD */
+        "SETGPREF SETMTRAC SETPMSG  SETDMSG",                 /* @L2 */
         "ZLLGJOB1 ZLLGJOB2 ZLLGJOB3 ZLLGJOB4) PROFILE"
 
   If (SETMTRAC <> 'NO') then do
@@ -358,21 +363,13 @@ SDSF_LOG:                                                     /* @A6 */
      RETURN
   END
 
-  KLPAR = MVSVAR("SYMDEF","SYSKLPAR")     /* GDPS K-Lpar? */  /* @A2 */
-  SELECT                                                      /* @A2 */
-     WHEN (KLPAR = "Y") THEN DO                               /* @A2 */
-          ISFSYSID = SUBSTR(LPAR,2) /* Chg IEFSYSID=LPAR? */  /* @A2 */
-          ADDRESS SDSF "ISFLOG READ TYPE(SYSLOG)"             /* @A2 */
-     END                                                      /* @A2 */
-     OTHERWISE DO                                             /* @A2 */
-          IF (RACFMLPR = "*") | (KLPAR <> "") THEN            /* @A6 */
-             ADDRESS SDSF "ISFLOG READ TYPE(OPERLOG)"         /* @A6 */
-          ELSE DO                                             /* @A6 */
-             ISFSYSID = RACFMLPR                              /* @A2 */
-             ADDRESS SDSF "ISFLOG READ TYPE(SYSLOG)"          /* @A6 */
-          END
-     END                                                      /* @A2 */
-  END                                                         /* @A2 */
+  IF (SETLMSG = 'O') then                          /* @L1 */
+     ADDRESS SDSF "ISFLOG READ TYPE(OPERLOG)"      /* @L1 */
+  ELSE DO                                          /* @L1 */
+     ISFSYSID = RACFMLPR                           /* @L1 */
+     ADDRESS SDSF "ISFLOG READ TYPE(SYSLOG)"       /* @L1 */
+  END                                              /* @L1 */
+
   RC=ISFCALLS("OFF")
 
   K = 0
