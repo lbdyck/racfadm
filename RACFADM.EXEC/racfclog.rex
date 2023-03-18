@@ -12,6 +12,7 @@
   | Author:    Lionel B. Dyck                                  |
   |                                                            |
   | History:  (most recent on top)                             |
+  |            2023/03/17 EEJ - Update for (E)JES              |
   |            2023/03/17 LBD - Creation                       |
   |                                                            |
   * ---------------------------------------------------------- */
@@ -42,13 +43,12 @@
     else logtype = 0   /* SYSLOG Active  */
   end
   else do   /* (E)JES */
-    cmd.0 = 1
-    cmd.1 = '/D LOGGER'
-    erc = ejesrexx("execapi * (STEM EJES TERM")
+    erc = ejesrexx("EXECAPI 0 '/"cmd"' (WAIT TERM")        /* EEJ */
     if erc > maxrc then maxrc = erc
     do i = 1 to ejes_ulog.0
       if pos('---',ejes_ulog.i) > 1 then leave
     end
+    i = i + 1                                              /* EEJ */
     if pos('ACTIVE',ejes_ulog.i) > 1
     then logtype = 1   /* Operlog Active */
     else logtype = 0   /* SYSLOG Active  */

@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @EEJ 230317  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
 /* @L1  230316  LBD      Fix Message Scan                             */
 /* @AJ  200918  RACFA    Fix 'Type=A', was displaying same msg        */
@@ -350,6 +351,8 @@ SDSF_LOG:                                                     /* @A6 */
      ISFLOGSTOPDATE  = RACFMDAT  /* DATE - MM/DD/YY */
      ISFLOGSTOPTIME  = "23:59"   /* Time - hh:mm:ss */
   END                                                         /* @AA */
+  else parse value '' with isflogstartdate isflogstarttime ,  /* @L3 */
+       isflogstopdate isfstoptime                             /* @L3 */
   ISFLINELIM      = 0
 
   RC = ISFCALLS("ON")
@@ -399,7 +402,8 @@ PROCESS_LOG_RECS:                                             /* @A6 */
   DO J = 1 TO ISFLINE.0-1
      PARSE VAR ISFLINE.J W1 W2 W3 W4 W5 W6 W7 W8 W9 W10
      IF (W7 = "ICH408I") | (W8 = "ICH408I") THEN DO           /* @A4 */
-        if (jdate = W4) | (jdate = "*") then DO               /* @AA */
+        W4R = RIGHT(W4,5)                                     /* EEJ */
+        if (jdate = W4R) | (jdate = "*") then do              /* EEJ */
            IF (RACFMLPR = "*") | (RACFMLPR = W3) THEN DO
               MSGBEG = J
               MSGEND = J + 12
@@ -618,20 +622,18 @@ RETURN
 /*                Phoenix Software International, Inc.                */
 /*--------------------------------------------------------------------*/
 EJES_LOG:
-  logdate = "09/04/19"  /* mm/dd/yy              */
-  logtype = "SYSLOG"    /* SYSLOG or OPERLOG     */
-  logsys  = "MVSA0"     /* Lpar (Sysname)        */
 
   parse UPPER arg logdate logtype logsys /* Get Parms */
 
-  if (logdate = "*") then                                     /* @AC */
-     logdate = "01/01/90"                                     /* @AC */
-
   rc = EJESREXX("ON")
-  dateparm = LEFT(DATE("Standard",logdate,"Usa"),4) ||,
-             DATE("Days",logdate,"Usa")
-  datepdot = LEFT(DATE("Standard",logdate,"Usa"),4) ||,
-             "." || DATE("Days",logdate,"Usa")
+  if logdate <> "*" then do                                   /* EEJ */
+    dateparm = "000" || DATE("Days",logdate,"Usa")            /* EEJ */
+    dateparm = LEFT(DATE("Standard",logdate,"Usa"),4) ||,
+               RIGHT(dateparm,3)                              /* EEJ */
+    datepdot = "000" || DATE("Days",logdate,"Usa")            /* EEJ */
+    datepdot = LEFT(DATE("Standard",logdate,"Usa"),4) ||,
+               "." || RIGHT(datepdot,3)                       /* EEJ */
+  end                                                         /* EEJ */
 
   select
     /******************/
@@ -642,10 +644,13 @@ EJES_LOG:
       QUEUE "DATEFMT YYYYDDD ."
       QUEUE "LOG" logtype
       QUEUE "XSELECT"
-      QUEUE ":<"logsys"><><><><><><><><><><>"||,
-             "<><><><><><IRR*><ICH*><><><><><>"||,
-             "<00.00-"datepdot">"||,
-             "<23.59-"datepdot">"
+      questr = ":<"logsys"><><><><><><><><><><><><><><><><IRR*><ICH*>" /* EEJ */
+      if logdate <> "*" then do                               /* EEJ */
+        questr = questr || "<><><><><>"||,                    /* EEJ */
+                 "<00.00-"datepdot">"||,
+                 "<23.59-"datepdot">"
+        QUEUE questr                                          /* EEJ */
+      end                                                     /* EEJ */
       QUEUE ""
       ADDRESS EJES "EXECAPI * (PRE log_ TERM"
       end /* when */
@@ -665,7 +670,10 @@ EJES_LOG:
         QUEUE "DATEFMT YYYYDDD ."
         QUEUE "logsys" logsys
         QUEUE "LOG" logtype
-        QUEUE "LOCATE 00.00-"datepdot
+        if logdate = "*" then                                 /* EEJ */
+          QUEUE "TOP"                                         /* EEJ */
+        else                                                  /* EEJ */
+          QUEUE "LOCATE 00.00-"datepdot
         QUEUE "FIND P'" || msgprfx.msgidx || "###'"
         QUEUE ""
         ADDRESS EJES "EXECAPI 9 (PRE log_"
@@ -742,6 +750,17 @@ EJES_LOG:
       logmsg.0 = 0
       end /* otherwise */
   end /* select */
+
+  ISFLINE.0 = log_line.0                                      /* EEJ */
+  do i = 1 to log_line.0                                      /* EEJ */
+    ISFLINE.i = log_line.i                                    /* EEJ */
+  end                                                         /* EEJ */
+  DROP log_line.                                              /* EEJ */
+                                                              /* EEJ */
+  K = 0                                                       /* EEJ */
+  TOTALMSGS = 0                                               /* EEJ */
+  CALL PROCESS_LOG_RECS                                       /* EEJ */
+  LOGMSG.0 = K                                                /* EEJ */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  EJES - SYSLOG logic                                               */

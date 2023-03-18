@@ -11,7 +11,7 @@
 %Search:
 +  Userid!......._RACFMID { (&USERID, *)
 +  Lpar!........._RACFMLPR{ (&LPAR, *)
-+  Date!........._RACFMDAT{ (mm/dd/yy, =, *)
++  Date!........._RACFMDAT{ (mm/dd/yy, =, *, -n)
 +  Type!........._Z{        (A=All, I=Insufficient, V=Violation)
 +  USS Only!....._Z{        (Y=Yes, N=No)
 +
@@ -46,6 +46,10 @@ _ZLLGJOB4
    *REXX(RACFMDAT)
     if racfmdat = '=' then
        racfmdat = date('u')
+    if left(racfmdat,1) = '-' then do
+       dt = date('b') + racfmdat
+       racfmdat = date('u',dt,'b')
+       end
    *ENDREXX
 
    IF (&RACFMDAT NE *)
