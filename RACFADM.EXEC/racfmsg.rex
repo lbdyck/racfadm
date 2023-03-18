@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L3  230318  LBD      Add ToDate along with FromDate               */
 /* @EEJ 230317  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
 /* @L1  230316  LBD      Fix Message Scan                             */
@@ -118,6 +119,7 @@ FOREGROUND:
   "VPUT (RACFMID  RACFMLPR RACFMDAT RACFMTYP",                /* @AA */
         "RACFMUSS RACFMMOD RACFMJCL RACFMSCN",                /* @A6 */
         "SETGPREF SETMTRAC SETPMSG  SETDMSG",                 /* @L2 */
+        "RACFTDAT",                                           /* @L3 */
         "ZLLGJOB1 ZLLGJOB2 ZLLGJOB3 ZLLGJOB4) PROFILE"
 
   If (SETMTRAC <> 'NO') then do
@@ -348,11 +350,9 @@ SDSF_LOG:                                                     /* @A6 */
   IF (JDATE <> "*") THEN DO                                   /* @AA */
      ISFLOGSTARTDATE = RACFMDAT
      ISFLOGSTARTTIME = "00:00"
-     ISFLOGSTOPDATE  = RACFMDAT  /* DATE - MM/DD/YY */
+     ISFLOGSTOPDATE  = RACFTDAT  /* DATE - MM/DD/YY */        /* @L3 */
      ISFLOGSTOPTIME  = "23:59"   /* Time - hh:mm:ss */
   END                                                         /* @AA */
-  else parse value '' with isflogstartdate isflogstarttime ,  /* @L3 */
-       isflogstopdate isfstoptime                             /* @L3 */
   ISFLINELIM      = 0
 
   RC = ISFCALLS("ON")
@@ -403,7 +403,6 @@ PROCESS_LOG_RECS:                                             /* @A6 */
      PARSE VAR ISFLINE.J W1 W2 W3 W4 W5 W6 W7 W8 W9 W10
      IF (W7 = "ICH408I") | (W8 = "ICH408I") THEN DO           /* @A4 */
         W4R = RIGHT(W4,5)                                     /* EEJ */
-        if (jdate = W4R) | (jdate = "*") then do              /* EEJ */
            IF (RACFMLPR = "*") | (RACFMLPR = W3) THEN DO
               MSGBEG = J
               MSGEND = J + 12
@@ -454,7 +453,6 @@ PROCESS_LOG_RECS:                                             /* @A6 */
                  END /* If FOUND */
               END M
            END /* If RACFMLPR*/
-        END /* If jdate */
      END /* If ICH408I */
   END J
   DROP ISFLINE.

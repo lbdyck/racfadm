@@ -11,6 +11,7 @@
  ORLIST    IBM TSO Cmd    Unix Dir/File Security, like RLIST
  RACFADM   Software       Dynamically allocate and invoke software
  RACFCERT  CertAuth       Display Digital Certificates, menu opt CA
+ RACFCLOG  Documentation  Determine LOG type (rc=0 SYSLOG, rc=1 OPERLOG)
  RACFCLSA  Authorization  Display authorization on profile, menu opt 9
  RACFCLSG  Class          Extract generic class profiles
  RACFCLSR  Class          Display class profiles, menu option 4
@@ -34,6 +35,7 @@
  RACFPRMS  Parameter      Display RACF parameters, menu option 7
  RACFPROF  Profile        Execute line cmd 'P', extract/display profile
  RACFPSWD  Password       Reset userid password (menu opt 5/linecmd PW)
+ RACFPUTL  Commands       Called by RACFCMDS, display command at top
  RACFRPTS  Reports        RACF reports, menu option R
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked
  RACFSETG  Settings       Customize settings, menu option 0

@@ -151,6 +151,17 @@
     RETURN
     HLITE_ERRS:                          /* Highlite ICH408I message */
       zshadow = overlay(colort,zshadow,i+8,zwidth-8)
+      str = substr(zdata,i,zwidth)
+      hepos = pos(' USER(',str)
+      if hepos > 0 then
+         zshadow = overlay(colorr,zshadow,i+hepos+5,8)
+      hepos = pos(' GROUP(',str)
+      if hepos > 0 then
+         zshadow = overlay(colorr,zshadow,i+hepos+6,8)
+      hepos = pos(' NAME(',str)
+      if hepos > 0 then
+         zshadow = overlay(colorr,zshadow,i+hepos+5,20)
+      /* Comment Start
       If (substr(zdata,i+72,5) = 'USER(') then
          zshadow = overlay(colorr,zshadow,i+77,8)
       If (substr(zdata,i+17,5) = 'USER(') then
@@ -159,6 +170,7 @@
          zshadow = overlay(colorr,zshadow,i+38,8)
       If (substr(zdata,i+48,5) = 'NAME(') then
          zshadow = overlay(colorr,zshadow,i+53,20)
+         Comment End */
     RETURN
   *ENDREXX
 )REINIT

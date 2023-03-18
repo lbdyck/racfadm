@@ -11,7 +11,8 @@
 %Search:
 +  Userid!......._RACFMID { (&USERID, *)
 +  Lpar!........._RACFMLPR{ (&LPAR, *)
-+  Date!........._RACFMDAT{ (mm/dd/yy, =, *, -n)
++  FromDate!....._RACFMDAT{ (mm/dd/yy, =, *, -n)
++  ToDate!.  ...._RACFTDAT{ (mm/dd/yy, =, *, -n)
 +  Type!........._Z{        (A=All, I=Insufficient, V=Violation)
 +  USS Only!....._Z{        (Y=Yes, N=No)
 +
@@ -22,7 +23,6 @@
 %File:
 +  Scan!........._Z{        (A=Active log, B=Backup DSN)
 +  Backup DSN!..._SETDMSG                                     +
-+
 +
 %Job card:
 _ZLLGJOB1
@@ -46,9 +46,24 @@ _ZLLGJOB4
    *REXX(RACFMDAT)
     if racfmdat = '=' then
        racfmdat = date('u')
-    if left(racfmdat,1) = '-' then do
-       dt = date('b') + racfmdat
-       racfmdat = date('u',dt,'b')
+    if racfmdat = '*' then
+       racfmdat = date('u')
+    if left(racfmdat,1) = '-' then
+       if datatype(racfmdat) = 'NUM' then do
+          dt = date('b') + racfmdat
+          racfmdat = date('u',dt,'b')
+          end
+   *ENDREXX
+
+   *REXX(RACFTDAT)
+    if racftdat = '=' then
+       racftdat = date('u')
+    if racftdat = '*' then
+       racftdat = date('u')
+    if left(racftdat,1) = '-' then
+       if datatype(racftdat) = 'NUM' then do
+          dt = date('b') + racftdat
+          racftdat = date('u',dt,'b')
        end
    *ENDREXX
 
@@ -61,6 +76,16 @@ _ZLLGJOB4
       *ENDREXX
       VER (&RACFMDAT,NB,IDATE)
       &RACFMDAT = &TMPDATE
+
+   IF (&RACFTDAT NE *)
+      &TMPDATE = &RACFTDAT
+      *REXX(*)
+        RACFTDAT = SUBSTR(RACFTDAT,7,2)"/"||,
+                   SUBSTR(RACFTDAT,1,2)"/"||,
+                   SUBSTR(RACFTDAT,4,2)
+      *ENDREXX
+      VER (&RACFTDAT,NB,IDATE)
+      &RACFTDAT = &TMPDATE
 
    VER (&RACFMTYP,NB,LIST,A,V,I)
    VER (&RACFMUSS,NB,LIST,Y,N)
@@ -76,7 +101,7 @@ _ZLLGJOB4
          &TMPDMSG1 = &Z
          &TMPDMSG2 = &Z
          *REXX (SETDMSG  BADDSN RACFSMSG RACFLMSG RACFMDAT
-                SETGPREF TMPDMSG1 TMPDMSG2)
+                RACFTDAT SETGPREF TMPDMSG1 TMPDMSG2)
             X = MSG("OFF")
             IF (SETGPREF = "YES") THEN DO
                IF (SUBSTR(SETDMSG,1,1) <> "'") THEN

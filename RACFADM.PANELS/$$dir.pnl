@@ -64,6 +64,7 @@
  #RACSET3  Tutorial       Settings - Customize options (3 of 4)
  #RACSET4  Tutorial       Settings - Customize options (4 of 4)
  #RACUSR2  Tutorial       User profile
+ #RACUSR6  Tutorial       User profile
  OPERMIT   TSO Help       Unix Access Control List, like PERMIT
  ORALTER   TSO Help       Unix Security Attribute, like ALTER
  ORLIST    TSO Help       Unix Dir/File Security, like RLIST
