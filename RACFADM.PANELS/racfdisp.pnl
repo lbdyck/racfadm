@@ -152,7 +152,7 @@
     HLITE_ERRS:                          /* Highlite ICH408I message */
       zshadow = overlay(colort,zshadow,i+8,zwidth-8)
       If (substr(zdata,i+72,5) = 'USER(') then
-         zshadow = overlay(colorr,zshadow,i+77,3)
+         zshadow = overlay(colorr,zshadow,i+77,8)
       If (substr(zdata,i+17,5) = 'USER(') then
          zshadow = overlay(colorr,zshadow,i+22,8)
       If (substr(zdata,i+32,6) = 'GROUP(') then

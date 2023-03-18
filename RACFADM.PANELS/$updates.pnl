@@ -6,6 +6,7 @@
      - RACFCLOG updated for (E)JES support by Ed Jaffe
      - RACFMSG  (Option M)
        - updated for (E)JES support by Ed Jaffe
+     - RACFDISP panel updated to highlight all of the userid
 
   17 Mar 2023 - V35R5
      - RACFCLOG added
