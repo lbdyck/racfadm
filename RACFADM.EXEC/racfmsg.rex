@@ -34,10 +34,6 @@ ENV        = SYSVAR(SYSENV)
 USERID     = USERID()                                         /* @A8 */
 LPAR       = MVSVAR("SYMDEF","SYSNAME")                       /* @A8 */
 
-rc = racfclog()   /* Get Operlog or SYSLOG */                 /* @L2 */
-if rc = 0 then setlmsg = 'S'                                  /* @L2 */
-else setlmsg = 'O'                                            /* @L2 */
-
 ADDRESS ISPEXEC
   ADDRESS TSO "PROFILE VARSTORAGE(HIGH)"
   IF (ENV = "FORE") THEN
@@ -58,6 +54,11 @@ FOREGROUND:
         "RACFMUSS RACFMMOD RACFMJCL RACFMSCN",                /* @A6 */
         "SETGPREF SETMTRAC SETPMSG  SETDMSG",                 /* @L2 */
         "ZLLGJOB1 ZLLGJOB2 ZLLGJOB3 ZLLGJOB4) PROFILE"
+
+  rc = racfclog(setpmsg) /* Get Operlog or SYSLOG */       /* @L3 */
+  if rc = 0 then setlmsg = 'S'                             /* @L3 */
+  else setlmsg = 'O'                                       /* @L3 */
+
   If (SETMTRAC <> 'NO') then do
      Say "*"COPIES("-",70)"*"
      Say "*"Center("Begin Program = "REXXPGM,70)"*"
@@ -169,8 +170,14 @@ BATCH:
              PARSE UPPER VAR PARMS.J . "USERID="RACFMID .     /* @A9 */
         WHEN (POS("LPAR=",PARMS.J)    > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "LPAR="RACFMLPR .      /* @A9 */
-        WHEN (POS("DATE=",PARMS.J)    > 0) THEN               /* @A9 */
+        WHEN (POS("FROMDATE=",PARMS.J)    > 0) THEN           /* @L3 */
              PARSE UPPER VAR PARMS.J . "DATE="RACFMDAT .      /* @A9 */
+        WHEN (POS("TODATE=",PARMS.J)    > 0) THEN             /* @L3 */
+             PARSE UPPER VAR PARMS.J . "DATE="RACFTDAT .      /* @L3 */
+        WHEN (POS("FROMTIME=",PARMS.J)    > 0) THEN           /* @L3 */
+             PARSE UPPER VAR PARMS.J . "TIME="RACFFTIM .      /* @L3 */
+        WHEN (POS("TOTIME=",PARMS.J)    > 0) THEN             /* @L3 */
+             PARSE UPPER VAR PARMS.J . "DATE="RACFTTIM .      /* @L3 */
         WHEN (POS("USSONLY=",PARMS.J) > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "USSONLY="RACFMUSS .   /* @A9 */
         WHEN (POS("TYPE=",PARMS.J)    > 0) THEN               /* @A9 */
@@ -187,10 +194,30 @@ BATCH:
   END J
   DROP PARMS.
 
+     Select                                             /* @L3 */
+     when left(radmfdat,1) = '-' then                   /* @L3 */
+        if datatype(radmfdat) = 'NUM' then do           /* @L3 */
+           dt = date('b') + radmfdat                    /* @L3 */
+           racfmdat = date('u',dt,'b')                  /* @L3 */
+           end                                          /* @L3 */
+     when left(radmtdat,1) = '-' then                   /* @L3 */
+        if datatype(radmtdat) = 'NUM' then do           /* @L3 */
+           dt = date('b') + radmtdat                    /* @L3 */
+           racftdat = date('u',dt,'b')                  /* @L3 */
+           end                                          /* @L3 */
+     when radmfdat = '=' then                           /* @L3 */
+        if radmfdat = '='                               /* @L3 */
+        then racfmdat = date('u')                       /* @L3 */
+        else racfmdat = radmfdat                        /* @L3 */
+     when radmtdat = '=' then                           /* @L3 */
+        if radmtdat = '='                               /* @L3 */
+        then racftdat = date('u')                       /* @L3 */
+        else racftdat = radmtdat                        /* @L3 */
+     Otherwise nop                                      /* @L3 */
+     End                                                /* @L3 */
+
   IF (RACFMID  = "")  THEN RACFMID  = "*"
   IF (RACFMLPR = "")  THEN RACFMLPR = "*"
-  IF (RACFMDAT = "")  THEN RACFMDAT = DATE("U")
-  IF (RACFMDAT = "=") THEN RACFMDAT = DATE("U")               /* @AE */
   IF (RACFMUSS = "")  THEN RACFMUSS = "N"
   IF (RACFMTYP = "")  THEN RACFMTYP = "A"
   IF (RACFMSCN = "")  THEN RACFMSCN = "A"                     /* @A6 */
@@ -222,26 +249,32 @@ BATCH:
   SAY "*"CENTER("RACFADM - Messages",70)"*"                   /* @A7 */
   SAY "*"COPIES("-",70)"*"                                    /* @A7 */
   SAY " "                                                     /* @A7 */
-  SAY "   Total:"                                             /* @A7 */
-  SAY "     Messages = "TOTALMSGS                             /* @A7 */
+  SAY " Total:"                                               /* @A7 */
+  SAY "   Messages = "TOTALMSGS                               /* @A7 */
   SAY " "                                                     /* @A7 */
-  SAY "   Parameters:"                                        /* @A7 */
-  SAY "     Userid   = "LEFT(RACFMID,8),                      /* @A7 */
-      " ("USERID", *)"                                        /* @A8 */
-  SAY "     Lpar     = "LEFT(racfmlpr,8),                     /* @A7 */
-      " ("LPAR", *)"                                          /* @A8 */
-  SAY "     Date     = "LEFT(racfmdat,8),                     /* @A7 */
-      " (mm/dd/yy, =, *)"                                     /* @AE */
-  SAY "     Type     = "LEFT(racfmtyp,8),                     /* @A7 */
-      " (A=All, I=Insufficient, V=Violation)"                 /* @A7 */
-  SAY "     USS      = "LEFT(racfmuss,8),                     /* @A7 */
-      " (Y=Yes, N=No)"                                        /* @A7 */
-  SAY "     Log      = "LEFT(SETLMSG,8),                      /* @A7 */
-      " (O=Operlog, S=Syslog)"                                /* @A7 */
-  SAY "     Scan     = "LEFT(RACFMSCN,8),                     /* @A7 */
-      " (A=Active log, B=Backup log)"                         /* @A7 */
-  SAY "     Program  = "LEFT(SETPMSG,8),                      /* @A7 */
-      " (EJES, SDSF)"                                         /* @A7 */
+  SAY "  Parameters:"                                         /* @L3 */
+  SAY "   Userid     = "LEFT(RACFMID,8),                      /* @L3 */
+      " ("USERID", *)"                                        /* @L3 */
+  SAY "   Lpar       = "LEFT(racfmlpr,8),                     /* @L3 */
+      " ("LPAR", *)"                                          /* @L3 */
+  SAY "   From Date  = "LEFT(racfmdat,8),                     /* @L3 */
+      " (mm/dd/yy, =, *, -n)"                                 /* @L3 */
+  SAY "   To Date    = "LEFT(racftdat,8),                     /* @L3 */
+      " (mm/dd/yy, =, *, -n)"                                 /* @L3 */
+  SAY "   From Time  = "LEFT(racfftim,8),                     /* @L3 */
+      " hh:mm "                                               /* @L3 */
+  SAY "   To Time    = "LEFT(racfttim,8),                     /* @L3 */
+      " hh:mm "                                               /* @L3 */
+  SAY "   Type       = "LEFT(racfmtyp,8),                     /* @L3 */
+      " (A=All, I=Insufficient, V=Violation)"                 /* @L3 */
+  SAY "   USS        = "LEFT(racfmuss,8),                     /* @L3 */
+      " (Y=Yes, N=No)"                                        /* @L3 */
+  SAY "   Log        = "LEFT(SETLMSG,8),                      /* @L3 */
+      " (O=Operlog, S=Syslog)"                                /* @L3 */
+  SAY "   Scan       = "LEFT(RACFMSCN,8),                     /* @L3 */
+      " (A=Active log, B=Backup log)"                         /* @L3 */
+  SAY "   Program    = "LEFT(SETPMSG,8),                      /* @L3 */
+      " (EJES, SDSF)"                                         /* @L3 */
   SAY " "                                                     /* @A7 */
   ADDRESS TSO "EXECIO * DISKW ERRORS (STEM LOGMSG. FINIS"
   EXECIORC = RC
@@ -380,7 +413,7 @@ SDSF_LOG:                                                     /* @A6 */
      ISFLOGSTARTDATE = RACFMDAT
      ISFLOGSTARTTIME = RACFFTIM                               /* @L3 */
      ISFLOGSTOPDATE  = RACFTDAT  /* DATE - MM/DD/YY */        /* @L3 */
-     ISFLOGSTOPTIMEE = RACFTTIM                               /* @L3 */
+     ISFLOGSTOPTIME  = RACFTTIM                               /* @L3 */
   END                                                         /* @AA */
   ISFLINELIM      = 0
 

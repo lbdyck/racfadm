@@ -3,7 +3,7 @@
   |                                                            |
   | Function:  Return 0 if SYSLOG and 1 if OPERLOG active      |
   |                                                            |
-  | Syntax:    rc = racfclog()                                 |
+  | Syntax:    rc = racfclog(setpmsg)                          |
   |                                                            |
   | Usage Notes: called by RACFLOG and RACFMSG                 |
   |                                                            |
@@ -12,15 +12,14 @@
   | Author:    Lionel B. Dyck                                  |
   |                                                            |
   | History:  (most recent on top)                             |
+  |            2023/03/19 LBD - Add PARM                       |
   |            2023/03/17 EEJ - Update for (E)JES              |
   |            2023/03/17 LBD - Creation                       |
   |                                                            |
   * ---------------------------------------------------------- */
 
-  /* ---------------------------------- *
-  | Get RACFADM Variable for SDSF/EJES |
-  * ---------------------------------- */
-  Address ISPExec 'vget (setpmsg)'
+  arg setpmsg
+  if setpmsg = '' then setpmsg = 'SDSF'
 
   /* ------------------------ *
   | Prime the command to use |

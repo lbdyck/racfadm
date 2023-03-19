@@ -3,6 +3,8 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @L3  230319  LBD      Add TODATE, TIME, TOTIME
+)CM*                        Change Date to FROMDATE
 )CM*  @A6  200630  RACFA    Added "=" for today's date in comments
 )CM*  @A5  200630  RACFA    Chged var. DSNBKLOG to TMPBKLOG
 )CM*  @A4  200629  RACFA    Updated PARM date comments
@@ -34,7 +36,10 @@
 )TB 3 25
 !USERID=#RACFMID!(#USERID, *)
 !LPAR=#RACFMLPR!(#LPAR, *)
-!DATE=#RACFMDAT!(mm/dd/yy, =, *)
+!FROMDATE=#RACFMDAT!(mm/dd/yy, =, *, -n)
+!TODATE=#RACFTDAT!(mm/dd/yy, =, *, -n)
+!FROMTIME=#RACFFTIM!(hh:mm)
+!TOTIME=#RACFTTIM!(hh:mm)
 !TYPE=#RACFMTYP!(A=All, I=Insufficient, V=Violation)
 !USSONLY=#RACFMUSS!(Y=Yes, N=No)
 !LOG=#SETLMSG!(O=Operlog, S=Syslog)
