@@ -11,8 +11,8 @@
 %Search:
 +  Userid!......._RACFMID { (&USERID, *)
 +  Lpar!........._RACFMLPR{ (&LPAR, *)
-+  FromDate!....._RACFMDAT{ (mm/dd/yy, =, *, -n)
-+  ToDate!.  ...._RACFTDAT{ (mm/dd/yy, =, *, -n)
++  Dates......... From:_Z       { To:_Z       {  (mm/dd/yy, =, *, -n)
++  Times......... From:_Z    {    To:_Z    {     (hh:mm, blank = 00:00-23:59)
 +  Type!........._Z{        (A=All, I=Insufficient, V=Violation)
 +  USS Only!....._Z{        (Y=Yes, N=No)
 +
@@ -32,7 +32,16 @@ _ZLLGJOB4
 )INIT
   .CURSOR = RACFMID
   .HELP   = #RACMSG
-  .ZVARS  = '(RACFMTYP RACFMUSS RACFMMOD RACFMJCL RACFMSCN)'
+  .ZVARS  = '(RADMFDAT RADMTDAT RADMFTIM RADMTTIM +
+              RACFMTYP RACFMUSS RACFMMOD RACFMJCL RACFMSCN)'
+  if (&radmftim = &z)
+      &radmftim = 00:00
+  if (&radmttim = &z)
+      &radmttim = 23:59
+  if (&radmfdat = &Z)
+      &radmfdat = '*'
+  if (&radmtdat = &Z)
+      &radmtdat = '*'
 )PROC
    IF (&RACFMID EQ &Z)
       &RACFMID = *
@@ -43,49 +52,42 @@ _ZLLGJOB4
    IF (&RACFMLPR NE *)
       VER (&RACFMLPR,NB,NAME)
 
-   *REXX(RACFMDAT)
-    if racfmdat = '=' then
-       racfmdat = date('u')
-    if racfmdat = '*' then
-       racfmdat = date('u')
-    if left(racfmdat,1) = '-' then
-       if datatype(racfmdat) = 'NUM' then do
-          dt = date('b') + racfmdat
-          racfmdat = date('u',dt,'b')
-          end
+   *REXX(RADMFDAT RADMTDAT ckfdat cktdat)
+     ckfdat = 1
+     cktdat = 1
+     if left(radmfdat,1) = '*' then ckfdat = 0
+     if left(radmfdat,1) = '=' then ckfdat = 0
+     if left(radmfdat,1) = '-' then ckfdat = 0
+     if left(radmtdat,1) = '*' then cktdat = 0
+     if left(radmtdat,1) = '=' then cktdat = 0
+     if left(radmtdat,1) = '-' then cktdat = 0
    *ENDREXX
 
-   *REXX(RACFTDAT)
-    if racftdat = '=' then
-       racftdat = date('u')
-    if racftdat = '*' then
-       racftdat = date('u')
-    if left(racftdat,1) = '-' then
-       if datatype(racftdat) = 'NUM' then do
-          dt = date('b') + racftdat
-          racftdat = date('u',dt,'b')
-       end
-   *ENDREXX
-
-   IF (&RACFMDAT NE *)
-      &TMPDATE = &RACFMDAT
-      *REXX(*)
-        RACFMDAT = SUBSTR(RACFMDAT,7,2)"/"||,
-                   SUBSTR(RACFMDAT,1,2)"/"||,
-                   SUBSTR(RACFMDAT,4,2)
+   IF (&CKFDAT EQ 1)
+      &TMPDATE = &RADMFDAT
+      *REXX(RADMFDAT)
+        parse value radmfdat with mm'/'dd'/'yy
+        radmfdat = yy'/'mm'/'right(dd+100,2)
       *ENDREXX
-      VER (&RACFMDAT,NB,IDATE)
-      &RACFMDAT = &TMPDATE
+      VER (&RADMFDAT,NB,IDATE)
+      &RACFMDAT = &RADMFDAT
+      &RADMFDAT = &TMPDATE
 
-   IF (&RACFTDAT NE *)
-      &TMPDATE = &RACFTDAT
-      *REXX(*)
-        RACFTDAT = SUBSTR(RACFTDAT,7,2)"/"||,
-                   SUBSTR(RACFTDAT,1,2)"/"||,
-                   SUBSTR(RACFTDAT,4,2)
+   IF (&CKTDAT EQ 1)
+      &TMPDATE = &RADMTDAT
+      *REXX(RADMTDAT)
+        parse value radmtdat with mm'/'dd'/'yy
+        radmtdat = yy'/'mm'/'right(dd+100,2)
       *ENDREXX
-      VER (&RACFTDAT,NB,IDATE)
-      &RACFTDAT = &TMPDATE
+      VER (&RADMTDAT,NB,IDATE)
+      &RACFTDAT = &RADMTDAT
+      &RADMTDAT = &TMPDATE
+
+
+   ver (&radmftim,itime)
+   ver (&radmttim,itime)
+   &racfftim = &radmftim
+   &racfttim = &radmttim
 
    VER (&RACFMTYP,NB,LIST,A,V,I)
    VER (&RACFMUSS,NB,LIST,Y,N)
@@ -155,4 +157,6 @@ _ZLLGJOB4
 
   IF (&RACFMMOD = B)
      VER(&ZLLGJOB1,NB)
+  VPUT (RADMFDAT RADMTDAT RADMFTIM RADMTTIM) PROFILE
+  VPUT (RACFMDAT RACFTDAT RACFFTIM RACFTTIM) SHARED
 )END

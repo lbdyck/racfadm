@@ -73,6 +73,7 @@
     do i = 1 to length(zshadow) by zwidth
        color  = ''
        titlec = colort                /* Color for the title section */
+       str = substr(zdata,i,zwidth)
        Select
           When substr(zdata,i+8,5)  = '*****' then     /* Top/Bottom */
                nop
@@ -110,9 +111,7 @@
                zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
           When substr(zdata,i+8,6) = ' ---- ' then       /* Enqueues */
                zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
-          When substr(zdata,i+64,7) = 'ICH408I' then     /* Errors   */
-               call hlite_errs
-          When substr(zdata,i+9,7)  = 'ICH408I' then     /* Errors   */
+          When pos(' ICH408I',str) > 0 then              /* Errors */
                call hlite_errs
           Otherwise do
              if vtype = 'TREE' then

@@ -7,6 +7,8 @@
      - RACFMSG  (Option M)
        - updated for (E)JES support by Ed Jaffe
        - support for ToDate along with existing FromDate
+         and from/to times
+     - #RACFMSG tutorial panel updated
      - RACFDISP panel updated to highlight all of the userid
         group, and name in a more generic way
 

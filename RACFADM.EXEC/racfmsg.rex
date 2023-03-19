@@ -3,7 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @L3  230318  LBD      Add ToDate along with FromDate               */
+/* @L3  230319  LBD      Add ToDate along with FromDate               */
+/*                       Translae out x'00' in error message (ejes)   */
 /* @EEJ 230317  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
 /* @L1  230316  LBD      Fix Message Scan                             */
@@ -71,6 +72,11 @@ FOREGROUND:
      WHEN (RACFMDAT = "*") THEN NOP                           /* @AA */
      OTHERWISE RACFMDAT = DATE("U")                           /* @AA */
   END                                                         /* @AA */
+  SELECT                                                      /* @AA */
+     WHEN (RACFTDAT = "")  THEN RACFTDAT = DATE("U")          /* @L3 */
+     WHEN (RACFTDAT = "*") THEN NOP                           /* @L3 */
+     OTHERWISE RACFTDAT = DATE("U")                           /* @L3 */
+  END                                                         /* @L3 */
   IF (RACFMTYP = "") THEN RACFMTYP = "A"
   IF (RACFMUSS = "") THEN RACFMUSS = "N"
   RACFMMOD = "F"                                              /* @AA */
@@ -101,6 +107,29 @@ FOREGROUND:
      ZCMD = ""                                                /* @AF */
      "DISPLAY PANEL("PANEL01")"
      IF (RC = 8) THEN LEAVE
+
+     Select                                             /* @L3 */
+     when left(radmfdat,1) = '-' then                   /* @L3 */
+        if datatype(radmfdat) = 'NUM' then do           /* @L3 */
+           dt = date('b') + radmfdat                    /* @L3 */
+           racfmdat = date('u',dt,'b')                  /* @L3 */
+           end                                          /* @L3 */
+     when left(radmtdat,1) = '-' then                   /* @L3 */
+        if datatype(radmtdat) = 'NUM' then do           /* @L3 */
+           dt = date('b') + radmtdat                    /* @L3 */
+           racftdat = date('u',dt,'b')                  /* @L3 */
+           end                                          /* @L3 */
+     when radmfdat = '=' then                           /* @L3 */
+        if radmfdat = '='                               /* @L3 */
+        then racfmdat = date('u')                       /* @L3 */
+        else racfmdat = radmfdat                        /* @L3 */
+     when radmtdat = '=' then                           /* @L3 */
+        if radmtdat = '='                               /* @L3 */
+        then racftdat = date('u')                       /* @L3 */
+        else racftdat = radmtdat                        /* @L3 */
+     Otherwise nop                                      /* @L3 */
+     End                                                /* @L3 */
+
      IF (RACFMDAT = "*") THEN                                 /* @AA */
         JDATE = "*"
      ELSE DO                                                  /* @AA */
@@ -349,9 +378,9 @@ RETURN
 SDSF_LOG:                                                     /* @A6 */
   IF (JDATE <> "*") THEN DO                                   /* @AA */
      ISFLOGSTARTDATE = RACFMDAT
-     ISFLOGSTARTTIME = "00:00"
+     ISFLOGSTARTTIME = RACFFTIM                               /* @L3 */
      ISFLOGSTOPDATE  = RACFTDAT  /* DATE - MM/DD/YY */        /* @L3 */
-     ISFLOGSTOPTIME  = "23:59"   /* Time - hh:mm:ss */
+     ISFLOGSTOPTIMEE = RACFTTIM                               /* @L3 */
   END                                                         /* @AA */
   ISFLINELIM      = 0
 
@@ -447,7 +476,7 @@ PROCESS_LOG_RECS:                                             /* @A6 */
                     TOTALMSGS = TOTALMSGS + 1
                     DO N = MSGBEG TO MSGEND
                        K = K + 1
-                       LOGMSG.K = ISFLINE.N
+                       LOGMSG.K = translate(isfline.n,' ','00'x) /* @L3 */
                     END N
                     LEAVE M                                   /* @AJ */
                  END /* If FOUND */

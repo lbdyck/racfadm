@@ -13,8 +13,8 @@
 +It uses!SDSF+or!EJES+to obtain the active operlog or syslog and userid!&ZUSER
 +must be authorized to view the!SDSF+or!EJES LOG
 +
-+The search criteria can be userid, lpar, fromdate, todate, only USS messages
-+and type of!ICH408I+message (insufficient access or violations)
++The search criteria can be userid, lpar, from/to dates, from/to times only USS
++messages and type of!ICH408I+message (insufficient access or violations)
 +
 +A small message in the upper right hand corner of the screen will display
 +the total number of!ICH408I+messages found
