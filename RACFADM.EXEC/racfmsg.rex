@@ -137,34 +137,33 @@ FOREGROUND:
      Say "*"Center("End Program = "REXXPGM,70)"*"
      Say "*"COPIES("-",70)"*"
   end
+return
 
-Fixup_dates:
-  Select                                             /* @L3 */
-    when radmfdat = '*' then                         /* @L3 */
+Fixup_dates:                                         /* @L3 */
+    racfmdat = radmfdat                              /* @L3 */
+    racftdat = radmtdat                              /* @L3 */
+    IF radmfdat = '*' then                           /* @L3 */
          racfmdat = '*'                              /* @L3 */
-    when left(radmfdat,1) = '-' then                 /* @L3 */
-    if datatype(radmfdat) = 'NUM' then do            /* @L3 */
+    IF left(radmfdat,1) = '-' then                   /* @L3 */
+    IF datatype(radmfdat) = 'NUM' then do            /* @L3 */
       dt = date('b') + radmfdat                      /* @L3 */
       racfmdat = date('u',dt,'b')                    /* @L3 */
     end                                              /* @L3 */
-    when left(radmtdat,1) = '-' then                 /* @L3 */
-    if datatype(radmtdat) = 'NUM' then do            /* @L3 */
+    IF left(radmtdat,1) = '-' then                   /* @L3 */
+    IF datatype(radmtdat) = 'NUM' then do            /* @L3 */
       dt = date('b') + radmtdat                      /* @L3 */
       racftdat = date('u',dt,'b')                    /* @L3 */
     end                                              /* @L3 */
-    when radmfdat = '=' then                         /* @L3 */
-    if radmfdat = '='                                /* @L3 */
+    IF radmfdat = '=' then                           /* @L3 */
+    IF radmfdat = '='                                /* @L3 */
     then racfmdat = date('u')                        /* @L3 */
     else racfmdat = radmfdat                         /* @L3 */
-    when radmtdat = '=' then                         /* @L3 */
-    if radmtdat = '='                                /* @L3 */
+    IF radmtdat = '=' then                           /* @L3 */
+    IF radmtdat = '='                                /* @L3 */
     then racftdat = date('u')                        /* @L3 */
     else racftdat = radmtdat                         /* @L3 */
-    Otherwise nop                                    /* @L3 */
-  End                                                /* @L3 */
   return                                             /* @L3 */
 
-RETURN
 /*--------------------------------------------------------------------*/
 /*  Execution in batch mode                                           */
 /*--------------------------------------------------------------------*/

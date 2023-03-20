@@ -61,6 +61,7 @@
   &MIXED = TRANS(&ZPDMIX N,EBCDIC *,MIX) /* set mixed format */
   vget (vtype) shared
   *REXX(* zdata zshadow zwidth vtype)
+    if zwidth < 81 then exit
     colorb = left('B',zwidth,'B')
     colorg = left('G',zwidth,'G')
     colorr = left('R',zwidth,'R')
