@@ -160,16 +160,10 @@
       hepos = pos(' NAME(',str)
       if hepos > 0 then
          zshadow = overlay(colorr,zshadow,i+hepos+5,20)
-      /* Comment Start
-      If (substr(zdata,i+72,5) = 'USER(') then
-         zshadow = overlay(colorr,zshadow,i+77,8)
-      If (substr(zdata,i+17,5) = 'USER(') then
-         zshadow = overlay(colorr,zshadow,i+22,8)
-      If (substr(zdata,i+32,6) = 'GROUP(') then
-         zshadow = overlay(colorr,zshadow,i+38,8)
-      If (substr(zdata,i+48,5) = 'NAME(') then
-         zshadow = overlay(colorr,zshadow,i+53,20)
-         Comment End */
+      w = word(str,3)
+      hepos = pos(w,str)
+      if hepos > 0 then
+         zshadow = overlay(colorb,zshadow,i+hepos-1,8)
     RETURN
   *ENDREXX
 )REINIT
