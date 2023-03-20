@@ -109,27 +109,7 @@ FOREGROUND:
      "DISPLAY PANEL("PANEL01")"
      IF (RC = 8) THEN LEAVE
 
-     Select                                             /* @L3 */
-     when left(radmfdat,1) = '-' then                   /* @L3 */
-        if datatype(radmfdat) = 'NUM' then do           /* @L3 */
-           dt = date('b') + radmfdat                    /* @L3 */
-           racfmdat = date('u',dt,'b')                  /* @L3 */
-           end                                          /* @L3 */
-     when left(radmtdat,1) = '-' then                   /* @L3 */
-        if datatype(radmtdat) = 'NUM' then do           /* @L3 */
-           dt = date('b') + radmtdat                    /* @L3 */
-           racftdat = date('u',dt,'b')                  /* @L3 */
-           end                                          /* @L3 */
-     when radmfdat = '=' then                           /* @L3 */
-        if radmfdat = '='                               /* @L3 */
-        then racfmdat = date('u')                       /* @L3 */
-        else racfmdat = radmfdat                        /* @L3 */
-     when radmtdat = '=' then                           /* @L3 */
-        if radmtdat = '='                               /* @L3 */
-        then racftdat = date('u')                       /* @L3 */
-        else racftdat = radmtdat                        /* @L3 */
-     Otherwise nop                                      /* @L3 */
-     End                                                /* @L3 */
+     call Fixup_dates
 
      IF (RACFMDAT = "*") THEN                                 /* @AA */
         JDATE = "*"
@@ -158,12 +138,39 @@ FOREGROUND:
      Say "*"COPIES("-",70)"*"
   end
 
+Fixup_dates:
+  Select                                             /* @L3 */
+    when radmfdat = '*' then                         /* @L3 */
+         racfmdat = '*'                              /* @L3 */
+    when left(radmfdat,1) = '-' then                 /* @L3 */
+    if datatype(radmfdat) = 'NUM' then do            /* @L3 */
+      dt = date('b') + radmfdat                      /* @L3 */
+      racfmdat = date('u',dt,'b')                    /* @L3 */
+    end                                              /* @L3 */
+    when left(radmtdat,1) = '-' then                 /* @L3 */
+    if datatype(radmtdat) = 'NUM' then do            /* @L3 */
+      dt = date('b') + radmtdat                      /* @L3 */
+      racftdat = date('u',dt,'b')                    /* @L3 */
+    end                                              /* @L3 */
+    when radmfdat = '=' then                         /* @L3 */
+    if radmfdat = '='                                /* @L3 */
+    then racfmdat = date('u')                        /* @L3 */
+    else racfmdat = radmfdat                         /* @L3 */
+    when radmtdat = '=' then                         /* @L3 */
+    if radmtdat = '='                                /* @L3 */
+    then racftdat = date('u')                        /* @L3 */
+    else racftdat = radmtdat                         /* @L3 */
+    Otherwise nop                                    /* @L3 */
+  End                                                /* @L3 */
+  return                                             /* @L3 */
+
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Execution in batch mode                                           */
 /*--------------------------------------------------------------------*/
 BATCH:
   ADDRESS TSO "EXECIO * DISKR PARMS (STEM PARMS. FINIS"
+  parse value '' with racfmdat racftdat racfftim racfttim
   DO J = 1 TO PARMS.0
      SELECT
         WHEN (POS("USERID=",PARMS.J)  > 0) THEN               /* @A9 */
@@ -194,27 +201,7 @@ BATCH:
   END J
   DROP PARMS.
 
-     Select                                             /* @L3 */
-     when left(radmfdat,1) = '-' then                   /* @L3 */
-        if datatype(radmfdat) = 'NUM' then do           /* @L3 */
-           dt = date('b') + radmfdat                    /* @L3 */
-           racfmdat = date('u',dt,'b')                  /* @L3 */
-           end                                          /* @L3 */
-     when left(radmtdat,1) = '-' then                   /* @L3 */
-        if datatype(radmtdat) = 'NUM' then do           /* @L3 */
-           dt = date('b') + radmtdat                    /* @L3 */
-           racftdat = date('u',dt,'b')                  /* @L3 */
-           end                                          /* @L3 */
-     when radmfdat = '=' then                           /* @L3 */
-        if radmfdat = '='                               /* @L3 */
-        then racfmdat = date('u')                       /* @L3 */
-        else racfmdat = radmfdat                        /* @L3 */
-     when radmtdat = '=' then                           /* @L3 */
-        if radmtdat = '='                               /* @L3 */
-        then racftdat = date('u')                       /* @L3 */
-        else racftdat = radmtdat                        /* @L3 */
-     Otherwise nop                                      /* @L3 */
-     End                                                /* @L3 */
+     call Fixup_dates
 
   IF (RACFMID  = "")  THEN RACFMID  = "*"
   IF (RACFMLPR = "")  THEN RACFMLPR = "*"
@@ -415,6 +402,10 @@ SDSF_LOG:                                                     /* @A6 */
      ISFLOGSTOPDATE  = RACFTDAT  /* DATE - MM/DD/YY */        /* @L3 */
      ISFLOGSTOPTIME  = RACFTTIM                               /* @L3 */
   END                                                         /* @AA */
+  else do
+       parse value '' with isflogstarttime isflogstartdate ,
+       isflogstopdate isflogstoptime
+       end
   ISFLINELIM      = 0
 
   RC = ISFCALLS("ON")
