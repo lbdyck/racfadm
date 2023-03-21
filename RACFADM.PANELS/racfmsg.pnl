@@ -12,7 +12,7 @@
 +  Userid!......._RACFMID { (&USERID, *)
 +  Lpar!........._RACFMLPR{ (&LPAR, *)
 +  Dates......... From:_Z       { To:_Z       {  (mm/dd/yy, =, *, -n)
-+  Times......... From:_Z    {    To:_Z    {     (hh:mm, blank = 00:00-00:00)
++  Times......... From:_Z    {    To:_Z    {     (hh:mm, blank = 00:00-23:59)
 +  Type!........._Z{        (A=All, I=Insufficient, V=Violation)
 +  USS Only!....._Z{        (Y=Yes, N=No)
 +
@@ -37,7 +37,7 @@ _ZLLGJOB4
   if (&radmftim = &z)
       &radmftim = 00:00
   if (&radmttim = &z)
-      &radmttim = 00:00
+      &radmttim = 23:59
   if (&radmfdat = &Z)
       &radmfdat = '*'
   if (&radmtdat = &Z)
