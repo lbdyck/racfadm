@@ -3,9 +3,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @EEJ 230320  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L3  230319  LBD      Add ToDate along with FromDate               */
 /*                       Translae out x'00' in error message (ejes)   */
-/* @EEJ 230317  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
 /* @L1  230316  LBD      Fix Message Scan                             */
 /* @AJ  200918  RACFA    Fix 'Type=A', was displaying same msg        */
@@ -140,8 +140,8 @@ FOREGROUND:
 return
 
 Fixup_dates:                                         /* @L3 */
-    racfmdat = radmfdat                              /* @L3 */
-    racftdat = radmtdat                              /* @L3 */
+    racfmdat = radmfdat                              /* EEJ */
+    racftdat = radmtdat                              /* EEJ */
     IF radmfdat = '*' then                           /* @L3 */
          racfmdat = '*'                              /* @L3 */
     IF left(radmfdat,1) = '-' then                   /* @L3 */
@@ -177,9 +177,9 @@ BATCH:
         WHEN (POS("LPAR=",PARMS.J)    > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "LPAR="RACFMLPR .      /* @A9 */
         WHEN (POS("FROMDATE=",PARMS.J)    > 0) THEN           /* @L3 */
-             PARSE UPPER VAR PARMS.J . "DATE="RACFMDAT .      /* @A9 */
+             PARSE UPPER VAR PARMS.J . "DATE="RADMFDAT .      /* @L3 */
         WHEN (POS("TODATE=",PARMS.J)    > 0) THEN             /* @L3 */
-             PARSE UPPER VAR PARMS.J . "DATE="RACFTDAT .      /* @L3 */
+             PARSE UPPER VAR PARMS.J . "DATE="RADMTDAT .      /* @L3 */
         WHEN (POS("FROMTIME=",PARMS.J)    > 0) THEN           /* @L3 */
              PARSE UPPER VAR PARMS.J . "TIME="RACFFTIM .      /* @L3 */
         WHEN (POS("TOTIME=",PARMS.J)    > 0) THEN             /* @L3 */
@@ -210,6 +210,7 @@ BATCH:
   if (RACFMDAT = "*") THEN                                    /* @AA */
      JDATE = "*"
   else do                                                     /* @AA */
+say 'batch racfmdat:' racfmdat 'radmfdat:' radmfdat
      PARSE VAR racfmdat MM "/" DD "/" YY .
      YYYYMMDD = "20"YY""MM""DD
      DDD      = DATE("D",YYYYMMDD,"S")
@@ -222,7 +223,7 @@ BATCH:
                 EJESLOG = "SYSLOG"
              ELSE
                 EJESLOG = "OPERLOG"
-             CALL EJES_LOG RACFMDAT EJESLOG RACFMLPR          /* @A6 */
+             CALL EJES_LOG EJESLOG RACFMLPR                   /* EEJ */
         END
         OTHERWISE                                             /* @A6 */
              CALL SDSF_LOG                                    /* @A6 */
@@ -324,7 +325,7 @@ FOREGROUND_LOG:
                 EJESLOG = "SYSLOG"                            /* @A6 */
              ELSE                                             /* @A6 */
                 EJESLOG = "OPERLOG"                           /* @A6 */
-             CALL EJES_LOG RACFMDAT EJESLOG RACFMLPR          /* @A6 */
+             CALL EJES_LOG EJESLOG RACFMLPR                   /* EEJ */
         END                                                   /* @A6 */
         OTHERWISE                                             /* @A6 */
              CALL SDSF_LOG                                    /* @A6 */
@@ -673,17 +674,34 @@ RETURN
 /*--------------------------------------------------------------------*/
 EJES_LOG:
 
-  parse UPPER arg logdate logtype logsys /* Get Parms */
+  ADDRESS TSO                                                 /* EEJ */
+  parse UPPER arg logtype logsys /* Get Parms */              /* EEJ */
+
+  if RACFMDAT = "*" then                                      /* EEJ */
+    fparm = ""                                                /* EEJ */
+  else do                                                     /* EEJ */
+    fparm = "000" || DATE("Days",RACFMDAT,"Usa")              /* EEJ */
+    fparm = LEFT(DATE("Standard",RACFMDAT,"Usa"),4) ||,       /* EEJ */
+           "." || RIGHT(fparm,3)                              /* EEJ */
+    if RACFFTIM = "" then                                     /* EEJ */
+      fparm = "00.00-"fparm                                   /* EEJ */
+    else                                                      /* EEJ */
+      fparm = RACFFTIM"-"fparm                                /* EEJ */
+  end                                                         /* EEJ */
+                                                              /* EEJ */
+  if RACFTDAT = "*" then                                      /* EEJ */
+    tparm = ""                                                /* EEJ */
+  else do                                                     /* EEJ */
+    tparm = "000" || DATE("Days",RACFTDAT,"Usa")              /* EEJ */
+    tparm = LEFT(DATE("Standard",RACFTDAT,"Usa"),4) ||,       /* EEJ */
+           "." || RIGHT(tparm,3)                              /* EEJ */
+    if RACFTTIM = "" then                                     /* EEJ */
+      tparm = "23.59-"tparm                                   /* EEJ */
+    else                                                      /* EEJ */
+      tparm = RACFTTIM"-"tparm                                /* EEJ */
+  end                                                         /* EEJ */
 
   rc = EJESREXX("ON")
-  if logdate <> "*" then do                                   /* EEJ */
-    dateparm = "000" || DATE("Days",logdate,"Usa")            /* EEJ */
-    dateparm = LEFT(DATE("Standard",logdate,"Usa"),4) ||,
-               RIGHT(dateparm,3)                              /* EEJ */
-    datepdot = "000" || DATE("Days",logdate,"Usa")            /* EEJ */
-    datepdot = LEFT(DATE("Standard",logdate,"Usa"),4) ||,
-               "." || RIGHT(datepdot,3)                       /* EEJ */
-  end                                                         /* EEJ */
 
   select
     /******************/
@@ -694,15 +712,16 @@ EJES_LOG:
       QUEUE "DATEFMT YYYYDDD ."
       QUEUE "LOG" logtype
       QUEUE "XSELECT"
-      questr = ":<"logsys"><><><><><><><><><><><><><><><><IRR*><ICH*>" /* EEJ */
-      if logdate <> "*" then do                               /* EEJ */
-        questr = questr || "<><><><><>"||,                    /* EEJ */
-                 "<00.00-"datepdot">"||,
-                 "<23.59-"datepdot">"
-        QUEUE questr                                          /* EEJ */
-      end                                                     /* EEJ */
+      QUEUE ":<"logsys"><><><><><><><><><><>"  ||,            /* EEJ */
+            "<><><><><><IRR*><ICH*><><><><><>" ||,            /* EEJ */
+            "<"fparm"><"tparm">"                              /* EEJ */
       QUEUE ""
       ADDRESS EJES "EXECAPI * (PRE log_ TERM"
+      ISFLINE.0 = log_line.0                                  /* EEJ */
+      do i = 1 to log_line.0                                  /* EEJ */
+        ISFLINE.i = log_line.i                                /* EEJ */
+      end                                                     /* EEJ */
+      DROP log_line.                                          /* EEJ */
       end /* when */
 
     /**************************/
@@ -718,30 +737,41 @@ EJES_LOG:
         DELSTACK
         QUEUE "MASKCHAR * %"
         QUEUE "DATEFMT YYYYDDD ."
-        QUEUE "logsys" logsys
+        if logsys <> "*" then                                 /* EEJ */
+          QUEUE "logsys" logsys
         QUEUE "LOG" logtype
-        if logdate = "*" then                                 /* EEJ */
+        if RACFMDAT = "*" then                                /* EEJ */
           QUEUE "TOP"                                         /* EEJ */
-        else                                                  /* EEJ */
-          QUEUE "LOCATE 00.00-"datepdot
+        else do                                               /* EEJ */
+          QUEUE "LOCATE" fparm                                /* EEJ */
+        end
         QUEUE "FIND P'" || msgprfx.msgidx || "###'"
         QUEUE ""
-        ADDRESS EJES "EXECAPI 9 (PRE log_"
+        ADDRESS EJES "EXECAPI 9 (PRE tmp_"                    /* EEJ */
+
+        if tparm <> "" then do                                /* EEJ */
+          ttime = LEFT(tparm,5)                               /* EEJ */
+          tdate = SUBSTR(tparm,7,4) || RIGHT(tparm,3)         /* EEJ */
+        end                                                   /* EEJ */
         do while rc = 0
-          if (logdate <> "*") then                            /* @AC */
-             if RIGHT(log_LogTime.1,7) <> dateparm then leave;
-          column = log_FindPos.1.1
+          if tparm <> "" then do                              /* EEJ */
+            if RIGHT(tmp_LogTime.1,7) > tdate then leave      /* EEJ */
+            if RACFTTIM <> "" & ,                             /* EEJ */
+               RIGHT(tmp_LogTime.1,7) = tdate & ,             /* EEJ */
+               LEFT(tmp_LogTime.1,4) > RACFTTIM then leave    /* EEJ */
+          end
+          column = tmp_FindPos.1.1                            /* EEJ */
           /* Filter & Continuation Rules for JES2 SYSLOG */
           if EJES_EnvJES = 2 then do
             call EJES_addMSGline 1
             select
-              when LEFT(logmsg.1,1) = "N" then
-                if LEFT(logmsg.2,1) = "S" then
+              when LEFT(tmp_line.1,1) = "N" then              /* EEJ */
+                if LEFT(tmp_line.2,1) = "S" then              /* EEJ */
                    call EJES_addMSGline 2
-              when LEFT(logmsg.1,1) = "M" then
-                do i = 2 to logmsg.0
+              when LEFT(tmp_line.1,1) = "M" then              /* EEJ */
+                do i = 2 to tmp_line.0                        /* EEJ */
                   call EJES_addMSGline i
-                  if LEFT(logmsg.i,1) = "E" then leave;
+                  if LEFT(tmp_line.i,1) = "E" then leave;     /* EEJ */
                 end
               otherwise;
             end /* select */
@@ -749,26 +779,26 @@ EJES_LOG:
           /* Filter & Continuation Rules for JES3 DLOG */
           else do
             keylen = column - 30
-            key = SUBSTR(logmsg.1,30,keylen)
+            key = SUBSTR(tmp_line.1,30,keylen)                /* EEJ */
             if logsys = "*" | WORD(key,1) = logsys then do
               call EJES_addMSGline 1
-              do i = 2 to logmsg.0
-                if key <> SUBSTR(logmsg.i,30,keylen) then
+              do i = 2 to tmp_line.0                          /* EEJ */
+                if key <> SUBSTR(tmp_line.i,30,keylen) then   /* EEJ */
                    leave
-                if SUBSTR(logmsg.i,column,1) = "I" | ,
-                   SUBSTR(logmsg.i,column,1) = "$" then
+                if SUBSTR(tmp_line.i,column,1) = "I" | ,      /* EEJ */
+                   SUBSTR(tmp_line.i,column,1) = "$" then     /* EEJ */
                    leave
                 call EJES_addMSGline i
-                if SUBSTR(logmsg.i,column,1) <> " " then
+                if SUBSTR(tmp_line.i,column,1) <> " " then    /* EEJ */
                    leave
               end
             end
           end
           DELSTACK
-          QUEUE "UP" logmsg.0
+          QUEUE "UP" tmp_line.0                               /* EEJ */
           QUEUE "RFIND"
           QUEUE ""
-          ADDRESS EJES "EXECAPI 9 (PRE log_"
+          ADDRESS EJES "EXECAPI 9 (PRE tmp_"                  /* EEJ */
         end
       end /* msgidx = msgprfx.0 */
 
@@ -776,7 +806,7 @@ EJES_LOG:
       rc = EJESREXX("TERMAPI")
       IRRnum = 1
       ICHnum = 1
-      logmsg.0 = 0
+      ISFLINE.0 = 0                                           /* EEJ */
       do forever
         select
           when IRRnum <= IRRline.0 then do
@@ -797,20 +827,15 @@ EJES_LOG:
 
       end /* when */
     otherwise do
-      logmsg.0 = 0
+      ISFLINE.0 = 0                                           /* EEJ */
       end /* otherwise */
   end /* select */
-
-  ISFLINE.0 = log_line.0                                      /* EEJ */
-  do i = 1 to log_line.0                                      /* EEJ */
-    ISFLINE.i = log_line.i                                    /* EEJ */
-  end                                                         /* EEJ */
-  DROP log_line.                                              /* EEJ */
                                                               /* EEJ */
   K = 0                                                       /* EEJ */
   TOTALMSGS = 0                                               /* EEJ */
   CALL PROCESS_LOG_RECS                                       /* EEJ */
   LOGMSG.0 = K                                                /* EEJ */
+  DROP ISFLINE.                                               /* EEJ */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  EJES - SYSLOG logic                                               */
@@ -819,25 +844,25 @@ EJES_ADDMSGLINE:
   arg ix
   interpret "k =" msgprfx.msgidx || "line.0 + 1"
   interpret msgprfx.msgidx || "line.0 = k"
-  interpret msgprfx.msgidx || "line.k = logmsg.ix"
+  interpret msgprfx.msgidx || "line.k = tmp_line.ix"          /* EEJ */
   interpret msgprfx.msgidx || "time.0 = k"
-  interpret msgprfx.msgidx || "time.k = log_LogTime.ix"
+  interpret msgprfx.msgidx || "time.k = tmp_LogTime.ix"       /* EEJ */
   return
 /*--------------------------------------------------------------------*/
 /*  EJES - IRR messages                                               */
 /*--------------------------------------------------------------------*/
 EJES_LOGIRRLINE:
-/*  i = logmsg.0 + 1           */
-/*  logmsg.0 = i               */
-/*  logmsg.i = IRRline.IRRnum  */
-/*  IRRnum = IRRnum + 1        */
+    i = ISFLINE.0 + 1                                         /* EEJ */
+    ISFLINE.0 = i                                             /* EEJ */
+    ISFLINE.i = IRRline.IRRnum                                /* EEJ */
+    IRRnum = IRRnum + 1
 RETURN
 /*--------------------------------------------------------------------*/
 /*  EJES - ICH messages                                               */
 /*--------------------------------------------------------------------*/
 EJES_LOGICHLINE:
-  i = logmsg.0 + 1
-  logmsg.0 = i
-  logmsg.i = ICHline.ICHnum
+  i = ISFLINE.0 + 1                                           /* EEJ */
+  ISFLINE.0 = i                                               /* EEJ */
+  ISFLINE.i = ICHline.ICHnum                                  /* EEJ */
   ICHnum = ICHnum + 1
 RETURN
