@@ -10,6 +10,10 @@
 *----------------------------------------------------------------------*
 
 
+  22 Mar 2023 - V35R7
+     - RACFMSG  (Option M)
+       - Correct batch date/time reporting
+
   21 Mar 2023 - V35R6
      - RACFCLOG updated for (E)JES support by Ed Jaffe
      - RACFMSG  (Option M)

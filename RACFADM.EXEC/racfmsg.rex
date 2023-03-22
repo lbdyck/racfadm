@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L4  230322  LBD      Fix batch date/time reporting                */
 /* @EEJ 230321  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L3  230319  LBD      Add ToDate along with FromDate               */
 /*                       Translae out x'00' in error message (ejes)   */
@@ -177,13 +178,13 @@ BATCH:
         WHEN (POS("LPAR=",PARMS.J)    > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "LPAR="RACFMLPR .      /* @A9 */
         WHEN (POS("FROMDATE=",PARMS.J)    > 0) THEN           /* @L3 */
-             PARSE UPPER VAR PARMS.J . "DATE="RADMFDAT .      /* @L3 */
+             PARSE UPPER VAR PARMS.J . "FROMDATE="RADMFDAT .  /* @L4 */
         WHEN (POS("TODATE=",PARMS.J)    > 0) THEN             /* @L3 */
-             PARSE UPPER VAR PARMS.J . "DATE="RADMTDAT .      /* @L3 */
+             PARSE UPPER VAR PARMS.J . "TODATE="RADMTDAT .    /* @L4 */
         WHEN (POS("FROMTIME=",PARMS.J)    > 0) THEN           /* @L3 */
-             PARSE UPPER VAR PARMS.J . "TIME="RACFFTIM .      /* @L3 */
+             PARSE UPPER VAR PARMS.J . "FROMTIME="RACFFTIM .  /* @L4 */
         WHEN (POS("TOTIME=",PARMS.J)    > 0) THEN             /* @L3 */
-             PARSE UPPER VAR PARMS.J . "DATE="RACFTTIM .      /* @L3 */
+             PARSE UPPER VAR PARMS.J . "TOTIME="RACFTTIM .    /* @L4 */
         WHEN (POS("USSONLY=",PARMS.J) > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "USSONLY="RACFMUSS .   /* @A9 */
         WHEN (POS("TYPE=",PARMS.J)    > 0) THEN               /* @A9 */
@@ -443,6 +444,10 @@ DSN_LOG:                                                      /* @A6 */
   DO WHILE READRC = 0
      ADDRESS TSO "EXECIO 300000 DISKR BKPLOG (STEM ISFLINE."
      READRC = RC
+     if isfline.0 = 0 then do
+        isfline.0 = 1
+        isfline.1 = 'No records found.'
+        end
      CALL PROCESS_LOG_RECS                                    /* @A6 */
   END
   ADDRESS TSO "EXECIO 0 DISKR BKPLOG (FINIS"
