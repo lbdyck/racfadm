@@ -11,6 +11,13 @@
 
 
   xx Mar 2023 - V35R8
+     - $DEFSETG Panel
+       - Add default setting SETGBTCH to enable (Y) or disable (N)
+         batch processing
+     - RACFRMSG Panel (Option O)
+       - Update to validate if SCAN=B that backup dsn is specified and
+         Exists
+       - Update to prevent Batch if $DEFSETG setting SETGBTCH=N
      - RACFRPTS Panel (Option R)
        - Update message if the IRRDBU00 Dsn does not exist to mention
          using the UNLoad command on the panel

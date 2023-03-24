@@ -101,6 +101,7 @@ _ZLLGJOB4
    VER (&RACFMSCN,NB,LIST,A,B)
 
    IF (&RACFMSCN = B)
+      VER (&SETDMSG,NB,DSNAME)
       IF (.MSG = &Z & &SETDMSG NE &Z)
          &BADDSN   = N
          &RACFSMSG = &Z
