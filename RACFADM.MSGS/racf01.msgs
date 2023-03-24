@@ -2,3 +2,5 @@ RACF011  '&racfsmsg               ' .ALARM=NO .HELP=*
 '&racflmsg'
 RACF012  '                        ' .WINDOW=NORESP
 'Retrieving record &n1 of &n2 (&pct)'
+RACF013  'Only F is allowed' .WINDOW=NORESP
+'Only Foreground processing is allowed per Site Defaults)'
