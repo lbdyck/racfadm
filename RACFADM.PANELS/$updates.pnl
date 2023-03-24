@@ -10,6 +10,11 @@
 *----------------------------------------------------------------------*
 
 
+  xx Mar 2023 - V35R8
+     - RACFRPTS Panel (Option R)
+       - Update message if the IRRDBU00 Dsn does not exist to mention
+         using the UNLoad command on the panel
+
   22 Mar 2023 - V35R7
      - RACFMSG  (Option M)
        - Correct batch date/time reporting

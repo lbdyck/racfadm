@@ -49,6 +49,7 @@ SETGCONF = Y       /* Confirm panel       (Y=Yes, N=No)              */
 SETGMVS  = Y       /* Showmvs RACF data   (Y=Yes, N=No)              */
 SETGMVSD = N       /* Showmvs LIBDEF DSN  (Y=Yes, N=No)              */
 SETGPREF = N       /* Prefix dataset      (Y=Yes, N=No)              */
+SETGBTCH = Y       /* Enable Batch        (Y=Yes, N=No)              */
 *---------------------------------------------------------------------*
 *  Management                                                         *
 *---------------------------------------------------------------------*

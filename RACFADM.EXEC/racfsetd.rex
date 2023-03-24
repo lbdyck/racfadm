@@ -38,6 +38,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @LD  220324  LBD      Add SETGBTCH option                          */
 /* @AN  201220  RACFA    Fix/deleted code for SETTPSWD                */
 /* @AM  201130  RACFA    Validate GDG base, without recalling gens    */
 /* @AL  200720  LBD      Fix to honor lowercase password              */
@@ -164,6 +165,7 @@ ADDRESS ISPEXEC
         OTHERWISE NOP
      END
 
+
      INTERPRET W1" = W3"                                      /* @A7 */
      CKCHR1TO4 = SUBSTR(W1,1,4)                               /* @A9 */
      CKCHR5TO7 = SUBSTR(W1,5,3)                               /* @AE */
@@ -171,6 +173,9 @@ ADDRESS ISPEXEC
         /* Is this a variable used to Refresh?     */         /* @A8 */
         WHEN (CKCHR1TO4 = "SETR") THEN                        /* @A9 */
              CKRESVAR = W1                                    /* @A9 */
+        /* Batch enabled yes or no */                         /* @LD */
+        When W1 = 'SETGBTCH' then                             /* @LD */
+                INTERPRET "'VPUT ("W1") PROFILE'"             /* @LD */
         /* Refresh 'General' variables?            */         /* @A8 */
         WHEN (CKRESVAR = "SETRGEN"),                          /* @A9 */
            & (SETRGEN = "YES") THEN                           /* @A9 */

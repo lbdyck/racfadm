@@ -68,7 +68,8 @@ _ZZZ    Z      Z        Z
            RACFSMSG = 'DSN does not exist'
            RACFLMSG = 'The dataset does not reside in the catalog',
                       'or on a disk pack, please investigate.',
-                      'DSN = 'TMPDSN
+                      'DSN = 'TMPDSN ,
+                      'or use the UNLOAD command to create it.'
            BADDSN   = "Y"
         END
      *ENDREXX
