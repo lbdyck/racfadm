@@ -10,7 +10,14 @@
 *----------------------------------------------------------------------*
 
 
-  xx Mar 2023 - V35R8
+  30 Aug 2023 - V35R8
+     - General resources (Option 4)
+       -- Updated exec RACFCLSG to issue SETROPTS REFRESH after
+          RDELETE
+
+  22 Mar 2023 - V35R7
+     - RACFMSG  (Option M)
+       - Correct batch date/time reporting
      - $DEFSETG Panel
        - Add default setting SETGBTCH to enable (Y) or disable (N)
          batch processing
@@ -21,10 +28,6 @@
      - RACFRPTS Panel (Option R)
        - Update message if the IRRDBU00 Dsn does not exist to mention
          using the UNLoad command on the panel
-
-  22 Mar 2023 - V35R7
-     - RACFMSG  (Option M)
-       - Correct batch date/time reporting
 
   21 Mar 2023 - V35R6
      - RACFCLOG updated for (E)JES support by Ed Jaffe

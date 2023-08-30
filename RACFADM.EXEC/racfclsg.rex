@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CA  230830  TRIDJK   Issue SETROPTS for RDELETE                   */
 /* @C9  220317  LBD      Close table on exit                          */
 /* @C8  220317  TRIDJK   Intialize OPTB in Do Forever,rsels < 2 logic */
 /* @C7  220317  TRIDJK   Fix Add literal in SELCMDS                   */
@@ -1064,9 +1065,11 @@ EXCMD:
   x = OUTTRAP('OFF')
   if (SETMSHOW <> 'NO') then                                  /* @B6 */
      call SHOWCMD                                             /* @AF */
-  if (subword(msg.1,1,1) = 'ICH11009I') |,
-     (subword(msg.1,1,1) = 'ICH10006I') |,
-     (subword(msg.1,1,1) = 'ICH06011I') then raclist = 'YES'
+  if (subword(msg.1,1,1) = 'ICH11009I') |,   /* RALTER  */
+     (subword(msg.1,1,1) = 'ICH10006I') |,   /* RDEFINE */
+     (subword(msg.1,1,1) = 'ICH12002I') |,   /* RDELETE */    /* @CA */
+     (subword(msg.1,1,1) = 'ICH06011I')      /* PERMIT  */
+    then raclist = 'YES'
 RETURN
 /*--------------------------------------------------------------------*/
 /*  List class's profile                                              */
