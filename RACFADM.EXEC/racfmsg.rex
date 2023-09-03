@@ -3,8 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @L4  230322  LBD      Fix batch date/time reporting                */
-/* @EEJ 230321  EEJ      Update by Ed Jaffe for (E)JES Support        */
+/* @L5  230830  LBD      Use Grep to filter isfline (sdsf)            */
+/* @EEJ 230320  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L3  230319  LBD      Add ToDate along with FromDate               */
 /*                       Translae out x'00' in error message (ejes)   */
 /* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
@@ -178,13 +178,13 @@ BATCH:
         WHEN (POS("LPAR=",PARMS.J)    > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "LPAR="RACFMLPR .      /* @A9 */
         WHEN (POS("FROMDATE=",PARMS.J)    > 0) THEN           /* @L3 */
-             PARSE UPPER VAR PARMS.J . "FROMDATE="RADMFDAT .  /* @L4 */
+             PARSE UPPER VAR PARMS.J . "DATE="RADMFDAT .      /* @L3 */
         WHEN (POS("TODATE=",PARMS.J)    > 0) THEN             /* @L3 */
-             PARSE UPPER VAR PARMS.J . "TODATE="RADMTDAT .    /* @L4 */
+             PARSE UPPER VAR PARMS.J . "DATE="RADMTDAT .      /* @L3 */
         WHEN (POS("FROMTIME=",PARMS.J)    > 0) THEN           /* @L3 */
-             PARSE UPPER VAR PARMS.J . "FROMTIME="RACFFTIM .  /* @L4 */
+             PARSE UPPER VAR PARMS.J . "TIME="RACFFTIM .      /* @L3 */
         WHEN (POS("TOTIME=",PARMS.J)    > 0) THEN             /* @L3 */
-             PARSE UPPER VAR PARMS.J . "TOTIME="RACFTTIM .    /* @L4 */
+             PARSE UPPER VAR PARMS.J . "DATE="RACFTTIM .      /* @L3 */
         WHEN (POS("USSONLY=",PARMS.J) > 0) THEN               /* @A9 */
              PARSE UPPER VAR PARMS.J . "USSONLY="RACFMUSS .   /* @A9 */
         WHEN (POS("TYPE=",PARMS.J)    > 0) THEN               /* @A9 */
@@ -444,10 +444,6 @@ DSN_LOG:                                                      /* @A6 */
   DO WHILE READRC = 0
      ADDRESS TSO "EXECIO 300000 DISKR BKPLOG (STEM ISFLINE."
      READRC = RC
-     if isfline.0 = 0 then do
-        isfline.0 = 1
-        isfline.1 = 'No records found.'
-        end
      CALL PROCESS_LOG_RECS                                    /* @A6 */
   END
   ADDRESS TSO "EXECIO 0 DISKR BKPLOG (FINIS"
@@ -457,6 +453,7 @@ RETURN
 /*  Proces log records, find ICH408I msgs that meet search criteria   */
 /*--------------------------------------------------------------------*/
 PROCESS_LOG_RECS:                                             /* @A6 */
+  call bpxwunix "grep -A 9 'ICH408'",isfline.,isfline.,stderr. /* @L5 */
   DO J = 1 TO ISFLINE.0-1
      PARSE VAR ISFLINE.J W1 W2 W3 W4 W5 W6 W7 W8 W9 W10
      IF (W7 = "ICH408I") | (W8 = "ICH408I") THEN DO           /* @A4 */
@@ -682,9 +679,6 @@ EJES_LOG:
   ADDRESS TSO                                                 /* EEJ */
   parse UPPER arg logtype logsys /* Get Parms */              /* EEJ */
 
-  IRRmsg = "NO" /* Allow IRR option for future functions */   /* EEJ */
-  tableo = XRANGE('00'X,'3F'X) || XRANGE('FF'X,'FF'X)         /* EEJ */
-
   if RACFMDAT = "*" then                                      /* EEJ */
     fparm = ""                                                /* EEJ */
   else do                                                     /* EEJ */
@@ -716,23 +710,18 @@ EJES_LOG:
     /* Handle OPERLOG */
     /******************/
     when logtype = "OPERLOG" then do
-
       QUEUE "MASKCHAR * %"
       QUEUE "DATEFMT YYYYDDD ."
       QUEUE "LOG" logtype
       QUEUE "XSELECT"
-      if IRRMsg = "NO" then                                   /* EEJ */
-        IRRfilt = ""                                          /* EEJ */
-      else                                                    /* EEJ */
-        IRRfilt = "IRR*"                                      /* EEJ */
-      QUEUE ":<"logsys"><><><><><><><><><><><>"  ||,          /* EEJ */
-            "<><><><><"IRRfilt"><ICH*><><><><><>" ||,         /* EEJ */
+      QUEUE ":<"logsys"><><><><><><><><><><>"  ||,            /* EEJ */
+            "<><><><><><IRR*><ICH*><><><><><>" ||,            /* EEJ */
             "<"fparm"><"tparm">"                              /* EEJ */
       QUEUE ""
       ADDRESS EJES "EXECAPI * (PRE log_ TERM"
       ISFLINE.0 = log_line.0                                  /* EEJ */
       do i = 1 to log_line.0                                  /* EEJ */
-        ISFLINE.i = TRANSLATE(log_line.i,,tableo,' ')         /* EEJ */
+        ISFLINE.i = log_line.i                                /* EEJ */
       end                                                     /* EEJ */
       DROP log_line.                                          /* EEJ */
       end /* when */
@@ -742,13 +731,9 @@ EJES_LOG:
     /**************************/
     when logtype = "SYSLOG" then do
 
-      msgprfx.1="ICH";msgprfx.2="IRR"                         /* EEJ */
-      if IRRMsg = "NO" then                                   /* EEJ */
-        msgprfx.0=1                                           /* EEJ */
-      else                                                    /* EEJ */
-        msgprfx.0=2                                           /* EEJ */
-      ICHline.0 = 0;ICHtime.0 = 0
+      msgprfx.1="IRR";msgprfx.2="ICH";msgprfx.0=2
       IRRline.0 = 0;IRRtime.0 = 0
+      ICHline.0 = 0;ICHtime.0 = 0
 
       do msgidx = 1 to msgprfx.0
         DELSTACK
@@ -869,10 +854,10 @@ EJES_ADDMSGLINE:
 /*  EJES - IRR messages                                               */
 /*--------------------------------------------------------------------*/
 EJES_LOGIRRLINE:
-  i = ISFLINE.0 + 1                                           /* EEJ */
-  ISFLINE.0 = i                                               /* EEJ */
-  ISFLINE.i = TRANSLATE(IRRline.IRRnum,,tableo,' ')           /* EEJ */
-  IRRnum = IRRnum + 1
+    i = ISFLINE.0 + 1                                         /* EEJ */
+    ISFLINE.0 = i                                             /* EEJ */
+    ISFLINE.i = IRRline.IRRnum                                /* EEJ */
+    IRRnum = IRRnum + 1
 RETURN
 /*--------------------------------------------------------------------*/
 /*  EJES - ICH messages                                               */
@@ -880,6 +865,6 @@ RETURN
 EJES_LOGICHLINE:
   i = ISFLINE.0 + 1                                           /* EEJ */
   ISFLINE.0 = i                                               /* EEJ */
-  ISFLINE.i = TRANSLATE(ICHline.ICHnum,,tableo,' ')           /* EEJ */
+  ISFLINE.i = ICHline.ICHnum                                  /* EEJ */
   ICHnum = ICHnum + 1
 RETURN

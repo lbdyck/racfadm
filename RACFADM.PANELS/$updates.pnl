@@ -10,6 +10,13 @@
 *----------------------------------------------------------------------*
 
 
+  03 Sep 2023 - V35R9
+     - User profiles (Option 1)
+       -- Created help panel #RACUSR5 for RACFUSR5 panel
+       -- Updated $$DIR in panel dataset
+     - RACFMSG  (Option M)
+       - Add grep filter for SDSF searches
+
   30 Aug 2023 - V35R8
      - General resources (Option 4)
        -- Updated exec RACFCLSG to issue SETROPTS REFRESH after

@@ -1,0 +1,229 @@
+)ATTR DEFAULT(%+})
+   #  AREA(SCRL) EXTEND(ON)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
+%Command ===>}ZCMD
+%
+#RELATED ----------------------------------------------------------------------#
+)AREA RELATED
+%User Profile Segments:+
+!CICS+
+   SNT identification information (e.g., OPIDENT)
+   .--------------------------------------------------------------.
+   |   CICS(                                                      |
+   |     OPCLASS(operator-class ...)                              |
+   |       | ADDOPCLASS(operator-class ...)                       |
+   |       | DELOPCLASS(operator-class ...)                       |
+   |       | NOOPCLASS                                            |
+   |     OPIDENT(operator-id) | NOOPIDENT                         |
+   |     OPPRTY(operator-priority) | NOOPPRTY                     |
+   |     RSLKEY(rslkey ... | 0 | 99) | NORSLKEY                   |
+   |     TIMEOUT(timeout-value) | NOTIMEOUT                       |
+   |     TSLKEY(tslkey ... | 0 | 1 | 99) | NOTSLKEY               |
+   |     XRFSOFF(FORCE | NOFORCE) | NOXRFSOFF                     |
+   |      )                                                       |
+   |    | NOCICS                                                  |
+   .--------------------------------------------------------------.
+!CSDATA+
+   Customer-defined custom data field
+  ~.--------------------------------------------------------------.
+   |   CSDATA(                                                    |
+   |     custom-field-name(custom-field-value)                    |
+   |      | NOcustom-field-name ... )                             |
+   |    | NOCSDATA                                                |
+  ~.--------------------------------------------------------------.
+!DCE+
+   Associates DCE Principle Identity (e.g., uuid) to RACF USERID
+  ~.--------------------------------------------------------------.
+   |   DCE(                                                       |
+   |     AUTOLOGIN(YES | NO) | NOAUTOLOGIN                        |
+   |     DCENAME(user-principal-name) | NODCENAME                 |
+   |     HOMECELL(dce-cell-name) | NOHOMECELL                     |
+   |     HOMEUUID(home-cell-UUID) | NOHOMEUUID                    |
+   |     UUID(universal-unique-identifier) | NOUUID               |
+   |     )                                                        |
+   |    | NODCE                                                   |
+  ~.--------------------------------------------------------------.
+!DFP+
+   SMS data management and DASD storage (e.g., MGMTCLAS)
+   .--------------------------------------------------------------.
+   |   DFP(                                                       |
+   |     DATAAPPL(application-name) | NODATAAPPL                  |
+   |     DATACLAS(data-class-name) | NODATACLAS                   |
+   |     MGMTCLAS(management-class-name) | NOMGMTCLAS             |
+   |     STORCLAS(storage-class-name) | NOSTORCLAS                |
+   |     )                                                        |
+   |    | NODFP                                                   |
+   .--------------------------------------------------------------.
+!EIM+
+   LDAP profile
+  ~.--------------------------------------------------------------.
+   |   EIM(                                                       |
+   |     LDAPPROF(ldapbind_profile) | NOLDAPPROF                  |
+   |      )                                                       |
+   |    | NOEIM                                                   |
+  ~.--------------------------------------------------------------.
+!KERB+
+   Kerberos user attributes
+  ~.--------------------------------------------------------------.
+   |   KERB(                                                      |
+   |     ENCRYPT (                                                |
+   |       DES | NODES                                            |
+   |       DES3 | NODES3                                          |
+   |       DESD | NODESD                                          |
+   |       AES128 | NOAES128                                      |
+   |       AES256 | NOAES256                                      |
+   |       AES128SHA2 | NOAES128SHA2                              |
+   |       AES256SHA2 | NOAES256SHA2                              |
+   |       )                                                      |
+   |      | NOENCRYPT                                             |
+   |     KERBNAME(kerberos-principal-name) | NOKERBNAME           |
+   |     MAXTKTLFE(max-ticket-life) | NOMAXTKTLFE                 |
+   |     )                                                        |
+   |    | NOKERB                                                  |
+  ~.--------------------------------------------------------------.
+!LANGUAGE+
+   Preferred National Language
+  ~.--------------------------------------------------------------.
+   |  LANGUAGE(                                                   |
+   |     PRIMARY(language) | NOPRIMARY                            |
+   |     SECONDARY(language) | NOSECONDARY                        |
+   |     )                                                        |
+   |    | NOLANGUAGE                                              |
+  ~.--------------------------------------------------------------.
+!LNOTES+
+   Lotus Notes user (e.g., SNAME)
+  ~.--------------------------------------------------------------.
+   |   LNOTES(                                                    |
+   |     SNAME(short-name) | NOSNAME                              |
+   |     )                                                        |
+   |    | NOLNOTES                                                |
+  ~.--------------------------------------------------------------.
+!NDS+
+   Map Novell Directory Service user name to RACF USERID
+  ~.--------------------------------------------------------------.
+   |   NDS(                                                       |
+   |     UNAME(user-name) | NOUNAME                               |
+   |     )                                                        |
+   |    | NONDS                                                   |
+  ~.--------------------------------------------------------------.
+!NETVIEW+
+   Application access information
+  ~.--------------------------------------------------------------.
+   |   NETVIEW(                                                   |
+   |     CONSNAME(console-name | NOCONSNAME                       |
+   |     CTL(GENERAL | GLOBAL | SPECIFIC) | NOCTL                 |
+   |     DOMAINS(domain-name ...)                                 |
+   |       | ADDDOMAINS(domain-name ...)                          |
+   |       | DELDOMAINS(domain-name ...)                          |
+   |       | NODOMAINS                                            |
+   |     IC('command | command-list') | NOIC                      |
+   |     MSGRECVR( YES | NO) | NOMSGRECVR                         |
+   |     NGMFADMN( YES | NO) | NONGMFADMN                         |
+   |     NGMFVSPN(view-span) | NONGMFVSPN                         |
+   |     OPCLASS(class ...)                                       |
+   |      | ADDOPCLASS(class ...)                                 |
+   |      | DELOPCLASS(class ...)                                 |
+   |      | NOOPCLASS                                             |
+   |      )                                                       |
+   |    | NONETVIEW                                               |
+  ~.--------------------------------------------------------------.
+!OMVS+
+   UNIX user attributes (e.g., UID)
+   .--------------------------------------------------------------.
+   |   OMVS(                                                      |
+   |     ASSIZEMAX(address-space-size) | NOASSIZEMAX              |
+   |     AUTOUID | UID(user-identifier) SHARED | NOUID            |
+   |     CPUTIMEMAX(cpu-time) | NOCPUTIMEMAX                      |
+   |     FILEPROCMAX(files-per-process) | NOFILEPROCMAX           |
+   |     HOME(directory-pathname) | NOHOME                        |
+   |     MEMLIMIT(nonshared-memory-size) | NOMEMLIMIT             |
+   |     MMAPAREAMAX(memory-map-size) | NOMMAPAREAMAX             |
+   |     PROCUSERMAX(processes-per-UID) | NOPROCUSERMAX           |
+   |     PROGRAM(program-name) | NOPROGRAM                        |
+   |     SHMEMMAX(shared-memory-size) | NOSHMEMMAX                |
+   |     THREADSMAX(threads-per-process) | NOTHREADSMAX           |
+   |     )                                                        |
+   |    | NOOMVS                                                  |
+!OPERPARM+
+   Extended MCS Console Session attributes (e.g., AUTH)
+  ~.--------------------------------------------------------------.
+   |   OPERPARM(                                                  |
+   |     ALTGRP(alternate-console-group) | NOALTGRP               |
+   |     AUTH(operator-authority) | NOAUTH                        |
+   |     AUTO( YES | NO ) | NOAUTO                                |
+   |     CMDSYS(system-name) | NOCMDSYS                           |
+   |     DOM( NORMAL | ALL | NONE ) | NODOM                       |
+   |     HC( YES | NO ) | NOHC                                    |
+   |     INTIDS( YES | NO ) | NOINTIDS                            |
+   |     KEY(searching-key) | NOKEY                               |
+   |     LEVEL(message-level) | NOLEVEL                           |
+   |     LOGCMDRESP( SYSTEM | NO ) | NOLOGCMDRESP                 |
+   |     MFORM(message-format) | NOMFORM                          |
+   |     MIGID( YES | NO ) | NOMIGID                              |
+   |     MONITOR(event) | NOMONITOR                               |
+   |     MSCOPE(system-name ... | * | *ALL)                       |
+   |       | ADDMSCOPE(system-name ...)                           |
+   |       | DELMSCOPE(system-name ...)                           |
+   |       | NOMSCOPE                                             |
+   |     ROUTCODE(ALL | NONE | routing-codes) | NOROUTCODE        |
+   |     STORAGE(amount) | NOSTORAGE                              |
+   |     UD( YES | NO ) | NOUD                                    |
+   |     UNKNIDS( YES | NO ) | NOUNKNIDS                          |
+   |     )                                                        |
+   |    | NOOPERPARM                                              |
+  ~.--------------------------------------------------------------.
+!PROXY+
+   LDAP characteristics (e.g., LDAPHOST)
+  ~.--------------------------------------------------------------.
+   |   PROXY (                                                    |
+   |     LDAPHOST(ldap_url) | NOLDAPHOST                          |
+   |     BINDDN(bind_distinguished_name) | NOBINDDN               |
+   |     BINDPW(bind_password) | NOBINDPW)                        |
+   |    | NOPROXY                                                 |
+  ~.--------------------------------------------------------------.
+!TSO+
+   TSO UADS logon and authority information (e.g., ACCTNUM)
+   .--------------------------------------------------------------.
+   |   TSO(                                                       |
+   |     ACCTNUM(account-number) | NOACCTNUM                      |
+   |     COMMAND(cmd-issued-at-logon) | NOCOMMAND                 |
+   |     DEST(destination-id) | NODEST                            |
+   |     HOLDCLASS(hold-class) | NOHOLDCLASS                      |
+   |     JOBCLASS(job-class) | NOJOBCLASS                         |
+   |     MAXSIZE(maximum-region-size) | NOMAXSIZE                 |
+   |     MSGCLASS(message-class) | NOMSGCLASS                     |
+   |     PROC(logon-procedure-name) | NOPROC                      |
+   |     SECLABEL(seclabel-name) | NOSECLABEL                     |
+   |     SIZE(default-region-size) | NOSIZE                       |
+   |     SYS(sysout-class) | NOSYS                                |
+   |     UNIT(unit-name) | NOUNIT                                 |
+   |     USERDATA(user-data) | NOUSERDATA                         |
+   |     )                                                        |
+   |    | NOTSO                                                   |
+   .--------------------------------------------------------------.
+!WORKATTR+
+   APPC User characteristics (e.g., WANAME for SYSOUT)
+  ~.--------------------------------------------------------------.
+   |   WORKATTR(                                                  |
+   |     WAACCNT(account-number) | NOWAACCNT                      |
+   |     WAADDR1(address-line-1) | NOWAADDR1                      |
+   |     WAADDR2(address-line-2) | NOWAADDR2                      |
+   |     WAADDR3(address-line-3) | NOWAADDR3                      |
+   |     WAADDR4(address-line-4) | NOWAADDR4                      |
+   |     WABLDG(building) | NOWABLDG                              |
+   |     WADEPT(department) | NOWADEPT                            |
+   |     WANAME(name) | NOWANAME                                  |
+   |     WAROOM(room) | NOWAROOM                                  |
+   |     WAEMAIL(e-mail) | NOWAEMAIL                              |
+   |     )                                                        |
+   |    | NOWORKATTR                                              |
+  ~.--------------------------------------------------------------.
+)PROC
+  &ZUP     = #RACUSR5
+)END

@@ -29,7 +29,7 @@
 +  _z+NOADSP       _z+NOROAUDIT        _z+NORESTRICTED
 )INIT
   .CURSOR  = NOS
-  .HELP    = #RACMENU
+  .HELP    = #RACUSR5
   &NOS     = ''
   &notso   = ''
   &notso1  = ''
