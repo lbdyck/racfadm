@@ -4,3 +4,5 @@ RACF012  '                        ' .WINDOW=NORESP
 'Retrieving record &n1 of &n2 (&pct)'
 RACF013  'Only F is allowed' .WINDOW=NORESP
 'Only Foreground processing is allowed per Site Defaults)'
+RACF014  'Only A is allowed' .WINDOW=NORESP
+'Only Add is allowed on null (NONE/NO) entries'

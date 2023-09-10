@@ -40,6 +40,10 @@ _Z+ Z         Z
         IF (&SROW ^= 0)
            &OPTB = S
 
+  IF (&ID = NONE)
+     IF (&ACC = DEFINED)
+        VER (&OPTB,LIST,A,MSG=RACF014)
+
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
         VER (&OPTB,LIST,S,L,P,C,A,R)

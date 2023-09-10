@@ -10,6 +10,21 @@
 *----------------------------------------------------------------------*
 
 
+  10 Sep 2023 - V36R0
+     - User Profiles (Option 1)
+       -- Updated RACFPROF to correctly display irrcerta et al
+          "anchor" user profiles
+     - Group Profiles (Option 2)
+       -- Updated panel RACFGRP5 to only allow A(dd) for "NONE"
+     - Dataset Profiles (Option 3)
+       -- Updated panel RACFDSN5 to only allow A(dd) for "NONE DEFINED"
+     - General resources (Option 4)
+       -- Updated panel RACFCLS5 to only allow A(dd) for "NO USERS"
+       -- Updated panel RACFCLS6 to verify the correct UACC variable
+     - Group, Dataset, and General resources (Options 2/3/4)
+       -- Added message RACF014 'Only A is allowed'
+          'Only Add is allowed on null (NONE/NO) entries'
+
   03 Sep 2023 - V35R9
      - User profiles (Option 1)
        -- Created help panel #RACUSR5 for RACFUSR5 panel

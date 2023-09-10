@@ -14,6 +14,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @B0  230908  TRIDJK   Handle irrcerta et al "anchor" user profiles */
 /* @AZ  200923  TRIDJK   PARSE ARG ...  (lower case for DIGTCERT/RING)*/
 /* @AY  200423  RACFA    Move PARSE REXXPGM name up above IF SETMTRAC */
 /* @AX  200422  RACFA    Fixed IRRXUTIL RC when displaying RACF cmds  */
@@ -170,9 +171,12 @@ ADDRESS ISPEXEC
   if (class = 'USER') then do
      gcnt = racf.base.connects.repeatcount
      call sez 'Connect Groups:  ' 'Fields:'right(gcnt,2,"0")
-     do i = 1 to gcnt
-        call sez '  'racf.base.cgroup.i                       /* @A7 */
-     end
+     if datatype(gcnt) <> 'NUM' then  /* irrcerta et al */    /* @B0 */
+       nop                                                    /* @B0 */
+     else                                                     /* @B0 */
+       do i = 1 to gcnt
+          call sez '  'racf.base.cgroup.i                     /* @A7 */
+       end
   end
 
   /* --------------------------------- */                     /* @A3 */
