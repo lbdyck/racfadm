@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @D3  231007  TRIDJK   Added line command 'Y'                       */
 /* @D2  2200318 LBD      Clean up open tables                         */
 /* @CZ  201201  RACFA    Unhide line command 'X' for ADMIN users      */
 /* @CY  201130  TRIDJK   Added hidden line command 'X'                */
@@ -151,11 +152,11 @@ ADDRESS ISPEXEC                                               /* @AO */
      If (SETMIRRX = "YES") then                               /* @BS */
         SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,            /* @BH */
                   "ÝC¨Change,ÝA¨Add,"||,                      /* @BH */
-                  "ÝR¨Remove,ÝX¨Xref"                         /* @CZ */
+                  "ÝR¨Remove,ÝX¨XrefÝY¨Acc"                   /* @D3 */
      Else                                                     /* @BS */
         SELCMDS = "ÝS¨Show,ÝL¨List,"||,                       /* @BS */
                   "ÝC¨Change,ÝA¨Add,"||,                      /* @BS */
-                  "ÝR¨Remove,ÝX¨Xref"                         /* @CZ */
+                  "ÝR¨Remove,ÝX¨XrefÝY¨Acc"                   /* @D3 */
   else do                                                     /* @CM */
      If (SETMIRRX = "YES") then                               /* @CM */
         SELCMDS = "ÝS¨Show,ÝL¨list,ÝP¨Profile"                /* @CM */
@@ -294,6 +295,7 @@ PROFL:
         when (opta = 'C') then call Chgd
         when (opta = 'L') then call Lisd
         when (opta = 'X') then Call RACFUSRX group JCC        /* @CY */
+        when (opta = 'Y') then Call RACFUSRY group            /* @D3 */
         when (opta = 'P') then                                /* @BE */
              call RACFPROF 'GROUP' group                      /* @BF */
         when (opta = 'R') then call Deld
@@ -567,6 +569,7 @@ DISD:
               when (optb = 'S')  then call RACFUSR id
               when (optb = 'SE') then call RACFCLSS id
               when (optb = 'X') then Call RACFUSRX id JCC     /* @CY */
+              when (optb = 'Y') then Call RACFUSRY id         /* @D3 */
               otherwise nop
            End
         end

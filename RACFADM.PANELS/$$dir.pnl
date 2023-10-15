@@ -10,6 +10,7 @@
  $REPORTS  Reports        ICETOOL/DSMON reports
  $STNDARD  Standards      Document coding and design
  $UPDATES  Updates        Document version/updates
+ #RACACC   User/Group     DSN/Resource Access Report
  #RACACKN  Tutorial       Acknowledgements
  #RACCERT  Tutorial       Digital certificates
  #RACCLSA  Tutorial       Add/Change class profile
@@ -69,6 +70,7 @@
  OPERMIT   TSO Help       Unix Access Control List, like PERMIT
  ORALTER   TSO Help       Unix Security Attribute, like ALTER
  ORLIST    TSO Help       Unix Dir/File Security, like RLIST
+ RACFACC   User/Group     DSN/Resource Access Report Prompt (pop-up)
  RACFCERT  Certificates   Digital certificates, menu opt CA
  RACFCLSB  Class          List members
  RACFCLSC  Class          Add class

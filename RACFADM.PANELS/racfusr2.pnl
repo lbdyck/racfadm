@@ -19,7 +19,7 @@
 +\-\(%RACFADM - User Profiles+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+FILTER: $RFILTER                                      ¬SELCMD2B               ¬
++FILTER: $RFILTER                                ¬SELCMD2B                     ¬
 +SELECT: ¬SELCMD2A                                                             ¬
 %
 %S         ~Userid  ~Name                ~Group   ~Logon   ~Owner   ~Rev~Att~TSO
@@ -41,12 +41,12 @@ _Z ^Z      Z       Z                   Z       Z       	Z       Z  Z  
         IF (&SROW ^= 0)
            &OPTA = S
 
-  /* Line command: X & XR are not displayed (hidden) */
+  /* Line command: XR is not displayed (hidden) */
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,S,SE,L,P,D,C,A,R,RS,RV,PW,X,XR,AL)
+        VER (&OPTA,LIST,S,SE,L,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL)
      ELSE
-        VER (&OPTA,LIST,S,SE,L,D,C,A,R,RS,RV,PW,X,XR,AL)
+        VER (&OPTA,LIST,S,SE,L,D,C,A,R,RS,RV,PW,X,XR,Y,AL)
   ELSE
      IF (&SETMIRRX = YES)
         VER (&OPTA,LIST,S,SE,L,P,D)
@@ -76,7 +76,7 @@ _Z ^Z      Z       Z                   Z       Z       	Z       Z  Z  
 /*     the user tabbed down to a row and pressed ENTER to select      */
 /*     an entry                                                       */
 /*                                                                    */
-/*  3) Line command 'X/XR', Cross Reference Report, are not displayed */
+/*  3) Line command 'XR', Cross Reference Report, is not displayed    */
 /*     - Reason for this is sites with a large RACF database, the     */
 /*       time for 'IRRUT100' to read/obtain the data is significant   */
 /*     - This command can only be accessed/used when Settings         */

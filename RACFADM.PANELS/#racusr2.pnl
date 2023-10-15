@@ -3,6 +3,7 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
 %Command ===>_ZCMD
@@ -14,6 +15,8 @@
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
+^Linec ---------------------------------------------------------------^
+)Area Linec
 +Line Commands
 %  S  !Show         +List of groups user is connected to
 %  SE !Search       +Analyze user access to general resource profiles
@@ -27,6 +30,8 @@
 %  RS !Resume       +Resume user and initialize the password@(admin)
 %  RV !Revoke       +Revoke the user@(admin)
 %  AL !Alter        +Alter user profile segments@(admin)
+%  X  !Xref         +Create JCL for Cross Reference Report@(admin)
+%  Y  !Access       +User/Grp Access Report@(admin)
 )PROC
   &ZUP     = #RACUSR2
 )END

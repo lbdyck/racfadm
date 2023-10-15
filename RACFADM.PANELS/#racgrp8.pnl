@@ -24,6 +24,7 @@
 %  A  !Add          +Define a new group@(admin)
 %  R  !Remove       +Remove group from RACF@(admin)
 %  X  !Xref         +Create JCL for Cross Reference Report@(admin)
+%  Y  !Access       +User/Grp Access Report@(admin)
 )PROC
   &ZUP     = #RACGRP8
 )END

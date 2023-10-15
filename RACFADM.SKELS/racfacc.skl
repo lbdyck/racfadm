@@ -1,0 +1,69 @@
+)CM*------------------------------------------------------------------*
+)CM*  Purpose:  RACFADM - User/Group access report
+)CM*------------------------------------------------------------------*
+)CM*  FLG  YYMMDD  USERID   DESCRIPTION
+)CM*  ---  ------  -------  ------------------------------------------
+)CM*  @L0  241013  LBDYCK   Add comment about Submit
+)CM*                        Remove delete step and use temp for unload
+)CM*  @A0  231007  TRIDJK   Created skeleton
+)CM*------------------------------------------------------------------*
+)DEFAULT  )&#!~|@
+)SEL &ZLLGJOB1 ^= &Z
+&ZLLGJOB1
+)ENDSEL
+)SEL &ZLLGJOB2 ^= &Z
+&ZLLGJOB2
+)ENDSEL
+)SEL &ZLLGJOB3 ^= &Z
+&ZLLGJOB3
+)ENDSEL
+)SEL &ZLLGJOB4 ^= &Z
+&ZLLGJOB4
+)ENDSEL
+//*-------------------------------------------------------------------*
+//*   REVIEW AND THEN USE THE ISPF EDIT SUBMIT COMMAND
+//*-------------------------------------------------------------------*
+//*  UNLOAD BACKUP RACF DATA BASE TO A TEMPORARY DATASET
+//*-------------------------------------------------------------------*
+//IRRDBU00 EXEC PGM=IRRDBU00,PARM=NOLOCKINPUT
+//INDD1    DD  DISP=SHR,DSN=&RACFDTMP
+//OUTDD    DD  DSN=&&RPTU,
+//             DISP=(NEW,PASS,DELETE),
+//             DCB=(LRECL=4096,RECFM=VB,BLKSIZE=81920),
+//             UNIT=SYSALLDA,SPACE=(CYL,(10,10),RLSE)
+//SYSPRINT DD  SYSOUT=*
+//*-------------------------------------------------------------------*
+//*  SORT RACF UNLOADED DATA BASE
+//*-------------------------------------------------------------------*
+//SORT     EXEC  PGM=SORT,PARM='SIZE=MAX'
+//SYSOUT   DD  SYSOUT=*
+//SORTIN   DD  DISP=(OLD,DELETE),DSN=&&RPTU
+//T0404    DD  DSN=&&T0404,BUFNO=200,
+//             DISP=(NEW,PASS),
+//             UNIT=SYSALLDA,
+//             SPACE=(TRK,(10,5),RLSE),
+//             RECFM=FB,LRECL=264
+//T0505    DD  DSN=&&T0505,BUFNO=200,
+//             DISP=(NEW,PASS),
+//             UNIT=SYSALLDA,
+//             SPACE=(TRK,(10,5),RLSE),
+//             RECFM=FB,LRECL=264
+ SORT FIELDS=COPY
+ OPTION VLSHRT
+ OUTFIL FNAMES=T0404,CONVERT,
+ INCLUDE=(5,4,BI,EQ,C'0404',AND,62,9,BI,EQ,C'&USER'),
+ OUTREC=(1:C'DATASET ',10:71,9,19:10,52,194X)
+ OUTFIL FNAMES=T0505,CONVERT,
+ INCLUDE=(5,4,BI,EQ,C'0505',AND,266,9,BI,EQ,C'&USER'),
+ OUTREC=(1:257,9,10:275,9,19:10,246)
+ END
+//*
+//*-------------------------------------------------------------------*
+//*  JOIN RESOURCE AND DATASET RECORDS FOR USER ACCESS REPORT
+//*-------------------------------------------------------------------*
+//JOIN     EXEC  PGM=ICEGENER
+//SYSPRINT DD  SYSOUT=*
+//SYSUT1   DD  DISP=(OLD,DELETE),BUFNO=200,DSN=&&T0404
+//         DD  DISP=(OLD,DELETE),BUFNO=200,DSN=&&T0505
+//SYSUT2   DD  SYSOUT=*
+//SYSIN    DD  DUMMY

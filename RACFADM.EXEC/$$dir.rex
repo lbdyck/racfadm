@@ -41,7 +41,8 @@
  RACFSETG  Settings       Customize settings, menu option 0
  RACFUSR   User           Display userid profiles, menu option 1
  RACFUSRT  User           Add, delete and change TSO userid
- RACFUSRX  User           Userid cross reference report (line cmd XR)
+ RACFUSRX  User           Userid cross reference report (line cmd X)
+ RACFUSRY  User           Userid dsn/rsrc access report (line cmd Y)
 
  Notes
    - Class is 'General Resources'

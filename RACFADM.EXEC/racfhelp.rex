@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A4  231006  DT       Check/allocate dd:syshelp                    */
 /* @A3  200618  RACFA    Chged SYSDA to SYSALLDA                      */
 /* @A2  200605  RACFA    Concatenate panel dsn to TSOHELP             */
 /* @A1  200520  RACFA    Added RACF cmds: OPERMIT, ORALTER and ORLIST */
@@ -187,6 +188,7 @@
  QLIBRC = RC                                                  /* @A2 */
  IF (QLIBRC = 0) THEN DO                                      /* @A2 */
     Address TSO "alloc f(rachelp) da("dsname") shr reuse"     /* @A2 */
+    call syshelp                                              /* @A4 */
     call bpxwdyn "concat ddlist(syshelp,rachelp) msg(wtp)"    /* @A2 */
  END                                                          /* @A2 */
 
@@ -1449,8 +1451,6 @@ ZTSO001 '&SMSG'
  | are not useful                                  |
  * ----------------------------------------------- */
   "change p'########' ' ' 73 80 all"
-  "Exclude '*' 2 all"
-  "Del x all"
 /* --------------------------------------- *
  | Now remove any duplicated blank records |
  * --------------------------------------- */
@@ -1589,6 +1589,29 @@ Update_nb:
   i = i + iu
   last = last + iu
   return
+
+  /* --------------------------------------------------- *
+   | Test if the SYSHELP DD is allocated and if not then |
+   | get the SYSHELP information via the PARMLIB command |
+   | and allocte SYSHELP to those libraries.             |
+   * --------------------------------------------------- */
+SYSHelp:                                                      /* @A4 */
+  rc = listdsi('syshelp' 'file')                              /* @A4 */
+  if rc = 0 then return                                       /* @A4 */
+  call outtrap 'h.'                                           /* @A4 */
+  address tso 'parmlib list(help)'                            /* @A4 */
+  call outtrap 'off'                                          /* @A4 */
+  helpdsns = null                                             /* @A4 */
+  do i = 1 to h.0                                             /* @A4 */
+     if pos('DATASET(S):',h.i) > 0 then leave                 /* @A4 */
+  end                                                         /* @A4 */
+  si = i  + 1                                                 /* @A4 */
+  do i = si to h.0                                            /* @A4 */
+     helpdsns = helpdsns  "'"word(h.i,1)"'"                   /* @A4 */
+  end                                                         /* @A4 */
+  address tso "alloc f(syshelp) da("helpdsns") shr reuse"     /* @A4 */
+  return                                                      /* @A4 */
+
 >END
 >DATA      Sample TSO Help Member directory information
 /* keep the description to 53 characters to avoid truncation */

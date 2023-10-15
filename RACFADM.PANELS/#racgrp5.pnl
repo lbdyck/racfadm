@@ -24,6 +24,8 @@
 %  A  !Add          +Connect user to group@(admin)
 %  R  !Remove       +Remove user from group@(admin)
 %  X  !Xref         +Create JCL for Cross Reference Report@(admin)
+%  Y  !Access       +User/Grp Access Report@(admin)
+%  Z  !Access       +Create JCL for User/Grp Access Report@(admin)
 )PROC
   &ZUP     = #RACGRP5
 )END

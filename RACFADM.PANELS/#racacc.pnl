@@ -1,0 +1,20 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE) HILITE(USCORE)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - DSN/Resource Access Report Prompt+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%
++  This pop-up prompting panel will precede the generation of the
++  DSN/Resource Access Report in either Foreground or Background
++  execution.
++
++  In both modes, the RACF Backup Database will be unloaded to a
++  temporary unload file before the access reports are generated.
++
+)PROC
+  &ZUP     = #RACACC
+)END

@@ -10,6 +10,25 @@
 *----------------------------------------------------------------------*
 
 
+  13 Oct 2023 - V36R1
+     - RACFMENU updated for version change
+     - User Profiles (Option 1)
+       -- Updated RACFUSR exec to allow option Y (User Access Report)
+       -- Added RACFUSRY exec to create User Access Report
+       -- Added RACFACC skeleton for User Access Report JCL
+       -- Added RACFACC panel for User Access Report JCL
+       -- Added #RACACC panel for User Access Report JCL
+       -- Updated panel RACFUSR2 to add option Y  (User Access Report)
+       -- Updated panel #RACUSR3 to add option Y  (User Access Report)
+       -- Updated panel #RACGRP5 to add option Y  (Grp Access Report)
+       -- Updated panel #RACGRP8 to add option Y  (Grp Access Report)
+     - Group Profiles (Option 2)
+       -- Updated RACFGRP exec to allow option Y (Grp Access Report)
+       -- Updated panel RACFGRP5 to add option Y (Grp Access Report)
+       -- Updated panel RACFGRP8 to add option Y (Grp Access Report)
+     - General resources (Option 4)
+       -- Updated panel RACFCLS2, made the profile field scrollable
+
   10 Sep 2023 - V36R0
      - User Profiles (Option 1)
        -- Updated RACFPROF to correctly display irrcerta et al

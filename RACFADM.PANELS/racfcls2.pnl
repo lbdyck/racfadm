@@ -21,9 +21,9 @@
 %S  ~Profile                                ~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                                      Z                               @z
+_Z+ Z                                   @Z Z                               @z
 )INIT
-  .ZVARS   = '(OPTA PROFILE DATA SCIND)'
+  .ZVARS   = '(OPTA PROFILE SCINP DATA SCIND)'
   .HELP    = #RACCLS2
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -50,7 +50,8 @@ _Z+ Z                                      Z                               @z
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT PROFILE')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT DESC')
 )Field
-  FIELD(DATA) IND(SCIND,'<>') LEN(255)
+  FIELD(PROFILE) IND(SCINP,'<>') LEN(255)
+  FIELD(DATA)    IND(SCIND,'<>') LEN(255)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */
@@ -70,5 +71,11 @@ _Z+ Z                                      Z                               @z
 /*     in ascending or descending order                               */
 /*                                                                    */
 /*  4) The 'DATA' field is a scrollable field                         */
+/*                                                                    */
+/*  5) The RLIST command might provide unpredictable results          */
+/*     when searching on the DIGTCERT and DIGTRING classes.           */
+/*     Due to the lowercase characters in these classes, the          */
+/*     profile filter on the RLIST command might not function         */
+/*     correctly.                                                     */
 /*                                                                    */
 /*--------------------------------------------------------------------*/

@@ -5,6 +5,7 @@
   Member      Subject                   Description
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
+ RACFACC   User/Group     RACF dataset/resource access report
  RACFCERT  CertAuth       Save display to a dataset
  RACFCLSD  Class          List classes
  RACFCLSR  Class          List classes

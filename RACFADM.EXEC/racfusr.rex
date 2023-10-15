@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @EX  231007  TRIDJK   Added line command 'Y'                       */
 /* @EW  220318  LBD      Clean up opened Tables (LBD)                 */
 /* @EV  201220  RACFA    Display action for Xref line command         */
 /* @EU  201201  RACFA    Unhide line command X for ADMIN users        */
@@ -235,7 +236,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝRV¨RevÝAL¨AltÝX¨Xref"                   /* @EU */
+        SELCMD2B = " ÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"             /* @EU */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
      end                                                      /* @D7 */
@@ -243,7 +244,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "        ÝAL¨AltÝX¨Xref"                   /* @EU */
+        SELCMD2B = "        ÝAL¨AltÝX¨XrefÝY¨Acc"             /* @EU */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
      end                                                      /* @D7 */
@@ -445,6 +446,11 @@ PROFL:
              action = '*Xref'                                 /* @EV */
              'TBMOD 'tablea                                   /* @EV */
         end                                                   /* @EV */
+        when (opta = 'Y' ) then do                            /* @EX */
+             call RACFUSRY user                               /* @EX */
+             action = '*Access'                               /* @EX */
+             'TBMOD 'tablea                                   /* @EX */
+        end
         when (opta = 'AL') then call Altd                     /* @E6 */
         otherwise nop
      End
