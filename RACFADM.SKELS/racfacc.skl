@@ -30,7 +30,7 @@
 //OUTDD    DD  DSN=&&RPTU,
 //             DISP=(NEW,PASS,DELETE),
 //             DCB=(LRECL=4096,RECFM=VB,BLKSIZE=81920),
-//             UNIT=SYSALLDA,SPACE=(CYL,(10,10),RLSE)
+//             UNIT=SYSALLDA,SPACE=(CYL,(10,200),RLSE)
 //SYSPRINT DD  SYSOUT=*
 //*-------------------------------------------------------------------*
 //*  SORT RACF UNLOADED DATA BASE
@@ -48,6 +48,7 @@
 //             UNIT=SYSALLDA,
 //             SPACE=(TRK,(10,5),RLSE),
 //             RECFM=FB,LRECL=264
+//SYSIN DD *
  SORT FIELDS=COPY
  OPTION VLSHRT
  OUTFIL FNAMES=T0404,CONVERT,

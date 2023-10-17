@@ -10,8 +10,13 @@
 *----------------------------------------------------------------------*
 
 
-  13 Oct 2023 - V36R1
+  17 Oct 2023 - V36R2
      - RACFMENU updated for version change
+     - RACFUSRY updated for to check for IRRDBU00 in the PARMLIB
+                IKJTSOxx in the AUTHPGM section for option Y
+     - RACFACC  updated skeleton space values
+
+  13 Oct 2023 - V36R1
      - User Profiles (Option 1)
        -- Updated RACFUSR exec to allow option Y (User Access Report)
        -- Added RACFUSRY exec to create User Access Report

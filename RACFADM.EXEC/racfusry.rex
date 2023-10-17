@@ -12,7 +12,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @L2  241014  LBDYCK   Check popup RC                               */
+/* @L2  231017  LBDYCK   Check IRRDBU00 in IKJTSOxx via PARMLIB cmd   */
+/* @L1  231014  LBDYCK   Check popup RC                               */
 /* @A2  231013  TRIDJK   Add pop-up for mode (Foreground/Background)  */
 /* @A1  231007  TRIDJK   Created REXX program                         */
 /* @A0  020201  XEPHON   Created SHOWACC, Joao Bentes De Jesus        */
@@ -22,7 +23,7 @@ SKELETON1   = "RACFACC"    /* Cross reference JCL          */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
 Address ISPExec
-  "VGET (SETDRPTU ZLLGJOB1 ZLLGJOB2 ZLLGJOB3 ZLLGJOB4) PROFILE"
+  "VGET (ZLLGJOB1 ZLLGJOB2 ZLLGJOB3 ZLLGJOB4) PROFILE"
 
 Address ISPExec
   "VGET (SETGDISP SETMTRAC) PROFILE"
@@ -53,10 +54,29 @@ end
 
 Address TSO
   x = outtrap('delete.','*')
-  'delete RACF.DBUNLOAD'
-  'delete RACF.T0404'
-  'delete RACF.T0505'
+  if sysvar('sysuid') = sysvar('syspref')
+     then prefix = sysvar('sysuid')
+     else prefix = sysvar('syspref')
+  prefix = prefix".RACFADM.WORK"
+  dbunload = "'"prefix".dbunload'"
+  t0404    = "'"prefix".t0404'"
+  t0505    = "'"prefix".t0505'"
+  'delete'  dbunload
+  'delete'  t0404
+  'delete'  t0505
   x=outtrap("OFF")
+
+  rc = check_irrdbu00()                                       /* @L2 */
+  if rc > 0 then do                                           /* @L2 */
+     racfsmsg = 'Error.'                                      /* @L2 */
+     racflmsg = 'Foreground processing is not supported when the' ,
+                'program IRRDBU00 is *not* found in the IKJTSOxx' ,
+                'member in the AUTHPGM section. Change to Batch' ,
+                'or update your IKJTSOxx member in PARMLIB and try' ,
+                'again.'
+     Address ISPExec 'setmsg msg(racf011)'                    /* @L2 */
+     exit 0                                                   /* @L2 */
+     end                                                      /* @L2 */
 
   /*--------------------------------------------*/
   /*  Unload RACF backup dsn                    */
@@ -67,21 +87,21 @@ Address TSO
   "alloc f(indd1)    shr reuse  dsn('"racf_dsn"') bufno(200)"
   'alloc f(outdd)    new reuse unit(sysallda)',
          'lrecl(4096) blksize(0) recfm(v b) bufno(200)',
-         'dsn(racf.dbunload) new catalog',
+         'dsn('dbunload') new catalog',
          'space(75,75) tracks'
   "call *(irrdbu00) 'NOLOCKINPUT'"
 
   /*--------------------------------------------*/
   /*  Sort resource and dataset access reports  */
   /*--------------------------------------------*/
-  'alloc f(sortin) da(racf.dbunload)'
+  'alloc f(sortin) da('dbunload')'
   'alloc f(t0404)    new reuse unit(sysallda)',
          'lrecl(264) blksize(0) recfm(f b)',
-         'dsn(racf.t0404) catalog',
+         'dsn('t0404') catalog',
          'space(1,1) tracks'
   'alloc f(t0505)    new reuse unit(sysallda)',
          'lrecl(264) blksize(0) recfm(f b)',
-         'dsn(racf.t0505) catalog',
+         'dsn('t0505') catalog',
          'space(1,1) tracks'
   'alloc f(sysin)    new reuse unit(sysallda)',
          'lrecl(80) blksize(0) recfm(f b)',
@@ -107,7 +127,7 @@ Address TSO
   /*--------------------------------------------*/
   'alloc f(sysprint) new reuse unit(sysallda)',
          'space(1,1) tracks'
-  'alloc f(sysut1)   shr reuse  delete dsn(racf.t0404 racf.t0505)'
+  'alloc f(sysut1)   shr reuse  delete dsn('t0404 t0505')'
   'alloc f(sysut2)   new reuse unit(sysallda)',
          'lrecl(264) blksize(0) recfm(f b)',
          'space(1,1) tracks'
@@ -139,6 +159,11 @@ Address TSO
   'delstack'
   'free  f(sysprint indd1 outdd sysout sortin sysin)'
   'free  f(t0404 t0505 sysut1 sysut2)'
+  x = outtrap('delete.','*')
+  'delete'  dbunload
+  'delete'  t0404
+  'delete'  t0505
+  x=outtrap("OFF")
   'alloc f(sysin) ds(*) reuse'
   call Goodbye
 exit
@@ -164,7 +189,6 @@ ADDRESS ISPEXEC
                 "REGION=0M,NOTIFY=&SYSUID"
      "VPUT (ZLLGJOB1 ZLLGJOB2)"
   END
-  TMPDRPTU = STRIP(SETDRPTU,,"'")
   "FTOPEN TEMP"
   "VGET (ZTEMPF)"
   "FTINCL "SKELETON1
@@ -200,3 +224,31 @@ Goodbye:
      Say "*"COPIES("-",70)"*"
   end
 return
+
+  /* -------------------------------------------------- *
+   | Check that IRRDBU00 is in the IKJTSOxx AUTHPGM     |
+   | section and if so then return 0 otherwise return 4 |
+   * -------------------------------------------------- */
+Check_IRRDBU00: procedure                                     /* @L2 */
+  call outtrap 't.'
+  'parmlib'
+  call outtrap 'off'
+  hit = 0
+  do ica = 1 to t.0
+    if wordpos('AUTHPGM:',t.ica) > 0 then do
+      hit = 1
+      ica = ica + 1
+      leave
+    end
+  end
+  if hit = 0 then return 4
+  hit = 0
+  do ic = ica to t.0
+    if pos('CURRENT PARMLIB',t.ic) > 0 then leave
+    if wordpos('IRRDBU00',t.ic) > 0 then do
+      hit = 1
+      leave
+    end
+  end
+  if hit = 0 then return 4
+  else return 0
