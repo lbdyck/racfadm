@@ -1,5 +1,5 @@
 )ATTR DEFAULT(%+_)
-  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRPROF)
+   ]  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRPROF)
    [  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
    @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
@@ -18,10 +18,10 @@
 +FILTER: $RFILTER
 +SELECT: ¬SELCMDS                                                              ¬
 %
-%S  ~Profile
+%S ~Profile
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                                                                       @Z
+_Z+]Z                                                                        @Z
 )INIT
   .ZVARS   = '(OPTA PROFILE SCINP)'
   .HELP    = #RACCLS2

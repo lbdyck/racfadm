@@ -9,6 +9,8 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  21 Oct 2023 - V36R5
+     - RACFCLS2 panel update for an additional space for class
 
   19 Oct 2023 - V36R4
      - RACFRVER exec updated for version
