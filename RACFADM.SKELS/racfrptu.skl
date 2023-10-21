@@ -3,6 +3,7 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @L1  231019  LBD      Change unload blksize to 0
 )CM*  @A3  200701  RACFA    If GDG, do not include DELETE step
 )CM*  @A2  200701  RACFA    Chged var. SETDRPTU to TMPDRPTU
 )CM*  @A1  200618  RACFA    Removed JOB card, moved to seperate member
@@ -28,6 +29,6 @@
 //INDD1    DD  DISP=SHR,DSN=&RACFDTMP
 //OUTDD    DD  DSN=&TMPDRPTU,
 //             DISP=(NEW,CATLG,DELETE),
-//             DCB=(LRECL=4096,RECFM=VB,BLKSIZE=81920),
+//             DCB=(LRECL=4096,RECFM=VB,BLKSIZE=0),
 //             UNIT=SYSALLDA,SPACE=(CYL,(300,300),RLSE)
 //SYSPRINT DD  SYSOUT=*

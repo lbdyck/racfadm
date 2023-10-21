@@ -37,6 +37,7 @@
  RACFPSWD  Password       Reset userid password (menu opt 5/linecmd PW)
  RACFPUTL  Commands       Called by RACFCMDS, display command at top
  RACFRPTS  Reports        RACF reports, menu option R
+ RACFRVER  Version        Sets the version for this application
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked
  RACFSETG  Settings       Customize settings, menu option 0
  RACFUSR   User           Display userid profiles, menu option 1

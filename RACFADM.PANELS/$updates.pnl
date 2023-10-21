@@ -10,6 +10,20 @@
 *----------------------------------------------------------------------*
 
 
+  19 Oct 2023 - V36R4
+     - RACFRVER exec updated for version
+     - RACFACC  skel update for unload blksize = 0
+     - RACFMSG  skel update for unload blksize = 0
+     - RACFRPTU skel update for unload blksize = 0
+     - #RACNOT3 panel update to remove obsolete info
+     - RACFCLS2 panel remove description so more room for Profile
+     - RACFRPTS panel update to add UNLOAD command hint
+
+  18 Oct 2023 - V36R3
+     - RACFMENU panel updated to invoke RACFRVER to get version
+     - RACFHELP exec updated to correctly handle null variable
+     - RACFRVER exec updated for version
+
   17 Oct 2023 - V36R2
      - RACFMENU updated for version change
      - RACFUSRY updated for to check for IRRDBU00 in the PARMLIB

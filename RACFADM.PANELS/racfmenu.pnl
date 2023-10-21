@@ -3,11 +3,12 @@
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
    ¨  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF) COLOR(WHITE)
+   [  TYPE(OUTPUT)  INTENS(High) CAPS(ON) COLOR(WHITE)
    Ý  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF) COLOR(GREEN)
    {  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF)
    ~  TYPE(PS)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - RACF Administration - V36R2+)\-\
++\-\(%RACFADM - RACF Administration -[rver +)\-\
 %Option ===>_ZCMD
 %
 %   0 ~Settings +Customize options      %C ~Command   +Execute RACF commands
@@ -96,7 +97,8 @@
 
   *REXX (RACFVER PRMDBASE BKPDBASE ZOSVER RACFGRP  RACFNAM RACFLMSG
          SECSOFT RACFFMID USADATE UTYPE SETMADMN UATT RACFMENU
-         SETMPHRA)
+         SETMPHRA rver)
+    rver = racfrver()
     Numeric Digits 10
     CVT      = C2D(STORAGE(10,4))               /* Get RACF FMID     */
     RACFFMID = "HRF"STORAGE(D2X(CVT - 29),4)

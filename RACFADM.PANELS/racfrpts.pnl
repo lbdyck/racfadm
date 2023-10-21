@@ -12,7 +12,7 @@
 +\-\(%RACFADM - RACF Reports+)\-\
 %Command ==>_ZCMD                                                  %Scr =>_Z   +
 +
-+SELECT: %S+Select,%R+Reset                               %F3+- Edit/Submit Job
++Select: %S+Select,%R+Reset   Command: %Unload            %F3+- Edit/Submit Job
 +
 +IRRDBU00 Dsn:_SETDRPTU                                    + Edit JCL:_Z{ (Y/N)
 +

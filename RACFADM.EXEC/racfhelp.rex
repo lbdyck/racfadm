@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L1  231018  LBD      Move set defaults higher in the code         */
 /* @A4  231006  DT       Check/allocate dd:syshelp                    */
 /* @A3  200618  RACFA    Chged SYSDA to SYSALLDA                      */
 /* @A2  200605  RACFA    Concatenate panel dsn to TSOHELP             */
@@ -168,6 +169,10 @@
 
  arg helpcmd
 
+/* --------------- *                                         /* @L1 */
+ | define defaults |
+ * --------------- */
+  parse value '' with null load_info sortcol srchtsoh
 
 /* ----------------------------------------------- *
  | Check for APPLID of ISR and if not then recurse |
@@ -211,11 +216,6 @@
     end
  else ztsotest = 0
  Address ISPExec 'vput (ztsotest)'
-
-/* --------------- *
- | define defaults |
- * --------------- */
-  parse value '' with null load_info sortcol srchtsoh
 
 /* ---------------------- *CUSTOM* -------------------------- *
  | The TSO Help member data may be inline or may be in        |
@@ -1505,7 +1505,7 @@ ZTSO001 '&SMSG'
 /* ---------------------------------------------- *
  | Move all messages to the end before processing |
  * ---------------------------------------------- */
- Move_Messages: Procedure
+ Move_Messages: Procedure expose null
   '(last) = linenum .zlast'
   drop msgs.
   msgc = 1

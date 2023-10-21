@@ -1,6 +1,6 @@
 )ATTR DEFAULT(%+_)
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRPROF)
-  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
+   [  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
    @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
@@ -18,12 +18,12 @@
 +FILTER: $RFILTER
 +SELECT: ¬SELCMDS                                                              ¬
 %
-%S  ~Profile                                ~Description
+%S  ~Profile
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                                   @Z Z                               @z
+_Z+ Z                                                                       @Z
 )INIT
-  .ZVARS   = '(OPTA PROFILE SCINP DATA SCIND)'
+  .ZVARS   = '(OPTA PROFILE SCINP)'
   .HELP    = #RACCLS2
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -48,10 +48,8 @@ _Z+ Z                                   @Z Z                               @z
         VER (&OPTA,LIST,S,L)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT PROFILE')
-  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT DESC')
 )Field
   FIELD(PROFILE) IND(SCINP,'<>') LEN(255)
-  FIELD(DATA)    IND(SCIND,'<>') LEN(255)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

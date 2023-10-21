@@ -6,10 +6,7 @@
 %Tutorial+\-\(%RACFADM - Installation Notes - 3 of 3+)\-\%Tutorial
 %Command ===>_ZCMD
 %
-!  7)+The%User+line commands%XR,+Cross Reference Report, and
-!                           %Z ,+User Access Report, are not displayed
-!       -+Reason for this is sites with a large RACF database, the time
-+         for!IRRUT100/IRRDBU00+to read/unload the data is significant
+!  7)+The%User+line commands%XR,+Cross Reference Report.
 !       -+To access/use this command, turn on the%Settings+(Option 0):
 +          !Administrator ..... Y
 +
@@ -21,6 +18,9 @@
 +
 !  9)%RACFADM+allows passing a menu option as a parameter, which will invoke
 +     the option and when!F3+(END) is pressed, exit out of%RACFADM
++
++
++
 +
 +
 +

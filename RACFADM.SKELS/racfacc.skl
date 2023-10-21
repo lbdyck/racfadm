@@ -3,6 +3,7 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @L1  241019  LBDYCK   Change unload blksize to 0
 )CM*  @L0  241013  LBDYCK   Add comment about Submit
 )CM*                        Remove delete step and use temp for unload
 )CM*  @A0  231007  TRIDJK   Created skeleton
@@ -29,7 +30,7 @@
 //INDD1    DD  DISP=SHR,DSN=&RACFDTMP
 //OUTDD    DD  DSN=&&RPTU,
 //             DISP=(NEW,PASS,DELETE),
-//             DCB=(LRECL=4096,RECFM=VB,BLKSIZE=81920),
+//             DCB=(LRECL=4096,RECFM=VB,BLKSIZE=0),
 //             UNIT=SYSALLDA,SPACE=(CYL,(10,200),RLSE)
 //SYSPRINT DD  SYSOUT=*
 //*-------------------------------------------------------------------*
