@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  11 Nov 2023 - V36R6
+     - RACFMVS  exec to fix missing comma in message text
+
   21 Oct 2023 - V36R5
      - RACFCLS2 panel update for an additional space for class
 

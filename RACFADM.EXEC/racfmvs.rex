@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L1  231107  LBD      Correct typo in message                      */
 /* @A4  200702  RACFA    Allow for symbolic in dsname                 */
 /* @A3  200611  RACFA    Add capability to display USS info   (Opt O) */
 /* @A2  200525  RACFA    Allow defining pgm name in Settings  (Opt 0) */
@@ -59,7 +60,7 @@ ADDRESS ISPEXEC
   if (LASTRC <> 0) THEN DO
      racfsmsg = 'Error - SHOWMVS'
      racflmsg = 'Unable to execute SHOWMVS (RC='RC'). ',
-                'Verify SHOWMVS is in the linklist,'
+                'Verify SHOWMVS is in the linklist,' ,       /* @L1 */
                 'ISPLLIB or STEPLIB.'
      'setmsg msg(RACF011)'
      return
