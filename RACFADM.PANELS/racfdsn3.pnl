@@ -9,14 +9,14 @@
 %
 +Add RACF%DATASET+profile: %ADDSD+command and optionally a%PERMIT+
 +
-+PROFILE%===>_DATASET                                   { (Enter%NEW{name)
++PROFILE%===>_DATASET                                     {(Enter%NEW{name)
 +
 +OWNER  %===>_OWNER   { (Owner of profile)
 +UACC   %===>_UACC    { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +WARNING%===>_Z  {      (Warn or fail access, YES/NO)
 +DATA   %===>_DATA                                                           @Z
 +
-+FROM   %===>_FROM                                       {(Existing profile)
++FROM   %===>_FROM                                        {(Existing profile)
 +
 {If%FROM{is set to a generic profile name then the%ACCESS LIST{from this
 {profile is added to the new profile with a permit command immediately.

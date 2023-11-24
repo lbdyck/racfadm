@@ -15,10 +15,10 @@
 +FILTER: $RFILTER
 +SELECT: ¬SELCMDS2                                                             ¬
 %
-%S  ~Profile                                ~Type
+%S  ~Profile                                     ~Type
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                                      Z
+_Z+ Z                                           Z
 )INIT
   .ZVARS   = '(OPTA DATASET TYPE)'
   .HELP    = #RACDSN2

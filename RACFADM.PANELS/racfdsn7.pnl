@@ -9,14 +9,14 @@
 %
 +Add RACF%DATASET+permit: %PERMIT+command
 +
-+PROFILE%===>$DATASET                            +$TYPE
++PROFILE%===>$DATASET                                     +$TYPE
 +
 +ID     %===>_ID      { (User or Group)
 +UACC   %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +
 {and / or
 +
-+FROM   %===>_FROM                                   { (Existing profile)
++FROM   %===>_FROM                                        {(Existing profile)
 +
 {If%FROM{is set to a generic profile name then the%ACCESS LIST{is copied.
 +

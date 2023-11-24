@@ -10,7 +10,7 @@
 %
 +Change RACF%DATASET+profile: %ALTDSD+command
 +
-+PROFILE%===> &DATASET                          +$TYPE
++PROFILE%===> &DATASET                                    +$TYPE
 +
 {Change one or more of the fields below:
 +

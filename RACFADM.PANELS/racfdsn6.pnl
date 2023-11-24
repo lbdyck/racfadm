@@ -11,7 +11,7 @@
 +
 {Changing the%ACCESS{will alter the access right of the ID shown.
 +
-+PROFILE%===>$DATASET                          +$TYPE
++PROFILE%===>$DATASET                                     +$TYPE
 +ID     %===>$ID
 +
 +UACC   %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)

@@ -9,6 +9,14 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  23 Nov 2023 - V36R7
+     - RACFDSN2 panel update to change DATASET profile length to 44
+     - RACFDSN3 panel update to change DATASET profile length to 44
+     - RACFDSN4 panel update to change DATASET profile length to 44
+     - RACFDSN5 panel update to change DATASET profile length to 44
+     - RACFDSN6 panel update to change DATASET profile length to 44
+     - RACFDSN7 panel update to change DATASET profile length to 44
+
   11 Nov 2023 - V36R6
      - RACFMVS  exec to fix missing comma in message text
 

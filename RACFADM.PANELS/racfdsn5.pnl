@@ -14,7 +14,7 @@
 +\-\(%RACFADM - Dataset Profiles+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+PROFILE:$DATASET                                        +$TYPE
++PROFILE:$DATASET                                     +$TYPE
 +UACC:   $UACC    { (Default access)
 +OWNER:  $OWNER   { (Owner of profile)
 +WARNING:$WARN    { (Warn or fail access, YES/NO)
