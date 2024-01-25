@@ -1,0 +1,23 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Password/Phrase Clear History+)\-\%Tutorial
+%Command ===>_ZCMD
+%
++ !RSH RACF Tip: How to Clear a User's Password and Phrase History
++
++  To clear a user's password and password phrase history, execute the
++  follwing commands.  The first command makes the ID PROTECTED.
++  PWCLEAN then removes the entire password and phrase history. As this
++  process also deletes the user's current password and/or phrase along
++  with the history, it will be necessary to set the user's password and
++  and/or password phrase to a new value(s).
++
+%  ALTUSER+userid%NOPASSWORD NOPHRASE
+%  ALTUSER+userid%PWCLEAN
+%  ALTUSER+userid%PASSWORD(newpassword) -and/or- PHRASE(newphrase)
+)PROC
+  &ZUP     = #RACPSWD
+)END

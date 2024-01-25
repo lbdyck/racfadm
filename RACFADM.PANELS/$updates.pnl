@@ -9,6 +9,15 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  10 Jan 2024 - V36R8
+     - RACFDB exec updated to check for RACF VSAM databases
+     - Added #RACPSWH panel to document how to clear password/phrase
+       history
+     - Corrected spelling in the following panels:
+       $$DIR, $DEFSETG, $STNDARD, $UPDATES, ORLIST, RACFMSG, RACFSETI
+     - User Profiles (Option 1)
+       -- Added line command 'LC' for list certificates
+
   23 Nov 2023 - V36R7
      - RACFDSN2 panel update to change DATASET profile length to 44
      - RACFDSN3 panel update to change DATASET profile length to 44
@@ -815,12 +824,12 @@
        -- Added 'Password minimum change interval'
      - OMVSCmds (Option O)
        -- Update F/G/ULIST commands
-          * Moved 'Numeric Digits' to top of program, elliminates
+          * Moved 'Numeric Digits' to top of program, eliminates
             executing multiple times
           * Moved initialization of variable CHKPRM to init subroutine,
             was redundant in several subroutines
           * Removed unnecessary 'TRACE O' left in code when debugging
-          * Changed/reduced code when verifying parmeters
+          * Changed/reduced code when verifying parameters
           * Fixed displaying error message, when no entries met search
             criteria
           * Fixed highlighting report header/totals, variable OMVSCMDS
@@ -859,7 +868,7 @@
 
   06 June 2020 - V27R2
      - OMVSCmds (Option O)
-       -- Updated FLIST when specifing a pathname, highlights the
+       -- Updated FLIST when specifying a pathname, highlights the
           report header when in VIEW or EDIT mode
        -- Updated ULIST, allow searching and displaying specific
           UID, GID, Shell and Home path
@@ -998,7 +1007,7 @@
             read in $DEFSETG to obtain the default settings, and
             and then read in $DEFSITE to obtain any overrides
           * This prevents from having to update the $DEFSETG member
-            everytime a new version of RACFADM is installed
+            every time a new version of RACFADM is installed
           * Fixed defining 'Default password in $DEFSETG and $DEFSITE
             o Was not honoring lower case characters
           * Added comments in $DEFSETG
@@ -1365,7 +1374,7 @@
 
   27 Apr 2020 - V21R6
      - RACFdb (Option 8)
-       -- Display parmeters in a table
+       -- Display parameters in a table
           * Primary commands are SORT, LOCATE, ONLY and RESET
             o These commands operate like all the other panels
        -- Added 'Password phrase'
@@ -1610,7 +1619,7 @@
        -- Added RACF backup database name
      - Issues (Option I)
        -- Updated two PMR statuses, some said 'Testing' or 'Open',
-          when infact they were 'Closed'
+          when in fact they were 'Closed'
      - Tutorials (Option T)
        -- Fixed spelling issues in panels (#RACMENU and #RACPSWD)
 
@@ -1903,7 +1912,7 @@
   12 Apr 2020 - V14R9
      - User (Option 1)
        -- When Settings (Option 0) is 'Admin RACF API = Y', and
-          'A'dding or 'C'hanging a userid, if unsuccessfull,
+          'A'dding or 'C'hanging a userid, if unsuccessful,
           display error message
      - Changes (Option C)
        -- Corrected bullets logged in V14R8
@@ -2007,7 +2016,7 @@
 
   07 Apr 2020 - V13R8
      - Settings (Option 0)
-       * 'JOBLLIB dataset' is now optional, prior when providing
+       * 'JOBLIB dataset' is now optional, prior when providing
          'User catalog' this field was required, updated tutorial
      - Other Items
        * Standardized )ATTR section on all panels, making it easier
@@ -2032,7 +2041,7 @@
        -- When 'A'dding, 'C'hanging and 'S'howing a group, made DATA
           field scrollable, right/left, <> (RACFGRP2/4/5)
      - Other Items
-       -- Corrected sequencing flag characters (@??) in REXX progams
+       -- Corrected sequencing flag characters (@??) in REXX programs
           (RACFUSR/RACFCLSS)
 
   06 Apr 2020 - V13R6
@@ -2245,23 +2254,23 @@
           to seven when typing in the 'TSOSIZE', preventing abend
 
   20 Mar 2020 - V10R7
-     - User (Optiion 1)
+     - User (Option 1)
        -- Once again... attempting to fix the 'C'hanging of a userid
           when 'TSO Userid=N'... maybe three times is the charm...
 
   20 Mar 2020 - V10R6
-     - User (Optiion 1)
+     - User (Option 1)
        -- Re-attempt fixing 'C'hanging a userid when 'TSO Userid=N',
           was not updating the table/row
 
   20 Mar 2020 - V10R5
-     - User (Optiion 1)
+     - User (Option 1)
        -- When deleting a userid, delete all 'userid.*' files, before
           deleting the alias, prior it only deleted ISPPROF and JOBLIB
           datasets
 
   19 Mar 2020 - V10R4
-     - User (Optiion 1)
+     - User (Option 1)
        -- Fixed 'C'hanging a userid, when 'TSO Userid=N', remove
           TSO access
 
@@ -2313,7 +2322,7 @@
   16 Mar 2020 - V9R7
      - Other Items
        -- Fixed line command 'L'ist and 'P'rofile when group is a
-          single asterick, display message
+          single asterisk, display message
 
   16 Mar 2020 - V9R6
      - Other Items

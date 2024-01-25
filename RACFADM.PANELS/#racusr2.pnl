@@ -32,6 +32,7 @@
 %  AL !Alter        +Alter user profile segments@(admin)
 %  X  !Xref         +Create JCL for Cross Reference Report@(admin)
 %  Y  !Access       +User/Grp Access Report@(admin)
+%  LC !Cert         +List certificates for user@(admin)
 )PROC
   &ZUP     = #RACUSR2
 )END

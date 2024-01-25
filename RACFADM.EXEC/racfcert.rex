@@ -1,8 +1,9 @@
 /*%NOCOMMENT====================* REXX *==============================*/
-/*  PURPOSE:  RACFADM - Digital Certificates, Option CA, List labels  */
+/*PURPOSE:  RACFADM - Digital Certificates, Option CA-LC, List labels */
 /*--------------------------------------------------------------------*/
 /* FLG  YYMhDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A4  240111  GA       List ca or user certificate                  */
 /* @A3  220317  LBD      Close open table on exit                     */
 /* @A2  210309  LBD      Add State (expired) to table                 */
 /* @A1  201118  TRIDJK   Add X (CA Export) line command               */
@@ -32,7 +33,13 @@ ADDRESS ISPEXEC
         interpret "Trace "SUBSTR(SETMTRAC,1,1)
   end
 
-  cmd = "racdcert certauth list(label('DUMMY')"
+  Parse Arg user                                              /* @A4 */
+  certtype = "certauth"                                       /* @A4 */
+  if (user <> NULL) then do                                   /* @A4 */
+   certtype = "id("user")"                                    /* @A4 */
+  end                                                         /* @A4 */
+
+  cmd = "racdcert "certtype" list(label('DUMMY')"             /* @A4 */
   x    = outtrap('var.')
   Address TSO cmd
   cmd_rc = rc
@@ -84,7 +91,7 @@ RETURN
 /*--------------------------------------------------------------------*/
 GET_CERT_LABELS:
   Scan = 'OFF'
-  cmd = "racdcert certauth list"
+  cmd = "racdcert "certtype" list"                            /* @A4 */
   x = OUTTRAP('var.')
   address TSO cmd
   cmd_rc = rc
@@ -327,7 +334,7 @@ LISTL:
         cmd_rc = 8                                            /* @A1 */
         RETURN                                                /* @A1 */
      end                                                      /* @A1 */
-     cmd = "racdcert certauth export(label('"LABEL"')) dsn("xdsn")"
+     cmd = "racdcert "certtype" export(label('"LABEL"')) dsn("xdsn")"/* @A4 */
      X = OUTTRAP("CMDREC.")                                   /* @A1 */
      ADDRESS TSO cmd                                          /* @A1 */
      cmd_rc = rc                                              /* @A1 */
@@ -343,7 +350,7 @@ LISTL:
        end                                                    /* @A1 */
   END                                                         /* @A1 */
   ELSE DO                                                     /* @A1 */
-     cmd = "racdcert certauth list(label('"LABEL"'))"
+     cmd = "racdcert "certtype" list(label('"LABEL"'))"       /* @A4 */
      X = OUTTRAP("CMDREC.")
      ADDRESS TSO cmd
      cmd_rc = rc

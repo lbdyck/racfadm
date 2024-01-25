@@ -56,8 +56,9 @@
  #RACOMVS  Tutorial       OMVS commands
  #RACPRMS  Tutorial       RACF parameters
  #RACPSWD  Tutorial       Password reset
+ #RACPSWH  Tutorial       Password/Phrase clear history
  #RACPUB1  Tutorial       RACF publications and downloads (1 of 2)
- #RACPUB2  Tutorial       RACF eductional websites (2 of 2)
+ #RACPUB2  Tutorial       RACF educational websites (2 of 2)
  #RACRPT1  Tutorial       RACF reports (1 of 2)
  #RACRPT2  Tutorial       RACF reports (2 of 2)
  #RACSET1  Tutorial       Settings - Customize options (1 of 4)

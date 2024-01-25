@@ -12,7 +12,7 @@
    Ý  TYPE(DATAOUT) INTENS(HIGH)
    ~  TYPE(PS)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - Digital Certificates+)\-\
++\-\(%RACFADM - Digital Certificates &user   +)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
 +SELECT: ¬SELCMDS                                                              ¬

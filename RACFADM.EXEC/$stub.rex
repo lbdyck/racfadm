@@ -13,7 +13,7 @@
   |                 high-level-qualifier.                      |
   |                                                            |
   * ---------------------------------------------------------- */
-  hlq = 'radmhlq'   /* <=== Change this variable */
+  hlq = 'LBDYCK.RACFADM.NEW' /* <=== Change this variable */
 
   Address TSO
   "Altlib Act App(Exec) Dataset('"hlq".racfadm.exec')"

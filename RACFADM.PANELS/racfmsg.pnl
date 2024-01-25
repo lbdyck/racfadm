@@ -130,7 +130,7 @@ _ZLLGJOB4
                IF (W1 = "GDG") & (W2 = "BASE") THEN DO
                   RACFSMSG = 'Invalid Backup DSN'
                   RACFLMSG = 'Can not use a base GDG when date is',
-                             'an asterick (*).'
+                             'an asterisk (*).'
                   BADDSN   = "Y"
                   RETURN
                END

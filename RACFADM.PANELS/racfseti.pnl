@@ -15,7 +15,7 @@
 %Datasets
 +  Messages ..._SETDIBMM                                    +
 +  Panels ....._SETDIBMP                                    +
-+  Skeltons ..._SETDIBMS                                    +
++  Skeletons .._SETDIBMS                                    +
 +  Clist ......_SETDIBMC                                    +
 +
 %Note

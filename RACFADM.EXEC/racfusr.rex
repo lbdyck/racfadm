@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @EY  240111  GA       Added new line command LC (list certificate) */
 /* @EX  231007  TRIDJK   Added line command 'Y'                       */
 /* @EW  220318  LBD      Clean up opened Tables (LBD)                 */
 /* @EV  201220  RACFA    Display action for Xref line command         */
@@ -236,7 +237,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"             /* @EU */
+        SELCMD2B = " ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
      end                                                      /* @D7 */
@@ -244,7 +245,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "        ÝAL¨AltÝX¨XrefÝY¨Acc"             /* @EU */
+        SELCMD2B = "        ÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
      end                                                      /* @D7 */
@@ -416,6 +417,11 @@ PROFL:
              "TBMOD" TABLEA                                   /* @BW */
         end                                                   /* @BW */
         when (opta = 'L')  then call Lisd
+        when (opta = 'LC') then do                            /* @EY */
+             call RACFCERT user                               /* @EY */
+             action = '*Cert'                                 /* @EY */
+             "TBMOD" TABLEA                                   /* @EY */
+             end
         when (opta = 'P') then do                             /* @CK */
              call RACFPROF 'USER' user                        /* @CK */
              action = '*Prof'                                 /* @CW */

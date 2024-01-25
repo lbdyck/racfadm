@@ -25,4 +25,5 @@
 +
 )PROC
   &ZUP     = #RACPSWD
+  &ZCONT   = #RACPSWH
 )END

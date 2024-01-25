@@ -17,8 +17,8 @@
 %  SAve             +Save display to a dataset
 +
 +Line Commands
-%  S  !Show         +Issue RACDCERT CERTAUTH LIST LABEL command@(SPECIAL)
-%  X  !Export       +Issue RACDCERT CERTAUTH EXPORT LABEL command@(SPECIAL)
+%  S  !Show         +Issue RACDCERT &certtype LIST LABEL command     @(SPECIAL)
+%  X  !Export       +Issue RACDCERT &certtype EXPORT LABEL command   @(SPECIAL)
 )PROC
   &ZUP     = #RACCERT
 )END

@@ -46,7 +46,7 @@
             o When possible the RESET command will allow changing
               the filter criteria, by passing it a text string as
               a parameter
-          * The SORTed column is the color turquois and un-sorted
+          * The SORTed column is the color turquoise and un-sorted
             columns are green
           * The LOCATE command operates on the SORTed column
           * Column headers are point-n-shoot sort fields

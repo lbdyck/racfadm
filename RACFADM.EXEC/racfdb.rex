@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AK  240110  TRIDJK   If RACF dsn is VSAM, no space used stats     */
 /* @AJ  200629  RACFA    If no RACF bkup dsn, then display N/A        */
 /* @AI  200629  RACFA    Fixed FMID                                   */
 /* @AH  200616  RACFA    Chg panel name RACFRPTS to RACFDISP          */
@@ -318,6 +319,13 @@ FINDSIZE:
   ARG RDSN                      /* GET RACF DATASET NAME             */
   FREE_SEGS = 0                 /* TOTAL NUMBER FREE SEGMENTS        */
   USED_SEGS = 0                 /* TOTAL NUMBER ALLOCATED SEGMENTS   */
+
+  ADDRESS ISPEXEC "DSINFO DATASET("RDSN")"                    /* @AK */
+  IF ZDSORG = 'VS' THEN DO      /* VSAM DATABASE? */          /* @AK */
+    USED_SEGS = 1;SEG_COUNT = 100000;SPACEALLOC = 'VSAM'      /* @AK */
+    RETURN                                                    /* @AK */
+    END                                                       /* @AK */
+
   CALL $RDSN_SETUP              /* OPEN RACF DSN AND READ ICB BLOCK  */
   BAM_COUNTER = 0               /* COUNT NUMBER OF BAMS PROCESSED    */
 
