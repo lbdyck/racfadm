@@ -1,0 +1,39 @@
+)CM*-------------------------------------------------------------------*
+)CM*  Purpose:  RACFADM - Digital Rings - SAve command
+)CM*-------------------------------------------------------------------*
+)CM*  FLG  YYMMDD  USERID   DESCRIPTION
+)CM*  ---  ------  -------  -------------------------------------------
+)CM*  @A0  240117  GA       Save command for list rings
+)CM*-------------------------------------------------------------------*
+)SEL &RACFSFIL = T
+)SETF RING    = &STRIP(&RING,, )
+)SETF RING    = &LEFT(&RING,73, )
+&ZDATE ----------- ( RACFADM - Digital Rings &user ) ---------- &ZTIME
+ Ring: &RING
+ Label                            Owner        Usage    Default
+ -----------------------------------------------------------------------
+)TB 2 35 48 57
+)DOT &TABLEA
+)SETF LABEL   = &STRIP(&LABEL,, )
+)SETF LABEL   = &LEFT(&LABEL,32, )
+)SETF OWNER   = &LEFT(&OWNER,12, )
+)SETF USAGE   = &LEFT(&USAGE,8, )
+)SETF DEFAULT = &LEFT(&DEFAULT,3, )
+!&LABEL!&OWNER!&USAGE!&DEFAULT
+)ENDDOT
+)ENDSEL
+)SEL &RACFSFIL = C
+)SETF RING    = &STRIP(&RING,, )
+)SETF RING    = &LEFT(&RING,73, )
+RACFADM - Digital Rings &user
+Ring - &RING
+Label,Owner,Usage,Default
+-----,------,------,------
+)DOT &TABLEA
+)SETF LABEL   = &STRIP(&LABEL,, )
+)SETF OWNER   = &STRIP(&OWNER,, )
+)SETF USAGE   = &STRIP(&USAGE,, )
+)SETF DEFAULT = &STRIP(&DEFAULT,, )
+&LABEL,&OWNER,&USAGE,&DEFAULT
+)ENDDOT
+)ENDSEL

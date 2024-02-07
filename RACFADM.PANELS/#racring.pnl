@@ -4,7 +4,7 @@
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
 )BODY EXPAND(\\)
-%Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
+%Tutorial+\-\(%RACFADM - Digital Rings+)\-\%Tutorial
 %Command ===>_ZCMD
 %
 +Primary Commands
@@ -14,15 +14,19 @@
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
 %  Reset            +Redisplay all rows and sort first column
-%  Type             +Switch certificate list from CERTAUTH to SITE
 %  SAve             +Save display to a dataset
 +
-+Line Commands
-%  S  !Show         +Issue RACDCERT &certtype LIST LABEL command
-%  X  !Export       +Issue RACDCERT &certtype EXPORT LABEL command
-%  H  !Chain        +Issue RACDCERT &certtype LISTCHAIN LABEL command
-%  A  !Add          +Issue RACDCERT &certtype ADD WITHLABEL command  @(Admin)
-%  D  !Delete       +Issue RACDCERT &certtype DELETE LABEL command   @(Admin)
++Line Commands for Ring
+%  L  !List         +Issue RACDCERT ID(User) LISTRING(Ring)
+%  A  !Add          +Issue RACDCERT ID(User) ADDRING(Ring)           @(Admin)
+%  D  !Del          +Issue RACDCERT ID(User) DELRING(Ring)           @(Admin)
+%
++Line Commands for Labels connected to a Ring
+%  S  !Show         +Issue RACDCERT Owner LIST LABEL command
+%  X  !Export       +Issue RACDCERT Owner EXPORT LABEL command
+%  H  !Chain        +Issue RACDCERT Owner LISTCHAIN LABEL command
+%  C  !Connect      +Issue RACDCERT CONNECT LABEL RING command       @(Admin)
+%  R  !Remove       +Issue RACDCERT REMOVE LABEL RING command        @(Admin)
 )PROC
-  &ZUP     = #RACCERT
+  &ZUP     = #RACRING
 )END

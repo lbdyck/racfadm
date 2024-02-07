@@ -11,6 +11,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F1  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
+/* @EZ  240117  GA       Added line command LR (List ring)            */
 /* @EY  240111  GA       Added new line command LC (list certificate) */
 /* @EX  231007  TRIDJK   Added line command 'Y'                       */
 /* @EW  220318  LBD      Clean up opened Tables (LBD)                 */
@@ -237,7 +239,8 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EY */
+        SELCMD2B = " ÝLR¨Ring"||,                             /* @EZ */
+                   "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
      end                                                      /* @D7 */
@@ -245,7 +248,8 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "        ÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EY */
+        SELCMD2B = "        "||,                              /* @EZ */
+                   "ÝLR¨RingÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EZ */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
      end                                                      /* @D7 */
@@ -253,11 +257,12 @@ ADDRESS ISPEXEC                                               /* @BC */
   else do
      IF (SETMIRRX = "YES") then do                            /* @EH */
         SELCMD2A = "ÝS¨Show,ÝSE¨Search,ÝL¨list,"||,           /* @EH */
-                   "ÝP¨Profile,ÝD¨Dsn"                        /* @EH */
+                   "ÝLR¨RingÝLC¨CertÝP¨Profile,ÝD¨Dsn"        /* @EZ  */
         SELCMDS3 = "ÝS¨Show,ÝL¨list,ÝP¨Profile"               /* @EH */
      end
      else do                                                  /* @EH */
-        SELCMD2A = "ÝS¨Show,ÝSE¨Search,ÝL¨list,ÝD¨Dsn"        /* @DI */
+        SELCMD2A = "ÝS¨Show,ÝSE¨Search,ÝL¨list,"||,           /* @EZ */
+                   "ÝLR¨Ring,ÝLC¨Cert,ÝD¨Dsn"                 /* @EZ */
         SELCMDS3 = "ÝS¨Show,ÝL¨list"                          /* @B8 */
      end                                                      /* @EH */
      SELCMD2B = ""                                            /* @DI */
@@ -421,12 +426,17 @@ PROFL:
              call RACFCERT user                               /* @EY */
              action = '*Cert'                                 /* @EY */
              "TBMOD" TABLEA                                   /* @EY */
-             end
+             end                                              /* @EY */
+        when (opta = 'LR') then do                            /* @EZ */
+             call RACFRING user                               /* @EZ */
+             action = '*Ring'                                 /* @EZ */
+             "TBMOD" TABLEA                                   /* @EZ */
+             end                                              /* @EZ */
         when (opta = 'P') then do                             /* @CK */
              call RACFPROF 'USER' user                        /* @CK */
              action = '*Prof'                                 /* @CW */
              "TBMOD" TABLEA                                   /* @CW */
-        end                                                   /* @CW */
+             end                                              /* @CW */
         when (opta = 'PW') then do                            /* @DG */
              RC = RACFPSWD(user)                              /* @DG */
              if (RC = 0) then do                              /* @DG */
@@ -1601,6 +1611,7 @@ DO_SAVE:                                                      /* @EK */
      "DISPLAY PANEL("PANELS1")"                               /* @EK */
      IF (RC = 08) THEN DO                                     /* @EK */
         "REMPOP"                                              /* @EK */
+        X = MSG("ON")                                         /* @F1 */
         RETURN                                                /* @EK */
      END                                                      /* @EK */
      RACFSDSN = STRIP(RACFSDSN,,"'")                          /* @EK */

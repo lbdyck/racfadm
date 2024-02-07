@@ -1,0 +1,51 @@
+)ATTR DEFAULT(%+_)
+   $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   /  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) CAPS(off) COLOR(TURQ)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Digital Rings &user   +)\-\
+%Command ===>_ZCMD
+%
++  Add new%LABEL+to%RING+:/RING                                              @Z
++
++  LABEL  %===>¬LABELC                          +{(certificate label)
++  OWNER  %===>_OWNERC  +                        {(cert-owner|CERTAUTH|SITE)
++  USAGE  %===>_USAGEC  +                        {(PERSONAL|CERTAUTH|SITE)
++  DEFAULT%===>_DFC+                             {(YES|NO)
++
++
++
++
++
++
++
++
++
++
++
++
++\ \Press%ENTER+to process or%END+to exit\ \
+)INIT
+  .ZVARS   = '(SCIND)'
+  .HELP    = #RACMENU
+)PROC
+  VER(&LABELC,NB)
+  VER(&OWNERC,NB)
+  IF (&USAGEC ^='')
+    VER(&USAGEC,NB,LIST,PERSONAL,SITE,CERTAUTH)
+  IF (&DFC    ^='')
+    VER(&DFC,NB,LIST,YES,NO)
+)FIELD
+  FIELD(RING) IND(SCIND,'<>') LEN(237)
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The 'RING' field is a scrollable field                         */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

@@ -174,7 +174,7 @@
        utype    = 'Admn:'
     end
     if (RACFLMSG = "") & (ACCESS = "") THEN DO
-       RACFLMSG = "Userid ("userid") has limited access",
+       RACFLMSG = "Userid ("user") has limited access",
                   "to display/view entries, due to it",
                   "does NOT have the attribute AUDITOR,",
                   "ROAUDIT or SPECIAL."

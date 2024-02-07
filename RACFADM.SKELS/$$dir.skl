@@ -19,6 +19,8 @@
  RACFJOB   Job card       JOB card
  RACFMSG   Messages       RACF messages
  RACFPRMS  Parameter      RACF parameters
+ RACFRIN1  Rings          Save display to a dataset
+ RACFRIN2  Rings          Save display to a dataset
  RACFRPTS  Reports        RACF reports, All reports
  RACFRPTU  Reports        RACF reports, IRRDBU00 unload utility
  RACFUSR2  User           List userids

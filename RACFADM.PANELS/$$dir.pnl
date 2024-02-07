@@ -59,6 +59,7 @@
  #RACPSWH  Tutorial       Password/Phrase clear history
  #RACPUB1  Tutorial       RACF publications and downloads (1 of 2)
  #RACPUB2  Tutorial       RACF educational websites (2 of 2)
+ #RACRING  Rings          Digital rings
  #RACRPT1  Tutorial       RACF reports (1 of 2)
  #RACRPT2  Tutorial       RACF reports (2 of 2)
  #RACSET1  Tutorial       Settings - Customize options (1 of 4)
@@ -72,11 +73,12 @@
  ORALTER   TSO Help       Unix Security Attribute, like ALTER
  ORLIST    TSO Help       Unix Dir/File Security, like RLIST
  RACFACC   User/Group     DSN/Resource Access Report Prompt (pop-up)
+ RACFCERA  Certificates   Add new certificate
  RACFCERT  Certificates   Digital certificates, menu opt CA
  RACFCLSB  Class          List members
  RACFCLSC  Class          Add class
  RACFCLSD  Class          List class profiles
- RACFCLSE  Class          Enter profile/class/user, menu opt 9 (hidden)
+ RACFCLSE  Class          Enter profile/class/user, menu opt 99 (hidden)
  RACFCLSF  Class          List group/ids and access
  RACFCLSR  Class          List classes (show, refresh), menu option 4
  RACFCLS1  Class          Set filter
@@ -113,6 +115,10 @@
  RACFPRMS  Parameter      RACF parameters, menu option 6
  RACFPSWD  Password       Reset userid password, opt 5 and line cmd PW
  RACFPSWE  Password       Reset userid password with expire keyword
+ RACFRINA  Rings          Add new ring
+ RACFRINC  Rings          Add new label to ring
+ RACFRIN1  Rings          List digital rings
+ RACFRIN2  Rings          List digital rings
  RACFRPTS  Reports        RACF reports, display reports
  RACFRPTJ  Reports        RACF reports, Job card and JCL parameters
  RACFSAVE  Save Cmd       Save display to dataset (primary command)

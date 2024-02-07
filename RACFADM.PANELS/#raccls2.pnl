@@ -19,6 +19,7 @@
 +Line Commands
 %  S  !Show         +List of permits defined for this profile
 %  L  !List         +Issue RLIST command
+%  O  !Other        +Issue RLIST command to retrieve specific info of profile
 %  P  !Profile      +List profile using IRRXUTIL@(admin RACF API)
 %  C  !Change       +Change profile attributes@(admin)
 %  A  !Add          +Add profile to RACF@(admin)

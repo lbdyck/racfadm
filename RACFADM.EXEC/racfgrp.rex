@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @D4  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @D3  231007  TRIDJK   Added line command 'Y'                       */
 /* @D2  2200318 LBD      Clean up open tables                         */
 /* @CZ  201201  RACFA    Unhide line command 'X' for ADMIN users      */
@@ -1066,6 +1067,7 @@ DO_SAVE:                                                      /* @CQ */
      "DISPLAY PANEL("PANELS1")"                               /* @CQ */
      IF (RC = 08) THEN DO                                     /* @CQ */
         "REMPOP"                                              /* @CQ */
+        X = MSG("ON")                                         /* @D4 */
         RETURN                                                /* @CQ */
      END                                                      /* @CQ */
      RACFSDSN = STRIP(RACFSDSN,,"'")                          /* @CQ */

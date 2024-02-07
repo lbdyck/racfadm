@@ -3,6 +3,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMhDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A7  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
+/* @A6  240126  GA       Add new function Chain,Add,Delete,Export,Type*/
+/* @A5  240117  GA       Add NO row for certificate not found         */
 /* @A4  240111  GA       List ca or user certificate                  */
 /* @A3  220317  LBD      Close open table on exit                     */
 /* @A2  210309  LBD      Add State (expired) to table                 */
@@ -10,6 +13,7 @@
 /* @A0  200929  TRIDJK   Created REXX                                 */
 /*====================================================================*/
 PANEL27     = "RACFCERT"   /* List labels                  */
+PANEL28     = "RACFCERA"   /* Add certificate              */ /* @A6 */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */
 PANELXP     = "RACFEXP"    /* Export DSN prompt            */ /* @A1 */
@@ -34,10 +38,13 @@ ADDRESS ISPEXEC
   end
 
   Parse Arg user                                              /* @A4 */
-  certtype = "certauth"                                       /* @A4 */
+  certtype = "CERTAUTH"                                       /* @A4 */
+  type = certtype                                             /* @A6 */
   if (user <> NULL) then do                                   /* @A4 */
    certtype = "id("user")"                                    /* @A4 */
+   type = user                                                /* @A6 */
   end                                                         /* @A4 */
+
 
   cmd = "racdcert "certtype" list(label('DUMMY')"             /* @A4 */
   x    = outtrap('var.')
@@ -53,13 +60,17 @@ ADDRESS ISPEXEC
     "SETMSG MSG(RACF011)"                                     /* @A1 */
     EXIT
     end
-
+  /*
   racflmsg = "Loading awesomeness.."
   "control display lock"
   "display msg(RACF011)"
   Address 'SYSCALL' 'SLEEP (1)'
-
-  SELCMDS = "ÝS¨ShowÝX¨Export"                                /* @A1 */
+  */
+  if (SETMADMN = "YES") then                                  /* @A6 */
+    SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨Chain"||,                   /* @A6 */
+                  "ÝA¨AddÝD¨Delete"                           /* @A6 */
+  else                                                        /* @A6 */
+    SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨Chain"                      /* @A6 */
 
   call Select_label
   rc = display_table()
@@ -118,7 +129,14 @@ GET_CERT_LABELS:
       "TBMOD" TABLEA
       end
     end
-
+  if cnt = 0 then do                                          /* @A5 */
+    label   = 'NO'                                            /* @A5 */
+    status  = ''                                              /* @A5 */
+    stdate  = ''                                              /* @A5 */
+    endate  = ''                                              /* @A5 */
+    state   = ''                                              /* @A5 */
+    "TBMOD" TABLEA                                            /* @A5 */
+  end
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Labels table display section                                      */
@@ -220,6 +238,9 @@ DISPLAY_TABLE:
                 otherwise NOP
            END
         END
+        WHEN (ABBREV("TYPE",ZCMD,1) = 1) THEN DO              /* @A6 */
+         CALL SWTT                                            /* @A6 */
+        END                                                   /* @A6 */
         OTHERWISE NOP
      End /* Select */
      CLRLABE  = "GREEN"; CLRSTDA = "GREEN"
@@ -231,9 +252,11 @@ DISPLAY_TABLE:
      ZCMD = ""; PARM = ""
      'control display save'
      Select
-        when (opta = 'L') then call listl
         when (opta = 'S') then call listl
         when (opta = 'X') then call listl                     /* @A1 */
+        when (opta = 'H') then call listl                     /* @A6 */
+        when (opta = 'A') then call addl                      /* @A6 */
+        when (opta = 'D') then call dell                      /* @A6 */
         otherwise nop
      End
      'control display restore'
@@ -330,27 +353,37 @@ LISTL:
      'DISPLAY PANEL('panelxp')'                               /* @A1 */
      disprc = RC                                              /* @A1 */
      'REMPOP'                                                 /* @A1 */
-     if (disprc = 8) then do                                  /* @A1 */
+     if (disprc > 0) then do                                  /* @A6 */
         cmd_rc = 8                                            /* @A1 */
         RETURN                                                /* @A1 */
      end                                                      /* @A1 */
-     cmd = "racdcert "certtype" export(label('"LABEL"')) dsn("xdsn")"/* @A4 */
+     cmd = "racdcert "certtype" export(label('"LABEL"'))"     /* @A6 */
+     cmd = cmd || " dsn("xdsn")"                              /* @A6 */
+     if (formatx <> NULL) then                                /* @A6 */
+      cmd = cmd || " FORMAT("formatx")"                       /* @A6 */
+     if (pwdx  <> NULL) then                                  /* @A6 */
+      cmd = cmd || " PASSWORD('"pwdx"')"                      /* @A6 */
      X = OUTTRAP("CMDREC.")                                   /* @A1 */
      ADDRESS TSO cmd                                          /* @A1 */
      cmd_rc = rc                                              /* @A1 */
      X = OUTTRAP("OFF")                                       /* @A1 */
      if (SETMSHOW <> 'NO') then                               /* @A1 */
         call SHOWCMD                                          /* @A1 */
-     DROP CMDREC.                                             /* @A1 */
      if (cmd_rc = 0) then do                                  /* @A1 */
        RACFSMSG = "Certificate exported"                      /* @A1 */
        RACFLMSG = "Label '"strip(label)"' was exported to",   /* @A1 */
                   "dataset "xdsn                              /* @A1 */
        "SETMSG MSG(RACF011)"                                  /* @A1 */
        end                                                    /* @A1 */
+     else                                                     /* @A6 */
+        CALL racfmsgs "ERR10" cmdrec.1 /* Generic failure */  /* @A6 */
+     DROP CMDREC.                                             /* @A6 */
   END                                                         /* @A1 */
   ELSE DO                                                     /* @A1 */
-     cmd = "racdcert "certtype" list(label('"LABEL"'))"       /* @A4 */
+     IF (OPTA = "S") THEN                                     /* @A6 */
+      cmd = "racdcert "certtype" list(label('"LABEL"'))"      /* @A4 */
+     ELSE                                                     /* @A6 */
+      cmd = "racdcert "certtype" listchain(label('"LABEL"'))" /* @A6 */
      X = OUTTRAP("CMDREC.")
      ADDRESS TSO cmd
      cmd_rc = rc
@@ -427,6 +460,7 @@ DO_SAVE:
      "DISPLAY PANEL("PANELS1")"
      IF (RC = 08) THEN DO
         "REMPOP"
+        X = MSG("ON")                                         /* @A7 */
         RETURN
      END
      RACFSDSN = STRIP(RACFSDSN,,"'")
@@ -518,3 +552,77 @@ ADDRESS ISPEXEC
   X = MSG("ON")
 
 RETURN
+/*--------------------------------------------------------------------*/
+/*  Add certificate                                                   */
+/*--------------------------------------------------------------------*/
+ADDL:                                                         /* @A6 */
+  "DISPLAY PANEL("PANEL28")"                                  /* @A6 */
+  if (rc > 0) then return                                     /* @A6 */
+  if (ownera = 'SITE' |  ownera = 'CERTAUTH') then            /* @A6 */
+   cmd = "RACDCERT ADD("DSNA") "OWNERA" "TRUSTA               /* @A6 */
+  else                                                        /* @A6 */
+   cmd = "RACDCERT ADD("DSNA") id("OWNERA") "TRUSTA           /* @A6 */
+  cmd =  cmd || " WITHLABEL('"LABELA"')"                      /* @A6 */
+  if (PWDA      <> '') then                                   /* @A6 */
+   cmd = cmd || " PASSWORD('"PWDA"')"                         /* @A6 */
+  if (PKDSA <> '') then                                       /* @A6 */
+   cmd = cmd || " PKDS("PKDSA")"                              /* @A6 */
+  x = OUTTRAP('var.')                                         /* @A6 */
+  address TSO cmd                                             /* @A6 */
+  cmd_rc = rc                                                 /* @A6 */
+  x = OUTTRAP('OFF')                                          /* @A6 */
+  if (SETMSHOW <> 'NO') then                                  /* @A6 */
+   call SHOWCMD                                               /* @A6 */
+  if (cmd_rc = 0) then do                                     /* @A6 */
+      if label = 'NO' then                                    /* @A6 */
+       "TBDELETE" TABLEA                                      /* @A6 */
+      call select_label                                       /* @A6 */
+   end                                                        /* @A6 */
+  else call racfmsgs 'ERR26' var.1 /* error adding cert. */   /* @A6 */
+RETURN                                                        /* @A6 */
+/*--------------------------------------------------------------------*/
+/*  Delete label                                                      */
+/*--------------------------------------------------------------------*/
+DELL:                                                         /* @A6 */
+  if (label = 'NO') then                                      /* @A6 */
+     return                                                   /* @A6 */
+   msg    ='You are about to delete 'label                    /* @A6 */
+   Sure_? = RACFMSGC(msg)                                     /* @A6 */
+   if (sure_? = 'YES') then do                                /* @A6 */
+    cmd = "RACDCERT DELETE(LABEL('"LABEL"')) "certtype        /* @A6 */
+    x = OUTTRAP('var.')                                       /* @A6 */
+    address TSO cmd                                           /* @A6 */
+    cmd_rc = rc                                               /* @A6 */
+    x = OUTTRAP('OFF')                                        /* @A6 */
+    if (SETMSHOW <> 'NO') then                                /* @A6 */
+     call SHOWCMD                                             /* @A6 */
+    if (cmd_rc = 0) then do                                   /* @A6 */
+     "TBDELETE" TABLEA                                        /* @A6 */
+     "TBTOP" TABLEA                                           /* @A6 */
+     "TBQUERY" TABLEA 'ROWNUM(nrow)'                          /* @A6 */
+    if (nrow = 0) then do                                     /* @A6 */
+     label   ='NO'                                            /* @A6 */
+     stdate  = ''                                             /* @A6 */
+     endate  = ''                                             /* @A6 */
+     status  = ''                                             /* @A6 */
+     state   = ''                                             /* @A6 */
+     "TBMOD" TABLEA                                           /* @A6 */
+    end                                                       /* @A6 */
+   end                                                        /* @A6 */
+   else                                                       /* @A6 */
+   CALL racfmsgs "ERR27" var.1 /* error deleting cert. */     /* @A6 */
+   end                                                        /* @A6 */
+RETURN                                                        /* @A6 */
+/*--------------------------------------------------------------------*/
+/*  Switch type CERTAUTH - SITE                                       */
+/*--------------------------------------------------------------------*/
+SWTT:                                                         /* @A6 */
+   if (Certtype = 'CERTAUTH' | Certtype = 'SITE') then do     /* @A6 */
+    if (certtype = 'CERTAUTH') then                           /* @A6 */
+     certtype = 'SITE'                                        /* @A6 */
+    else                                                      /* @A6 */
+     certtype = 'CERTAUTH'                                    /* @A6 */
+   type = certtype                                            /* @A6 */
+   call select_label                                          /* @A6 */
+  end                                                         /* @A6 */
+RETURN                                                        /* @A6 */

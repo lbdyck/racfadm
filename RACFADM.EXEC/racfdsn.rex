@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CO  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @CN  220318  LBD      Close open table on exit                     */
 /* @CM  200708  TRIDJK   Msg if selection list has no entries ('NONE')*/
 /* @CL  200624  RACFA    Allow passing fully qual. dsn with quotes    */
@@ -1154,6 +1155,7 @@ DO_SAVE:                                                      /* @CG */
      "DISPLAY PANEL("PANELS1")"                               /* @CG */
      IF (RC = 08) THEN DO                                     /* @CG */
         "REMPOP"                                              /* @CG */
+        X = MSG("ON")                                         /* @CO */
         RETURN                                                /* @CG */
      END                                                      /* @CG */
      RACFSDSN = STRIP(RACFSDSN,,"'")                          /* @CG */

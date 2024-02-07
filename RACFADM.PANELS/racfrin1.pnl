@@ -1,30 +1,27 @@
 )ATTR DEFAULT(%+_)
-   ]  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRPROF)
-   [  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
-   @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRRING)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
-   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)      HILITE(USCORE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
    ¬  AREA(DYNAMIC) EXTEND(OFF)
    ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
    Ý  TYPE(DATAOUT) INTENS(HIGH)
    ~  TYPE(PS)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - General Resources+)\-\
++\-\(%RACFADM - Digital Rings &user   +)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+CLASS:  $RCLASS
-+FILTER: $RFILTER
 +SELECT: ¬SELCMDS                                                              ¬
 %
-%S ~Profile
+%S ~Ring
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+]Z                                                                        @Z
+_Z+Z                                                                        @Z
 )INIT
-  .ZVARS   = '(OPTA PROFILE SCINP)'
-  .HELP    = #RACCLS2
+  .ZVARS   = '(OPTA,RING,SCIND)'
+  .HELP    = #RACRING
   &ZCMD    = ' '
   IF (&SAMT = ' ')
       &SAMT = &ZSCED
@@ -34,22 +31,15 @@ _Z+]Z                                                                        @Z
      IF (&ZTDSELS = 0)
         &SROW = .CSRROW
         IF (&SROW ^= 0)
-           &OPTA = S
-
+           &OPTA = L
   IF (&SETMADMN = YES)
-     IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,S,L,O,P,C,A,R,M)
-     ELSE
-        VER (&OPTA,LIST,S,L,O,C,A,R,M)
+   VER (&OPTA,LIST,L,A,D)
   ELSE
-     IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,S,L,O,,P)
-     ELSE
-        VER (&OPTA,LIST,S,L,O)
+   VER (&OPTA,LIST,L)
 )PNTS
-  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT PROFILE')
-)Field
-  FIELD(PROFILE) IND(SCINP,'<>') LEN(255)
+  FIELD(ZPS00001) VAR(ZCMD) VAL('SORT RING')
+)FIELD
+  FIELD(RING) IND(SCIND,'<>') LEN(237)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */
@@ -68,12 +58,6 @@ _Z+]Z                                                                        @Z
 /*  3) The column headers are point-n-shoot fields to sort the data   */
 /*     in ascending or descending order                               */
 /*                                                                    */
-/*  4) The 'DATA' field is a scrollable field                         */
-/*                                                                    */
-/*  5) The RLIST command might provide unpredictable results          */
-/*     when searching on the DIGTCERT and DIGTRING classes.           */
-/*     Due to the lowercase characters in these classes, the          */
-/*     profile filter on the RLIST command might not function         */
-/*     correctly.                                                     */
+/*  4) The 'RING' field is a scrollable field                         */
 /*                                                                    */
 /*--------------------------------------------------------------------*/

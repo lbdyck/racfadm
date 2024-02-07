@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AZ  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @AY  200730  TRIDJK   Added Generic prof chk/Generic cmd proc      */
 /* @AX  200629  RACFA    Added FMID                                   */
 /* @AW  200629  RACFA    Chged RACF version to V##R##, was V##R##M##  */
@@ -578,6 +579,7 @@ DO_SAVE:                                                      /* @AP */
      "DISPLAY PANEL("PANELS1")"                               /* @AP */
      IF (RC = 08) THEN DO                                     /* @AP */
         "REMPOP"                                              /* @AP */
+        X = MSG("ON")                                         /* @AZ */
         RETURN                                                /* @AP */
      END                                                      /* @AP */
      RACFSDSN = STRIP(RACFSDSN,,"'")                          /* @AP */

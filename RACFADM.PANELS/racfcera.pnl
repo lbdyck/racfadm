@@ -1,0 +1,52 @@
+)ATTR DEFAULT(%+_)
+   $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Digital Certificates &type   +)\-\
+%Command ===>_ZCMD
+%
++  Add new%certificate+
+%
++  DSN  %===>_DSNA                                            +{(Input DATASET)
++  OWNER%===>@OWNERA  +                        {(cert-owner|CERTAUTH|SITE)
++  TRUST%===>_TRUSTA   +                       {(TRUST|NOTRUST|HIGHTRUST)
++  LABEL%===>¬LABELA                          +{(Certificate LABEL)
++  PWD  %===>¬PWDA                                          @Z {(Cert.PASSWORD)
++  PKDS %===>_PKDSA                                         @Z {(PKDS-LABEL|*)
++
++
++
++
++
++
++
++
++
++
++\ \Press%ENTER+to process or%END+to exit\ \
+)INIT
+  .HELP    = #RACMENU
+  .ZVARS   ='(SCIND1,SCIND2)'
+  IF (&OWNERA = '')
+    &OWNERA = &TYPE
+)PROC
+  VER(&DSNA,NB)
+  VER(&OWNERA,NB,LIST,&TYPE)
+  if (&TRUSTA ^= '')
+    VER(&TRUSTA,NB,LIST,TRUST,NOTRUST,HIGHTRUST)
+  VER(&LABELA,NB)
+)FIELD
+  FIELD(PWDA) IND(SCIND1,'<>') LEN(255)
+  FIELD(PKDSA) IND(SCIND2,'<>') LEN(64)
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) The 'PWDA',PKDSA' fields are scrollable fields                 */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

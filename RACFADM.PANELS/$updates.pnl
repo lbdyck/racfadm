@@ -9,6 +9,36 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  02 Feb 2024 - V36R9
+     - General resources (Option 4)
+       -- Updated exec RACFCLSG for new line command Other (info)
+       -- Updated panels RACFCLS2 and #RACCLS2 for new line command
+          Other (info)
+     - RACFMENU panel updated to use correct User variable
+       in limited access message
+     - User Profiles (Option 1)
+       -- Added line command 'LR' for list rings
+       -- Added new line commands for Digital rings
+          H - Chain   (Issue RACDCERT Owner LISTCHAIN LABEL command)
+          C - Connect (Issue RACDCERT CONNECT LABEL RING command)
+          R - Remove  (Issue RACDCERT REMOVE LABEL RING command)
+       -- Added exec RACFRING Display Digital Rings
+       -- Added panel RACFRINA Add new ring
+       -- Added panel RACFRINC Add new label to ring
+       -- Added panel RACFRIN1 List digital rings
+       -- Added panel RACFRIN2 List digital rings
+       -- Added skeleton RACFRIN1 Save display to a dataset
+       -- Added skeleton RACFRIN2 Save display to a dataset
+       -- Added tutorial panel #RACRING Digital rings
+     - CertAuth (Option CA)
+       -- Added panel RACFCERA Add new certificate
+       -- Added new line commands for Digital certificates
+          H - Chain  (Issue RACDCERT &certtype LISTCHAIN LABEL command)
+          A - Add    (Issue RACDCERT &certtype ADD WITHLABEL command)
+          D - Delete (Issue RACDCERT &certtype DELETE LABEL command)
+       -- Added new primary command for Digital certificates
+          Type -     (Switch certificate list from CERTAUTH to SITE)
+
   10 Jan 2024 - V36R8
      - RACFDB exec updated to check for RACF VSAM databases
      - Added #RACPSWH panel to document how to clear password/phrase

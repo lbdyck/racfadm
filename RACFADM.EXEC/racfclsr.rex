@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMhDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @BD  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @BC  220317  LBD      Close table on exit                          */
 /* @BB  200618  RACFA    Chged SYSDA to SYSALLDA                      */
 /* @BA  200617  RACFA    Added comments to right of variables         */
@@ -436,6 +437,7 @@ DO_SAVE:                                                      /* @B8 */
      "DISPLAY PANEL("PANELS1")"                               /* @B8 */
      IF (RC = 08) THEN DO                                     /* @B8 */
         "REMPOP"                                              /* @B8 */
+        X = MSG("ON")                                         /* @BD */
         RETURN                                                /* @B8 */
      END                                                      /* @B8 */
      RACFSDSN = STRIP(RACFSDSN,,"'")                          /* @B8 */

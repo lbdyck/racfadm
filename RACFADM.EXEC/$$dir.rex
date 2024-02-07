@@ -36,6 +36,7 @@
  RACFPROF  Profile        Execute line cmd 'P', extract/display profile
  RACFPSWD  Password       Reset userid password (menu opt 5/linecmd PW)
  RACFPUTL  Commands       Called by RACFCMDS, display command at top
+ RACFRING  User           Display Digital Rings
  RACFRPTS  Reports        RACF reports, menu option R
  RACFRVER  Version        Sets the version for this application
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked

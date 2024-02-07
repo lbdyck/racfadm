@@ -1,0 +1,29 @@
+)CM*-------------------------------------------------------------------*
+)CM*  Purpose:  RACFADM - Digital Rings - SAve command
+)CM*-------------------------------------------------------------------*
+)CM*  FLG  YYMMDD  USERID   DESCRIPTION
+)CM*  ---  ------  -------  -------------------------------------------
+)CM*  @A0  240117  GA       Save command for list rings
+)CM*-------------------------------------------------------------------*
+)SEL &RACFSFIL = T
+&ZDATE ----------- ( RACFADM - Digital Rings &user ) ---------- &ZTIME
+)BLANK
+ Ring
+ ----------------------------------------------------------------------
+)TB 2
+)DOT &TABLEA
+)SETF RING    = &STRIP(&RING,, )
+)SETF RING    = &LEFT(&RING,73, )
+!&RING
+)ENDDOT
+)ENDSEL
+)SEL &RACFSFIL = C
+RACFADM - Digital Ring &user
+Ring
+-----
+)DOT &TABLEA
+)SETF RING    = &STRIP(&RING,, )
+)SETF RING    = &LEFT(&RING,73, )
+&RING
+)ENDDOT
+)ENDSEL

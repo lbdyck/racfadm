@@ -5,6 +5,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AH  200913  GA       Add message for ring and certificate error   */
 /* @AG  200913  LBD      Accept message from command (msg.1)          */
 /* @AF  200423  RACFA    Move PARSE REXXPGM name up above IF SETMTRAC */
 /* @AE  200423  RACFA    Ensure REXX program name is 8 chars long     */
@@ -130,6 +131,30 @@ ADDRESS ISPEXEC                                               /* @A4 */
           racfsmsg = 'Invalid entry'                          /* @A9 */
           racflmsg = 'NO and NONE are not valid entries.'     /* @A9 */
      end                                                      /* @A9 */
+     WHEN (code = 'ERR22') then do                            /* @AH */
+          racfsmsg = 'Error deleting ring'                    /* @AH */
+          racflmsg = 'Error deleting ring'                    /* @AH */
+     end                                                      /* @AH */
+     WHEN (code = 'ERR23') then do                            /* @AH */
+          racfsmsg = 'Error adding ring'                      /* @AH */
+          racflmsg = 'Error adding new ring'                  /* @AH */
+     end                                                      /* @AH */
+     WHEN (code = 'ERR24') then do                            /* @AH */
+          racfsmsg = 'Error connecting'                       /* @AH */
+          racflmsg = 'Error connecting certificate to ring'   /* @AH */
+     end                                                      /* @AH */
+     WHEN (code = 'ERR25') then do                            /* @AH */
+          racfsmsg = 'Error removing'                         /* @AH */
+          racflmsg = 'Error removing certificate from ring'   /* @AH */
+     end                                                      /* @AH */
+     WHEN (code = 'ERR26') then do                            /* @AH */
+          racfsmsg = 'Error adding cert.'                     /* @AH */
+          racflmsg = 'Error adding certificate'               /* @AH */
+     end                                                      /* @AH */
+     WHEN (code = 'ERR27') then do                            /* @AH */
+          racfsmsg = 'Error deleting cert.'                   /* @AH */
+          racflmsg = 'Error deleting certificate'             /* @AH */
+     end                                                      /* @AH */
      otherwise nop
   End
   if message /= '' then                                       /* @AG */

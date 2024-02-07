@@ -246,6 +246,8 @@ ADDRESS ISPEXEC                                               /* @AG */
      QUEUE "  % Space used ...",                              /* @A1 */
            "%"TRUNC(((USED_SEGS / SEG_COUNT) * 100),2) "OF",
            SPACEUNIT"("SPACEALLOC")"
+     if vsam = "YES" then                                     /* @AK */
+       queue "  VSAM File ...... Run IRRUT200 for space info" /* @AK */
      QUEUE " "                                                /* @A1 */
      QSNAME = "'"STRIP(BNAME)"'"         /*PUT QUOTES AROUND RDB NAME*/
      CALL FINDSIZE QSNAME                /* GET THE SPACE USED VALUE */
@@ -257,6 +259,8 @@ ADDRESS ISPEXEC                                               /* @AG */
      QUEUE "  % Space used ...",                              /* @A1 */
            "%"TRUNC(((USED_SEGS / SEG_COUNT) * 100),2) "OF",
            SPACEUNIT"("SPACEALLOC")"
+     if vsam = "YES" then                                     /* @AK */
+       queue "  VSAM File ...... Run IRRUT200 for space info" /* @AK */
 
      DSDTPRIM = D2X(X2D(DSDTPRIM) + 352) /* BUMP TO NEXT SLOT        */
      DSDTBACK = D2X(X2D(DSDTBACK) + 352) /* BUMP TO NEXT SLOT        */
@@ -322,7 +326,8 @@ FINDSIZE:
 
   ADDRESS ISPEXEC "DSINFO DATASET("RDSN")"                    /* @AK */
   IF ZDSORG = 'VS' THEN DO      /* VSAM DATABASE? */          /* @AK */
-    USED_SEGS = 1;SEG_COUNT = 100000;SPACEALLOC = 'VSAM'      /* @AK */
+    vsam = 'YES'                                              /* @AK */
+    USED_SEGS = 1;SEG_COUNT = 100000;SPACEALLOC = ''          /* @AK */
     RETURN                                                    /* @AK */
     END                                                       /* @AK */
 

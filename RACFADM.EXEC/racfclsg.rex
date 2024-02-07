@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CC  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
+/* @CB  240206  GA       New Other command to get specific class info */
 /* @CA  230830  TRIDJK   Issue SETROPTS for RDELETE                   */
 /* @C9  220317  LBD      Close table on exit                          */
 /* @C8  220317  TRIDJK   Intialize OPTB in Do Forever,rsels < 2 logic */
@@ -284,6 +286,7 @@ PROFL:
         when (opta = 'C') then call Chgd
         when (opta = 'L') then call Lisd                      /* @A1 */
         when (opta = 'M') then call Dism
+        when (opta = 'O') then call Othl                      /* @CB */
         when (opta = 'P') then                                /* @BA */
              call RACFPROF rclass profile                     /* @BA */
         when (opta = 'R') then call Deld
@@ -905,6 +908,40 @@ GETD:
            else                                               /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list"                    /* @AL */
         end
+     select                                                   /* @CB */
+      when RCLASS='APPCLU'   then OTHER_LIST='SESSION'        /* @CB */
+      when RCLASS='CDT'      then OTHER_LIST='CDTINFO'        /* @CB */
+      when RCLASS='CFIELD'   then OTHER_LIST='CFDEF'          /* @CB */
+      when RCLASS='CSFKEYS'  then OTHER_LIST='ICSF'           /* @CB */
+      when RCLASS='GCSFKEYS' then OTHER_LIST='ICSF'           /* @CB */
+      when RCLASS='XCSFKEY'  then OTHER_LIST='ICSF'           /* @CB */
+      when RCLASS='GXCSFKEY' then OTHER_LIST='ICSF'           /* @CB */
+      when RCLASS='DIGTCERT' then OTHER_LIST='CERTDATA'       /* @CB */
+      when RCLASS='DIGTRING' then OTHER_LIST='CERTDATA'       /* @CB */
+      when RCLASS='DLFCLASS' then OTHER_LIST='DLFDATA'        /* @CB */
+      when RCLASS='EJBROLE'  then OTHER_LIST='TME'            /* @CB */
+      when RCLASS='FACILITY'                                  /* @CB */
+                      then OTHER_LIST='DLFDATA EIM PROXY TME' /* @CB */
+      when RCLASS='IDTDATA'  then OTHER_LIST='IDTPARMS'       /* @CB */
+      when RCLASS='JESJOBS'  then OTHER_LIST='JES'            /* @CB */
+      when RCLASS='LDAPBIND'                                  /* @CB */
+                             then OTHER_LIST='EIM ICTX PROXY' /* @CB */
+      when RCLASS='MFADEF'   then OTHER_LIST='MFA MFPOLICY'   /* @CB */
+      when RCLASS='PROGRAM'  then OTHER_LIST='SIGVER'         /* @CB */
+      when RCLASS='PTKTDATA' then OTHER_LIST='SSIGNON'        /* @CB */
+      when RCLASS='REALM'    then OTHER_LIST='KERB'           /* @CB */
+      when RCLASS='STARTED'  then OTHER_LIST='STDATA'         /* @CB */
+      when RCLASS='SYSMVIEW' then OTHER_LIST='SVFMR'          /* @CB */
+      when RCLASS='TAPEVOL'  then OTHER_LIST='TVTOC'          /* @CB */
+      otherwise OTHER_LIST = ''                               /* @CB */
+     end                                                      /* @CB */
+     if (OTHER_LIST <> '') then do                            /* @CB */
+      if (SETMADMN = "YES") then                              /* @CB */
+         SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,            /* @CB */
+                    "ÝA¨Add,ÝR¨Remove,ÝM¨Member,ÝO¨Other"     /* @CB */
+      else                                                    /* @CB */
+               SELCMDS = "ÝS¨Show,ÝL¨list,ÝO¨Other"           /* @CB */
+     end                                                      /* @CB */
      if (audit = ' ') then
         if (substr(getd_temp,2,8) = 'AUDITING') then do
            getd_i    = getd_i + 2
@@ -1111,6 +1148,45 @@ SETBOOL:
   interpret "if (x= '"value"'x) then "variable"="status2      /* @A6 */
 RETURN 0                                                      /* @A6 */
 /*--------------------------------------------------------------------*/
+/*  List addition data for specific class                             */
+/*--------------------------------------------------------------------*/
+OTHL:                                                         /* @CB */
+  cmd = "RLIST "RCLASS PROFILE" " OTHER_LIST " NORACF"        /* @CB */
+  X = OUTTRAP("CMDREC.")                                      /* @CB */
+  ADDRESS TSO cmd                                             /* @CB */
+  cmd_rc = rc                                                 /* @CB */
+  X = OUTTRAP("OFF")                                          /* @CB */
+  if (SETMSHOW <> 'NO') then                                  /* @CB */
+     call SHOWCMD                                             /* @CB */
+  if (cmd_rc > 0) then do    /* Remove parms */               /* @CB */
+     cmd = "RLIST "RCLASS PROFILE                             /* @CB */
+     X = OUTTRAP("CMDREC.")                                   /* @CB */
+     ADDRESS TSO cmd                                          /* @CB */
+     cmd_rc = rc                                              /* @CB */
+     X = OUTTRAP("OFF")                                       /* @CB */
+     if (SETMSHOW <> 'NO') then                               /* @CB */
+        call SHOWCMD                                          /* @CB */
+  end                                                         /* @CB */
+  call display_info                                           /* @CB */
+  if (cmd_rc > 0) then                                        /* @CB */
+     CALL racfmsgs "ERR10" /* Generic failure */              /* @CB */
+RETURN                                                        /* @CB */
+/*--------------------------------------------------------------------*/
+/*  Set boolean value for mask                                        */
+/*--------------------------------------------------------------------*/
+SETBOOL:
+  variable = arg(1)                                           /* @A6 */
+  offset   = arg(2)                                           /* @A6 */
+  value    = arg(3)                                           /* @A6 */
+  status1  = arg(4)                                           /* @A6 */
+  status2  = arg(5)                                           /* @A6 */
+  interpret "rcvtsta$= d2x((x2d("cvtrac"))+"offset")"         /* @A6 */
+  x        = storage(rcvtsta$,1)                              /* @A6 */
+  interpret variable '= 'status1                              /* @A6 */
+  interpret "x=bitand(x,'"value"'x)" /*remove bad bits*/      /* @A6 */
+  interpret "if (x= '"value"'x) then "variable"="status2      /* @A6 */
+RETURN 0                                                      /* @A6 */
+/*--------------------------------------------------------------------*/
 /*  List group                                                        */
 /*--------------------------------------------------------------------*/
 LISP:                                                         /* @A2 */
@@ -1291,6 +1367,7 @@ DO_SAVE:                                                      /* @C3 */
      "DISPLAY PANEL("PANELS1")"                               /* @C3 */
      IF (RC = 08) THEN DO                                     /* @C3 */
         "REMPOP"                                              /* @C3 */
+        X = MSG("ON")                                         /* @CC */
         RETURN                                                /* @C3 */
      END                                                      /* @C3 */
      RACFSDSN = STRIP(RACFSDSN,,"'")                          /* @C3 */
