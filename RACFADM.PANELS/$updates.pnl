@@ -9,6 +9,11 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  18 Apr 2024 - V37R0
+     - Reporting (Option R)
+       -- Updated skel RACFRPTS report 200 to include info on use of
+          Password or Passphrase
+
   02 Feb 2024 - V36R9
      - General resources (Option 4)
        -- Updated exec RACFCLSG for new line command Other (info)

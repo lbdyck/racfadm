@@ -3,6 +3,7 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A5  240418  LBD      Update 200 report for password/phrase
 )CM*  @A4  200619  RACFA    Chged var. SETDRPTU to TMPDRPTU
 )CM*  @A3  200619  SLBD     Support multiple reports in one job
 )CM*  @A2  200618  RACFA    Removed JOB card, moved to seperate member
@@ -147,7 +148,9 @@
           HEADER('Owner') ON(30,8,CH)          -
           HEADER('Spec') ON(44,4,CH)           -
           HEADER('Oper') ON(49,4,CH)           -
-          HEADER('Revoke') ON(54,4,CH)
+          HEADER('Revoke') ON(54,4,CH)         -
+          HEADER('Password') ON(596,10,CH)     -
+          HEADER('PassPhrase') ON(616,10,CH)
 )ENDSEL
 )SEL &REC = 200A | &REC = ALL
 *--------------------------------------------------------------------*

@@ -2,6 +2,7 @@
    | RACFRVER defines the version of the dialog                        |
    |                                                                   |
    | Historuy:                                                         |
+   | 18APR2024 LBD Created with version V37R0                          |
    | 02FEB2024 GIO Created with version V36R9                          |
    | 10JAN2024 DRK Created with version V36R8                          |
    | 23NOV2023 DRK Created with version V36R7                          |
@@ -10,4 +11,4 @@
    | 19OCT2023 LBD Created with version V36R4                          |
    | 17OCT2023 LBD Created with version V36R3                          |
    * ----------------------------------------------------------------- */
-   return 'V36R9'
+   return 'V37R0'
