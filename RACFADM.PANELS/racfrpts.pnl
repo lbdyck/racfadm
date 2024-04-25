@@ -47,6 +47,11 @@ _ZZZ    Z      Z        Z
         END
         ELSE
            TMPDRPTU = STRIP(SETDRPTU,,"'")
+        if setdrptu = "" & (ABBREV("UNLOAD",ZCMD,1) = 1) then do
+           racfsmsg = 'DSN incorrect'
+           racflmsg = 'Specify a valid DSN for the IRRDBU00 unload'
+           baddsn   = "Y"
+          end
         IF (ABBREV("UNLOAD",ZCMD,1) = 1) THEN
            RETURN
         PARSE VAR TMPDRPTU DSN1 "&" SYMBOL "." DSN2

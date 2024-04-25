@@ -1,0 +1,15 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   #  TYPE(INPUT)   INTENS(HIGH) CAPS(OFF) JUST(LEFT)   HILITE(USCORE)
+   ~  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)  COLOR(TURQ)  CAPS(OFF)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
+)Body Window(54,4) Expand(\\)
++\-\(%RACFADM - Password/Passphrase Report Prompt+)\-\
++
++Enter%Userid+Filter:_userid +  %**+= all users
++
+)Init
+)Proc
+)End

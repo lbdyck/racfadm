@@ -9,6 +9,13 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  23 Apr 2024 - V37R1
+     - Added option P to report on users with passwords or phrases
+     - Update Report 200 for meaning full info on passwords or phrases
+       - with assist from Sri Hari Kolusu on the report
+     - Updates RACFRPTS panel to check validity of the unload dataset name
+     - The main menu is now scrollable and still supports point and shoot
+
   18 Apr 2024 - V37R0
      - Reporting (Option R)
        -- Updated skel RACFRPTS report 200 to include info on use of

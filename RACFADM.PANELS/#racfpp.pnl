@@ -1,0 +1,21 @@
+)ATTR DEFAULT(@+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+)BODY EXPAND(\\)
+@Tutorial+\-\(@RACFADM - Password/Phrase Rpt+)\-\@Tutorial
+@Command ===>_ZCMD
++
++Generate and display a simple report on all, or selected, userids
++reporting on if the user has a Password or a PassPhrase or both.
++
++A popup will ask for a userid mask:
++
++   @**+     For all userids
++   @A*+     For all userids starting with A
++   @*A*+    For all userids with an A
++   @%A*+    For all userids with an A as the 2nd charactert
++
+)PROC
+  &ZUP     = #RACFPP
+)END

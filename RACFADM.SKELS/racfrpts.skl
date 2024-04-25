@@ -3,12 +3,16 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A6  240423  LBD      Update 200 to clarigy password/phrase
 )CM*  @A5  240418  LBD      Update 200 report for password/phrase
 )CM*  @A4  200619  RACFA    Chged var. SETDRPTU to TMPDRPTU
 )CM*  @A3  200619  SLBD     Support multiple reports in one job
 )CM*  @A2  200618  RACFA    Removed JOB card, moved to seperate member
 )CM*  @A1  200618  RACFA    Fix rpt 200H, chg SCHEDULED to 462, was 471
 )CM*  @A0  200617  RACFA    Created skeleton
+)CM*------------------------------------------------------------------*
+)CM* See the IBM z/OS Security Server RACF Macros and Interfaces      *
+)CM* for the report particulars and offsets.                          *
 )CM*------------------------------------------------------------------*
 )DOT &TABLEA
 )SEL &DOIT EQ *
@@ -150,7 +154,7 @@
           HEADER('Oper') ON(49,4,CH)           -
           HEADER('Revoke') ON(54,4,CH)         -
           HEADER('Password') ON(596,10,CH)     -
-          HEADER('PassPhrase') ON(616,10,CH)
+          HEADER('PassPhrase') ON(617,10,CH)
 )ENDSEL
 )SEL &REC = 200A | &REC = ALL
 *--------------------------------------------------------------------*
@@ -1317,6 +1321,12 @@
   SORT    FIELDS=(10,8,CH,A)
   INCLUDE COND=(5,4,CH,EQ,C'0200')
   OPTION  VLSHRT
+  INREC OVERLAY=(596:596,10,CHANGE=(10,C'LEGACY',C'PASSWORD',
+                                         C'KDFAES',C'PASSWORD'),
+                            NOMATCH=(596,10),
+                   617:617,10,CHANGE=(10,C'LEGACY',C'PASSPHRASE',
+                                         C'KDFAES',C'PASSPHRASE'),
+                            NOMATCH=(617,10))
 )ENDSEL
 )SEL &REC = 200A | &REC = ALL
 //A200CNTL DD  *
