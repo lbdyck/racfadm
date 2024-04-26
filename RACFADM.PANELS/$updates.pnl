@@ -9,6 +9,10 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  25 Apr 2024 - V37R2
+     - If the IRRXIUTIL option in settings is not set to Y then remove
+       option P on the menu.
+
   23 Apr 2024 - V37R1
      - Added option P to report on users with passwords or phrases
      - Update Report 200 for meaning full info on passwords or phrases

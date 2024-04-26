@@ -21,7 +21,7 @@
 +  @z {m4desc   +General resources      @z {mldesc    +ISPF log file
 +  @z {m5desc   +Password reset         @z {mmdesc    +RACF messages
 +  @z {m6desc   +Group tree report      @z {modesc    +OMVS RACF commands
-+  @z {OPT1DESC ÝOPT1INFO               @z {mpdesc    +Word or Phrase Report
++  @z {OPT1DESC ÝOPT1INFO               @z {mpdesc    ÝMPINFO
 +  @z {OPT2DESC ÝOPT2INFO               @z {mrdesc    +RACF reports
 +  @z {OPT3DESC ÝOPT3INFO               @z {msdesc    +Coding/design
 +  @z {OPT4DESC ÝOPT4INFO               @z {mtdesc    +Help
@@ -70,6 +70,8 @@
   &modesc = 'OMVSCmds'
   &mp = 'P'
   &mpdesc = 'PassType'
+  &mpinfo = 'Word or Phrase Report'
+  &mpcmd  = 'CMD(%RACFPWPH)'
   &mr = 'R'
   &mrdesc = 'Reports'
   &ms = 'S'
@@ -141,7 +143,7 @@
 
   *REXX (RACFVER PRMDBASE BKPDBASE ZOSVER RACFGRP  RACFNAM RACFLMSG
          SECSOFT RACFFMID USADATE UTYPE SETMADMN UATT RACFMENU
-         SETMPHRA rver)
+         SETMPHRA rver setmirrx mp mpdesc mpinfo mpcmd)
     rver = racfrver()
     Numeric Digits 10
     CVT      = C2D(STORAGE(10,4))               /* Get RACF FMID     */
@@ -236,6 +238,10 @@
         RACFLMSG = "PASSPHRASE(OFF) in PARMLIB member IKJTSOxx",
                    "conflicts with Passphrase value in Settings"
     end
+    if setmirrx /= 'YES' then do
+       parse value '' with mp mpdesc mpinfo
+       mpcmd = 'PGM(IEFBR14)'
+       end
   *ENDREXX
   VPUT (RACFMENU)                     /* No. of times menu displayed */
   VPUT (SETMADMN) PROFILE             /* Update SETMADMN in profile  */
@@ -346,7 +352,7 @@
       L,'CMD(%RACFLOG ISPLOG)'
       M,'CMD(%RACFMSG)'
       O,'CMD(%RACFOMVS)'
-      P,'CMD(%RACFPWPH)'
+      P,&mpcmd
       R,'CMD(%RACFRPTS)'
       S,'CMD(%RACFLOG $STNDARD)'
       T,'PGM(ISPTUTOR) PARM(#RACMENU)'
