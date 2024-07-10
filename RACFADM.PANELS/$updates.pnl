@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  10 Jul 2024 - V37R3
+     - Fix Panel RACFUSR2 to correct missing VER options of C and D
+
   25 Apr 2024 - V37R2
      - If the IRRXIUTIL option in settings is not set to Y then remove
        option P on the menu.
