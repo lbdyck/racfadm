@@ -46,7 +46,7 @@ _Z ^Z      Z       Z                   Z       Z       	Z       Z  Z  
      IF (&SETMIRRX = YES)
         VER (&OPTA,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL)
      ELSE
-        VER (&OPTA,LIST,S,SE,L,LC,LR,A,R,RS,RV,PW,X,XR,Y,AL)
+        VER (&OPTA,LIST,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,XR,Y,AL)
   ELSE
      IF (&SETMIRRX = YES)
         VER (&OPTA,LIST,S,SE,L,LC,LR,P,D)
