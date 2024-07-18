@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  18 Jul 2024 - V37R4
+     - Update Panel RACFRPTS to add available commands
+
   10 Jul 2024 - V37R3
      - Fix Panel RACFUSR2 to correct missing VER options of C and D
 
