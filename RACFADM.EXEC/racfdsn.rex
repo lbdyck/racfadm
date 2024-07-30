@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @74  240730  TRIDJK   Add DFP to the CMDPRM for LISTDSD            */
 /* @CO  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @CN  220318  LBD      Close open table on exit                     */
 /* @CM  200708  TRIDJK   Msg if selection list has no entries ('NONE')*/
@@ -956,7 +957,7 @@ RETURN
 /*  List dataset                                                      */
 /*--------------------------------------------------------------------*/
 LISD:                                                         /* @A1 */
-  CMDPRM  = "ALL DSNS"                                        /* @CK */
+  CMDPRM  = "ALL DSNS DFP"                                    /* @74 */
   CMD     = "LISTDSD DATASET('"DATASET"')" CMDPRM             /* @B2 */
   X = OUTTRAP("CMDREC.")                                      /* @A1 */
   ADDRESS TSO cmd                                             /* @AI */

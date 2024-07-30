@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  30 Jul 2024 - V37R5
+     - Update EXEC RACFDSN to add DFP to the LISTDSD options
+
   18 Jul 2024 - V37R4
      - Update Panel RACFRPTS to add available commands
 
