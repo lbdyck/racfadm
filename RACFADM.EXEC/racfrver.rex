@@ -2,6 +2,7 @@
    | RACFRVER defines the version of the dialog                        |
    |                                                                   |
    | Historuy:                                                         |
+   | 12AUG2024 LBD Updated to version V37R6                            |
    | 30JUL2024 LBD Updated to version V37R5                            |
    | 18JUL2024 LBD Updated to version V37R4                            |
    | 10JUL2024 LBD Updated to version V37R3                            |

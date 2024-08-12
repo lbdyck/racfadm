@@ -9,6 +9,10 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  12 Aug 2024 - V37R6
+     - Update Panel RACFUSR6 to validate the OMVS Program (Shell) is
+       a valid file - does not validate it is a valid shell :)
+
   30 Jul 2024 - V37R5
      - Update EXEC RACFDSN to add DFP to the LISTDSD options
 

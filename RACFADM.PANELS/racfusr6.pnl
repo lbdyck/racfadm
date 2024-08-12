@@ -184,7 +184,7 @@
      &USER = &Z
      &NAME = &Z
 )PROC
-  *REXX (PSWDFLD, PSWD, USER, RACFLMSG)      /* Get password */
+  *REXX (PSWDFLD, PSWD, USER, ZRXMSG, OPROGRAM, RACFSMSG RACFLMSG)
      IF SUBSTR(PSWDFLD,2,6) = 'PHRASE' THEN DO
        PSWD = SUBSTR(PSWDFLD,16,14)
 
@@ -223,6 +223,17 @@
        END
      ELSE
        PSWD = SUBSTR(PSWDFLD,16,8)
+  if length(oprogram) > 0 then do
+     address syscall
+     'lstat (oprogram) op.'
+     address TSO
+     if op.0 = 0 then do
+        zrxrc = 8
+        racfsmsg = 'Bad Path.'
+        racflmsg = 'Invalid Shell Program Path.'
+        zrxmsg = 'racf011'
+        end
+     end
   *ENDREXX
   IF (&ACTION = '*Add')
      IF (&OLDUSR = &USER)
