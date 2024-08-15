@@ -17,4 +17,4 @@
    | 19OCT2023 LBD Updated to version V36R4                            |
    | 17OCT2023 LBD Updated to version V36R3                            |
    * ----------------------------------------------------------------- */
-   return 'V37R5'
+   return 'V37R6'
