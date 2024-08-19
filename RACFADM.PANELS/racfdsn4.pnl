@@ -17,6 +17,7 @@
 +OWNER  %===>_OWNER   { (Owner of profile)
 +UACC   %===>_UACC    { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +WARNING%===>_Z  {      (Warn or fail access, YES/NO)
++ERASE  %===>_Z  {      (Erase the contents when deleted, YES/NO)
 +DATA   %===>_DATA                                                           @Z
 +
 {To change data to blanks enter%NONE
@@ -26,10 +27,9 @@
 +
 {Previous%AUDIT{values are lost if either of the above audit fields is updated
 +
-+
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
-  .ZVARS  = '(WARN SCIND)'
+  .ZVARS  = '(WARN ERASE SCIND)'
   .CURSOR = OWNER
   .HELP   = #RACDSNA
   &FAIL   = TRUNC(&FAIL,')')
@@ -37,6 +37,7 @@
 )PROC
   VER (&OWNER,NAME)
   VER (&WARN,NB,LIST,YES,NO)
+  VER (&ERASE,NB,LIST,YES,NO)
   VER (&UACC,LIST,NONE,EXECUTE,READ,ALTER,CONTROL,UPDATE)
   VER (&FAIL,LIST,EXECUTE,READ,ALTER,CONTROL,UPDATE)
   VER (&SUCC,LIST,EXECUTE,READ,ALTER,CONTROL,UPDATE)

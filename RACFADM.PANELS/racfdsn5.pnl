@@ -18,6 +18,7 @@
 +UACC:   $UACC    { (Default access)
 +OWNER:  $OWNER   { (Owner of profile)
 +WARNING:$WARN    { (Warn or fail access, YES/NO)
++ERASE:  $ERASE   { (Erase the contents when deleted, YES/NO)
 +AUDIT:  $AUDIT
 +                                           +
 +SELECT: ¬SELCMDS5                                                             ¬

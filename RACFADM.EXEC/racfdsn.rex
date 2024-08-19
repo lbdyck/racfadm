@@ -3,7 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @74  240730  TRIDJK   Add DFP to the CMDPRM for LISTDSD            */
+/* @CQ  240819  TRIDJK   Add ERASE/NOERASE options                    */
+/* @CP  240730  TRIDJK   Add DFP to the CMDPRM for LISTDSD            */
 /* @CO  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @CN  220318  LBD      Close open table on exit                     */
 /* @CM  200708  TRIDJK   Msg if selection list has no entries ('NONE')*/
@@ -408,11 +409,14 @@ ADDD:
      wrn = 'WARNING'
   if (warn = 'NO') then                                       /* @AA */
      wrn = 'NOWARNING'                                        /* @AA */
+  era = ' '                                                   /* @CQ */
+  if (erase = 'YES') then                                     /* @CQ */
+     era = 'ERASE'                                            /* @CQ */
   xtr = ' '
   if (data <> ' ') then
      xtr = xtr "DATA('"data"')"
   call EXCMD "ADDSD '"DATASET"' OWN("OWNER")",
-             "UACC("UACC")" type aud xtr
+             "UACC("UACC")" type aud xtr era                  /* @CQ */
   if (cmd_rc > 0) then do                                     /* @BE */
      CALL racfmsgs 'ERR01' /* Add failed */                   /* @B6 */
      return
@@ -460,6 +464,11 @@ CHGD:
      wrn = 'WARNING'
   if (warn  = 'NO') then                                      /* @AA */
      wrn = 'NOWARNING'                                        /* @AA */
+  era = ' '                                                   /* @CQ */
+  if (erase = 'YES') then                                     /* @CQ */
+     era = 'ERASE'                                            /* @CQ */
+  if (erase = 'NO') then                                      /* @CQ */
+     era = 'NOERASE'                                          /* @CQ */
   if (fail <> ' ') then
      aud = 'FAILURES('FAIL')'
   if (succ <> ' ') then
@@ -473,7 +482,7 @@ CHGD:
      xtr = xtr "DATA('"DATA"')"
   end
   msg = "ALTDSD '"DATASET"'" own uc type aud xtr wrn
-  call EXCMD "ALTDSD '"DATASET"'" own uc type aud xtr wrn
+  call EXCMD "ALTDSD '"DATASET"'" own uc type aud xtr wrn era /* @CQ */
   if (cmd_rc > 0) then                                        /* @BE */
      call racfmsgs 'ERR07' /* Altdsd failed */                /* @B6 */
   else do
@@ -689,7 +698,8 @@ CREATE_TABLEB:                                                /* @BM */
   audit = ' '
   owner = ' '
   warn  = ' '
-  uacc  = ' '
+  erase = ' '
+  uacc  = ' '                                                 /* @CQ */
   data  = ' '
   if (type = 'DISCRETE') then
      type = ' '
@@ -714,6 +724,7 @@ CREATE_TABLEB:                                                /* @BM */
            owner = subword(temp,2,1)
            uacc  = subword(temp,3,1)
            warn  = subword(temp,4,1)                          /* @A9 */
+           erase = subword(temp,5,1)                          /* @CQ */
         end
      if (audit = ' ') then
         if (substr(temp,2,8) = 'AUDITING') then do
@@ -766,6 +777,7 @@ GETD:
   flags = 'OFF'
   owner = ' '
   warn  = ' '
+  erase = ' '                                                 /* @CQ */
   uacc  = ' '
   audit = ' '
   data  = ' '
@@ -787,6 +799,7 @@ GETD:
            owner = subword(temp,2,1)
            uacc  = subword(temp,3,1)
            warn  = subword(temp,4,1)                          /* @A9 */
+           erase = subword(temp,5,1)                          /* @CQ */
         end
      if (audit = ' ') then
         if (substr(temp,2,8) = 'AUDITING') then do
@@ -957,7 +970,7 @@ RETURN
 /*  List dataset                                                      */
 /*--------------------------------------------------------------------*/
 LISD:                                                         /* @A1 */
-  CMDPRM  = "ALL DSNS DFP"                                    /* @74 */
+  CMDPRM  = "ALL DSNS DFP"                                    /* @CP */
   CMD     = "LISTDSD DATASET('"DATASET"')" CMDPRM             /* @B2 */
   X = OUTTRAP("CMDREC.")                                      /* @A1 */
   ADDRESS TSO cmd                                             /* @AI */

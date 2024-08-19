@@ -9,6 +9,12 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  19 Aug 2024 - V37R7
+     - Update Panel RACFUSR6 to validate the OMVS HOME root exists and
+       starts with a /
+     - Update Exec RACFDSN and Panels RACFDSN3/4/5 to enable ERASE on
+       a DSN profile (thx JK)
+
   12 Aug 2024 - V37R6
      - Update Panel RACFUSR6 to validate the OMVS Program (Shell) is
        a valid file - does not validate it is a valid shell :)
