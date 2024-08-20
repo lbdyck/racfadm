@@ -9,6 +9,10 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  20 Aug 2024 - V37R8
+     - Update Panel RACFCLS5 to report the profile in mixed case
+       thx to Thomas Liu
+
   19 Aug 2024 - V37R7
      - Update Panel RACFUSR6 to validate the OMVS HOME root exists and
        starts with a /

@@ -1,6 +1,7 @@
 )ATTR DEFAULT(%+_)
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRID)
   02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRACC)
+  03  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ) CAPS(OFF)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)   JUST(LEFT)   HILITE(USCORE)
@@ -14,7 +15,7 @@
 +\-\(%RACFADM - General Resources+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+PROFILE:$PROFILE                                         +$TYPE
++PROFILE:PROFILE                                         +$TYPE
 +CLASS:  $RCLASS   +
 +UACC:   $UACC    { (Default access)     +OWNER: $OWNER   { (Owner of profile)
 +WARNING:$WARN    { (YES/NO)             +AUDIT: $AUDIT
