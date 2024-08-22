@@ -233,6 +233,7 @@
   if zrxrc /= 8 then
   if length(ohome) > 0 then do
      parse value ohome with '/'thome'/'.
+     thome = '/'thome
      address syscall
      'lstat (thome) op.'
      address TSO

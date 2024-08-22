@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  22 Aug 2024 - V37R9
+     - Update Panel RACFUSR6 to fix the home validation
+
   20 Aug 2024 - V37R8
      - Update Panel RACFCLS5 to report the profile in mixed case
        thx to Thomas Liu
