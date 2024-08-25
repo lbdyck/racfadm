@@ -1,7 +1,7 @@
 /*%NOCOMMENT====================* REXX *==============================*/
 /*PURPOSE:  RACFADM - Digital Certificates, Option CA-LC, List labels */
 /*--------------------------------------------------------------------*/
-/* FLG  YYMhDD  USERID   DESCRIPTION                                  */
+/* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
 /* @A7  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @A6  240126  GA       Add new function Chain,Add,Delete,Export,Type*/

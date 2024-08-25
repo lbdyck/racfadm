@@ -1,11 +1,13 @@
 )ATTR DEFAULT(%+_)
+   [  area(SCRL)    Extend(ON)
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - Settings - 3 of 4+)\-\%Tutorial
 %Command ===>_ZCMD
-%
+[radm -------------------------------------------------------------------------[
+)Area radm
 +Management
 !  RACF commands    +To view the RACF commands executed
 +                     %Display+in pop-up panel
@@ -19,13 +21,27 @@
 +                     %Results,+display commands and results
 +                     %No,+turn off tracing (default)
 +
-+Adding TSO userid
-!  Default password +The initial password given to a new TSO user or when
-+                    resetting an individual's password%(Option 5 and line
-+                   %command PW).+ The password can be in upper/lower case and
-+                    if left%blank,+will produce a%random+password (default)
++Adding TSO userids
+!  Default password +The initial password/phrase given to a new TSO
++                    user or when resetting an individual's
++                    password%(Option 5 and line command PW).+ The
++                    password can be in upper/lower case and if
++                    left%blank,+will produce a%random+password
++                    (default)
++
+!  Passphrase +      If Passphrase%Y+then a "Phrase" field will
++                    displayed in Option 5 (Password) and Option 1
++                    (User Profile/Add User).  Phrase will be edited
++                    for 2 alphabetic, 2 non-alphabetic, no Userid, and
++                    no more than 2 repeating characters.  Phrase is a
++                    14 character field.
++
++                    If Passphrase%N+then a "Password" field will be
++                    displayed instead of a "Phrase" field.  Password
++                    is an 8 character field.
 +
 + \ \ (press%ENTER+to continue) \ \
++
 )PROC
   &ZCONT   = #RACSET4
 )END

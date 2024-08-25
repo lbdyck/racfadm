@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F2  240824  TRIDJK   Use ISO Extended date format                 */
 /* @F1  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @EZ  240117  GA       Added line command LR (List ring)            */
 /* @EY  240111  GA       Added new line command LC (list certificate) */
@@ -203,6 +204,7 @@ EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */ /* @CZ */
 TABLEA      = 'TA'RANDOM(0,99999)  /* Unique table name A  */ /* @EB */
 TABLEB      = 'TB'RANDOM(0,99999)  /* Unique table name B  */ /* @EC */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @E2 */
+datesep     = racfdsep()   /* Date separator char          */ /* @F2 */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @DZ */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @DZ */
 NULL        = ''                                              /* @ED */
@@ -219,7 +221,7 @@ ADDRESS ISPEXEC                                               /* @BC */
   "CONTROL ERRORS RETURN"                                     /* @B1 */
   "VGET (SETGSTA  SETGSTAP SETGDISP SETMADMN",                /* @EA */
         "SETMIRRX SETMSHOW SETMTRAC SETTPSWD",                /* @EA */
-        "SETTPROF SETTUDSN SETMPHRA) PROFILE"                 /* @EQ */
+        "SETTPROF SETTUDSN SETMPHRA) PROFILE"                 /* @EA */
 
   If (SETMTRAC <> 'NO') then do                               /* @DK */
      Say "*"COPIES("-",70)"*"                                 /* @DK */
@@ -365,7 +367,8 @@ PROFL:
                 end                                           /* @BE */
              end                                              /* @BE */
         END                                                   /* @LB */
-        WHEN (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @AS */
+        WHen (Abbrev("FILTER",zcmd,3) = 1) |
+          if (ABBREV("RESET",ZCMD,1) = 1) THEN DO
              if (parm <> '') then                             /* @E4 */
                 rfilter = parm                                /* @E4 */
              xtdtop   = 1                                     /* @AS */
@@ -1034,7 +1037,10 @@ GETD:
   'USER=' x 'NAME=' name 'OWNER=' owner 'CREATED=' datecre
   if datecre <> '' then do                                    /* @DN */
      datecre = SUBSTR(datecre,1,2)SUBSTR(datecre,4,3)         /* @DN */
-     datecre = DATE('U',datecre,'J')                          /* @DO */
+     datecre = DATE('S',datecre,'J')                          /* @F2 */
+     datecre = SUBSTR(datecre,1,4)||datesep||,                /* @F2 */
+               SUBSTR(datecre,5,2)||datesep||,                /* @F2 */
+               SUBSTR(datecre,7,2)                            /* @F2 */
   end                                                         /* @DN */
 
   parse var details.2 ,
@@ -1077,7 +1083,10 @@ GETD:
      nop                                                      /* @AO */
   else do                                                     /* @AR */
      datelgn = SUBSTR(datelgn,1,2)SUBSTR(datelgn,4,3)         /* @AN */
-     datelgn = DATE('O',datelgn,'J')                          /* @AN */
+     datelgn = DATE('S',datelgn,'J')                          /* @F2 */
+     datelgn = SUBSTR(datelgn,1,4)||datesep||,                /* @F2 */
+               SUBSTR(datelgn,5,2)||datesep||,                /* @F2 */
+               SUBSTR(datelgn,7,2)                            /* @F2 */
   end                                                         /* @AN */
 
   parse var details.7 'INSTALLATION-DATA=' data

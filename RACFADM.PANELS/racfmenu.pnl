@@ -32,7 +32,7 @@
 +   RACF:!RACFVER        +PrmDB:!PRMDBASE
 +   FMID:!RACFFMID       +BkpDB:!BKPDBASE
 +   z/OS:!ZOSVER         +Plex: !ZSYSPLEX       +Lpar:!ZSYSID
-+   Date:!USADATE        +JDate:!ZJDATE         +Time:!ZTIME
++   Date:!RDATE          +JDate:!ZJDATE         +Time:!ZTIME
 +  Ýz    !ZUSER    @UATT +Group:!RACFGRP        +Name:!RACFNAM
 + ---------------------------------------------------------------------------
 )INIT
@@ -133,7 +133,7 @@
   &RACFLMSG = &Z
   &SECSOFT  = &Z
   &RACFFMID = &Z
-  &USADATE  = &Z
+  &RDATE    = &Z
   &UATT     = &Z
   &UTYPE    = 'User'
 
@@ -142,7 +142,7 @@
      &RACFMENU = 0
 
   *REXX (RACFVER PRMDBASE BKPDBASE ZOSVER RACFGRP  RACFNAM RACFLMSG
-         SECSOFT RACFFMID USADATE UTYPE SETMADMN UATT RACFMENU
+         SECSOFT RACFFMID RDATE UTYPE SETMADMN UATT RACFMENU
          SETMPHRA rver setmirrx mp mpdesc mpinfo mpcmd)
     rver = racfrver()
     Numeric Digits 10
@@ -188,7 +188,9 @@
     name$     = d2x((x2d(name$))+1)     /* ACEEUNAM Ptr +1           */
     RACFGRP   = storage(group$,8)       /* ACEEGRPN (RACF group name)*/
     RACFNAM   = storage(name$,20)       /* ACEEUNAM (RACF user name) */
-    USADATE   = DATE('U')
+    sep       = racfdsep()
+    RDATE     = DATE('S')
+    rdate     = left(rdate,4)||sep||substr(rdate,5,2)||sep||right(rdate,2)
 
     if (setmadmn = 'YES') then          /* Display User or Admn?     */
        utype = 'Admn:'

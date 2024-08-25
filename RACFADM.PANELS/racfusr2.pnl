@@ -22,10 +22,10 @@
 +FILTER: $RFILTER                ¬SELCMD2B                                     ¬
 +SELECT: ¬SELCMD2A                                                             ¬
 %
-%S         ~Userid  ~Name                ~Group   ~Logon   ~Owner   ~Rev~Att~TSO
+%S         ~Userid  ~Name              ~Group   ~Logon     ~Owner   ~Rev~Att~TSO
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z ^Z      Z       Z                   Z       Z       	Z       Z  Z  Z
+_Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  Z
 )INIT
   .ZVARS = '(OPTA ACTION USER NAME DEFGRP DATELGN OWNER REVOKED +
              ATTR2 TSOUSER)'

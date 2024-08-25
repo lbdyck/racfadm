@@ -1,7 +1,7 @@
 /*%NOCOMMENT====================* REXX *==============================*/
 /*PURPOSE:  RACFADM - Digital Rings, Option LR, List labels           */
 /*--------------------------------------------------------------------*/
-/* FLG  YYMhDD  USERID   DESCRIPTION                                  */
+/* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
 /* @A1  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @A0  240117  GA       Created REXX                                 */

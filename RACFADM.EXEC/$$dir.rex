@@ -39,6 +39,7 @@
  RACFRING  User           Display Digital Rings
  RACFRPTS  Reports        RACF reports, menu option R
  RACFRVER  Version        Sets the version for this application
+ RACFDSEP  User/Group     Sets the date separator character (User/Group)
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked
  RACFSETG  Settings       Customize settings, menu option 0
  RACFUSR   User           Display userid profiles, menu option 1

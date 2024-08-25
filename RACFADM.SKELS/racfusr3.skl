@@ -9,8 +9,8 @@
 )SEL &RACFSFIL = T
  &ZDATE --------------( RACFADM - User Profiles )-------------- &ZTIME
 )BLANK
-)TB 2 11 44
-!PROFILE:!&USER!CREATED: &DATECRE (mm/dd/yy)
+)TB 2 11 40
+!PROFILE:!&USER!CREATED: &DATECRE
 )TB 2 11 21
 !NAME:!&NAME
 )SETF OWNER   = &LEFT(&OWNER,8, )

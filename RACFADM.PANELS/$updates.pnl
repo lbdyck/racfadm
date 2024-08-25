@@ -9,6 +9,16 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  24 Aug 2024 - V38R0
+     - Update Panels RACFUSR2, RACFUSR3, RACFGRP5, and RACFMENU
+       to use ISO Extended date format
+     - Update Execs RACFUSR and RACFGRP to use ISO Extended
+       date format
+     - Add exec RACFDSEP to set the date separator character in
+       RACFUSR and RACFGRP execs
+     - Update exec RACFUSRY to use BUFNO=100 for IRRDBU00 files
+       to prevent 878-10 abends
+
   22 Aug 2024 - V37R9
      - Update Panel RACFUSR6 to fix the home validation
 

@@ -12,6 +12,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L3  240824  TRIDJK   Use BUFNO=100 for IRRDBU00 files             */
 /* @L2  231017  LBDYCK   Check IRRDBU00 in IKJTSOxx via PARMLIB cmd   */
 /* @L1  231014  LBDYCK   Check popup RC                               */
 /* @A2  231013  TRIDJK   Add pop-up for mode (Foreground/Background)  */
@@ -84,9 +85,9 @@ Address TSO
   call get_backup_dsn
   'alloc f(sysprint) new reuse unit(sysallda)',
          'space(1,1) tracks'
-  "alloc f(indd1)    shr reuse  dsn('"racf_dsn"') bufno(200)"
+  "alloc f(indd1)    shr reuse  dsn('"racf_dsn"') bufno(100)" /* @L3 */
   'alloc f(outdd)    new reuse unit(sysallda)',
-         'lrecl(4096) blksize(0) recfm(v b) bufno(200)',
+         'lrecl(4096) blksize(0) recfm(v b) bufno(100)',      /* @L3 */
          'dsn('dbunload') new catalog',
          'space(75,75) tracks'
   "call *(irrdbu00) 'NOLOCKINPUT'"

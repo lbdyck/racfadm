@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @D5  240824  TRIDJK   Use ISO Extended date format                 */
 /* @D4  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @D3  231007  TRIDJK   Added line command 'Y'                       */
 /* @D2  2200318 LBD      Clean up open tables                         */
@@ -125,6 +126,7 @@ EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */ /* @BO */
 TABLEA      = 'TA'RANDOM(0,99999)  /* Unique table name A  */ /* @CF */
 TABLEB      = 'TB'RANDOM(0,99999)  /* Unique table name B  */ /* @CG */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @C9 */
+datesep     = racfdsep()   /* Date separator char          */ /* @D5 */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @C8 */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @C8 */
 NULL        = ''                                              /* @CH */
@@ -659,7 +661,10 @@ CREATE_TABLEB:                                                /* @BM */
            owner   = substr(temp,39,8)
            datecre = substr(temp,59,6)                        /* @C2 */
            datecre = SUBSTR(datecre,1,2)SUBSTR(datecre,4,3)   /* @C2 */
-           datecre = DATE('U',datecre,'J')                    /* @C3 */
+           datecre = DATE('S',datecre,'J')                    /* @D5 */
+           datecre = SUBSTR(datecre,1,4)||datesep||,          /* @D5 */
+                     SUBSTR(datecre,5,2)||datesep||,          /* @D5 */
+                     SUBSTR(datecre,7,2)                      /* @D5 */
         end
      if (data = ' ') then
         if (substr(temp,6,17) = 'INSTALLATION DATA') then do

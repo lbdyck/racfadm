@@ -1,7 +1,7 @@
 /*%NOCOMMENT====================* REXX *==============================*/
 /*  PURPOSE:  RACFADM - General Resources - Option 4, List classes    */
 /*--------------------------------------------------------------------*/
-/* FLG  YYMhDD  USERID   DESCRIPTION                                  */
+/* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
 /* @BD  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @BC  220317  LBD      Close table on exit                          */

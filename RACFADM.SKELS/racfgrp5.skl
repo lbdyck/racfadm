@@ -9,8 +9,8 @@
 )SEL &RACFSFIL = T
  &ZDATE --------------( RACFADM - Group Profiles )------------- &ZTIME
 )BLANK
-)TB 2 11 44
-!PROFILE:!&GROUP!CREATED: &DATECRE (mm/dd/yy)
+)TB 2 11 40
+!PROFILE:!&GROUP!CREATED: &DATECRE
 )TB 2 11 21
 !SUPGRP:!&SUPGRP!(Superior group)
 !OWNER:!&OWNER!(Owner of profile)
