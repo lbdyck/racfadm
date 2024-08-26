@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  26 Aug 2024 - V38R1
+     - Update RACFUSR exec to fix typo
+
   24 Aug 2024 - V38R0
      - Update Panels RACFUSR2, RACFUSR3, RACFGRP5, and RACFMENU
        to use ISO Extended date format

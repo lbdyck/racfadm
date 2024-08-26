@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/*      240826  LBD      Fix typo in code                             */
 /* @F2  240824  TRIDJK   Use ISO Extended date format                 */
 /* @F1  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @EZ  240117  GA       Added line command LR (List ring)            */
@@ -367,8 +368,7 @@ PROFL:
                 end                                           /* @BE */
              end                                              /* @BE */
         END                                                   /* @LB */
-        WHen (Abbrev("FILTER",zcmd,3) = 1) |
-          if (ABBREV("RESET",ZCMD,1) = 1) THEN DO
+        When (ABBREV("RESET",ZCMD,1) = 1) THEN DO
              if (parm <> '') then                             /* @E4 */
                 rfilter = parm                                /* @E4 */
              xtdtop   = 1                                     /* @AS */
