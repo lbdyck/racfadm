@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @B1  240827  TRIDJK   Fixed audit special & terminal uacc values   */
 /* @AZ  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @AY  200730  TRIDJK   Added Generic prof chk/Generic cmd proc      */
 /* @AX  200629  RACFA    Added FMID                                   */
@@ -321,7 +322,7 @@ RACF_SETROPT_OPTIONS:
   rc = Setbool(rcvtscat,628,'40','NO','YES') /* catdsns               */
   rc = Setbool(rcvtseos,393,'20','NO','YES') /* erase on scratch      */
   rc = Setbool(rcvtsapl,764,'08','NO','YES') /* applaudit             */
-  rc = Setbool(rcvtsaus,764,'10','YES','NO') /* audit special         */
+  rc = Setbool(rcvtsaus,154,'10','YES','NO') /* audit special     @B1 */
   rc = Setbool(rcvtsauo,151,'01','NO','YES') /* audit operations      */
   rc = Setbool(rcvtsgrc,329,'80','NO','YES') /* listofgroupschecking  */
   rc = Setbool(rcvtsgno,628,'02','NO','YES') /* generic owner         */
@@ -399,7 +400,7 @@ RETURN
 /*--------------------------------------------------------------------*/
 RACF_TERMINAL_OPTIONS:
   rc = Setbool(rcvttaut,154,'80','NO','YES') /* terminal auth chking  */
-  rc = Setbool(rcvttuac,154,'40','NO','YES') /* terminal uacc         */
+  rc = Setbool(rcvttuac,154,'40','READ','NONE') /* terminal uacc  @B1 */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  RACF statistics                                                   */
@@ -551,8 +552,8 @@ CREATE_TABLEA:                                                /* @AE */
   call add_t  'Single level prefix              'RCVTQUAL     /* @AE */
   call add_t  'Tape dataset protection          'RCVTTDPR     /* @AE */
   call add_t  'Tape volume protection           'RCVTTVPR     /* @AE */
-  call add_t  'Terminal authority               'RCVTTAUT     /* @AE */
-  call add_t  'Terminal UACC                    'RCVTTUAC     /* @AE */
+  call add_t  'Terminal authority checking      'RCVTTAUT     /* @B1 */
+  call add_t  'Terminal UACC default            'RCVTTUAC     /* @B1 */
   call add_t  'Userid inactive                  'RCVTPINA     /* @AE */
   call add_t  'UADS dataset                     'RCVTUADS     /* @AI */
   call add_t  'UADS volume                      'RCVTUVOL     /* @AE */

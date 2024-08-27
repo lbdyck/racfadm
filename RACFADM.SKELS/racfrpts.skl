@@ -47,7 +47,7 @@
   DISPLAY FROM(TEMP100) LIST(RPT100)            -
           BLANK                                 -
           TITLE('T100/GPBD - Group Basic Data') -
-          DATE TIME PAGE                        -
+          DATE(4MD-) TIME PAGE                  -
           HEADER('Group') ON(10,8,CH)           -
           HEADER('Sup Group') ON(19,8,CH)       -
           HEADER('Owner') ON(39,8,CH)           -
@@ -63,7 +63,7 @@
   OCCURS  FROM(TEMP100A) LIST(RPT100A)                           -
           PAGE                                                   -
           TITLE('CPRO: Number of Profiles in the RACF Database') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(5,26,CH)   HEADER('Type')                           -
@@ -78,7 +78,7 @@
   OCCURS  FROM(TEMP100B) LIST(RPT100B)        -
           PAGE                                -
           TITLE('Universal Group Count')      -
-          DATE(YMD/)                          -
+          DATE(4MD-)                          -
           TIME(12:)                           -
           BLANK                               -
           ON(10,8,CH)    HEADER('Group Name') -
@@ -94,7 +94,7 @@
   DISPLAY FROM(TEMP102) LIST(RPT102)          -
           BLANK                               -
           TITLE('T102/GPMEM - Group Members') -
-          DATE TIME PAGE                      -
+          DATE(4MD-) TIME PAGE                -
           HEADER('User') ON(19,8,CH)          -
           HEADER('User Auth') ON(28,8,CH)     -
           BTITLE('Group :')                   -
@@ -109,7 +109,7 @@
   DISPLAY FROM(TEMP102A) LIST(RPT102A)                            -
           PAGE                                                    -
           TITLE('CONN: User IDs With Group Privileges Above Use') -
-          DATE(YMD/)                                              -
+          DATE(4MD-)                                              -
           TIME(12:)                                               -
           BLANK                                                   -
           ON(19,8,CH) HEADER('User ID')                           -
@@ -126,7 +126,7 @@
   OCCURS  FROM(TEMP120A) LIST(RPT120A)                 -
           PAGE                                         -
           TITLE('GIDS: UNIX GIDs Used More Than Once') -
-          DATE(YMD/)                                   -
+          DATE(4MD-)                                   -
           TIME(12:)                                    -
           BLANK                                        -
           ON(19,10,CH) HEADER('UNIX GID')              -
@@ -142,11 +142,11 @@
   DISPLAY FROM(TEMP200) LIST(RPT200)           -
           BLANK                                -
           TITLE('T200/USBD - User Basic Data') -
-          DATE TIME PAGE                       -
+          DATE(4MD-) TIME PAGE                 -
           HEADER('User') ON(10,8,CH)           -
           HEADER('Name') ON(79,20,CH)          -
           HEADER('DefGrp') ON(100,8,CH)        -
-          HEADER('Create Data') ON(19,10,CH)   -
+          HEADER('Create Date') ON(19,10,CH)   -
           HEADER('Logon Date') ON(118,10,CH)   -
           HEADER('Revoke Date') ON(462,10,CH)  -
           HEADER('Owner') ON(30,8,CH)          -
@@ -165,7 +165,7 @@
   DISPLAY FROM(TEMP200A) LIST(RPT200A)                     -
           PAGE                                             -
           TITLE('NPWI User IDs with NOINTERVAL Specified') -
-          DATE(YMD/)                                       -
+          DATE(4MD-)                                       -
           TIME(12:)                                        -
           BLANK                                            -
           ON(10,8,CH)   HEADER('User ID')                  -
@@ -186,7 +186,7 @@
   DISPLAY FROM(TEMP200B) LIST(RPT200B)                        -
           PAGE                                                -
           TITLE('UGLB: Users with Extraordinary Authorities') -
-          DATE(YMD/)                                          -
+          DATE(4MD-)                                          -
           TIME(12:)                                           -
           BLANK                                               -
           ON(10,8,CH)  HEADER('User ID')                      -
@@ -207,7 +207,7 @@
   DISPLAY FROM(TEMP200C) LIST(RPT200C)                        -
           PAGE                                                -
           TITLE('UL90: User IDs defined in the past 90 days') -
-          DATE(YMD/)                                          -
+          DATE(4MD-)                                          -
           TIME(12:)                                           -
           BLANK                                               -
           ON(19,10,CH)  HEADER('Date')                        -
@@ -232,7 +232,7 @@
   DISPLAY FROM(TEMP200D) LIST(RPT200D)                        -
           PAGE                                                -
           TITLE('URVK: User IDs Which are Currently Revoked') -
-          DATE(YMD/)                                          -
+          DATE(4MD-)                                          -
           TIME(12:)                                           -
           BLANK                                               -
           ON(10,8,CH)  HEADER('User ID')                      -
@@ -247,7 +247,7 @@
   DISPLAY FROM(TEMP200E) LIST(RPT200E)                         -
           PAGE                                                 -
           TITLE('USERIDS WHICH HAVE NULL LAST PASSWORD DATES') -
-          DATE(YMD/)                                           -
+          DATE(4MD-)                                           -
           TIME(12:)                                            -
           BLANK                                                -
           ON(79,20,CH)  HEADER('USER NAME')                    -
@@ -266,7 +266,7 @@
   DISPLAY FROM(TEMP200F) LIST(RPT200F)                 -
           PAGE                                         -
           TITLE('USERIDS WITH NON-EXPIRING PASSWORDS') -
-          DATE(YMD/)                                   -
+          DATE(4MD-)                                   -
           TIME(12:)                                    -
           BLANK                                        -
           ON(10,8,CH)     HEADER('USERID')             -
@@ -285,7 +285,7 @@
   DISPLAY FROM(TEMP200G) LIST(RPT200G)                 -
           PAGE                                         -
           TITLE('USER IDS WHICH HAVE NEVER BEEN USED') -
-          DATE(YMD/)                                   -
+          DATE(4MD-)                                   -
           TIME(12:)                                    -
           BLANK                                        -
           ON(10,8,CH)    HEADER('USER ID')             -
@@ -307,7 +307,7 @@
   DISPLAY FROM(TEMP200H) LIST(RPT200H) -
           PAGE -
           TITLE('REVOKED USERIDS') -
-          DATE(YMD/) -
+          DATE(4MD-) -
           TIME(12:)  -
           BLANK      -
           ON(10,8,CH)   HEADER('USERID')   -
@@ -324,7 +324,7 @@
   DISPLAY FROM(TEMP200I) LIST(RPT200I)            -
           PAGE                                    -
           TITLE('USERIDS WITH "UAUDIT" ASSIGNED') -
-          DATE(YMD/)                              -
+          DATE(4MD-)                              -
           TIME(12:)                               -
           BLANK                                   -
           ON(10,8,CH)   HEADER('USERID')          -
@@ -346,7 +346,7 @@
   DISPLAY FROM(TEMP200J) LIST(RPT200J)                   -
           PAGE                                           -
           TITLE('USERIDS WITH PASSWORD INTERVALS NE 60') -
-          DATE(YMD/)                                     -
+          DATE(4MD-)                                     -
           TIME(12:)                                      -
           BLANK                                          -
           ON(10,8,CH)     HEADER('USERID')               -
@@ -365,7 +365,7 @@
   DISPLAY FROM(TEMP205) LIST(RPT205)              -
           BLANK                                   -
           TITLE('T205/USCON - Group Connections') -
-          DATE TIME PAGE                          -
+          DATE(4MD-) TIME PAGE                    -
           HEADER('Group') ON(19,8,CH)             -
           HEADER('Owner') ON(39,8,CH)             -
           HEADER('Connect Date') ON(28,10,CH)     -
@@ -386,7 +386,7 @@
   OCCURS  FROM(TEMP205A) LIST(RPT205A)                              -
           PAGE                                                      -
           TITLE('CCON: Users With More Than 100 Group Connections') -
-          DATE(YMD/)                                                -
+          DATE(4MD-)                                                -
           TIME(12:)                                                 -
           BLANK                                                     -
           ON(10,8,CH)  HEADER('User ID')                            -
@@ -403,7 +403,7 @@
   DISPLAY FROM(TEMP205B) LIST(RPT205B)               -
           PAGE                                       -
           TITLE('GRPM: Members of the SYS1 Group')   -
-          DATE(YMD/)                                 -
+          DATE(4MD-)                                 -
           TIME(12:)                                  -
           BLANK                                      -
           ON(10,8,CH)     HEADER('User ID')          -
@@ -426,7 +426,7 @@
   DISPLAY FROM(TEMP205C) LIST(RPT205C)                              -
           PAGE                                                      -
           TITLE('UGRP: Users With Extraordinary Group Authorities') -
-          DATE(YMD/)                                                -
+          DATE(4MD-)                                                -
           TIME(12:)                                                 -
           BLANK                                                     -
           ON(10,8,CH)  HEADER('User ID')                            -
@@ -445,7 +445,7 @@
   DISPLAY FROM(TEMP206A) LIST(RPT206A)                                -
           PAGE                                                        -
           TITLE('ASOC: Users Who Have Explicit Associations Defined') -
-          DATE(YMD/)                                                  -
+          DATE(4MD-)                                                  -
           TIME(12:)                                                   -
           BLANK                                                       -
           ON(10,8,CH)    HEADER('User ID')                            -
@@ -470,7 +470,7 @@
   DISPLAY FROM(TEMP207A) LIST(RPT207A)            -
           PAGE                                    -
           TITLE('CLBL: Certificate Labels')       -
-          DATE(4MD/)                              -
+          DATE(4MD-)                              -
           TIME(12:)                               -
           BLANK                                   -
           ON(010,08,CH)  HEADER('User ID')        -
@@ -479,7 +479,7 @@
    OCCURS FROM(TEMP207A) LIST(RPT207A)                               -
           PAGE                                                       -
           TITLE('CLBL: Certificate Labels Which May Need to Change') -
-          DATE(YMD/)                                                 -
+          DATE(4MD-)                                                 -
           TIME(12:)                                                  -
           BLANK                                                      -
           ON(010,08,CH) HEADER('User ID')                            -
@@ -496,7 +496,7 @@
   DISPLAY FROM(TEMP220) LIST(RPT220)          -
           BLANK                               -
           TITLE('T220/USTSO - User TSO Data') -
-          DATE TIME PAGE                      -
+          DATE(4MD-) TIME PAGE                -
           HEADER('User') ON(10,8,CH)          -
           HEADER('Proc') ON(154,8,CH)         -
           HEADER('Size') ON(163,10,CH)        -
@@ -513,7 +513,7 @@
   DISPLAY FROM(TEMP270) LIST(RPT270)            -
           BLANK                                 -
           TITLE('T270/USOMVS - User OMVS Data') -
-          DATE TIME PAGE                        -
+          DATE(4MD-) TIME PAGE                  -
           HEADER('User') ON(10,8,CH)            -
           HEADER('UID') ON(19,10,CH)            -
           HEADER('Home Path') ON(30,44,CH)      -
@@ -528,7 +528,7 @@
   DISPLAY FROM(TEMP270A) LIST(RPT270A)                 -
           PAGE                                         -
           TITLE('OMVS: User IDs With an OMVS Segment') -
-          DATE(YMD/)                                   -
+          DATE(4MD-)                                   -
           TIME(12:)                                    -
           BLANK                                        -
           ON(10,8,CH)    HEADER('User ID')             -
@@ -546,7 +546,7 @@
   DISPLAY FROM(TEMP270B) LIST(RPT270B)                               -
           PAGE                                                       -
           TITLE('SUPU: UNIX System Services Super Users (UID of 0)') -
-          DATE(YMD/)                                                 -
+          DATE(4MD-)                                                 -
           TIME(12:)                                                  -
           BLANK                                                      -
           ON(10,8,CH)    HEADER('User ID')                           -
@@ -563,7 +563,7 @@
   OCCURS  FROM(TEMP270C) LIST(RPT270C)                 -
           PAGE                                         -
           TITLE('UIDS: UNIX UIDs Used More Than Once') -
-          DATE(YMD/)                                   -
+          DATE(4MD-)                                   -
           TIME(12:)                                    -
           BLANK                                        -
           ON(19,10,CH) HEADER('UNIX UID')              -
@@ -579,7 +579,7 @@
   DISPLAY FROM(TEMP400) LIST(RPT400)               -
           BLANK                                    -
           TITLE('T400/DSBD - Data Set Basic Data') -
-          DATE TIME PAGE                           -
+          DATE(4MD-) TIME PAGE                     -
           HEADER('Data Set Profile') ON(10,44,CH)  -
           HEADER('Gen') ON(62,4,CH)                -
           HEADER('UACC') ON(133,8,CH)              -
@@ -599,7 +599,7 @@
   DISPLAY FROM(TEMP400C) LIST(RPT400C)                           -
           PAGE                                                   -
           TITLE('UADS: DS Profiles with a UACC Other Than None') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(10,44,CH) HEADER('Data Set Name Profile Name')      -
@@ -617,7 +617,7 @@
   DISPLAY FROM(TEMP400D) LIST(RPT400D)                    -
           PAGE                                            -
           TITLE('WNDS: DS Profiles with in WARNING Mode') -
-          DATE(YMD/)                                      -
+          DATE(4MD-)                                      -
           TIME(12:)                                       -
           BLANK                                           -
           ON(10,44,CH) HEADER('Data Set Name')            -
@@ -634,7 +634,7 @@
   DISPLAY FROM(TEMP400E) LIST(RPT400E)          -
           PAGE                                  -
           TITLE('LIST OF DATASET PROFILES')     -
-          DATE(4MD/)                            -
+          DATE(4MD-)                            -
           TIME(24:)                             -
           BLANK                                 -
           ON(10,44,CH)  HEADER('DATA SET NAME') -
@@ -657,7 +657,7 @@
   DISPLAY FROM(TEMP400F) LIST(RPT400F)             -
           PAGE                                     -
           TITLE('DATASET PROFILES WITH UACC=NONE') -
-          DATE(YMD/)                               -
+          DATE(4MD-)                               -
           TIME(12:)                                -
           BLANK                                    -
           ON(10,44,CH)  HEADER('PROFILE NAME')     -
@@ -678,7 +678,7 @@
   DISPLAY FROM(TEMP402A) LIST(RPT402A)                           -
           PAGE                                                   -
           TITLE('IDSC: DS Cond ACLs With ID(*) Other Than None') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(10,44,CH)  HEADER('Profile Name')                   -
@@ -696,7 +696,7 @@
   DISPLAY FROM(TEMP404) LIST(RPT404)            -
           BLANK                                 -
           TITLE('T404/DSACC - Data Set Access') -
-          DATE TIME PAGE                        -
+          DATE(4MD-) TIME PAGE                  -
           HEADER('Group') ON(62,8,CH)           -
           HEADER('Access') ON(71,8,CH)          -
           HEADER('Access Count') ON(80,4,CH)    -
@@ -714,7 +714,7 @@
   DISPLAY FROM(TEMP404A) LIST(RPT404A)                            -
           PAGE                                                    -
           TITLE('ALDS: IDs with ALTER Auth to Discrete DS Profs') -
-          DATE(YMD/)                                              -
+          DATE(4MD-)                                              -
           TIME(12:)                                               -
           BLANK                                                   -
           ON(10,44,CH)  HEADER('Profile Name')                    -
@@ -732,7 +732,7 @@
   DISPLAY FROM(TEMP404B) LIST(RPT404B)                               -
           PAGE                                                       -
           TITLE('IDSS: DS Standard ACLs With ID(*) Other Than None') -
-          DATE(YMD/)                                                 -
+          DATE(4MD-)                                                 -
           TIME(12:)                                                  -
           BLANK                                                      -
           ON(10,44,CH)  HEADER('Profile Name')                       -
@@ -748,7 +748,7 @@
   DISPLAY FROM(TEMP404U) LIST(RPT404U)                     -
           BLANK                                            -
           TITLE('T404U/DSACCG - Data Set Access by Group') -
-          DATE TIME PAGE                                   -
+          DATE(4MD-) TIME PAGE                             -
           HEADER('Data Set Profile') ON(10,44,CH)          -
           HEADER('Access') ON(71,8,CH)                     -
           HEADER('Access Count') ON(80,4,CH)               -
@@ -764,7 +764,7 @@
   DISPLAY FROM(TEMP500) LIST(RPT500)                       -
           BLANK                                            -
           TITLE('T500/GRBD - General Resource Basic Data') -
-          DATE TIME PAGE                                   -
+          DATE(4MD-) TIME PAGE                             -
           HEADER('Profile Name') ON(10,40,CH)              -
           HEADER('Gen') ON(266,4,CH)                       -
           HEADER('UACC') ON(341,8,CH)                      -
@@ -787,7 +787,7 @@
   DISPLAY FROM(TEMP500A) LIST(RPT500A)                           -
           PAGE                                                   -
           TITLE('BGGR: Discrete GR Profiles with Generic Names') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(10,60,CH)   HEADER('Profile')                       -
@@ -806,7 +806,7 @@
   OCCURS  FROM(TEMP500B) LIST(RPT500B)                       -
           PAGE                                               -
           TITLE('CGEN: Number of General Resource Profiles') -
-          DATE(YMD/)                                         -
+          DATE(4MD-)                                         -
           TIME(12:)                                          -
           BLANK                                              -
           ON(257,8,CH)  HEADER('Class')                      -
@@ -822,7 +822,7 @@
   DISPLAY FROM(TEMP500C) LIST(RPT500C)                           -
           PAGE                                                   -
           TITLE('PROGRAM Profiles with MAIN or BASIC Attribute') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(10,8,CH)   HEADER('Name')                           -
@@ -841,7 +841,7 @@
   DISPLAY FROM(TEMP500D) LIST(RPT500D)                           -
           PAGE                                                   -
           TITLE('UAGR: GR Profiles with a UACC Other Than None') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(257,8,CH)  HEADER('Class')                          -
@@ -860,7 +860,7 @@
   DISPLAY FROM(TEMP500E) LIST(RPT500E)                          -
           PAGE                                                  -
           TITLE('WNGR: GR Profiles with in WARNING Mode')       -
-          DATE(YMD/)                                            -
+          DATE(4MD-)                                            -
           TIME(12:)                                             -
           BLANK                                                 -
           ON(10,44,CH)  HEADER('General Resource Profile Name') -
@@ -878,7 +878,7 @@
   OCCUR  FROM(TEMP503) LIST(RPT503)                             -
          TITLE('TRANSACTIONS DEFINED IN GREATER THAN 1 GTRANS') -
          PAGE                                                   -
-         DATE(YMD/)                                             -
+         DATE(4MD-)                                             -
          TIME(12:)                                              -
          BLANK                                                  -
          ON(257,8,CH)  HEADER('CLASS')                          -
@@ -895,7 +895,7 @@
   DISPLAY FROM(TEMP505) LIST(RPT505)                    -
           BLANK                                         -
           TITLE('T505/GRACC - General Resource Access') -
-          DATE TIME PAGE                                -
+          DATE(4MD-) TIME PAGE                          -
           HEADER('Profile Name') ON(10,40,CH)           -
           HEADER('Group') ON(266,8,CH)                  -
           HEADER('Access') ON(275,8,CH)                 -
@@ -914,7 +914,7 @@
   DISPLAY FROM(TEMP505A) LIST(RPT505A)                               -
           PAGE                                                       -
           TITLE('IGRS: GR Standard ACLs with ID(*) Other Than None') -
-          DATE(YMD/)                                                 -
+          DATE(4MD-)                                                 -
           TIME(12:)                                                  -
           BLANK                                                      -
           ON(257,8,CH)  HEADER('Class')                              -
@@ -930,7 +930,7 @@
   DISPLAY FROM(TEMP505U) LIST(RPT505U)                             -
           BLANK                                                    -
           TITLE('T505U/GRACCG - General Resource Access by Group') -
-          DATE TIME PAGE                                           -
+          DATE(4MD-) TIME PAGE                                     -
           HEADER('Class') ON(257,8,CH)                             -
           HEADER('Profile Name') ON(10,40,CH)                      -
           HEADER('Access') ON(275,8,CH)                            -
@@ -949,7 +949,7 @@
   DISPLAY FROM(TEMP507A) LIST(RPT507A)                           -
           PAGE                                                   -
           TITLE('IGRC: GR Cond ACLs with ID(*) Other Than None') -
-          DATE(YMD/)                                             -
+          DATE(4MD-)                                             -
           TIME(12:)                                              -
           BLANK                                                  -
           ON(257,8,CH)  HEADER('Class')                          -
@@ -967,7 +967,7 @@
   DISPLAY FROM(TEMP540) LIST(RPT540)                  -
           BLANK                                       -
           TITLE('T540/STDATA - Started Task Segment') -
-          DATE TIME PAGE                              -
+          DATE(4MD-) TIME PAGE                        -
           HEADER('Profile Name') ON(10,44,CH)         -
           HEADER('User') ON(266,8,CH)                 -
           HEADER('Group') ON(275,8,CH)                -
@@ -1705,7 +1705,7 @@
   OCCURS  FROM(DBUDATA) LIST(RPT400A)                   -
           PAGE                                          -
           TITLE('HLQs With Excessive Generic Profiles') -
-          DATE(YMD/)                                    -
+          DATE(4MD-)                                    -
           TIME(12:)                                     -
           BLANK                                         -
           ON(10,8,CH)   HEADER('HLQ')                   -
@@ -1785,7 +1785,7 @@
   OCCURS  FROM(DBUDATA) LIST(RPT400B)                               -
           PAGE                                                      -
           TITLE('HLQs With Excessive Fully Qual. Generic Profiles') -
-          DATE(YMD/)                                                -
+          DATE(4MD-)                                                -
           TIME(12:)                                                 -
           BLANK                                                     -
           ON(10,8,CH)   HEADER('HLQ')                               -
@@ -1824,7 +1824,7 @@
   DISPLAY FROM(TEMP0001) LIST(RPT560)                     -
           PAGE                                            -
           TITLE('Expired or Nearly Expired Certificates') -
-          DATE(YMD/)                                      -
+          DATE(4MD-)                                      -
           TIME(12:)                                       -
           BLANK                                           -
           ON(010,60,CH)  HEADER('Name')                   -
@@ -1964,7 +1964,7 @@
   DISPLAY FROM(UNIVGRPS) LIST(RPT100C)                  -
           PAGE                                          -
           TITLE('Users Connected to a UNIVERSAL Group') -
-          DATE(YMD/)                                    -
+          DATE(4MD-)                                    -
           TIME(12:)                                     -
           BLANK                                         -
           ON(10,8,CH)    HEADER('User')                 -

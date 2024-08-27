@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L1  240826  LBD      Support FILter as alist of Reset             */
 /* @D5  240824  TRIDJK   Use ISO Extended date format                 */
 /* @D4  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @D3  231007  TRIDJK   Added line command 'Y'                       */
@@ -259,7 +260,8 @@ PROFL:
                 end                                           /* @AP */
              end                                              /* @AP */
         END                                                   /* @AP */
-        WHEN (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @AE */
+        When (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
+             (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
              if (parm <> '') then                             /* @CD */
                 rfilter = parm                                /* @CD */
              xtdtop   = 1                                     /* @AE */

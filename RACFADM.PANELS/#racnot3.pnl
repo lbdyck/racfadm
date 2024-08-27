@@ -19,8 +19,8 @@
 !  9)%RACFADM+allows passing a menu option as a parameter, which will invoke
 +     the option and when!F3+(END) is pressed, exit out of%RACFADM
 +
-+
-+
+! 10)%RACFDSEP+in the REXX dataset may be updated to change the default date
++     separator for the USERID and GROUP displays. (default is%/+
 +
 +
 +

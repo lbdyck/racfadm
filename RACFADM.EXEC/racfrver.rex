@@ -1,9 +1,10 @@
   /* --------------------------- REXX -------------------------------- */
-   return 'V38R1'
+   return 'V38R2'
   /* RACFRVER defines the version of the dialog                        |
    |                                                                   |
    | Historuy:                                                         |
-   | 24AUG2026 LBD Updated to version V38R1                            |
+   | 27AUG2024 LBD Updated to version V38R2                            |
+   | 24AUG2024 LBD Updated to version V38R1                            |
    | 24AUG2024 JPK Updated to version V38R0                            |
    | 22AUG2024 LBD Updated to version V37R9                            |
    | 20AUG2024 LBD Updated to version V37R8                            |

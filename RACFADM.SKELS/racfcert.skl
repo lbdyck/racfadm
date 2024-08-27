@@ -7,7 +7,7 @@
 )CM*  @A1  200929  TRIDJK   Added capability to SAve file as TXT/CSV
 )CM*------------------------------------------------------------------*
 )SEL &RACFSFIL = T
- &ZDATE -------( RACFADM - Digital Certificates &type )----- &ZTIME
+ &ZDATESTD ------( RACFADM - Digital Certificates &type )----- &ZTIME
 )BLANK
  Label                            StDate     EnDate     Status
  ---------------------------------------------------------------------

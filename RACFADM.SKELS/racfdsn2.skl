@@ -7,7 +7,7 @@
 )CM*  @A0  200611  RACFA    Created skeleton
 )CM*------------------------------------------------------------------*
 )SEL &RACFSFIL = T
- &ZDATE -------------( RACFADM - Dataset Profiles )------------ &ZTIME
+ &ZDATESTD -----------( RACFADM - Dataset Profiles )----------- &ZTIME
 )BLANK
 )TB 2 11
 !FILTER:!&RFILTER

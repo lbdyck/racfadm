@@ -6,7 +6,7 @@
 )CM*  @A0  240117  GA       Save command for list rings
 )CM*-------------------------------------------------------------------*
 )SEL &RACFSFIL = T
-&ZDATE ----------- ( RACFADM - Digital Rings &user ) ---------- &ZTIME
+ &ZDATESTD ----------( RACFADM - Digital Rings &user )--------- &ZTIME
 )BLANK
  Ring
  ----------------------------------------------------------------------

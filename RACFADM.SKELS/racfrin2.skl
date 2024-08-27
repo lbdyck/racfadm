@@ -8,7 +8,7 @@
 )SEL &RACFSFIL = T
 )SETF RING    = &STRIP(&RING,, )
 )SETF RING    = &LEFT(&RING,73, )
-&ZDATE ----------- ( RACFADM - Digital Rings &user ) ---------- &ZTIME
+ &ZDATESTD ----------( RACFADM - Digital Rings &user )--------- &ZTIME
  Ring: &RING
  Label                            Owner        Usage    Default
  -----------------------------------------------------------------------
