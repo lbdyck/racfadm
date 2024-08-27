@@ -13,6 +13,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @DRK 240827  DJK      Fix FLIST for /PROC filesystem               */
 /* @AR  220822  GRZ027   UID/GID right justified                      */
 /* @AQ  200616  RACFA    Chg panel name RACFRPTS to RACFDISP          */
 /* @AP  200611  RACFA    Fix, duplicate entries, was MODE||RESULT     */
@@ -350,7 +351,10 @@ FLIST_GET_USAGE:                                              /* @A2 */
   if (DATATYPE(S.STFS_BLOCKSIZE) = "NUM") THEN DO             /* @A2 */
      j = s.stfs_total * s.stfs_blocksize                      /* @A2 */
      k = s.stfs_inuse * s.stfs_blocksize                      /* @A2 */
-     p = trunc(k/j*100,2)                                     /* @A2 */
+     if k > 0 then                                            /* @DRK*/
+       p = trunc(k/j*100,2)                                   /* @A2 */
+     else                                                     /* @DRK*/
+       p = 0.00                                               /* @DRK*/
   END                                                         /* @A2 */
                                                               /* @A2 */
   if (p > percent) then do                                    /* @A2 */

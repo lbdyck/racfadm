@@ -9,6 +9,9 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  27 Aug 2024 - V38R3
+     - Update RACFOMVS exec to fix FLIST issue with /PROC filesystem
+
   27 Aug 2024 - V38R2
      - Update RACFUSR and RACFGRP to support FILter as alias of Reset
      - Update RACFPRMS to fix error with SAUDIT flag
