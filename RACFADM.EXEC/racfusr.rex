@@ -11,8 +11,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F3  240829  TRIDJK   RS line command (Resume)                     */
 /* @L1  240826  LBD      Support FILter as alist of Reset             */
-/* @L1  240826  LBD      Fix typo in code                             */
 /* @F2  240824  TRIDJK   Use ISO Extended date format                 */
 /* @F1  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @EZ  240117  GA       Added line command LR (List ring)            */
@@ -552,25 +552,46 @@ RETURN                                                        /* @CX */
 /*--------------------------------------------------------------------*/
 /*  Resume/reset userid                                               */
 /*--------------------------------------------------------------------*/
-RESD:
-  action = '*Reset'                                           /* @A4 */
+RESR:
+  action = '*Reset'                                           /* @F3 */
   msg    = 'You are about to resume/reset 'USER NAME
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
-     if (SETTPSWD = "") then                                  /* @EQ */
-        userp = "user.user.user"                              /* @EQ */
-     else                                                     /* @EQ */
+     if (SETTPSWD = "") then do                               /* @F3 */
+        userp =  left(newpswd()||newpswd(),14)                /* @F3 */
+        userw =  newpswd()                                    /* @F3 */
+        end                                                   /* @F3 */
+     else do                                                  /* @F3 */
         userp = left(SETTPSWD,14)                             /* @EQ */
+        userw = left(SETTPSWD,8)                              /* @F3 */
+        end                                                   /* @F3 */
      if SETMPHRA = 'YES' then                                 /* @EQ */
         call EXCMD "ALTUSER "user" RESUME PHRASE('"userp"')"  /* @EQ */
      else                                                     /* @EQ */
-        call EXCMD "ALTUSER "user" RESUME PASSWORD("user")"   /* @EQ */
+        call EXCMD "ALTUSER "user" RESUME PASSWORD("userw")"  /* @F3 */
      if (cmd_rc = 0) then do                                  /* @CA */
         revoked ='NO'                                         /* @BP */
         "TBMOD" TABLEA
      end
      else
         CALL racfmsgs "ERR07" msg.1 /* Alter failed */        /* @X1 */
+  end
+RETURN
+/*--------------------------------------------------------------------*/
+/*  Resume userid                                                     */
+/*--------------------------------------------------------------------*/
+RESD:
+  action = "*Resume"                                          /* @F3 */
+  msg    = 'You are about to resume 'USER NAME                /* @F3 */
+  Sure_? = RACFMSGC(msg)                                      /* @F3 */
+  if (sure_? = 'YES') then do                                 /* @F3 */
+     call EXCMD "ALTUSER "user" RESUME"                       /* @F3 */
+     if (cmd_rc = 0) then do                                  /* @F3 */
+        revoked ='NO'                                         /* @F3 */
+        "TBMOD" TABLEA                                        /* @F3 */
+     end                                                      /* @F3 */
+     else                                                     /* @F3 */
+        CALL racfmsgs "ERR07" msg.1 /* Alter failed */        /* @F3 */
   end
 RETURN
 /*--------------------------------------------------------------------*/
@@ -1440,7 +1461,7 @@ RETURN                                                        /* @D4 */
 /*--------------------------------------------------------------------*/
 NEWPSWD:                                                      /* @E1 */
   /* No vowels, or "V" or "Z" */                              /* @E1 */
-  choices  = 'BCDFGHJKLMNPQRSTWXYbcdfghjklmnpqrstwxy'         /* @E5 */
+  choices  = 'BCDFGHJKLMNPQRSTWXY123456789'                   /* @E5 */
   chars.   = ''                                               /* @E1 */
   password = ''                                               /* @E1 */
   /* Initialize stem variables */                             /* @E1 */
@@ -1448,7 +1469,7 @@ NEWPSWD:                                                      /* @E1 */
      chars.n = substr(choices,n,1)                            /* @E1 */
   end                                                         /* @E1 */
   /* n character password */                                  /* @EQ */
-  psize = 6                                                   /* @EQ */
+  psize = 8                                                   /* @EQ */
   do forever                                                  /* @E1 */
      pick = random(1,length(choices))                         /* @E1 */
      /* No repeating characters */                            /* @E1 */
@@ -1459,10 +1480,12 @@ NEWPSWD:                                                      /* @E1 */
      if (length(password) > (psize-1)) then                   /* @EQ */
         leave                                                 /* @E1 */
   end                                                         /* @E1 */
+  /*
   /* Plug in 1 numeric character */                           /* @E1 */
   number   = random(1,9)                                      /* @E1 */
   place    = random(2,psize)                                  /* @EQ */
   password = overlay(number,password,place,1)                 /* @E1 */
+  */
 RETURN password                                               /* @E1 */
 /*--------------------------------------------------------------------*/
 /*  Change profile                                               @DT  */

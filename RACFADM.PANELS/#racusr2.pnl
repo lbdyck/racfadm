@@ -27,7 +27,7 @@
 %  A  !Add          +Define a new user@(admin)
 %  PW !Password     +Password reset@(admin)
 %  R  !Remove       +Remove user from RACF@(admin)
-%  RS !Resume       +Resume user and initialize the password@(admin)
+%  RS !Resume       +Resume user@(admin)
 %  RV !Revoke       +Revoke the user@(admin)
 %  AL !Alter        +Alter user profile segments@(admin)
 %  X  !Xref         +Create JCL for Cross Reference Report@(admin)

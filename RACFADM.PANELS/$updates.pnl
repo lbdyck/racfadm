@@ -9,6 +9,10 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  29 Aug 2024 - V38R4
+     - Update RACFUSR exec to change RS line command (Resume only)
+       without resetting the users password
+
   27 Aug 2024 - V38R3
      - Update RACFOMVS exec to fix FLIST issue with /PROC filesystem
 
