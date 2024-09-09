@@ -8,6 +8,9 @@
 %Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
 %Command ===>_ZCMD
 %
++Panel Legend
+%  ATTributes+(S=Special, O=Operations, A=Auditor)  %REVoked+(Y=Yes, N=No)
+%
 +Primary Commands
 %  Find text        +Find a text string
 %  Sort column A/D  +Sort column, ascending/descending, cols are point-and-shoot
