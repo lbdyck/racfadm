@@ -5,6 +5,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AI  240903  TRIDJK   Added ERR28 msg, 'Can't refresh class'       */
 /* @AH  200913  GA       Add message for ring and certificate error   */
 /* @AG  200913  LBD      Accept message from command (msg.1)          */
 /* @AF  200423  RACFA    Move PARSE REXXPGM name up above IF SETMTRAC */
@@ -38,6 +39,10 @@ ADDRESS ISPEXEC                                               /* @A4 */
         interpret "Trace "SUBSTR(SETMTRAC,1,1)                /* @AA */
   end                                                         /* @AA */
 
+  if code = 'ERR28' then do                                   /* @AI */
+    class = message                                           /* @AI */
+    message = ''                                              /* @AI */
+    end                                                       /* @AI */
   racfsmsg = ''; racflsmsg = ''
   Select
      when (code = 'ERR01') then do
@@ -155,6 +160,10 @@ ADDRESS ISPEXEC                                               /* @A4 */
           racfsmsg = 'Error deleting cert.'                   /* @AH */
           racflmsg = 'Error deleting certificate'             /* @AH */
      end                                                      /* @AH */
+     WHEN (code = 'ERR28') then do                            /* @AI */
+          racfsmsg = 'Can''t refresh' class                   /* @AI */
+          racflmsg = 'Class is not RACLISTed'                 /* @AI */
+     end                                                      /* @AI */
      otherwise nop
   End
   if message /= '' then                                       /* @AG */

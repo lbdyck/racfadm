@@ -111,6 +111,7 @@
  RACFMSG1  Message        'Confirm Request' (pop-up panel)
  RACFMSG2  Message        'RACF Command = Y', 3 lines (pop-up panel)
  RACFMSG3  Message        'RACF Command = Y', 7 lines (pop-up panel)
+ RACFMSGU  User           / line command prompt (pop-up panel)
  RACFOMVS  RACFCmds       Exec RACF OMVS cmds (OPERMIT/ORALTER/ORLIST)
  RACFPRMS  Parameter      RACF parameters, menu option 6
  RACFPSWD  Password       Reset userid password, opt 5 and line cmd PW

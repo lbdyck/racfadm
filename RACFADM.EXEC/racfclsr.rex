@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @BF  240906  TRIDJK   Add primary command SETRopts                 */
+/* @BE  240905  TRIDJK   ERR28 if 'INVALID RACLIST' on REFRESH        */
 /* @BD  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @BC  220317  LBD      Close table on exit                          */
 /* @BB  200618  RACFA    Chged SYSDA to SYSALLDA                      */
@@ -67,7 +69,8 @@ NULL        = ''                                              /* @B5 */
 ADDRESS ISPEXEC                                               /* @A7 */
   Arg class
   "CONTROL ERRORS RETURN"                                     /* @AJ */
-  "VGET (SETGDISP SETMADMN SETMSHOW SETMTRAC) PROFILE"        /* @B3 */
+  "VGET (SETGDISP SETMADMN SETMSHOW SETMTRAC",                /* @B3 */
+        "SETMIRRX) PROFILE"
 
   If (SETMTRAC <> 'NO') then do                               /* @AW */
      Say "*"COPIES("-",70)"*"                                 /* @AW */
@@ -235,6 +238,12 @@ DISPLAY_TABLE:
              sortclas = 'D'                                   /* @AR */
              xtdtop   = 1                                     /* @A9 */
         END                                                   /* @A9 */
+        When (abbrev("SETROPTS",zcmd,4) = 1) then DO          /* @BF */
+             if parm = '' then                                /* @BF */
+               parm = 'NONE'                                  /* @BF */
+             if (SETMIRRX = 'YES') then                       /* @BF */
+               call RACFPROF '_SETROPTS' '_SETROPTS' parm     /* @BF */
+        END                                                   /* @BF */
         When (abbrev("SAVE",zcmd,2) = 1) then DO              /* @B8 */
              TMPSKELT = SKELETON1                             /* @B8 */
              call do_SAVE                                     /* @B8 */
@@ -333,18 +342,46 @@ RETURN                                                        /* @AR */
 /*  Refresh class                                                     */
 /*--------------------------------------------------------------------*/
 REFRESH:
-  msg    = 'You are about to refresh class 'class
+if (SETMIRRX = 'YES') then do                                 /* @BE */
+  if chkrac() = 'NO' then do                                  /* @BE */
+    say class 'is not RACLISTed'                              /* @BE */
+    return                                                    /* @BE */
+    end                                                       /* @BE */
+  end                                                         /* @BE */
+  msg    = 'You are about to refresh class',                  /* @BE */
+            class 'in RACLIST'                                /* @BE */
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
      call EXCMD "SETR RACLIST("class") REFRESH"
      if (cmd_rc <> 0) then                                    /* @AO */
-        call racfmsgs "ERR10" /* CMD FAILED */
+       if (subword(msg.1,1,3)) = 'IKJ56702I INVALID RACLIST,' |,
+          (subword(msg.1,1,2)) = 'INVALID RACLIST,' then      /* @BE */
+         call racfmsgs 'ERR28' class                          /* @BE */
+       else
+         call racfmsgs "ERR10" /* CMD FAILED */
      else do
         action = '*REFRESHED'
         "TBMOD" TABLEA
      end
   end
 RETURN
+/*--------------------------------------------------------------------*/
+/*  Check RACLIST                                                     */
+/*--------------------------------------------------------------------*/
+CHKRAC:                                                       /* @BE */
+myrc=IRRXUTIL("EXTRACT","_SETROPTS","_SETROPTS","CLS")        /* @BE */
+if (word(myrc,1)<>0) then do                                  /* @BE */
+   say "MYRC="myrc                                            /* @BE */
+   say "An IRRXUTIL or R_admin error occurred"                /* @BE */
+end                                                           /* @BE */
+rac_listed = ''                                               /* @BE */
+do t = 1 to CLS.BASE.RACLIST.0                                /* @BE */
+  rac_listed = rac_listed cls.base.raclist.t                  /* @BE */
+  end                                                         /* @BE */
+if wordpos(class,rac_listed) = 0 then                         /* @BE */
+  return 'NO'                                                 /* @BE */
+else                                                          /* @BE */
+  return 'YES'                                                /* @BE */
 /*--------------------------------------------------------------------*/
 /*  Exec command                                                      */
 /*--------------------------------------------------------------------*/

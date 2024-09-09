@@ -11,7 +11,7 @@
 +
 +  This utility will use the!'Initial Password'+defined in%Settings
 +  (Option 0) and if the field is!blank,+it will generate a!random+
-+  password in upper and lower case characters.
++  password in alphabetic and numeric characters.
 +
 + !'Passphrase'+defined in%Settings+(Option 0):
 +

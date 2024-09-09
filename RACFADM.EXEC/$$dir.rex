@@ -21,6 +21,7 @@
  RACFDSL   DSList         Invoke DSLIST on ALTLIB/LIBDEF DSNs, opt D
  RACFDSN   Dataset        Display dataset profiles
  RACFEMAC  Edit Macro     View/edit, turn off highlighting
+ RACFEMST  Edit Macro     View/edit, position to SETROPTS section
  RACFENQS  Enqueues       Display enqueues on ALTLIB/LIBDEF dsns, opt E
  RACFGRP   Group          Display group profiles, menu option 2
  RACFGTRE  Group Tree     Execute/display DSMON group tree rpt, opt 6

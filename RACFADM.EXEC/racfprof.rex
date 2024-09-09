@@ -14,6 +14,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @B1  240906  TRIDJK   Handle _SETROPTS class and profile           */
 /* @B0  230908  TRIDJK   Handle irrcerta et al "anchor" user profiles */
 /* @AZ  200923  TRIDJK   PARSE ARG ...  (lower case for DIGTCERT/RING)*/
 /* @AY  200423  RACFA    Move PARSE REXXPGM name up above IF SETMTRAC */
@@ -57,8 +58,11 @@ EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */ /* @AL */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @AY */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @AY */
-
-Parse arg class profile                                       /* @AZ */
+Parse arg class profile setrsect                              /* @B1 */
+if class = '_SETROPTS' then do                                /* @B1 */
+  editmacr = "RACFEMST"                                       /* @B1 */
+  sect = setrsect                                             /* @B1 */
+  end                                                         /* @B1 */
 Select                                                        /* @AR */
    When (profile = "*") then do                               /* @AF */
       call RACFMSGS ERR17                                     /* @AF */
@@ -145,7 +149,8 @@ ADDRESS ISPEXEC
                  call sez "  "left(subfld,8)": "||,           /* @AB */
                           RACF.segname.subfld.rpt
               end /* dim */
-              call sez "  "COPIES("-",44)
+              if class <> '_SETROPTS' then                    /* @DRK*/
+                call sez "  "COPIES("-",44)
            end /* repeats */
         end /* repeat header */
         else if (RACF.segname.fieldname.REPEATING = "TRUE") then do
@@ -251,10 +256,18 @@ Address ISPExec
     call Goodbye                                              /* @AS */
   end
   Select                                                      /* @A4 */
-     When (SETGDISP = "VIEW") THEN                            /* @A4 */
-          "VIEW DATAID("id") MACRO("EDITMACR")"               /* @AK */
-     When (SETGDISP = "EDIT") THEN                            /* @A4 */
-          "EDIT DATAID("id") MACRO("EDITMACR")"               /* @AK */
+     When (SETGDISP = "VIEW") THEN DO                         /* @A4 */
+          if class = '_SETROPTS' then                         /* @B1 */
+            "VIEW DATAID("id") MACRO("EDITMACR") PARM(sect)"  /* @B1 */
+          else                                                /* @B1 */
+            "VIEW DATAID("id") MACRO("EDITMACR")"             /* @A4 */
+          END
+     When (SETGDISP = "EDIT") THEN DO                         /* @A4 */
+          if class = '_SETROPTS' then                         /* @B1 */
+            "EDIT DATAID("id") MACRO("EDITMACR") PARM(sect)"  /* @B1 */
+          else                                                /* @B1 */
+            "EDIT DATAID("id") MACRO("EDITMACR")"             /* @A4 */
+          END
      Otherwise                                                /* @A4 */
           'browse dataid('id')'                               /* @A4 */
   end                                                         /* @A4 */

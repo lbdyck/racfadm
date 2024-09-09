@@ -15,9 +15,10 @@
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
-^Linec ---------------------------------------------------------------^
+^Linec -----------------------------------------------------------------^
 )Area Linec
 +Line Commands
+%  /  !             +Display line command prompt panel (pop-up)
 %  S  !Show         +List of groups user is connected to
 %  SE !Search       +Analyze user access to general resource profiles
 %  L  !List         +Issue LISTUSER command

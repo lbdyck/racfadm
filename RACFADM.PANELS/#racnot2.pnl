@@ -9,7 +9,6 @@
 %
 !  4)+May want to add/display the below hidden menu options in panel%RACFMENU
 %       99 !Analyze  +Verify ACL             %B !Bookmgr  +RACF manuals
-%                                            %I !Issues   +Known issues
 +
 !  5)+The menu option%Command+(Option C), saves the commands into the user's
 +     dataset allocated to!ISPTABLE+or!ISPPROF+in member%RACFCMDS

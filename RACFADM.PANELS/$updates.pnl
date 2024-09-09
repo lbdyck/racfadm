@@ -9,6 +9,29 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  06 Sep 2024 - V38R5
+     - User Profiles (Option 1)
+       -- Update RACFUSR exec to add / line command for prompt pop-up
+       -- Update RACFUSR exec to use S-O-A attribute values in the
+          the ATT field on panel RACFUSR2
+       -- Add panel RACFMSGU for / line command prompt pop-up
+       -- Update panel #RACCLS2 for new / line command
+       -- Update RACFUSR exec to use Y/N for Rev and TSO panel values
+     - General resources (Option 4)
+       -- Updated exec RACFCLSR, R Refresh line command to check the
+          RACLIST and bypass REFRESH if profile is not RACLISTed.
+          IRRXUTIL must be enabled for this processing.
+       -- Updated exec RACFCLSR to generate message ERR28 if
+          error 'INVALID RACLIST' on REFRESH is received
+       -- Updated exec RACFCLSR to add primary command of SETRopts
+          to list SETROPTS data
+       -- Added Edit macro RACFEMST to position to a SETRopts
+          section.  For example, SETRopts GENERIC
+     - Password (Option 5)
+       -- Updated exec RACFPSWD to change random password length to 8
+     - Other Items
+       -- Update RACFMSGS exec to add message ERR28
+
   29 Aug 2024 - V38R4
      - Update RACFUSR exec to change RS line command (Resume only)
        without resetting the users password

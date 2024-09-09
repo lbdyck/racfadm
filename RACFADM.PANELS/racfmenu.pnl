@@ -350,7 +350,7 @@
       D,'CMD(%RACFDSL)'
       E,'CMD(%RACFENQS)'
       H,'CMD(%RACFHELP)'
-      I,'CMD(%RACFLOG $ISSUES)' /* Known issues (PMRs)  */  /* Hidden */
+ /*   I,'CMD(%RACFLOG $ISSUES)'    Known issues (PMRs)         Hidden */
       L,'CMD(%RACFLOG ISPLOG)'
       M,'CMD(%RACFMSG)'
       O,'CMD(%RACFOMVS)'

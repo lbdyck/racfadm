@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AH  240903  TRIDJK   Chg random password length to 8              */
 /* @AG  200908  TRIDJK   Minor update/fix to 'Passphrase'             */
 /* @AF  200821  TRIDJK   Password phrase support                      */
 /* @AE  200504  JRT      SET vars are stored in PROFILE, line was ASIS*/
@@ -41,9 +42,10 @@ Address ISPExec
   If (SETMADMN = 'YES') then                                  /* @AD */
      panelpw = PANELPE                                        /* @AD */
   If (SETTPSWD = "") THEN                                     /* @AB */
-     pswd = newpswd()                                         /* @AA */
+     pswd = newpswd()||newpswd()                              /* @AH */
   else                                                        /* @AA */
      pswd = SETTPSWD                                          /* @AB */
+/*SAY 'PSWD='pswd*/
   'ADDPOP'
   'DISPLAY PANEL('panelpw')'                                  /* @A2 */
   disprc = RC                                                 /* @A3 */
@@ -92,7 +94,7 @@ EXIT cmd_rc                                                   /* @A4 */
 /*--------------------------------------------------------------------*/
 NEWPSWD:
   /* No vowels, or "V" or "Z" */
-  choices  = 'BCDFGHJKLMNPQRSTWXYbcdfghjklmnpqrstwxy'         /* @A9 */
+  choices  = 'BCDFGHJKLMNPQRSTWXY'                            /* @AH */
   chars.   = ''
   password = ''
   /* Initialize stem variables */
@@ -100,7 +102,7 @@ NEWPSWD:
      chars.n = substr(choices,n,1)
   end
   /* n character password */                                  /* @AF */
-  psize = 6                                                   /* @AF */
+  psize = 8                                                   /* @AH */
   do forever
      pick = random(1,length(choices))
      /* No repeating characters */
@@ -113,7 +115,7 @@ NEWPSWD:
   end
   /* Plug in 1 numeric character */
   number   = random(1,9)
-  place    = random(2,psize)                                  /* @AF */
+  place    = random(2,psize-2)                                /* @AF */
   password = overlay(number,password,place,1)
 RETURN password
 /*--------------------------------------------------------------------*/

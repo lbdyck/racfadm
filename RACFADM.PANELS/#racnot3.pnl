@@ -20,10 +20,10 @@
 +     the option and when!F3+(END) is pressed, exit out of%RACFADM
 +
 ! 10)%RACFDSEP+in the REXX dataset may be updated to change the default date
-+     separator for the USERID and GROUP displays. (default is%/+
++     separator for the USERID and GROUP displays. (default is /)
 +
-+
-+
+! 11)%PROFILE MSGID+should be active in order to detect ICH messages
++     that will generate a SETR RACLIST(class) REFRESH command.
 +
 + \ \ (press%ENTER+to continue) \ \
 )PROC

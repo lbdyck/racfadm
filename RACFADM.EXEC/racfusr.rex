@@ -11,6 +11,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F5  240901  TRIDJK   Use S=Special O=Operations A=Audit in ATT    */
+/* @F4  240830  TRIDJK   / line command will display prompt popup     */
 /* @F3  240829  TRIDJK   RS line command (Resume)                     */
 /* @L1  240826  LBD      Support FILter as alist of Reset             */
 /* @F2  240824  TRIDJK   Use ISO Extended date format                 */
@@ -199,6 +201,7 @@ PANEL07     = "RACFUSR7"   /* Change connection            */ /* @BL */
 PANEL08     = "RACFUSR8"   /* Alter TSO segment            */ /* @BL */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */ /* @BL */
 PANELM3     = "RACFMSG3"   /* Display RACF IRXXUTIL Cmd    */ /* @D4 */
+PANELMU     = "RACFMSGU"   /* Display line Cmd popup       */ /* @F4 */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */ /* @EK */
 SKELETON1   = "RACFUSR2"   /* Save tablea to dataset       */ /* @EK */
 SKELETON2   = "RACFUSR3"   /* Save tableb to dataset       */ /* @EK */
@@ -377,6 +380,10 @@ PROFL:
              "TBEND" TABLEA                                   /* @BE */
              call CREATE_TABLEA                               /* @BE */
         END                                                   /* @AS */
+        When (abbrev("ATT",zcmd,3) = 1) then DO               /* @F5 */
+             if attyn = 'Y' then attyn = 'N'                  /* @F5 */
+             else attyn = 'Y'                                 /* @F5 */
+        END                                                   /* @F5 */
         When (abbrev("SAVE",zcmd,2) = 1) then DO              /* @EK */
              TMPSKELT = SKELETON1                             /* @EK */
              call do_SAVE                                     /* @EK */
@@ -414,6 +421,17 @@ PROFL:
      End /* Select */
      ZCMD = ""; PARM = ""                                     /* @EE */
      'control display save'                                   /* @EE */
+     Select                                                   /* @F4 */
+        when (opta = '/')  then do                            /* @F4 */
+             opta = ''                                        /* @F4 */
+             "control display save"                           /* @F4 */
+             "addpop row(6) column(4)"                        /* @F4 */
+             "DISPLAY PANEL("PANELMU")"                       /* @F4 */
+             "rempop"                                         /* @F4 */
+             "control display restore"                        /* @F4 */
+        end                                                   /* @F4 */
+        otherwise nop                                         /* @F4 */
+     End                                                      /* @F4 */
      Select
         when (opta = 'A')  then call @Addd                    /* @DQ */
         when (opta = 'C')  then call @Chgd                    /* @DQ */
@@ -454,7 +472,7 @@ PROFL:
         when (opta = 'RV') then call Revd
         when (opta = 'S')  then call Disd
         when (opta = 'SE') then do
-             if (revoked <> 'YES') then
+             if (revoked <> ' Y ') then
                 call RACFCLSS user
              else
                 call racfmsgs 'ERR12' msg.1 /* user revoked */
@@ -570,7 +588,7 @@ RESR:
      else                                                     /* @EQ */
         call EXCMD "ALTUSER "user" RESUME PASSWORD("userw")"  /* @F3 */
      if (cmd_rc = 0) then do                                  /* @CA */
-        revoked ='NO'                                         /* @BP */
+        revoked =' N '                                        /* @BP */
         "TBMOD" TABLEA
      end
      else
@@ -587,7 +605,7 @@ RESD:
   if (sure_? = 'YES') then do                                 /* @F3 */
      call EXCMD "ALTUSER "user" RESUME"                       /* @F3 */
      if (cmd_rc = 0) then do                                  /* @F3 */
-        revoked ='NO'                                         /* @F3 */
+        revoked =' N '                                        /* @F3 */
         "TBMOD" TABLEA                                        /* @F3 */
      end                                                      /* @F3 */
      else                                                     /* @F3 */
@@ -604,7 +622,7 @@ REVD:
   if (sure_? = 'YES') then do
      call EXCMD "ALTUSER "user" REVOKE"
      if (cmd_rc = 0) then do                                  /* @CA */
-        revoked ='YES'
+        revoked =' Y '
         "TBMOD" TABLEA
      end
      else
@@ -782,7 +800,7 @@ DELD:
   msg    = 'You are about to delete 'USER
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
-     if (tsouser = 'YES') then do
+     if (tsouser = ' Y ') then do
         msg    = user'.'SETTPROF                              /* @CF */
         if SETTUDSN <> '' then                                /* @CF */
         msg    = msg || ' and 'user'.'SETTUDSN                /* @CF */
@@ -1024,7 +1042,7 @@ GETD:
   datelgn  = ' '
   datepass = ' '
   intpass  = ' '
-  revoked  = 'NO'                                             /* @BP */
+  revoked  = ' N '                                            /* @BP */
   tsouser  = ''
   attr     = ''
   attrspec = 'N'      /* Special:    Y=Yes, N=No */           /* @CH */
@@ -1076,10 +1094,11 @@ GETD:
   if (POS('SPECIAL',attr) > 0)    then ATTRSPEC = "Y"         /* @CH */
   if (POS('OPERATIONS',attr) > 0) then ATTROPER = "Y"         /* @CH */
   if (POS('AUDITOR',attr) > 0)    then ATTRAUDI = "Y"         /* @CH */
+  if (POS('ROAUDIT',attr) > 0)    then ATTRAUDI = "Y"         /* @F5 */
 
   rev  = POS('REVOKED',attr)
   if (rev <> 0) then do                                       /* @BX */
-     revoked = 'YES'                                          /* @BX */
+     revoked = ' Y '                                          /* @BX */
      attr = delstr(attr,rev,7)   /* Del 'REVOKED' */          /* @BX */
   end                                                         /* @BX */
   none  = POS('NONE',attr)                                    /* @A9 */
@@ -1089,6 +1108,7 @@ GETD:
   if (none = 0) then do                                       /* @A9 */
      attr2 = 'YES'                                            /* @AB */
   end                                                         /* @A9 */
+  call @aos                                                   /* @F5 */
   prot  = POS('PROTECTED',attr)                               /* @BX */
   if (prot <> 0) then attr = delstr(attr,prot,9)              /* @BX */
 
@@ -1113,11 +1133,11 @@ GETD:
   end                                                         /* @AN */
 
   parse var details.7 'INSTALLATION-DATA=' data
-  TSOUSER = "NO"                                              /* @BQ */
+  TSOUSER = ' N '                                             /* @BQ */
   do getd_count=8 to getd_max
      if (details.getd_count = 'NO TSO INFORMATION') then leave
      if (details.getd_count = 'TSO INFORMATION') then do
-        tsouser    ='YES'
+        tsouser    =' Y '
         getd_count = getd_count + 1                           /* @CQ */
         do k = getd_count to getd_max                         /* @CQ */
            parse var details.k W1 W2                          /* @CQ */
@@ -1461,7 +1481,7 @@ RETURN                                                        /* @D4 */
 /*--------------------------------------------------------------------*/
 NEWPSWD:                                                      /* @E1 */
   /* No vowels, or "V" or "Z" */                              /* @E1 */
-  choices  = 'BCDFGHJKLMNPQRSTWXY123456789'                   /* @E5 */
+  choices  = 'BCDFGHJKLMNPQRSTWXY'                            /* @E5 */
   chars.   = ''                                               /* @E1 */
   password = ''                                               /* @E1 */
   /* Initialize stem variables */                             /* @E1 */
@@ -1480,12 +1500,10 @@ NEWPSWD:                                                      /* @E1 */
      if (length(password) > (psize-1)) then                   /* @EQ */
         leave                                                 /* @E1 */
   end                                                         /* @E1 */
-  /*
   /* Plug in 1 numeric character */                           /* @E1 */
   number   = random(1,9)                                      /* @E1 */
-  place    = random(2,psize)                                  /* @EQ */
+  place    = random(2,psize-2)                                /* @EQ */
   password = overlay(number,password,place,1)                 /* @E1 */
-  */
 RETURN password                                               /* @E1 */
 /*--------------------------------------------------------------------*/
 /*  Change profile                                               @DT  */
@@ -1563,7 +1581,7 @@ RETURN password                                               /* @E1 */
   end                                                         /* @DL */
   call @chkattr                                               /* @D4 */
   /*- Authorize logon and account to default group  -*/       /* @D4 */
-  if (tsouser = 'YES') then do                                /* @D4 */
+  if (tsouser = ' Y ') then do                                /* @D4 */
      cmd = "PE "tsoacct" CLASS(ACCTNUM) ACC(READ)",           /* @D4 */
            "ID("defgrp")"                                     /* @D4 */
      call excmd cmd                                           /* @D4 */
@@ -1607,15 +1625,15 @@ RETURN                                                        /* @D4 */
      call racfmsgs ERR20 msg.1                                /* @X1 */
      return                                                   /* @D4 */
   end                                                         /* @D5 */
-  tsouser = 'NO'                                              /* @D4 */
+  tsouser = ' N '                                             /* @D4 */
   do seg=1 to racf.0                                          /* @D4 */
      if (racf.seg = 'TSO') then                               /* @D4 */
-        tsouser = 'YES'                                       /* @D4 */
+        tsouser = ' Y '                                       /* @D4 */
   end                                                         /* @D4 */
   if (racf.base.revokefl.1 = 'TRUE') then                     /* @D4 */
-     revoked = 'YES'                                          /* @D4 */
+     revoked = ' Y '                                          /* @D4 */
   else                                                        /* @D4 */
-     revoked = 'NO'                                           /* @D4 */
+     revoked = ' N '                                          /* @D4 */
   if (racf.base.special.1 = 'TRUE') |,                        /* @D4 */
      (racf.base.oper.1    = 'TRUE') |,                        /* @D4 */
      (racf.base.grpacc.1  = 'TRUE') |,                        /* @D4 */
@@ -1626,7 +1644,28 @@ RETURN                                                        /* @D4 */
      attr2 = 'YES'                                            /* @D4 */
   else                                                        /* @D4 */
      attr2 = 'NO'                                             /* @D4 */
+  attrspec = 'N';attraudi = 'N';attroper = 'N';               /* @F5 */
+  if (racf.base.special.1 = 'TRUE') then attrspec = 'Y'       /* @F5 */
+  if (racf.base.auditor.1 = 'TRUE') then attraudi = 'Y'       /* @F5 */
+  if (racf.base.roaudit.1 = 'TRUE') then attraudi = 'Y'       /* @F5 */
+  if (racf.base.oper.1    = 'TRUE') then attroper = 'Y'       /* @F5 */
+  call @aos                                                   /* @F5 */
 RETURN                                                        /* @D4 */
+/*--------------------------------------------------------------------*/
+/*  Substitute attribute values AOS for ATT YES/NO               @F5  */
+/*--------------------------------------------------------------------*/
+@AOS:                                                         /* @F5 */
+  if attyn = 'Y' then                                         /* @F5 */
+    RETURN                                                    /* @F5 */
+  temp = ''                                                   /* @F5 */
+  if attrspec = 'Y' then      /* Special:    Y=Yes, N=No */   /* @F5 */
+    temp = 'S  '                                              /* @F5 */
+  if attroper = 'Y' then      /* Operations: Y=Yes, N=No */   /* @F5 */
+    temp = left(temp,1)||'O'                                  /* @F5 */
+  if attraudi = 'Y' then      /* Auditor:    Y=Yes, N=No */   /* @F5 */
+    temp = left(temp,2)||'A'                                  /* @F5 */
+  attr2 = temp                                                /* @F5 */
+RETURN                                                        /* @F5 */
 /*--------------------------------------------------------------------*/
 /*  Save table to dataset                                        @EK  */
 /*--------------------------------------------------------------------*/

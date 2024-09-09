@@ -2,6 +2,7 @@
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - General Resources+)\-\%Tutorial
 %Command ===>_ZCMD
@@ -14,6 +15,7 @@
 %  Only text        +Only display rows with text string
 %  Reset            +Redisplay all rows and sort first column
 %  SAve             +Save display to a dataset
+%  SETRopts         +List SETROPTS data using IRRXUTIL@(admin RACF API)
 +
 +Line Commands
 %  S  !Show         +Select a class from the list of active classes
