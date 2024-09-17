@@ -904,7 +904,7 @@ GETD:
            memcls        = subword(getd_temp,1,1)
            If (SETMADMN = "YES") then                         /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,      /* @AL */
-                         "ÝA¨Add,ÝR¨Remove" /* ÝM¨Member"        @C7 */
+                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member"         /* @C7 */
            else                                               /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list"                    /* @AL */
         end
@@ -938,7 +938,7 @@ GETD:
      if (OTHER_LIST <> '') then do                            /* @CB */
       if (SETMADMN = "YES") then                              /* @CB */
          SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,            /* @CB */
-                    "ÝA¨Add,ÝR¨Remove,ÝO¨Other" /* ÝM¨Member    @CB */
+                    "ÝA¨Add,ÝR¨Remove,ÝO¨Other,ÝM¨Member"     /* @CB */
       else                                                    /* @CB */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝO¨Other"           /* @CB */
      end                                                      /* @CB */

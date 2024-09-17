@@ -7,8 +7,9 @@
 +\-\(%RACFADM - General Resources+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+PROFILE:_PROFILE                                         +$TYPE
++PROFILE:_PROFILE                                                            $Z
 +CLASS:  _RCLASS    +
++TYPE:   $TYPE    +
 +UACC:   $UACC    { (Default access)     +OWNER:  $OWNER   { (Owner of profile)
 +WARNING:$WARN    { (YES/NO)             +AUDIT:  $AUDIT
 +DATA:   $DATA
@@ -18,9 +19,9 @@
 %S    Member
 %-------------------------------------------------------------------------------
 )MODEL
-_Z+  $Z                +
+_Z+  $Z                             +
 )INIT
-  .ZVARS   = '(OPTB ID)'
+  .ZVARS   = '(SCIND OPTB ID)'
   .CURSOR  = OPTB
   .HELP    = #RACMENU
   &ZCMD    = ' '
@@ -36,6 +37,8 @@ _Z+  $Z                +
         IF (&SROW ^= 0)
            &OPTB = A
   VER (&OPTB,LIST,A,R)
+)FIELD
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

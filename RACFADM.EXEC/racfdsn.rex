@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CS  240915  TRIDJK   Check '*' for TYPE=GEN before ADDSD command  */
+/* @CR  240915  TRIDJK   ERR29,ERR30: Not catl'd;User|Grp not defined */
 /* @CQ  240819  TRIDJK   Add ERASE/NOERASE options                    */
 /* @CP  240730  TRIDJK   Add DFP to the CMDPRM for LISTDSD            */
 /* @CO  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
@@ -415,18 +417,33 @@ ADDD:
   xtr = ' '
   if (data <> ' ') then
      xtr = xtr "DATA('"data"')"
+  if index(dataset,'*') > 0 then                              /* @CS */
+    type = 'GEN'                                              /* @CS */
+  else                                                        /* @CS */
+    type = ' '                                                /* @CS */
   call EXCMD "ADDSD '"DATASET"' OWN("OWNER")",
              "UACC("UACC")" type aud xtr era                  /* @CQ */
-  if (cmd_rc > 0) then do                                     /* @BE */
-     CALL racfmsgs 'ERR01' /* Add failed */                   /* @B6 */
-     return
-  end
+  if (cmd_rc <> 0) then do                                    /* @CR */
+    if (subword(msg.1,1,1)) = 'ICH09005I' then do             /* @CR */
+      call racfmsgs 'ERR29' /* Dataset not cataloged */       /* @CR */
+      return                                                  /* @CR */
+      end                                                     /* @CR */
+    if (subword(msg.1,1,1)) = 'ICH09006I' then do             /* @CR */
+      call racfmsgs 'ERR30' /* User or Group not defined */   /* @CR */
+      return                                                  /* @CR */
+      end                                                     /* @CR */
+    call racfmsgs "ERR01" /* Add failed */                    /* @CR */
+    return                                                    /* @CR */
+    end
   x = msg('OFF')
   call EXCMD "PERMIT '"DATASET"' ID("USERID()")",
              "DELETE" TYPE
   x = msg('ON')
   if (from <> ' ') then do
-     fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"
+     if type = 'GEN' then                                     /* @JK */
+       fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"       /* @JK */
+     else                                                     /* @JK */
+       fopt = "FROM('"FROM"') FCLASS(DATASET)"                /* @JK */
      call EXCMD "PERMIT '"DATASET"'" TYPE FOPT
      if (cmd_rc > 0) then                                     /* @BE */
         CALL racfmsgs 'ERR04' /* Permit Warn */               /* @B6 */
@@ -504,9 +521,9 @@ DELD:
   Sure_? = Confirm_request(msg)
   if (sure_? = 'YES') then do
      call EXCMD "DELDSD '"DATASET"'" type
+     if (type = ' ') then                                     /* @JK */
+        type = 'DISCRETE'     /* Need for TBDELETE */         /* @JK */
      if (cmd_rc > 0) then do                                  /* @BE */
-        if (type = ' ') then
-           type = 'DISCRETE'
         CALL racfmsgs "ERR02" /* Del DSD failed */            /* @BG */
         return                                                /* @BG */
      end
@@ -873,7 +890,10 @@ ADDP:
      idopt = 'ID('ID') ACCESS('ACC')'
   fopt = ' '
   if (from <> ' ') then do
-     fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"
+     if type = 'GEN' then                                     /* @JK */
+       fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"       /* @JK */
+     else                                                     /* @JK */
+       fopt = "FROM('"FROM"') FCLASS(DATASET)"                /* @JK */
      rb   = 'YES'             /* Cause table rebuild */
   end
   call EXCMD "PERMIT '"DATASET"'" idopt type fopt
@@ -1097,7 +1117,7 @@ CREATE_TABLEA:
      END                                                      /* @BZ */
 
      dataset = SUBWORD(temp,1,1)
-     t       = INDEX(temp,g)
+     t       = INDEX(temp,'(G)')
      if (t > 0) then
         type = 'GEN'
      else do

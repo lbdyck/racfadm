@@ -10,14 +10,15 @@
 +Add RACF%&RCLASS +permit: %PERMIT+command
 +
 +CLASS  %===>_RCLASS  +
-+PROFILE%===>_PROFILE                            +$TYPE
++PROFILE%===>_PROFILE                                                        $Z
++TYPE   %===>$TYPE
 +
 +ID     %===>_ID      { (User or group)
 +UACC   %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +
 {and / or
 +
-+FROM   %===>_FROM                                   + (Existing profile)
++FROM   %===>_FROM                                        $Z +(Existing profile)
 +
 {If%FROM{is set to a generic profile name then the%ACCESS LIST{is copied.
 +
@@ -25,9 +26,9 @@
 +
 +
 +
-+
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
+  .ZVARS   = '(SCIND1 SCIND2)'
   .CURSOR = ID
   .HELP   = #RACCLSA
   IF (&ID = NONE)
@@ -46,4 +47,7 @@
      VER (&ID,NB)
   IF (&FROM = ' ')
      VER (&ID,NB)
+)FIELD
+  FIELD(PROFILE) IND(SCIND1,'<>') LEN(246)
+  FIELD(FROM)    IND(SCIND2,'<>') LEN(246)
 )END

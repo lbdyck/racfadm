@@ -5,7 +5,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @AI  240903  TRIDJK   Added ERR28 msg, 'Can't refresh class'       */
+/* @AK  240916  TRIDJK   Added ERR33,34,35,36 msgs for Connect        */
+/* @AJ  240916  TRIDJK   Added ERR29,30 msgs, Not catlg, Not defined  */
+/* @AI  240903  TRIDJK   Added ERR28 msg, Can't refresh class         */
 /* @AH  200913  GA       Add message for ring and certificate error   */
 /* @AG  200913  LBD      Accept message from command (msg.1)          */
 /* @AF  200423  RACFA    Move PARSE REXXPGM name up above IF SETMTRAC */
@@ -164,6 +166,30 @@ ADDRESS ISPEXEC                                               /* @A4 */
           racfsmsg = 'Can''t refresh' class                   /* @AI */
           racflmsg = 'Class is not RACLISTed'                 /* @AI */
      end                                                      /* @AI */
+     WHEN (code = 'ERR29') then do                            /* @AJ */
+          racfsmsg = 'Not cataloged'                          /* @AJ */
+          racflmsg = 'Dataset not found in catalog'           /* @AJ */
+     end                                                      /* @AJ */
+     WHEN (code = 'ERR30') then do                            /* @AJ */
+          racfsmsg = 'User/Group not defined'                 /* @AJ */
+          racflmsg = 'User or Group not defined to RACF'      /* @AJ */
+     end                                                      /* @AJ */
+     when (code = 'ERR33') then do                            /* @AK */
+          racfsmsg = 'Connect failed'                         /* @AK */
+          racflmsg = 'Unable to connect to group'             /* @AK */
+     end                                                      /* @AK */
+     when (code = 'ERR34') then do                            /* @AK */
+          racfsmsg = 'Check connect results'                  /* @AK */
+          racflmsg = 'Please verify connect to group'         /* @AK */
+     end                                                      /* @AK */
+     when (code = 'ERR35') then do                            /* @AK */
+          racfsmsg = 'Connect failed'                         /* @AK */
+          racflmsg = 'Unable to add the connect'              /* @AK */
+     end                                                      /* @AK */
+     when (code = 'ERR36') then do                            /* @AK */
+          racfsmsg = 'Connect remove failed'                  /* @AK */
+          racflmsg = 'Unable to remove the connect'           /* @AK */
+     end                                                      /* @AK */
      otherwise nop
   End
   if message /= '' then                                       /* @AG */

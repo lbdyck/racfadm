@@ -9,6 +9,26 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  17 Sep 2024 - V38R6
+     - General resources (Option 4)
+       -- Updated panels RACFCLS.B,C,E,F and RACFCLS.2,3,4,5,6,7,8
+          to use 246 byte Profile name fields
+       -- Updated panel #RACCLS2 to document line command
+          M - Member (Addmen/Delmem for resource group profile)
+       -- Updated exec RACFCLSR to add description field to tablea
+          and panel RACFCLSR.  Add *Action status.
+       -- Updated exec RACFCLSR to add primary command CLASSes
+          to View the RACF General Resource Classes.
+       -- Added member $CLASSES to for new primary command
+          CLASSes
+     - User Profiles (Option 1)
+       -- Updated exec RACFUSR to add error messages ERR33-36 for
+          connect errors.
+     - Dataset Profiles (Option 3)
+       -- Updated exec RACFDSN to add error messages:
+           ERR29 - Data set is not cataloged
+           ERR30 - User or Group not defined
+
   06 Sep 2024 - V38R5
      - User Profiles (Option 1)
        -- Update RACFUSR exec to add / line command for prompt pop-up

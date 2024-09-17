@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F6  240917  TRIDJK   Added ERR33,34,35,35 messages for Connect    */
 /* @F5  240901  TRIDJK   Use S=Special O=Operations A=Audit in ATT    */
 /* @F4  240830  TRIDJK   / line command will display prompt popup     */
 /* @F3  240829  TRIDJK   RS line command (Resume)                     */
@@ -1156,7 +1157,7 @@ GETD:
   end  /* Do count */
 RETURN
 /*--------------------------------------------------------------------*/
-/*  Change permit option                                              */
+/*  Change connection to group                                        */
 /*--------------------------------------------------------------------*/
 CHGP:
   If (id = 'NONE') then
@@ -1164,15 +1165,14 @@ CHGP:
   "DISPLAY PANEL("PANEL07")"                                  /* @BL */
   if (rc > 0) then
      return
-  call EXCMD "PE "USER" CLASS("RCLASS") ID("ID")",
-             "ACC("ACC")" TYPE
+  call EXCMD "CONNECT ("user") GROUP("id") AUTH("acc")"       /* @F6 */
   if (cmd_rc = 0) then                                        /* @CA */
      "TBMOD" TABLEB
   else
-     Call racfmsgs 'ERR03' msg.1 /* permit failed */          /* @X1 */
+     Call racfmsgs 'ERR33' msg.1 /* permit failed */          /* @F6 */
 RETURN
 /*--------------------------------------------------------------------*/
-/*  Add permit option                                                 */
+/*  Add connection to group                                           */
 /*--------------------------------------------------------------------*/
 ADDP:
   new = 'NO'
@@ -1200,13 +1200,13 @@ ADDP:
   end
   else do
      if (from <> ' ') then
-        call racfmsgs 'ERR04' msg.1 /* Permit Warning/Failed */
+        call racfmsgs 'ERR34' msg.1  /* Connect Warning/Failed   @F6 */
      else
-        call racfmsgs 'ERR05' msg.1 /* Permit Failed */       /* @X1 */
+        call racfmsgs 'ERR35' msg.1  /* Connect Failed */     /* @F6 */
   end
 RETURN
 /*--------------------------------------------------------------------*/
-/*  Delete permit option                                              */
+/*  Delete connection from group                                      */
 /*--------------------------------------------------------------------*/
 DELP:
   if (id = 'NONE') then
@@ -1218,7 +1218,7 @@ DELP:
      if (cmd_rc = 0) then                                     /* @CA */
         "TBDELETE" TABLEB
      else
-        call racfmsgs 'ERR06'  msg.1   /* Permit Failed */    /* @X1 */
+        call racfmsgs 'ERR36' msg.1  /* Remove Failed */      /* @F6 */
   end
 RETURN
 /*--------------------------------------------------------------------*/

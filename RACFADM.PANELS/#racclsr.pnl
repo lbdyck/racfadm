@@ -16,6 +16,7 @@
 %  Reset            +Redisplay all rows and sort first column
 %  SAve             +Save display to a dataset
 %  SETRopts         +List SETROPTS data using IRRXUTIL@(admin RACF API)
+%  CLASSes          +View RACF General Resource Classes
 +
 +Line Commands
 %  S  !Show         +Select a class from the list of active classes

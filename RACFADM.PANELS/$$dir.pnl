@@ -5,6 +5,7 @@
   Member      Subject                   Description
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
+ $CLASSES  Information    Document general resource classes
  $DEFSETG  Settings       Default site settings for new users
  $ISSUES   Problems       Document all reported issues
  $REPORTS  Reports        ICETOOL/DSMON reports

@@ -9,7 +9,8 @@
 %
 +Change+RACF%&RCLASS +profile: %RALTER+command
 +
-+PROFILE%===>$PROFILE                                       +$TYPE
++PROFILE%===>$PROFILE                                                        $Z
++TYPE   %===>$TYPE    +
 +
 {Change one or more of the fields below:
 +
@@ -25,10 +26,9 @@
 +
 {Previous%AUDIT{values are lost if either of the above audit fields is updated
 +
-+
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
-  .ZVARS  = '(WARN)'
+  .ZVARS  = '(SCIND WARN)'
   .CURSOR = OWNER
   .HELP   = #RACCLSA
   &FAIL   = TRUNC(&FAIL,')')
@@ -39,4 +39,6 @@
   VER (&FAIL,LIST,EXECUTE,READ,ALTER,CONTROL,UPDATE)
   VER (&SUCC,LIST,EXECUTE,READ,ALTER,CONTROL,UPDATE)
   VER (&WARN,NB,LIST,YES,NO)
+)Field
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
 )END

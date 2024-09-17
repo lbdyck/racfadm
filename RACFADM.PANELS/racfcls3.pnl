@@ -2,21 +2,22 @@
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)   JUST(LEFT)   HILITE(USCORE)
    {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
 )BODY EXPAND(\\)
 +\-\(%RACFADM - General Resources+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
 +Add RACF%_RCLASS  +profile: %RDEFINE+command and optionally a%PERMIT+
 +
-+PROFILE%===>_PROFILE                                         {(Enter%NEW{name)
++PROFILE%===>_PROFILE                                       @Z {(Enter%NEW{name)
 +TYPE   %===>_TYPE    { (Enter%NEW{type)
 +
 +OWNER  %===>_OWNER   { (Owner of profile)
 +UACC   %===>_UACC    { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +WARNING%===>_Z  {      (Warn or fail access, YES/NO)
 +DATA   %===>_DATA
-+
-+FROM   %===>_FROM                     +%===>_FCLASS   { (Profile and Class)
++FROM   %===>_FROM                                                           @Z
++       %===>_FCLASS  { (Class)
 +
 {If%FROM{is set to a generic profile name then the%ACCESS LIST{from this
 {profile is added to the new profile with a permit command immediately.
@@ -27,7 +28,7 @@
 +
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
-  .ZVARS  = '(WARN)'
+  .ZVARS  = '(SCIND1 WARN SCIND2)'
   .CURSOR = PROFILE
   .HELP   = #RACCLSA
   &FCLASS = &RCLASS
@@ -54,4 +55,7 @@
   VER (&FAIL,LIST,EXECUTE,READ,ALTER,CONTROL,UPDATE)
   VER (&SUCC,LIST,EXECUTE,READ,ALTER,CONTROL,UPDATE)
   VER (&WARN,NB,LIST,YES,NO)
+)FIELD
+  FIELD(PROFILE) IND(SCIND1,'<>') LEN(246)
+  FIELD(FROM)    IND(SCIND2,'<>') LEN(246)
 )END

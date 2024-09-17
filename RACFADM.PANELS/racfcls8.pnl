@@ -14,9 +14,9 @@
 %S  ~Profile
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ $Z                                                                         +
+_Z+ $Z                                                                       $Z
 )INIT
-  .ZVARS   = '(OPTA PROFILE)'
+  .ZVARS   = '(OPTA PROFILE SCIND)'
   .HELP    = #RACCLS8
   IF (&SAMT = ' ')
       &SAMT = &ZSCED
@@ -31,6 +31,8 @@ _Z+ $Z                                                                         +
   VER (&OPTA,LIST,S,L)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT PROFILE')
+)FIELD
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

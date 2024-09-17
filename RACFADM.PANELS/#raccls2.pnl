@@ -24,6 +24,7 @@
 %  C  !Change       +Change profile attributes@(admin)
 %  A  !Add          +Add profile to RACF@(admin)
 %  R  !Remove       +Remove profile from RACF@(admin)
+%  M  !Member       +Addmen/Delmem for resource group profile@(admin)
 )PROC
   &ZUP     = #RACCLS2
 )END

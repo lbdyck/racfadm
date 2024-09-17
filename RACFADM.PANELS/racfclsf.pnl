@@ -9,7 +9,7 @@
 +\-\(%RACFADM - Authorization+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+PROFILE:$PROFILE
++PROFILE:$PROFILE                                                            @Z
 +CLASS:  $RCLASS   +
 +UACC:   $UACC    { (Default access)     +OWNER: $OWNER   { (Owner of profile)
 +WARNING:$WARN    { (YES/NO)             +AUDIT: $AUDIT
@@ -20,14 +20,15 @@
 )MODEL
 $Z           #Z
 )INIT
-  .ZVARS = '(SCIND ID ACC)'
+  .ZVARS = '(SCIND1 SCIND2 ID ACC)'
   .HELP  = #RACMENU
   &ZCMD  = ' '
   IF (&SAMT = ' ')
       &SAMT = &ZSCED
 )PROC
 )FIELD
-  FIELD(DATA) IND(SCIND,'<>') LEN(255)
+  FIELD(PROFILE) IND(SCIND1,'<>') LEN(246)
+  FIELD(DATA)    IND(SCIND2,'<>') LEN(255)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

@@ -2,11 +2,12 @@
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)    HILITE(USCORE)
    {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
 )BODY EXPAND(\\)
 +\-\(%RACFADM - Authorization+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+PROFILE%===>_PROFILE
++PROFILE%===>_PROFILE                                                        @Z
 +CLASS  %===>_RCLASS  +
 +USERID %===>_USER    +
 +
@@ -16,10 +17,13 @@
 {Enter the information above and press enter to start the analysis.
 +
 )INIT
+  .ZVARS  = '(SCIND)'
   .HELP   = #RACMENU
   .CURSOR = PROFILE
   &ZCMD   = ' '
 )PROC
   VER (&PROFILE,NB)
   VER (&RCLASS,NB)
+)FIELD
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
 )END

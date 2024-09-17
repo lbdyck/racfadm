@@ -11,11 +11,11 @@
 {This function will add a member to this profile.
 +
 +CLASS  %===>$RCLASS  +
-+PROFILE%===>$PROFILE                            +
++PROFILE%===>$PROFILE                                                        $Z
 +
 +
 +
-+MEMBER %===>_ID               { (Member to be added)
++MEMBER %===>_ID                                      {(Member to be added)
 +
 +
 +
@@ -28,6 +28,7 @@
 +
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
+  .ZVARS  = '(SCIND)'
   .CURSOR = ID
   .HELP   = #RACMENU
   IF (&ID = NONE)
@@ -35,4 +36,6 @@
   &OLDID = &ID
 )PROC
   VER (&ID,NB)
+)FIELD
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
 )END

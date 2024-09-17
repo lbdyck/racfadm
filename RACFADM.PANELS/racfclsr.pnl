@@ -13,12 +13,12 @@
 %
 +SELECT: ¬SELCMDS                                                              ¬
 %
-%S  ~Class
+%S  ~Class          ~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ $Z        #Z                +
+_Z+ $Z        #Z    $Z
 )INIT
-  .ZVARS   = '(OPTA CLASS ACTION)'
+  .ZVARS   = '(OPTA CLASS ACTION CDESC)'
   .HELP    = #RACCLSR
   &ZCMD    = ' '
   IF (&SAMT = ' ')

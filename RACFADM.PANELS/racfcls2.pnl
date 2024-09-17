@@ -23,7 +23,7 @@
 )MODEL CLEAR(OPTA)
 _Z+]Z                                                                        @Z
 )INIT
-  .ZVARS   = '(OPTA PROFILE SCINP)'
+  .ZVARS   = '(OPTA PROFILE SCIND)'
   .HELP    = #RACCLS2
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -48,8 +48,8 @@ _Z+]Z                                                                        @Z
         VER (&OPTA,LIST,S,L,O)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT PROFILE')
-)Field
-  FIELD(PROFILE) IND(SCINP,'<>') LEN(255)
+)FIELD
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */
