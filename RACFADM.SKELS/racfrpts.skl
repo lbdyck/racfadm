@@ -1441,8 +1441,18 @@
 )ENDSEL
 )SEL &REC = 207A | &REC = ALL
 //A207CNTL DD  *
-  SORT    FIELDS=(10,8,CH,A)
-  INCLUDE COND=(5,4,CH,EQ,C'0206')
+  INCLUDE COND=(5,4,CH,EQ,C'0207')
+  SORT FIELDS=(10,8,CH,A,266,32,CH,A)
+  INREC IFTHEN=(WHEN=INIT,
+         BUILD=(001,004,                 - Record descriptor word
+                005,005,                 - Record Type (0207)
+                010,009,                 - User ID
+                015,247,                 - Certificate name
+                266,032,                 - Original Label
+                266,032,TRAN=LTOU)),     - Folded certificate label
+  IFTHEN=(WHEN=INIT,FINDREP=(STARTPOS=298,
+          IN=(C'&&',C'%',C';',C',',C'\',C'*'),OUT=(C'_'))),
+  IFTHEN=(WHEN=INIT,OVERLAY=(298:298,32,SQZ=(SHIFT=LEFT,MID=C'_')))
   OPTION  VLSHRT
 )ENDSEL
 )SEL &REC = 220  | &REC = ALL
@@ -1580,15 +1590,15 @@
 //D500CNTL DD  *
   SORT    FIELDS=(257,8,CH,A,10,246,CH,A)
   INCLUDE COND=(5,4,CH,EQ,C'0500',AND,
-                 664,4,CH,EQ,C'YES')
+                 341,8,CH,NE,C'NONE',AND,
+                 257,8,CH,NE,C'DIGTCERT')
   OPTION  VLSHRT
 )ENDSEL
 )SEL &REC = 500E | &REC = ALL
 //E500CNTL DD  *
   SORT    FIELDS=(257,8,CH,A,10,246,CH,A)
   INCLUDE COND=(5,4,CH,EQ,C'0500',AND,
-                 341,8,CH,NE,C'NONE',AND,
-                 257,8,CH,NE,C'DIGTCERT')
+                 664,4,CH,EQ,C'YES')
   OPTION  VLSHRT
 )ENDSEL
 )SEL &REC = 503  | &REC = ALL

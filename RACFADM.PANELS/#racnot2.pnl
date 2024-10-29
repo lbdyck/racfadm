@@ -7,8 +7,8 @@
 %Tutorial+\-\(%RACFADM - Installation Notes - 2 of 3+)\-\%Tutorial
 %Command ===>_ZCMD
 %
-!  4)+May want to add/display the below hidden menu options in panel%RACFMENU
-%       99 !Analyze  +Verify ACL             %B !Bookmgr  +RACF manuals
+!  4)%PROFILE MSGID+should be active in order to detect ICH messages
++     that will generate a SETR RACLIST(class) REFRESH command.
 +
 !  5)+The menu option%Command+(Option C), saves the commands into the user's
 +     dataset allocated to!ISPTABLE+or!ISPPROF+in member%RACFCMDS
@@ -29,3 +29,5 @@
 )PROC
   &ZCONT   = #RACNOT3
 )END
+!  4)+May want to add/display the below hidden menu options in panel%RACFMENU
+%       99 !Analyze  +Verify ACL             %B !Bookmgr  +RACF manuals

@@ -11,8 +11,10 @@
  $REPORTS  Reports        ICETOOL/DSMON reports
  $STNDARD  Standards      Document coding and design
  $UPDATES  Updates        Document version/updates
- #RACACC   User/Group     DSN/Resource Access Report
+ #RACACC   Tutorial       DSN/Resource Access Report
  #RACACKN  Tutorial       Acknowledgements
+ #RACCERA  Tutorial       Add new certificate
+ #RACCERG  Tutorial       Generate a Digital Certificate
  #RACCERT  Tutorial       Digital certificates
  #RACCLSA  Tutorial       Add/Change class profile
  #RACCLSR  Tutorial       List classes (show, refresh)
@@ -60,7 +62,7 @@
  #RACPSWH  Tutorial       Password/Phrase clear history
  #RACPUB1  Tutorial       RACF publications and downloads (1 of 2)
  #RACPUB2  Tutorial       RACF educational websites (2 of 2)
- #RACRING  Rings          Digital rings
+ #RACRING  Tutorial       Digital rings
  #RACRPT1  Tutorial       RACF reports (1 of 2)
  #RACRPT2  Tutorial       RACF reports (2 of 2)
  #RACSET1  Tutorial       Settings - Customize options (1 of 4)
@@ -75,6 +77,7 @@
  ORLIST    TSO Help       Unix Dir/File Security, like RLIST
  RACFACC   User/Group     DSN/Resource Access Report Prompt (pop-up)
  RACFCERA  Certificates   Add new certificate
+ RACFCERG  Certificates   Generate a Digital Certificate
  RACFCERT  Certificates   Digital certificates, menu opt CA
  RACFCLSB  Class          List members
  RACFCLSC  Class          Add class
@@ -92,6 +95,9 @@
  RACFCLS8  Class          List classes and profiles
  RACFCMDS  Commands       Execute TSO RACF commands
  RACFDISP  Display        GrpTree/RACFdb/Enque/Chgs/Issues/ISPLog/Stds
+ RACFDSC5  Dataset        Show groups and access (Conditional)
+ RACFDSC6  Dataset        Change access (Conditional)
+ RACFDSC7  Dataset        Add access (Conditional)
  RACFDSN1  Dataset        Set filter, menu option 3
  RACFDSN2  Dataset        List profiles and types
  RACFDSN3  Dataset        Add profile

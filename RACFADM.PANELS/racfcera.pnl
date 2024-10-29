@@ -15,7 +15,7 @@
 +  OWNER%===>@OWNERA  +                        {(cert-owner|CERTAUTH|SITE)
 +  TRUST%===>_TRUSTA   +                       {(TRUST|NOTRUST|HIGHTRUST)
 +  LABEL%===>¬LABELA                          +{(Certificate LABEL)
-+  PWD  %===>¬PWDA                                          @Z {(Cert.PASSWORD)
++  PSWD %===>¬PWDA                                          @Z {(Cert.PASSWORD)
 +  PKDS %===>_PKDSA                                         @Z {(PKDS-LABEL|*)
 +
 +
@@ -29,7 +29,7 @@
 +
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
-  .HELP    = #RACMENU
+  .HELP    = #RACCERA
   .ZVARS   ='(SCIND1,SCIND2)'
   IF (&OWNERA = '')
     &OWNERA = &TYPE

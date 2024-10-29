@@ -10,16 +10,16 @@
 +  Below are websites to%RACF publications and downloads,+cut and paste
 +  the URL into a browser.
 +
-!    z/OS Internet Library
-@      https://www-01.ibr.com/servers/resourcelink/svc00100.nsf/
-@            pages/zosinternetLibrary
+!    z/OS 3.1 Publications
+@      https://www.ibm.com/docs/en/zos/
+@           3.1.0?topic=documentation-pdf-files-zos-310-library
 +
-!    z/OS Security Server RACF PDF Collection
-@      https://www.ibm.com/support/knowledgecenter/SSLTBW_2.4.0/
-@           com.ibm.zos.v2r4.ich
+!    z/OS 3.1 Security Server RACF
+@      https://www.ibm.com/docs/en/zos/
+@           3.1.0?topic=zos-security-server-racf
 +
-!    IBM Redbooks+(type%RACF+in the New Search box)
-@      https://www.redbooks.ibm.com/Redbooks.nsf/searchsite?SearchView
+!    Security on z/OS, IBM
+@      https://www.ibm.com/docs/en/zos-basic-skills?topic=security-zos
 +
 !    z/OS GitHub RACF Download Collection
 @      https://github.com/IBM/IBM-Z-zOS/tree/master/zOS-RACF/Downloads

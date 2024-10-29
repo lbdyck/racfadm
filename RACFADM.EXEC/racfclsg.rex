@@ -66,7 +66,7 @@
 /* @AK  200223  RACFA    Added primary cmds SORT, LOCATE, ONLY, RESET */
 /* @AJ  200223  RACFA    Del 'address TSO "PROFILE MSGID"', not needed*/
 /* @AI  200222  RACFA    Allow placing cursor on row and press ENTER  */
-/* @AH  200221  RACFA    Removed "G = '(G)'", not referenced          */
+/* @AH  241024  TRIDJK   Restored "G = '(G)'", referenced             */
 /* @AG  200221  RACFA    Make 'ADDRESS ISPEXEC' defualt, reduce code  */
 /* @AF  200220  RACFA    Fixed displaying all RACF commands           */
 /* @AE  200220  RACFA    When SETMTRAC=YES, then TRACE R, was I       */
@@ -1265,6 +1265,7 @@ CREATE_TABLEA:
      call SHOWCMD                                             /* @AF */
   if (SETGSTAP <> "") THEN                                    /* @BN */
      INTERPRET "RECNUM = var.0*."SETGSTAP"%1"                 /* @BN */
+  g= '(G)'                                                    /* @AH */
   Do i = 1 to var.0
      temp    = var.i
      profile = SUBWORD(temp,1,1)

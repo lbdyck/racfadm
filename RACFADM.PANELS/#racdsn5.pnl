@@ -20,9 +20,9 @@
 %  S  !Show         +List user/group with permits for this profile
 %  L  !List         +Issue LISTUSER/LISTGRP command
 %  P  !Profile      +List user/group profile using IRRXUTIL@(admin RACF API)
-%  C  !Change       +Change RACF permit@(admin)
-%  A  !Add          +Define a new profile@(admin)
-%  R  !Remove       +Remove profile from RACF@(admin)
+%  C  !Change       +Change RACF access@(admin)
+%  A  !Add          +Add RACF access@(admin)
+%  R  !Remove       +Remove RACF access@(admin)
 )PROC
   &ZUP     = #RACDSN5
 )END

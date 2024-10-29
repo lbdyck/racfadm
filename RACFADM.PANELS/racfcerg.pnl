@@ -1,0 +1,67 @@
+)ATTR DEFAULT(%+_)
+   $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Generate Certificate )\-\
+%Command ===>_ZCMD
+%
++    Owner  %===>_OWNERG  +                            {(cert-own|SITE|CERTAUTH)
++    Label  %===>¬LABELG                          +    {(Certificate Label)
++
+%  Subjects Distinguished Name:
++    Name   %===>¬NAMEG                              @Z {Common Name
++    Title  %===>¬TITLEG                             @Z {Title
++    Unit   %===>¬UNITG                              @Z {Organizational unit
++    Org    %===>¬ORGG                               @Z {Organization
++    City   %===>¬CITYG                              @Z {Locality
++    State  %===>¬STG                                @Z {State / Province
++    Country%===>¬CTRYG                              @Z {Country
++
+%  Certificate Info:
++    St Date%===>¬STDTG              +                 {yyyy-mm-dd}hh:mm:ss
++    En Date%===>¬ENDTG              +                 {yyyy-mm-dd}hh:mm:ss
++    SigCert%===>¬SIGWG                           +    {(Signing Cert Label)
++    SigType%===>_SIGTG   +                            {(SITE|CERTAUTH)
++
+%  OtherInfo:
++    Parms  %===>¬PARMG                                                      @Z
++
+)INIT
+  .HELP    = #RACCERG
+  .ZVARS   ='(SCIND1,SCIND2,SCIND3,SCIND4,SCIND5,SCIND6,SCIND7,SCIND8)'
+  IF (&OWNERG = '')
+    &OWNERG = &ZUSER
+)PROC
+  VER(&OWNERG,NB)
+  VER(&LABELG,NB)
+  VER(&NAMEG,NB)
+  VER(&TITLEG,NB)
+  VER(&UNITG,NB)
+  VER(&ORGG,NB)
+  VER(&CITYG,NB)
+  VER(&STG,NB)
+  VER(&CTRYG,NB)
+  VER(&SIGTG,LIST,SITE,CERTAUTH)
+  VPUT (OWNERG LABELG NAMEG TITLEG UNITG ORGG CITYG STG CTRYG
+        STDTG ENDTG PARMG) PROFILE
+)FIELD
+  FIELD(NAMEG ) IND(SCIND1,'<>') LEN(64)
+  FIELD(TITLEG) IND(SCIND2,'<>') LEN(64)
+  FIELD(ORGG  ) IND(SCIND3,'<>') LEN(64)
+  FIELD(UNITG ) IND(SCIND4,'<>') LEN(64)
+  FIELD(CITYG ) IND(SCIND5,'<>') LEN(64)
+  FIELD(STG   ) IND(SCIND6,'<>') LEN(64)
+  FIELD(CTRYG ) IND(SCIND7,'<>') LEN(64)
+  FIELD(PARMG ) IND(SCIND8,'<>') LEN(255)
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

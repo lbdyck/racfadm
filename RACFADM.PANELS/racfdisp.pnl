@@ -61,7 +61,7 @@
   &MIXED = TRANS(&ZPDMIX N,EBCDIC *,MIX) /* set mixed format */
   vget (vtype) shared
   *REXX(* zdata zshadow zwidth vtype)
-    if zwidth < 81 then exit
+ /* if zwidth < 81 then exit */
     colorb = left('B',zwidth,'B')
     colorg = left('G',zwidth,'G')
     colorr = left('R',zwidth,'R')
@@ -78,6 +78,24 @@
        Select
           When substr(zdata,i+8,5)  = '*****' then     /* Top/Bottom */
                nop
+          When substr(zdata,i+8,5) = 'User:' then do   /* Rings/Certs*/
+               zshadow = overlay(colort,zshadow,i+8,zwidth-8)
+               end
+          When substr(zdata,i+10,8) = 'Warning:' then do  /* Updates */
+               zshadow = overlay(colorr,zshadow,i+8,zwidth-8)
+               end
+          When substr(zdata,i+19,12) = 'distribution' then do /*   " */
+               zshadow = overlay(colorr,zshadow,i+8,zwidth-8)
+               end
+          When substr(zdata,i+41,9) = 'SYS1.HELP' then do /* Updates */
+               zshadow = overlay(colorr,zshadow,i+8,zwidth-8)
+               end
+          When substr(zdata,i+35,8) = 'SYSHELP'  then do  /* Updates */
+               zshadow = overlay(colorr,zshadow,i+8,zwidth-8)
+               end
+          When substr(zdata,i+21,4) = ' - V'     then do  /* Updates */
+               zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
+               end
           When substr(zdata,i+8,10) = 'RACF DATA ' then /* GrpTre 1st*/
                zshadow = overlay(titlec,zshadow,i+8,zwidth-8)
           When substr(zdata,i+8,3) = '---' then      /* GrpTree - 4rd*/

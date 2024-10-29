@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F7  241023  TRIDJK   Added RINGS/CERTS for users in TABLEA        */
 /* @F6  240917  TRIDJK   Added ERR33,34,35,35 messages for Connect    */
 /* @F5  240901  TRIDJK   Use S=Special O=Operations A=Audit in ATT    */
 /* @F4  240830  TRIDJK   / line command will display prompt popup     */
@@ -142,7 +143,7 @@
 /* @BI  200222  RACFA    Allowing abbreviating the column in SORT cmd */
 /* @BH  200222  RACFA    Removed translating OPTA/B, not needed       */
 /* @BG  200222  RACFA    Allow placing cursor on row and press ENTER  */
-/* @BF  200221  RACFA    Removed "G = '(G)'", not referenced          */
+/* @BF  241024  TRIDJK   Restored "G = '(G)'", referenced             */
 /* @BE  200221  LBD      Add ONLY primary command                     */
 /* @BD  200221  RACFA    Display '*Search' to right of userid         */
 /* @BC  200221  RACFA    Make 'ADDRESS ISPEXEC' defualt, reduce code  */
@@ -204,6 +205,7 @@ PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */ /* @BL */
 PANELM3     = "RACFMSG3"   /* Display RACF IRXXUTIL Cmd    */ /* @D4 */
 PANELMU     = "RACFMSGU"   /* Display line Cmd popup       */ /* @F4 */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */ /* @EK */
+PANELD1     = "RACFDISP"   /* Display report with colors   */ /* @F7 */
 SKELETON1   = "RACFUSR2"   /* Save tablea to dataset       */ /* @EK */
 SKELETON2   = "RACFUSR3"   /* Save tableb to dataset       */ /* @EK */
 EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */ /* @CZ */
@@ -373,6 +375,62 @@ PROFL:
                 end                                           /* @BE */
              end                                              /* @BE */
         END                                                   /* @LB */
+        WHEN (ABBREV("NOTONLY",ZCMD,3) = 1) THEN DO /*UNDOC*/ /* @JK */
+             find_str = translate(parm)                       /* @JK */
+             'tbtop ' TABLEA                                  /* @JK */
+             'tbskip' TABLEA                                  /* @JK */
+             do forever                                       /* @JK */
+                str = translate(user name defgrp owner attr2) /* @JK */
+                if (pos(find_str,str) > 0) then               /* @JK */
+                  'tbdelete' TABLEA                           /* @JK */
+                else nop                                      /* @JK */
+                'tbskip' TABLEA                               /* @JK */
+                if (rc > 0) then do                           /* @JK */
+                   'tbtop' TABLEA                             /* @JK */
+                   leave                                      /* @JK */
+                end                                           /* @JK */
+             end                                              /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("RINGS",ZCMD,4) = 1) THEN DO             /* @F7 */
+             x = outtrap("ring.")                             /* @F7 */
+             'tbtop ' TABLEA                                  /* @F7 */
+             do forever                                       /* @F7 */
+                'tbskip' TABLEA                               /* @F7 */
+                if (rc = 0) then do                           /* @F7 */
+                   cmd = 'racdcert listring(*) id('user')'    /* @F7 */
+                   Address TSO cmd                            /* @F7 */
+                   if (SETMSHOW <> 'NO') then                 /* @F7 */
+                      call SHOWCMD                            /* @F7 */
+                   end                                        /* @F7 */
+                else do                                       /* @F7 */
+                   x = outtrap("off")                         /* @F7 */
+                   call get_rings                             /* @F7 */
+                   call display_info                          /* @F7 */
+                   'tbtop' TABLEA                             /* @F7 */
+                   leave                                      /* @F7 */
+                   end                                        /* @F7 */
+                end                                           /* @F7 */
+        END                                                   /* @F7 */
+        WHEN (ABBREV("CERTS",ZCMD,4) = 1) THEN DO             /* @F7 */
+             x = outtrap("cert.")                             /* @F7 */
+             'tbtop ' TABLEA                                  /* @F7 */
+             do forever                                       /* @F7 */
+                'tbskip' TABLEA                               /* @F7 */
+                if (rc = 0) then do                           /* @F7 */
+                   cmd = 'racdcert list id('user')'           /* @F7 */
+                   Address TSO cmd                            /* @F7 */
+                   if (SETMSHOW <> 'NO') then                 /* @F7 */
+                      call SHOWCMD                            /* @F7 */
+                   end                                        /* @F7 */
+                else do                                       /* @F7 */
+                   x = outtrap("off")                         /* @F7 */
+                   call get_certs                             /* @F7 */
+                   call display_info                          /* @F7 */
+                   'tbtop' TABLEA                             /* @F7 */
+                   leave                                      /* @F7 */
+                   end                                        /* @F7 */
+                end                                           /* @F7 */
+        END                                                   /* @F7 */
         WHen (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
              if (parm <> '') then                             /* @E4 */
@@ -687,6 +745,91 @@ LISD:
      CALL racfmsgs "ERR10" msg.1 /* Generic failure */        /* @X1 */
 RETURN
 /*--------------------------------------------------------------------*/
+/*  Get rings                                                         */
+/*--------------------------------------------------------------------*/
+GET_RINGS:                                                    /* @F7 */
+  cmdrec. = ""                                                /* @F7 */
+  save_ring = ""                                              /* @F7 */
+  y = 0                                                       /* @F7 */
+  do x = 1 to ring.0                                          /* @F7 */
+     ring.x = left(strip(ring.x),80)                          /* @F7 */
+     /* Bypass these LISTRING records */
+     if left(ring.x,1) = ' ' |,        /* Blank line     */   /* @F7 */
+        left(ring.x,1) = '-' |,        /* Separator line */   /* @F7 */
+        left(ring.x,4) = 'Cert' |,     /* Header line    */   /* @F7 */
+        left(ring.x,4) = 'Ring' |,     /* Header line    */   /* @F7 */
+        left(ring.x,8) = 'The user' |, /* User not in RACF */ /* @F7 */
+        left(ring.x,5) = 'User ' |,    /* No rings nomsgid */ /* @F7 */
+        left(ring.x,4) = 'IRRD' then   /* No rings msgid */   /* @F7 */
+       iterate                                                /* @F7 */
+     if left(ring.x,7) = 'Digital' then do                    /* @F7 */
+       parse var ring.x . . . . . ring_user                   /* @F7 */
+       ring_user = strip(ring_user)                           /* @F7 */
+       ring_user = strip(ring_user,'T',':')                   /* @F7 */
+       ring_user = left(ring_user,8)                          /* @F7 */
+       iterate                                                /* @F7 */
+       end                                                    /* @F7 */
+     if left(ring.x,1) = '>' then do                          /* @F7 */
+       parse var ring.x '>' ring_name                         /* @F7 */
+       ring_name = strip(ring_name)                           /* @F7 */
+       ring_name = strip(ring_name,'T','<')                   /* @F7 */
+       iterate                                                /* @F7 */
+       end                                                    /* @F7 */
+     if left(ring.x,1) <> ' ' then do                         /* @F7 */
+       cert_name  = substr(ring.x,1,32)                       /* @F7 */
+       cert_owner = substr(ring.x,36,12)                      /* @F7 */
+       cert_usage = substr(ring.x,51,8)                       /* @F7 */
+       cert_deflt = substr(ring.x,64,3)                       /* @F7 */
+       if save_ring <> ring_user||ring_name then do           /* @F7 */
+         y = y + 1                                            /* @F7 */
+         cmdrec.y = ' '                                       /* @F7 */
+         y = y + 1                                            /* @F7 */
+         cmdrec.y = 'User: 'ring_user '  Ring: 'ring_name     /* @F7 */
+         end                                                  /* @F7 */
+       y = y + 1                                              /* @F7 */
+       cmdrec.y = 'LN='cert_name 'OWN='cert_owner,            /* @F7 */
+                  'USE='cert_usage 'DFLT='left(cert_deflt,1)  /* @F7 */
+       save_ring = ring_user||ring_name                       /* @F7 */
+       end                                                    /* @F7 */
+   end                                                        /* @F7 */
+  cmdrec.0 = y                                                /* @F7 */
+RETURN                                                        /* @F7 */
+/*--------------------------------------------------------------------*/
+/*  Get certs                                                         */
+/*--------------------------------------------------------------------*/
+GET_CERTS:                                                    /* @F7 */
+  cmdrec. = ""                                                /* @F7 */
+  save_user = ""                                              /* @F7 */
+  y = 0                                                       /* @F7 */
+  do x = 1 to cert.0                                          /* @F7 */
+     cert.x = left(strip(cert.x),80)                          /* @F7 */
+     if left(cert.x,7) = 'Digital' then do                    /* @F7 */
+       parse var cert.x . . . . . cert_user                   /* @F7 */
+       cert_user = strip(cert_user)                           /* @F7 */
+       cert_user = strip(cert_user,'T',':')                   /* @F7 */
+       cert_user = left(cert_user,8)                          /* @F7 */
+       iterate                                                /* @F7 */
+       end                                                    /* @F7 */
+     if substr(cert.x,1,6) = 'Label:' then do                 /* @F7 */
+       cert_name = substr(cert.x,8,32)  ; i = x + 2           /* @F7 */
+       cert_stat = substr(cert.i,11,9)  ; i = i + 1           /* @F7 */
+       cert_stdt = substr(cert.i,15,10) ; i = i + 1           /* @F7 */
+       cert_endt = substr(cert.i,15,10)                       /* @F7 */
+       if save_user <> cert_user then do                      /* @F7 */
+         y = y + 1                                            /* @F7 */
+         cmdrec.y = ' '                                       /* @F7 */
+         y = y + 1                                            /* @F7 */
+         cmdrec.y = 'User: 'cert_user                         /* @F7 */
+         end                                                  /* @F7 */
+       y = y + 1                                              /* @F7 */
+       cmdrec.y = 'LN='cert_name 'ST='cert_stdt,              /* @F7 */
+                  'EN='cert_endt 'TR='cert_stat               /* @F7 */
+       save_user = cert_user                                  /* @F7 */
+       end                                                    /* @F7 */
+     end                                                      /* @F7 */
+  cmdrec.0 = y                                                /* @F7 */
+RETURN                                                        /* @F7 */
+/*--------------------------------------------------------------------*/
 /*  Display information from line commands 'L' and 'P'           @D2  */
 /*--------------------------------------------------------------------*/
 DISPLAY_INFO:                                                 /* @D2 */
@@ -699,9 +842,11 @@ DISPLAY_INFO:                                                 /* @D2 */
   "LMINIT DATAID(CMDDATID) DDNAME("DDNAME")"                  /* @A2 */
   SELECT                                                      /* @B7 */
      WHEN (SETGDISP = "VIEW") THEN                            /* @B7 */
-          "VIEW DATAID("CMDDATID") MACRO("EDITMACR")"         /* @CZ */
+          "VIEW DATAID("CMDDATID") MACRO("EDITMACR")",        /* @CZ */
+               "PANEL("PANELD1")"                             /* @F7 */
      WHEN (SETGDISP = "EDIT") THEN                            /* @B7 */
-          "EDIT DATAID("CMDDATID") MACRO("EDITMACR")"         /* @CZ */
+          "EDIT DATAID("CMDDATID") MACRO("EDITMACR")",        /* @CZ */
+               "PANEL("PANELD1")"                             /* @F7 */
      OTHERWISE                                                /* @B7 */
           "BROWSE DATAID("CMDDATID")"                         /* @B7 */
   END                                                         /* @B7 */
@@ -1300,6 +1445,7 @@ CREATE_TABLEA:                                                /* @BE */
      call SHOWCMD                                             /* @BB */
   if (SETGSTAP <> "") THEN                                    /* @DY */
      INTERPRET "RECNUM = var.0*."SETGSTAP"%1"                 /* @DY */
+  g= '(G)'                                                    /* @BF */
   Do i = 1 to var.0
      temp = var.i
      USER = SUBWORD(temp,1,1)

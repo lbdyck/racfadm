@@ -244,6 +244,11 @@
        parse value '' with mp mpdesc mpinfo
        mpcmd = 'PGM(IEFBR14)'
        end
+    x = outtrap('var.')
+    "PROFILE"
+    x = outtrap('off')
+    if wordpos('NOMSGID',var.1) > 0 then
+      RACFLMSG = "PROFILE NOMSGID will not show ICH error messages"
   *ENDREXX
   VPUT (RACFMENU)                     /* No. of times menu displayed */
   VPUT (SETMADMN) PROFILE             /* Update SETMADMN in profile  */

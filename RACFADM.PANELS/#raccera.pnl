@@ -1,0 +1,51 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   ~  AREA(SCRL) EXTEND(ON)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Digital Certificates &type   +)\-\
+%Command ===>_ZCMD
+%
++ %Add+new certificate+
+%
+~DCAREA ----------------------------------------------------------------------~
+)AREA DCAREA
++   %DSN+contains the digital certificate to be associated with
++       the user ID specified. Up to 44 characters may be entered.
++
++   %Owner+specifies that the new certificate is either a user
++       certificate associated with the specified user ID, a site
++       certificate, or a certificate-authority certificate.
++
++   %Label+is the name to be associated with the certificate. The name
++       may be up to 32 characters in length, is case sensitive, and
++       may contain blanks. A label is optional, however, if not
++       specified, RACF will generate a label.
++
++   %Trust+
++         {TRUST:+a valid certificate.
++       {NOTRUST:+an unknown or non validated certificate.
++     {HIGHTRUST:+a highly trusted certificate, this option is
++                 ignored for non-CERTAUTH certificates and the
++                 status will be determined dynamically.
++
++   %PKDS+
++       Whenever a PKDS label (or *) is specified, the resulting label
++       must be unique and meet the following syntax guidelines:
++
++       1) Allowed characters are alphanumeric, national (@, #, $), or
++          a period (.).
++       2) The first character must be alphabetic or national.
++
++       The label has a maximum length of 64 characters and is case
++       insensitive (folded to upper case).
++
++   %Password+is required if the data set is PKCS12. It may be up
++       to 257 characters may contain blanks, is case sensitive,
++       is non-displayable. If specified, the data set will be
++       processed as if the certificate is in a PKCS12 format.
++
+)PROC
+  &ZUP     = #RACCERA
+)END

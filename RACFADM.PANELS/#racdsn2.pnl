@@ -17,7 +17,8 @@
 %  SAve             +Save display to a dataset
 +
 +Line Commands
-%  S  !Show         +List of permits defined for this profile
+%  S  !Show         +List of standard access permits defined for this profile
+%  W  !When         +List of conditional access permits defined for this profile
 %  L  !List         +Issue LISTDSD command
 %  D  !Dsn          +Display datasets
 %  C  !Change       +Change profile attributes@(admin)

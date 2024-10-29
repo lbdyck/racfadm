@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @BI  241022  TRIDJK   Add primary command CDT                      */
 /* @BH  240914  TRIDJK   Add Description to TABLEA and *Action for L/S*/
 /* @BG  240913  TRIDJK   Add primary command CLASSes                  */
 /* @BF  240906  TRIDJK   Add primary command SETRopts                 */
@@ -246,6 +247,24 @@ DISPLAY_TABLE:
              sortclas = 'D'                                   /* @AR */
              xtdtop   = 1                                     /* @A9 */
         END                                                   /* @A9 */
+        When (abbrev("CDT",zcmd,3) = 1) then DO               /* @BI */
+             /* Interface to SDSF */                          /* @BI */
+             if parm = '' then                                /* @BI */
+               parm = 'ALL'                                   /* @BI */
+             "ADDRESS ISPEXEC"                                /* @BI */
+             "CONTROL DISPLAY SAVE"                           /* @BI */
+             "SELECT PGM(ISFISP) NEWAPPL(ISF) NOCHECK",       /* @BI */
+                    "PARM(RAC "parm")"                        /* @BI */
+             "CONTROL DISPLAY RESTORE"                        /* @BI */
+        END                                                   /* @BI */
+        When (abbrev("RCLS",zcmd,4) = 1) then DO              /* @BI */
+             /* Interface to MXI using the MXIREXX API*/      /* @BI */
+             cmd = "RCLS"                                     /* @BI */
+             cmdrec.0 = 0                                     /* @BI */
+             cmdrec. = ""                                     /* @BI */
+             x = MXIREXX('cmdrec.',cmd)                       /* @BI */
+             call display_info                                /* @BI */
+        END                                                   /* @BI */
         When (abbrev("CLASSES",zcmd,5) = 1) then DO           /* @BG */
              call RACFLOG $CLASSES                            /* @BG */
         END                                                   /* @BG */
@@ -441,7 +460,7 @@ LISP:
         "TBMOD" TABLEA
      end
   end                                                         /* @AM */
-
+DISPLAY_INFO:
   ADDRESS TSO "ALLOC F("DDNAME") NEW REUSE",
               "LRECL(80) BLKSIZE(0) RECFM(F B)",              /* @AU */
               "UNIT(VIO) SPACE(1 5) CYLINDERS"
@@ -614,7 +633,7 @@ c.CACHECLS = "Contains profiles used for saving and restoring cache    "
 c.CBIND    = "Controlling the client's ability to bind to the server   "
 c.CDT      = "Contains profiles for installation-defined classes       "
 c.CFIELD   = "Contains profiles that define the installation's custom  "
-c.CONSOLE  = "Controlling access to MCS consoles. Also, conditional    "
+c.CONSOLE  = "Controlling access to MCS consoles                       "
 c.DASDVOL  = "DASD volumes                                             "
 c.DBNFORM  = "Reserved for future IBM use                              "
 c.DEVICES  = "Used by MVS allocation to control who can allocate       "
@@ -625,11 +644,12 @@ c.DIGTRING = "Contains a profile for each key ring                     "
 c.DIRAUTH  = "Setting logging options for RACROUTE REQUEST=DIRAUTH     "
 c.DLFCLASS = "The data lookaside facility                              "
 c.FACILITY = "Miscellaneous uses. Profiles are defined in this class   "
-c.FIELD    = "Fields in RACF profiles (field-level access checking).   "
+c.FIELD    = "Fields in RACF profiles (field-level access checking)    "
 c.GDASDVOL = "Resource group class for DASDVOL class                   "
 c.GLOBAL   = "Global access checking table entry                       "
 c.GMBR     = "Member class for the GLOBAL class                        "
 c.GSDSF    = "Resource group class for SDSF class                      "
+c.GSOMDOBJ = "Secure GSOMDOBJ for z/OS objects                         "
 c.GTERMINL = "Resource group class for TERMINAL class                  "
 c.GXFACILI = "Grouping class for XFACILIT resources                    "
 c.HBRADMIN = "Controls whether server resources are enabled or disabled"
@@ -637,7 +657,8 @@ c.HBRCMD   = "Specifies user IDs auth to issue zRES commands           "
 c.HBRCONN  = "Specifies user IDs auth to connect to zRES exec rule sets"
 c.IBMOPC   = "Controlling access to OPC/ESA subsystems                 "
 c.IDIDMAP  = "Contains distributed identity filters created with RACMAP"
-c.IZP      = "Controls resources related to the IBM Unified Mgt Server ".
+c.IDTDATA  = "Controls Identity Tokens                                 "
+c.IZP      = "Controls resources related to the IBM Unified Mgt Server "
 c.JESINPUT = "Conditional access support for jobs entered via JES input"
 c.JESJOBS  = "Controlling the submission and cancellation of jobs      "
 c.JESSPOOL = "Controlling access to job data sets on the JES spool     "
@@ -648,6 +669,7 @@ c.LOGSTRM  = "Controls system logger resources, such as log streams    "
 c.NODES    = "Controlling where jobs are allowed to enter the system   "
 c.NODMBR   = "Member class for the NODES class                         "
 c.OPERCMDS = "Controlling who can issue operator commands              "
+c.OPTAUDIT = "Contains profiles which control RACF logging behavior    "
 c.PKISERV  = "Controls access to R_PKIServ administration functions    "
 c.PMBR     = "Member class for the PROGRAM class                       "
 c.PROGRAM  = "Protects executable programs                             "
@@ -668,7 +690,7 @@ c.SECDATA  = "Security classification of users and data                "
 c.SECLABEL = "If security labels are used, and, their definitions      "
 c.SECLMBR  = "Member class for the SECLABEL class                      "
 c.SERVAUTH = "Contains profiles used to check client's auth to use srv "
-c.SERVER   = "Controlling server's ability to register with the daemon."
+c.SERVER   = "Controlling server's ability to register with the daemon "
 c.SMESSAGE = "Controlling to which users a user can send messages      "
 c.SOMDOBJS = "Controlling clients ability to invoke method in the class"
 c.STARTED  = "Used to assign an identity during processing of START cmd"
@@ -679,7 +701,7 @@ c.TAPEVOL  = "Tape volumes                                             "
 c.TEMPDSN  = "Controlling who can access residual temporary data sets  "
 c.TERMINAL = "Terminals (TSO or z/VM). See also GTERMINL class         "
 c.VTAMAPPL = "Controlling who can open ACBs from non-APF auth programs "
-c.WBEM     = "Controls access to the Common Information Model functions".
+c.WBEM     = "Controls access to the Common Information Model functions"
 c.WRITER   = "Controlling the use of JES writers                       "
 c.XFACILIT = "Miscellaneous uses. Profile names > 39 characters        "
 c.ZOWE     = "Controls resources related to the Zowe project           "
@@ -699,7 +721,7 @@ c.JCICSJCT = "CICS journal control table                               "
 c.KCICSJCT = "Resource group class for the JCICSJCT class              "
 c.MCICSPPT = "CICS processing program table                            "
 c.NCICSPPT = "Resource group class for the MCICSPPT class              "
-c.PCICSPSB = "CICS program specification blocks (PSBs).                "
+c.PCICSPSB = "CICS program specification blocks (PSBs)                 "
 c.QCICSPSB = "Resource group class for the PCICSPSB class              "
 c.RCICSRES = "CICS document templates                                  "
 c.SCICSTST = "CICS temporary storage table                             "
@@ -730,7 +752,7 @@ c.MDSNBP   = "Member class for DB2 buffer pool privileges              "
 c.MDSNCL   = "Member class for DB2 collection privileges               "
 c.MDSNDB   = "Member class for DB2 database privileges                 "
 c.MDSNGV   = "Member class for Db2z/OS global variables                "
-c.MDSNJR   = "Member class for Java archive files (JARs).              "
+c.MDSNJR   = "Member class for Java archive files (JARs)               "
 c.MDSNPK   = "Member class for DB2 package privileges                  "
 c.MDSNPN   = "Member class for DB2 plan privileges                     "
 c.MDSNSC   = "Member class for DB2 schema privileges                   "
@@ -745,28 +767,28 @@ c.MDSNUT   = "Member class for DB2 user-defined distinct type          "
 
 c.DCEUUIDS = "Used to define the mapping between a user's RACF user ID "
 
-c.RAUDITX  = "Controls auditing for Enterprise Identity Mapping (EIM). "
+c.RAUDITX  = "Controls auditing for Enterprise Identity Mapping (EIM)  "
 
 c.EJBROLE  = "Member class for Enterprise Java Beans authorization     "
 c.GEJBROLE = "Grouping class for Enterprise Java Beans authorization   "
 c.JAVA     = "Contains profiles that are used by Java for z/OS         "
 
-c.AIMS     = "Application group names (AGN).                           "
+c.AIMS     = "Application group names (AGN)                            "
 c.CIMS     = "Command                                                  "
 c.DIMS     = "Grouping class for command                               "
-c.FIMS     = "Field (in data segment).                                 "
+c.FIMS     = "Field (in data segment)                                  "
 c.GIMS     = "Grouping class for transaction                           "
 c.HIMS     = "Grouping class for field                                 "
-c.IIMS     = "Program specification block (PSB).                       "
-c.JIMS     = "Grouping class for program specification block (PSB).    "
-c.LIMS     = "Logical terminal (LTERM).                                "
-c.MIMS     = "Grouping class for logical terminal (LTERM).             "
+c.IIMS     = "Program specification block (PSB)                        "
+c.JIMS     = "Grouping class for program specification block (PSB)     "
+c.LIMS     = "Logical terminal (LTERM)                                 "
+c.MIMS     = "Grouping class for logical terminal (LTERM)              "
 c.OIMS     = "Other                                                    "
 c.PIMS     = "Database                                                 "
 c.QIMS     = "Grouping class for database                              "
 c.RIMS     = "Open Transaction Manager Access (OTMA) transaction pipe  "
-c.SIMS     = "Segment (in database).                                   "
-c.TIMS     = "Transaction (trancode).                                  "
+c.SIMS     = "Segment (in database)                                    "
+c.TIMS     = "Transaction (trancode)                                   "
 c.UIMS     = "Grouping class for segment                               "
 c.WIMS     = "Grouping class for other                                 "
 
@@ -810,7 +832,7 @@ c.NVASAPDT = "NetView/Access Services                                  "
 c.PTKTVAL  = "Used by NetView/Access Services SSI for PassTickets      "
 
 c.RMTOPS   = "NetView Remote Operations                                "
-c.RODMMGR  = "NetView Resource Object Data Manager (RODM).             "
+c.RODMMGR  = "NetView Resource Object Data Manager (RODM)              "
 
 c.KERBLINK = "Contains profiles that map local and foreign principals  "
 c.REALM    = "Used to define the local and foreign realms              "

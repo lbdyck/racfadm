@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A8  241027  TRIDJK   Add G (Gencert) line command                 */
 /* @A7  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @A6  240126  GA       Add new function Chain,Add,Delete,Export,Type*/
 /* @A5  240117  GA       Add NO row for certificate not found         */
@@ -14,6 +15,7 @@
 /*====================================================================*/
 PANEL27     = "RACFCERT"   /* List labels                  */
 PANEL28     = "RACFCERA"   /* Add certificate              */ /* @A6 */
+PANEL29     = "RACFCERG"   /* Generate certificate         */ /* @A8 */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */
 PANELXP     = "RACFEXP"    /* Export DSN prompt            */ /* @A1 */
@@ -68,7 +70,7 @@ ADDRESS ISPEXEC
   */
   if (SETMADMN = "YES") then                                  /* @A6 */
     SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨Chain"||,                   /* @A6 */
-                  "ÝA¨AddÝD¨Delete"                           /* @A6 */
+                  "ÝA¨AddÝD¨DeleteÝG¨Gencert"                 /* @A8 */
   else                                                        /* @A6 */
     SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨Chain"                      /* @A6 */
 
@@ -130,7 +132,7 @@ GET_CERT_LABELS:
       end
     end
   if cnt = 0 then do                                          /* @A5 */
-    label   = 'NO'                                            /* @A5 */
+    label   = 'NONE'                                          /* @A8 */
     status  = ''                                              /* @A5 */
     stdate  = ''                                              /* @A5 */
     endate  = ''                                              /* @A5 */
@@ -257,6 +259,7 @@ DISPLAY_TABLE:
         when (opta = 'H') then call listl                     /* @A6 */
         when (opta = 'A') then call addl                      /* @A6 */
         when (opta = 'D') then call dell                      /* @A6 */
+        when (opta = 'G') then call genc                      /* @A8 */
         otherwise nop
      End
      'control display restore'
@@ -574,17 +577,78 @@ ADDL:                                                         /* @A6 */
   if (SETMSHOW <> 'NO') then                                  /* @A6 */
    call SHOWCMD                                               /* @A6 */
   if (cmd_rc = 0) then do                                     /* @A6 */
-      if label = 'NO' then                                    /* @A6 */
+      if label = 'NONE' then                                  /* @A8 */
        "TBDELETE" TABLEA                                      /* @A6 */
       call select_label                                       /* @A6 */
    end                                                        /* @A6 */
   else call racfmsgs 'ERR26' var.1 /* error adding cert. */   /* @A6 */
 RETURN                                                        /* @A6 */
 /*--------------------------------------------------------------------*/
+/*  Generate certificate                                              */
+/*--------------------------------------------------------------------*/
+GENC:                                                         /* @A8 */
+  "DISPLAY PANEL("PANEL29")"                                  /* @A8 */
+  if (rc > 0) then return                                     /* @A8 */
+  if (ownerg = 'SITE' |  ownerg = 'CERTAUTH') then            /* @A8 */
+   cmd = "RACDCERT GENCERT "OWNERG                            /* @A8 */
+  else                                                        /* @A8 */
+   cmd = "RACDCERT GENCERT id("OWNERG")"                      /* @A8 */
+  cmd =  cmd || " WITHLABEL('"LABELG"')"                      /* @A8 */
+                                                              /* @A8 */
+  sdn = NAMEG||TITLEG||UNITG||ORGG||CITYG||STG||CTRYG         /* @A8 */
+  if sdn <> '' then do                                        /* @A8 */
+    #sdn = "SUBJECTSDN("||,                                   /* @A8 */
+           "CN('"nameg"')"||,       /* Common Name         */ /* @A8 */
+           " T('"titleg"')"||,      /* Title               */ /* @A8 */
+           "OU('"unitg"')"||,       /* Organizational unit */ /* @A8 */
+           " O('"orgg"')"||,        /* Organization        */ /* @A8 */
+           " L('"cityg"')"||,       /* Locality            */ /* @A8 */
+           "SP('"stg"')"||,         /* State / Province    */ /* @A8 */
+           " C('"ctryg"')"||,       /* Country             */ /* @A8 */
+           ")"                                                /* @A8 */
+    cmd =  cmd || #sdn                                        /* @A8 */
+    end                                                       /* @A8 */
+  if stdtg <> "" then do                                      /* @A8 */
+    nbdt = left(stdtg,10)        /* yyyy-mm-dd */             /* @A8 */
+    nbtm = substr(stdtg,12,8)    /* hh:mm:ss   */             /* @A8 */
+    if nbtm = '' then                                         /* @A8 */
+      nbtm = '00:00:00'                                       /* @A8 */
+    #stdtg = "NOTBEFORE(DATE("nbdt") TIME("nbtm"))"           /* @A8 */
+    cmd =  cmd || #stdtg                                      /* @A8 */
+    end                                                       /* @A8 */
+  if endtg <> "" then do                                      /* @A8 */
+    nadt = left(endtg,10)        /* yyyy-mm-dd */             /* @A8 */
+    natm = substr(endtg,12,8)    /* hh:mm:ss   */             /* @A8 */
+    if natm = '' then                                         /* @A8 */
+      natm = '23:59:59'                                       /* @A8 */
+    #endtg = "NOTAFTER(DATE("nadt") TIME("natm"))"            /* @A8 */
+    cmd =  cmd || #endtg                                      /* @A8 */
+    end                                                       /* @A8 */
+  if (sigwg <> "") then do                                    /* @A8 */
+    #signw = "SIGNWITH("sigtg "LABEL('"sigwg"')"              /* @A8 */
+    cmd =  cmd || #signw                                      /* @A8 */
+    end                                                       /* @A8 */
+  if (parmg  <> '') then                                      /* @A8 */
+   cmd = cmd || parmg                                         /* @A8 */
+                                                              /* @A8 */
+  x = OUTTRAP('var.')                                         /* @A8 */
+  address TSO cmd                                             /* @A8 */
+  cmd_rc = rc                                                 /* @A8 */
+  x = OUTTRAP('OFF')                                          /* @A8 */
+  if (SETMSHOW <> 'NO') then                                  /* @A8 */
+   call SHOWCMD                                               /* @A8 */
+  if (cmd_rc = 0) then do                                     /* @A8 */
+      if label = 'NONE' then                                  /* @A8 */
+       "TBDELETE" TABLEA                                      /* @A8 */
+      call select_label                                       /* @A8 */
+   end                                                        /* @A8 */
+  else call racfmsgs 'ERR26' var.1 /* error adding cert. */   /* @A8 */
+RETURN                                                        /* @A8 */
+/*--------------------------------------------------------------------*/
 /*  Delete label                                                      */
 /*--------------------------------------------------------------------*/
 DELL:                                                         /* @A6 */
-  if (label = 'NO') then                                      /* @A6 */
+  if (label = 'NONE') then                                    /* @A8 */
      return                                                   /* @A6 */
    msg    ='You are about to delete 'label                    /* @A6 */
    Sure_? = RACFMSGC(msg)                                     /* @A6 */
@@ -601,7 +665,7 @@ DELL:                                                         /* @A6 */
      "TBTOP" TABLEA                                           /* @A6 */
      "TBQUERY" TABLEA 'ROWNUM(nrow)'                          /* @A6 */
     if (nrow = 0) then do                                     /* @A6 */
-     label   ='NO'                                            /* @A6 */
+     label   ='NONE'                                          /* @A8 */
      stdate  = ''                                             /* @A6 */
      endate  = ''                                             /* @A6 */
      status  = ''                                             /* @A6 */

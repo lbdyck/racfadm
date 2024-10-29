@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CT  241018  TRIDJK   Add Conditional Access List processing       */
 /* @CS  240915  TRIDJK   Check '*' for TYPE=GEN before ADDSD command  */
 /* @CR  240915  TRIDJK   ERR29,ERR30: Not catl'd;User|Grp not defined */
 /* @CQ  240819  TRIDJK   Add ERASE/NOERASE options                    */
@@ -107,9 +108,12 @@ PANEL01     = "RACFDSN1"   /* Set filter, menu option 3    */ /* @AU */
 PANEL02     = "RACFDSN2"   /* List profiles and types      */ /* @AU */
 PANEL03     = "RACFDSN3"   /* Add profile                  */ /* @AU */
 PANEL04     = "RACFDSN4"   /* Change profile               */ /* @AU */
-PANEL05     = "RACFDSN5"   /* Show groups and access       */ /* @AU */
-PANEL06     = "RACFDSN6"   /* Change access                */ /* @AU */
-PANEL07     = "RACFDSN7"   /* Add access                   */ /* @AU */
+PANEL05     = "RACFDSN5"   /* Show groups and access (STD) */ /* @AU */
+PANELC5     = "RACFDSC5"   /* Show groups and access (COND)*/ /* @AU */
+PANEL06     = "RACFDSN6"   /* Change access (STD)          */ /* @AU */
+PANELC6     = "RACFDSC6"   /* Change access (COND)         */ /* @AU */
+PANEL07     = "RACFDSN7"   /* Add access    (STD)          */ /* @AU */
+PANELC7     = "RACFDSC7"   /* Add access    (COND)         */ /* @AU */
 PANELM1     = "RACFMSG1"   /* Confirm Request (pop-up)     */ /* @AU */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */ /* @AU */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */ /* @CG */
@@ -139,10 +143,11 @@ ADDRESS ISPEXEC                                               /* @AJ */
 
   If (SETMADMN = "YES") then do                               /* @B2 */
      SELCMDS2 = "ÝS¨Show,ÝL¨List,ÝD¨Dsn,ÝC¨Change,"||,        /* @B9 */
-                "ÝA¨Add,ÝR¨Remove"                            /* @B4 */
+                "ÝA¨Add,ÝR¨Remove,ÝW¨When"                    /* @CT */
      IF (SETMIRRX = "YES") THEN                               /* @BR */
         SELCMDS5 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @BH */
-                   "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @BH */
+                   "ÝC¨Chg Access,ÝA¨Add Access,"||,          /* @BH */
+                   "ÝR¨Rem Access"                            /* @BH */
      ELSE                                                     /* @BR */
         SELCMDS5 = "ÝS¨Show,ÝL¨List,"||,                      /* @BR */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @BR */
@@ -307,7 +312,14 @@ PROFL:
         end                                                   /* @B4 */
         when (opta = 'L') then call Lisd                      /* @A1 */
         when (opta = 'R') then call Deld
-        when (opta = 'S') then call Disd
+        when (opta = 'S') then do                             /* @CT */
+             acclist = 'STD'                                  /* @CT */
+             call Disd                                        /* @CT */
+             end                                              /* @CT */
+        when (opta = 'W') then do                             /* @CT */
+             acclist = 'COND'                                 /* @CT */
+             call Disd                                        /* @CT */
+             end                                              /* @CT */
         otherwise nop
      End
      'control display restore'                                /* @CA */
@@ -417,7 +429,7 @@ ADDD:
   xtr = ' '
   if (data <> ' ') then
      xtr = xtr "DATA('"data"')"
-  if index(dataset,'*') > 0 then                              /* @CS */
+  if verify(dataset,'*%','M') > 0 then                        /* @CS */
     type = 'GEN'                                              /* @CS */
   else                                                        /* @CS */
     type = ' '                                                /* @CS */
@@ -440,10 +452,10 @@ ADDD:
              "DELETE" TYPE
   x = msg('ON')
   if (from <> ' ') then do
-     if type = 'GEN' then                                     /* @JK */
-       fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"       /* @JK */
-     else                                                     /* @JK */
-       fopt = "FROM('"FROM"') FCLASS(DATASET)"                /* @JK */
+     if type = 'GEN' then                                     /* @CT */
+       fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"       /* @CT */
+     else                                                     /* @CT */
+       fopt = "FROM('"FROM"') FCLASS(DATASET)"                /* @CT */
      call EXCMD "PERMIT '"DATASET"'" TYPE FOPT
      if (cmd_rc > 0) then                                     /* @BE */
         CALL racfmsgs 'ERR04' /* Permit Warn */               /* @B6 */
@@ -521,8 +533,8 @@ DELD:
   Sure_? = Confirm_request(msg)
   if (sure_? = 'YES') then do
      call EXCMD "DELDSD '"DATASET"'" type
-     if (type = ' ') then                                     /* @JK */
-        type = 'DISCRETE'     /* Need for TBDELETE */         /* @JK */
+     if (type = ' ') then                                     /* @CT */
+        type = 'DISCRETE'     /* Need for TBDELETE */         /* @CT */
      if (cmd_rc > 0) then do                                  /* @BE */
         CALL racfmsgs "ERR02" /* Del DSD failed */            /* @BG */
         return                                                /* @BG */
@@ -554,7 +566,10 @@ DISD:
            'tbskip' tableb 'number('xtdtop')'                 /* @CA */
            radmrfnd = 'PASSTHRU'                              /* @CA */
            'vput (radmrfnd)'                                  /* @CA */
-           "TBDISPL" TABLEB "PANEL("PANEL05")"                /* @CA */
+           if acclist = 'STD' then                            /* @CT */
+             "TBDISPL" TABLEB "PANEL("PANEL05")"  /* STD  */  /* @CA */
+           else                                               /* @CT */
+             "TBDISPL" TABLEB "PANEL("PANELC5")"  /* COND */  /* @CT */
         end                                                   /* @CA */
         else 'tbdispl' tableb                                 /* @CA */
         if (rc > 4) then do                                   /* @CN */
@@ -614,6 +629,16 @@ DISD:
                    end                                        /* @BM */
                 end                                           /* @BM */
            END                                                /* @BM */
+           WHEN (ABBREV("DSD",ZCMD,3) = 1) THEN DO /*UNDOC*/  /* @CT */
+                cmd = "LISTDSD DA('"DATASET"') AUTH"          /* @CT */
+                x = OUTTRAP('CMDREC.')                        /* @CT */
+                address TSO cmd                               /* @CT */
+                cmd_rc = rc                                   /* @CT */
+                x = OUTTRAP('OFF')                            /* @CT */
+                if (SETMSHOW <> 'NO') then                    /* @CT */
+                   call SHOWCMD                               /* @CT */
+                call DISPLAY_INFO                             /* @CT */
+           END                                                /* @CT */
            WHEN (ABBREV("RESET",ZCMD,1) = 1) THEN DO          /* @BM */
                 xtdtop   = 1                                  /* @BM */
                 "TBEND" TABLEB                                /* @BM */
@@ -709,7 +734,7 @@ RETURN                                                        /* @C9 */
 /*  Create table 'B'                                             @BM  */
 /*--------------------------------------------------------------------*/
 CREATE_TABLEB:                                                /* @BM */
-  "TBCREATE" TABLEB "KEYS(ID) NAMES(ACC)",
+  "TBCREATE" TABLEB "KEYS(ID) NAMES(ACC CLS ENT)",            /* @CT */
                   "REPLACE NOWRITE"
   flags = 'OFF'
   audit = ' '
@@ -769,14 +794,22 @@ CREATE_TABLEB:                                                /* @BM */
         if (substr(temp,2,10) = 'NO ENTRIES') then do
            id  = 'NONE'        /* empty access list */
            acc = 'DEFINED'
+           cls = ''                                           /* @CT */
+           ent = ''                                           /* @CT */
         end
         else do
            id  = subword(temp,1,1)
            acc = subword(temp,2,1)
+           cls = subword(temp,3,1)                            /* @CT */
+           ent = subword(temp,4,1)                            /* @CT */
         end
         "TBMOD" TABLEB
      end
-     if (substr(temp,5,13) = 'ID     ACCESS') then do
+     if acclist = 'STD' then                                  /* @CT */
+       acchdr = 'ID     ACCESS'      /* STD  */               /* @CT */
+     else                                                     /* @CT */
+       acchdr = 'ID    ACCESS '      /* COND */               /* @CT */
+     if (substr(temp,5,13)) = acchdr then do                  /* @CT */
         flags = 'ON'      /* start of access list */
         i     = i + 1     /* skip */
      end
@@ -858,16 +891,26 @@ RETURN
 CHGP:
   If (id = 'NONE') then
      return
-  "DISPLAY PANEL("PANEL06")"                                  /* @AU */
+  if acclist = 'STD' then                                     /* @CT */
+    "DISPLAY PANEL("PANEL06")"                                /* @AU */
+  else                                                        /* @CT */
+    "DISPLAY PANEL("PANELC6")"                                /* @CT */
   if (rc > 0) then
      return
   if (type = 'DISCRETE') then
      type = ' '
-  call EXCMD "PERMIT '"DATASET"' ID("ID") ACC("ACC")" TYPE
+
+  wh = ''                                                     /* @CT */
+  if acclist = 'COND' then do                                 /* @CT */
+     if (cls <> '' & ent <> '') then                          /* @CT */
+        wh = "WHEN("cls"("ent"))" oth                         /* @CT */
+     end                                                      /* @CT */
+
+  call EXCMD "PERMIT '"DATASET"' ID("ID") ACC("ACC")" TYPE WH /* @CT */
   if (cmd_rc = 0) then do                                     /* @C5 */
      if (type = ' ') then
         type = 'DISCRETE'
-     "TBMOD" TABLEB
+     "TBMOD" TABLEB "ORDER"                                   /* @CT */
   end
   else
      Call racfmsgs 'ERR03' /* permit failed */                /* @B6 */
@@ -880,7 +923,10 @@ ADDP:
   if (id = 'NONE') then
      new = 'YES'
   from = ' '
-  "DISPLAY PANEL("PANEL07")"                                  /* @AU */
+  if acclist = 'STD' then                                     /* @CT */
+    "DISPLAY PANEL("PANEL07")"                                /* @AU */
+  else                                                        /* @CT */
+    "DISPLAY PANEL("PANELC7")"                                /* @CT */
   if (rc > 0) then
      return
   if (type = 'DISCRETE') then
@@ -890,15 +936,22 @@ ADDP:
      idopt = 'ID('ID') ACCESS('ACC')'
   fopt = ' '
   if (from <> ' ') then do
-     if type = 'GEN' then                                     /* @JK */
-       fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"       /* @JK */
-     else                                                     /* @JK */
-       fopt = "FROM('"FROM"') FCLASS(DATASET)"                /* @JK */
-     rb   = 'YES'             /* Cause table rebuild */
-  end
-  call EXCMD "PERMIT '"DATASET"'" idopt type fopt
+     if type = 'GEN' then                                     /* @CT */
+       fopt = "FROM('"FROM"') FCLASS(DATASET) FGENERIC"       /* @CT */
+     else                                                     /* @CT */
+       fopt = "FROM('"FROM"') FCLASS(DATASET)"                /* @CT */
+     end
+  /* rb   = 'YES' */          /* Cause table rebuild */
+
+  wh = ''
+  if acclist = 'COND' then do                                 /* @CT */
+     if (cls <> '' & ent <> '') then                          /* @CT */
+        wh = "WHEN("cls"("ent"))"                             /* @CT */
+     end
+
+  call EXCMD "PERMIT '"DATASET"'" idopt type fopt wh          /* @CT */
   if (cmd_rc = 0) then do                                     /* @C5 */
-     "TBMOD" TABLEB
+     "TBMOD" TABLEB "ORDER"                                   /* @CT */
      if (new = 'YES') then do
         id = 'NONE'
         "TBDELETE" TABLEB
@@ -919,10 +972,17 @@ DELP:
      return
   if (type = 'DISCRETE') then
      type = ' '
+
+  wh = ''
+  if acclist = 'COND' then do                                 /* @CT */
+     if (cls <> '' & ent <> '') then                          /* @CT */
+        wh = "WHEN("cls"("ent"))"                             /* @CT */
+     end
+
   msg    = 'You are about to delete access for 'ID
   Sure_? = Confirm_request(msg)
   if (sure_? = 'YES') then do
-     call EXCMD "PERMIT '"DATASET"' ID("ID") DELETE" TYPE
+     call EXCMD "PERMIT '"DATASET"' ID("ID") DELETE" TYPE WH  /* @CT */
      if (cmd_rc = 0) then                                     /* @C5 */
         "TBDELETE" TABLEB
      else
@@ -1050,7 +1110,7 @@ LISP:                                                         /* @A5 */
      call SHOWCMD                                             /* @AI */
   if (cmd_rc > 0) then do   /* Remove parms */                /* @AB */
      X = OUTTRAP("CMDREC.")                                   /* @AI */
-     CMD    = "LU "ID                                         /* @AI */
+     CMD    = "LU "ID "TSO CICS OMVS DFP"                     /* @CT */
      ADDRESS TSO cmd                                          /* @AI */
      cmd_rc = rc                                              /* @AB */
      if (SETMSHOW <> 'NO') then                               /* @BJ */

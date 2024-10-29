@@ -18,6 +18,8 @@
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
+%  CERTS            +List Digital cert information for users in table
+%  RINGS            +List Digital ring information for users in table
 ^Linec -----------------------------------------------------------------^
 )Area Linec
 +Line Commands

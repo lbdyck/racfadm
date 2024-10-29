@@ -1,0 +1,59 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   ~  AREA(SCRL) EXTEND(ON)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Digital Certificates+)\-\
+%Command ===>_ZCMD
+%
++ %Generate+a new certificate+
+%
+~DCAREA ----------------------------------------------------------------------~
+)AREA DCAREA
++   %Owner+specifies that the new certificate is either a user
++       certificate associated with the specified user ID, a site
++       certificate, or a certificate-authority certificate.
++
++   %Label+is the name to be associated with the certificate. The name
++       may be up to 32 characters in length, is case sensitive, and
++       may contain blanks. A label is optional, however, if not
++       specified, RACF will generate a label.
++
++   %Subject's Distinguished Name+consists of the following:
++
++       Common Name (CN), Title (T), Organizational unit (OU),
++       Organization (O), Locality (L), State / Province (SP),
++       and Country (C).
++
++       Each of the elements is limited to 64 characters.
++
++   %Start Date+refers to the local date and time at which the
++               certificate becomes valid.
++
++               If not specified, DATE will default to current local date
++               If not specified, TIME will default to 00:00:00.
++
++   %End Date+  refers to the local date and time after which the
++               certificate is not valid.
++
++               If not specified, DATE will default to one year after the
++               Start Date value.
++               If not specified, TIME will default to 23:59:59.
++
++   %Signing Cert+refers to the label of the certificate used for
++                 for signing.
++
++   %Signing Type+refers to the type of certificate used for signing,
++                 SITE or CERTAUTH.
++
++                 If not specified, the default is to "sign" the
++                 certificate with the private key of the certificate
++                 being generated.  This creates a "self-signed" certificate.
++
++   %Other Info+  refers to other parameters that can be included on
++                 the RACDCERT GENCERT command.
++
+)PROC
+  &ZUP     = #RACCERG
+)END

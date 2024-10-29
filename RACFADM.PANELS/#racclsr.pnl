@@ -16,7 +16,8 @@
 %  Reset            +Redisplay all rows and sort first column
 %  SAve             +Save display to a dataset
 %  SETRopts         +List SETROPTS data using IRRXUTIL@(admin RACF API)
-%  CLASSes          +View RACF General Resource Classes
+%  CLASSes          +View supplied RACF General Resource Classes
+%  CDT parm         +Invoke SDSF RACF CDT display (opt parm=active|inactive)
 +
 +Line Commands
 %  S  !Show         +Select a class from the list of active classes
