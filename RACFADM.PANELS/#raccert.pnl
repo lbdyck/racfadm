@@ -23,7 +23,7 @@
 %  H  !Chain        +Issue RACDCERT &certtype LISTCHAIN LABEL command
 %  A  !Add          +Issue RACDCERT &certtype ADD WITHLABEL command @(Admin)
 %  D  !Delete       +Issue RACDCERT &certtype DELETE LABEL command  @(Admin)
-%  G  !Gencert      +Issue RACDCERT GENCERT WITHLABEL command @(Admin)
+%  G  !Gencert      +Issue RACDCERT &certtype GENCERT WITHLABEL cmd @(Admin)
 )PROC
   &ZUP     = #RACCERT
 )END
