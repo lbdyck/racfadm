@@ -25,8 +25,6 @@ The package consists of 4 datasets:
 
 To create usable datasets from the .XMIT datasets execute the $INSTALL member of this PDS - follow the prompts.
 
-Access to three of the IBM RACF ISPF dialogs is available, but requires that the RACFSITE REXX program be updated with the correct HLQ and LLQ's for the IBM RACF ISPF dialog datasets.
-
 Then to use the application execute the hlq.RACFADM.EXEC member RACFADM which all LIBDEF and ALTLIB the required libraries and then start the application.
 
 Installation Suggestions:
