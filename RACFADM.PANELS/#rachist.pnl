@@ -1,0 +1,32 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - History+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%  Enhanced RACF Administration (ERA)
++
++  Creation date:     2001/11/19
++  Last modified:     2002/05/30
++  Version:           2.1
++  Category:          rexx
++  Author name:       Nico Rizzuto
++  Email address:    ~nico@rizzuto.it+
++  Web address:      ~http://www.rizzuto.it/tools.htm+
++
+!  ISPF based Enhanced Racf Facility to make most security tasks simple.
+!  It lists user, group, data set and general resource profiles through
+!  a user-friendly interface allowing you to modify most fields on-line.
+!  You can connect groups to users or add new permits and even search
+!  user authorizations in a given class and display the group through
+!  which the authorization is granted. It includes a customizable rexx
+!  exec to automate the creation of aliases or data sets when creating
+!  a new TSO user. With this new version you can also browse all RACF
+!  options from within the tool.
+!
+)PROC
+  &ZUP     = #RACHIST
+)END

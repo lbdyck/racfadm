@@ -1,0 +1,30 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Generate Profile Source+)\-\
+%Command ===>_ZCMD                                              +Scroll==>_SAMT+
+%
++
++FILTER %===>_FILTER                                                         @Z
++CLASS  %===>_CLASS   + {DATASET or General Resource Class
++
++
+{Enter a valid filter for the SEARCH command.  For example,
+   %SYS1.**
+   %SYS1.BMC.**
+   %LBD*.**
+   %**
++
+)INIT
+  .ZVARS  = '(SCIND)'
+  .HELP   = #RACGEN1
+  .CURSOR = FILTER
+  &ZCMD   = ' '
+)PROC
+  VER (&FILTER,NB)
+)FIELD
+  FIELD(FILTER) IND(SCIND,'<>') LEN(246)
+)END

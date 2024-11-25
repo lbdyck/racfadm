@@ -4,6 +4,7 @@
   03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRSUPG)
   04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLROWNE)
    @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
+   ?  TYPE(OUTPUT)  INTENS(LOW)  COLOR(WHITE) CAPS(OFF)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
@@ -18,12 +19,12 @@
 +FILTER: $RFILTER
 +SELECT: ¬SELCMDS                                                              ¬
 %
-%S  ~Group    ~SupGrp   ~Owner    ~Description
+%S  ~Group    ~SupGrp   ~Owner    ~Conn~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z        Z        Z        Z                                         @z
+_Z+ Z        Z        Z        Z   Z                                    @z
 )INIT
-  .ZVARS   = '(OPTA GROUP SUPGRP OWNER DATA SCIND)'
+  .ZVARS   = '(OPTA GROUP SUPGRP OWNER GCNT DATA SCIND)'
   .HELP    = #RACGRP8
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -48,7 +49,8 @@ _Z+ Z        Z        Z        Z                                         @z
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT GROUP')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT SUPGRP')
   FIELD(ZPS00003) VAR(ZCMD) VAL('SORT OWNER')
-  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT DESC')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT CONN')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT DESC')
 )Field
   FIELD(DATA) IND(SCIND,'<>') LEN(255)
 )END

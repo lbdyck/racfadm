@@ -3,6 +3,7 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A2  201116  TRIDJK   Add Conn field
 )CM*  @A1  200616  RACFA    Added capability to SAve file as TXT/CSV
 )CM*  @A0  200611  RACFA    Created skeleton
 )CM*------------------------------------------------------------------*
@@ -12,26 +13,28 @@
 )TB 2 11
 !FILTER:!&RFILTER
 )BLANK
- Group    SupGrp   Owner    Description
+ Group    SupGrp   Owner    Conn Description
  ---------------------------------------------------------------------
-)TB 2 11 20 29
+)TB 2 11 20 29 34
 )DOT &TABLEA
 )SETF GROUP   = &LEFT(&GROUP,8, )
 )SETF SUPGRP  = &LEFT(&SUPGRP,8, )
 )SETF OWNER   = &LEFT(&OWNER,8, )
-)SETF DATA    = &LEFT(&DATA,44, )
-!&GROUP!&SUPGRP!&OWNER!&DATA
+)SETF GCNT    = &LEFT(&GCNT,4, )
+)SETF DATA    = &LEFT(&DATA,36, )
+!&GROUP!&SUPGRP!&OWNER!&GCNT!&DATA
 )ENDDOT
 )ENDSEL
 )SEL &RACFSFIL = C
 RACFADM - Group Profiles
-Group,SupGrp,Owner,Description
------,------,-----,-----------
+Group,SupGrp,Owner,Conn,Description
+-----,------,-----,----,-----------
 )DOT &TABLEA
 )SETF GROUP   = &STRIP(&GROUP,, )
 )SETF SUPGRP  = &STRIP(&SUPGRP,, )
 )SETF OWNER   = &STRIP(&OWNER,, )
+)SETF GCNT    = &STRIP(&GCNT,, )
 )SETF DATA    = &STRIP(&DATA,, )
-&GROUP,&SUPGRP,&OWNER,&DATA
+&GROUP,&SUPGRP,&OWNER,&GCNT,&DATA
 )ENDDOT
 )ENDSEL

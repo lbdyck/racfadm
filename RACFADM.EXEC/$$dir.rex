@@ -18,11 +18,14 @@
  RACFCLSS  Class          Search and display classes
  RACFCMDS  Commands       Execute/save/display TSO RACF commands
  RACFDB    Database       Display RACF database info, menu option 8
+ RACFDCER  User           Sets the Digital Certificate indicator
+ RACFDSEP  User/Group     Sets the date separator character
  RACFDSL   DSList         Invoke DSLIST on ALTLIB/LIBDEF DSNs, opt D
  RACFDSN   Dataset        Display dataset profiles
  RACFEMAC  Edit Macro     View/edit, turn off highlighting
  RACFEMST  Edit Macro     View/edit, position to SETROPTS section
  RACFENQS  Enqueues       Display enqueues on ALTLIB/LIBDEF dsns, opt E
+ RACFGEN   Generate       Generate profile source, menu option G
  RACFGRP   Group          Display group profiles, menu option 2
  RACFGTRE  Group Tree     Execute/display DSMON group tree rpt, opt 6
  RACFHELP  Help           Display TSO HELP on RACF commands
@@ -40,7 +43,6 @@
  RACFRING  User           Display Digital Rings
  RACFRPTS  Reports        RACF reports, menu option R
  RACFRVER  Version        Sets the version for this application
- RACFDSEP  User/Group     Sets the date separator character (User/Group)
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked
  RACFSETG  Settings       Customize settings, menu option 0
  RACFUSR   User           Display userid profiles, menu option 1

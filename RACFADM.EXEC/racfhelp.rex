@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A5  241120  TRIDJK   Add $GLOSSRY - RACF Tech terms and abbrevs   */
 /* @L1  231018  LBD      Move set defaults higher in the code         */
 /* @A4  231006  DT       Check/allocate dd:syshelp                    */
 /* @A3  200618  RACFA    Chged SYSDA to SYSALLDA                      */
@@ -1618,6 +1619,7 @@ SYSHelp:                                                      /* @A4 */
 /* Group LOCAL is for local help members */
 /* enclosed as a REXX comment to avoid REXX syntax errors
 RACF:
+$GLOSSRY   Technical terms and abbreviations for RACF
 ADDGROUP   Add group profile
 ADDSD      Add data set profile
 ADDUSER    Add user profile

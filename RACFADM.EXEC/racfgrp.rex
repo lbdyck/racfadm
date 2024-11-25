@@ -3,7 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @L1  240826  LBD      Support FILter as alist of Reset             */
+/* @D7  241117  TRIDJK   Display connects in TABLEA                   */
+/* @D6  240826  LBD      Support FILter as alist of Reset             */
 /* @D5  240824  TRIDJK   Use ISO Extended date format                 */
 /* @D4  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @D3  231007  TRIDJK   Added line command 'Y'                       */
@@ -250,7 +251,7 @@ PROFL:
              'tbtop ' TABLEA                                  /* @AP */
              'tbskip' TABLEA                                  /* @AP */
              do forever                                       /* @AP */
-                str = translate(group supgrp owner data)      /* @BC */
+                str = translate(group supgrp owner gcnt data) /* @BC */
                 if (pos(find_str,str) > 0) then nop           /* @AP */
                 else 'tbdelete' TABLEA                        /* @AP */
                 'tbskip' TABLEA                               /* @AP */
@@ -260,8 +261,8 @@ PROFL:
                 end                                           /* @AP */
              end                                              /* @AP */
         END                                                   /* @AP */
-        When (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
-             (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
+        When (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @D6 */
+             (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @D6 */
              if (parm <> '') then                             /* @CD */
                 rfilter = parm                                /* @CD */
              xtdtop   = 1                                     /* @AE */
@@ -280,6 +281,8 @@ PROFL:
                      call sortseq 'SUPGRP'                    /* @BL */
                 when (ABBREV("OWNER",PARM,1) = 1) then        /* @BC */
                      call sortseq 'OWNER'                     /* @BL */
+                when (ABBREV("CONN",PARM,1) = 1) then         /* @D7 */
+                     call sortseq 'GCNT'                      /* @D7 */
                 when (ABBREV("DESCRIPTION",PARM,1) = 1) then  /* @AT */
                      call sortseq 'DATA'                      /* @BL */
                 otherwise NOP                                 /* @A3 */
@@ -405,6 +408,7 @@ ADDD:
      CALL racfmsgs 'ERR01' /* Add failed */                   /* @B5 */
      return
   end
+  gcnt = '   0'                                               /* @D7 */
   "TBMOD" TABLEA "ORDER"                                      /* @CK */
   if (new = 'YES') then do
      group = 'NONE'
@@ -412,7 +416,7 @@ ADDD:
   end
 RETURN
 /*--------------------------------------------------------------------*/
-/*  Add new profile                                                   */
+/*  Change profile                                                    */
 /*--------------------------------------------------------------------*/
 CHGD:
   if (group = 'NONE') then
@@ -973,7 +977,7 @@ RETURN                                                        /* @AN */
 /*--------------------------------------------------------------------*/
 CREATE_TABLEA:                                                /* @AP */
   seconds = TIME('S')
-  "TBCREATE" TABLEA "KEYS(GROUP) NAMES(DATA SUPGRP OWNER)",   /* @BC */
+  "TBCREATE" TABLEA "KEYS(GROUP) NAMES(DATA SUPGRP OWNER GCNT)",
            "REPLACE NOWRITE"
   cmd = "SEARCH FILTER("RFILTER") CLASS("rclass")"            /* @AN */
   x = OUTTRAP('var.')
@@ -1046,6 +1050,7 @@ CREATE_TABLEA:                                                /* @AP */
      END                                                      /* @C7 */
      /* Get further information */
      Call GETD
+     Call GETCONN                        /* Connects */       /* @D7 */
      "TBMOD" TABLEA
   end /* Do i=1 to var.0 */
   sort     = 'GROUP,C,A'                                      /* @CJ */
@@ -1056,6 +1061,22 @@ CREATE_TABLEA:                                                /* @AP */
   "TBSORT " TABLEA "FIELDS("sort")"                           /* @CJ */
   "TBTOP  " TABLEA                                            /* @CJ */
 RETURN                                                        /* @AP */
+/*--------------------------------------------------------------------*/
+/*  Get connects to group number                                 @D7  */
+/*--------------------------------------------------------------------*/
+GETCONN:                                                      /* @D7 */
+    myrc = IRRXUTIL('EXTRACT','GROUP',group,'RACF',)          /* @D7 */
+    if (word(myrc,1) <> 0) then do                            /* @D7 */
+      gcnt = '    '                                           /* @D7 */
+      return                                                  /* @D7 */
+      end                                                     /* @D7 */
+    gcnt = racf.base.connects.repeatcount                     /* @D7 */
+    if gcnt = '' then                                         /* @D7 */
+      gcnt = 0                                                /* @D7 */
+    gcnt = format(gcnt,4)                                     /* @D7 */
+    if racf.base.universl.1 = 'TRUE' then                     /* @D7 */
+      data = '(U) '||data                                   /* @D7 */
+RETURN                                                        /* @D7 */
 /*--------------------------------------------------------------------*/
 /*  Save table to dataset                                        @CQ  */
 /*--------------------------------------------------------------------*/

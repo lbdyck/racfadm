@@ -147,7 +147,7 @@ GET_RING_LABELS:
      end
   end
   if cnt = 0 then do
-      ring   = 'NO'
+      ring = 'NONE'                                           /* @JK */
       "TBMOD" TABLEA
   end
 
@@ -603,7 +603,7 @@ ADDR:
     call SHOWCMD
 
   if (cmd_rc = 0) then do
-     if ring = 'NO' then
+     if ring = 'NONE' then                                    /* @JK */
        "TBDELETE" TABLEA
      call select_ring
    end
@@ -613,7 +613,7 @@ RETURN
 /*  Delete ring                                                       */
 /*--------------------------------------------------------------------*/
 DELR:
-  if (ring = 'NO') then
+  if (ring = 'NONE') then                                     /* @JK */
      return
   msg    ='You are about to delete 'ring
   Sure_? = RACFMSGC(msg)

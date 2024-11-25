@@ -1,0 +1,1347 @@
+)F FUNCTION -
+ This glossary includes technical terms and abbreviations for RACF.
+
+=A
+    access.  The ability to use a protected resource.
+
+    access authority.  (1) The privileges granted to a particular user
+    or group when accessing a protected resource (such as the ability to
+    read or to update a data set). For resources protected by RACF
+    profiles, the access authorities are NONE, EXECUTE, READ, UPDATE,
+    CONTROL, and ALTER.  These authorities are hierarchical, with READ
+    also granting EXECUTE, UPDATE granting READ, and so forth.  (2) RACF
+    also has access authorities of READ, WRITE, and EXECUTE (or SEARCH)
+    when dealing with z/OS UNIX files and directories. Note that these
+    authorities are not hierarchical, and that z/OS UNIX files are not
+    protected by RACF profiles, although they do have access
+    authorities.
+
+    access ACL.  An ACL that is used to provide protection for a file
+    system object.
+
+    access control.  In computer security, ensuring that the resources
+    of a computer system can be accessed only by authorized users in
+    authorized ways.
+
+    access control list (ACL).  (1) In computer security, a collection
+    of all access rights for one object. In computer security, a list
+    associated with an object that identifies all the subjects that can
+    access the object and their access rights; for example, a list
+    associated with a file that identifies users who can access the file
+    and identifies their access rights to that file. (2) In z/OS UNIX,
+    an extension to the base POSIX permission bits. Similar to the
+    access list of a RACF profile, an ACL for a file system object
+    contains entries that specify access permissions for individual
+    users and groups.
+
+    ACL.  See access control list.
+
+    access list.  Synonym for standard access list. Contrast with
+    conditional access list.
+
+    ACEE.  (accessor environment element) A control block that contains
+    a description of the current user's security environment, including
+    user ID, current connect group, user attributes, and group
+    authorities. An ACEE is constructed during user identification and
+    verification. See ENVR object.
+
+    ADAU.  See automatic direction of application updates.
+
+    ADSP.  See automatic data set protection.
+
+    ADSP attribute.  A user attribute that establishes an environment in
+    which all permanent DASD data sets created by the user are
+    automatically defined to RACF and protected with a discrete profile.
+    See automatic data set protection.
+
+    AIM.  See application identity mapping (AIM).
+
+    application identity mapping (AIM).  Allows mapping between RACF
+    user IDs and various application identities, such as those
+    associated with z/OS UNIX, Novell Directory Services, and Lotus
+    Notes®.
+
+    application user identity.  An alternate name by which a RACF user
+    can be known to an application.
+
+    appropriate privileges.  Describes which users can perform an action
+    (such as execute a command, issue a syscall, and so forth) in a UNIX
+    environment. Usually refers to having superuser authority or an
+    appropriate subset of superuser authority.
+
+    attribute.  See user attribute and group-related user attribute.
+
+    AUDITOR attribute.  A user attribute that allows the user to specify
+    logging options on the RACF commands and list any profile (including
+    its auditing options) using the RACF commands. Contrast with
+    group-AUDITOR attribute.
+
+    authentication.  (1) Verification of the identity of a user or the
+    user's eligibility to access an object.  (2) Verification that a
+    message has not been altered or corrupted.  (3) A process used to
+    verify the user of an information system or protected resources. See
+    also password.
+
+    authority.  The right to access objects, resources, or functions.
+    See access authority, class authority, and group authority.
+
+    automatic command direction.  An RRSF function that enables RACF to
+    automatically direct certain commands to one or more remote nodes
+    after running the commands on the issuing node. Commands can be
+    automatically directed based on who issued the command, the command
+    name, or the profile class related to the command. Profiles in the
+    RRSFDATA class control to which nodes commands are automatically
+    directed. See automatic direction of application updates, automatic
+    password direction and command direction.
+
+    automatic data set protection (ADSP).  A system function, enabled by
+    the SETROPTS ADSP specification and the assignment of the ADSP
+    attribute to a user with ADDUSER or ALTUSER, that causes all
+    permanent data sets created by the user to be automatically defined
+    to RACF with a discrete RACF profile.
+
+    automatic direction.  See automatic command direction, automatic
+    password direction, and automatic direction of application updates.
+
+    automatic direction of application updates.  An RRSF function that
+    automatically directs ICHEINTY and RACROUTE macros that update the
+    RACF database to one or more remote systems. Profiles in the
+    RRSFDATA class control which macros are automatically directed, and
+    to which nodes. See automatic command direction and automatic
+    password direction.
+
+    automatic password direction.  An RRSF function that extends
+    password synchronization and automatic command direction to cause
+    RACF to automatically change the password for a user ID on one or
+    more remote nodes after the password for that user ID is changed on
+    the local node.  Profiles in the RRSFDATA class control for which
+    users and nodes passwords are automatically directed. See password
+    synchronization, automatic command direction, and automatic
+    direction of application updates.
+
+    automatic profile.  A tape volume profile that RACF creates when a
+    RACF-defined user protects a tape data set. When the last data set
+    on the volume is deleted, RACF automatically deletes the tape volume
+    profile.  Contrast with nonautomatic profile.
+
+=B
+    backup data set.  A data set in the backup RACF database. For each
+    data set in the primary RACF database, an installation should define
+    a corresponding backup data set.  See backup RACF database.
+
+    backup RACF database.  A RACF database that reflects the contents of
+    the primary RACF database.  Backup RACF databases might be
+    designated in the data set name table (ICHRDSNT) or specified at IPL
+    time. You can switch to a backup database without a re-IPL if the
+    primary RACF database fails. See primary RACF database.
+
+    base ACL entry.  Same as permission bits (owner, group, other). The
+    permissions can be changed using chmod. They are not physically part
+    of the ACL.
+
+    base segment.  The portion of a RACF profile that contains the
+    fundamental information about a user, group, or resource. The base
+    segment contains information that is common to all applications that
+    use the profile.
+
+    block update command (BLKUPD).  A RACF diagnostic command used to
+    examine or modify the content of individual physical records in a
+    RACF data set.
+
+=C
+    callable service.  In z/OS UNIX, a request by an active process for
+    a service. Synonymous with syscall.
+
+    category.  See security category.
+
+    CDMF.  See Commercial Data Masking Facility.
+
+    CDT.  See class descriptor table.
+
+    certificate.  See digital certificate.
+
+    certificate authority.  An organization that issues digital
+    certificates.  The certificate authority authenticates the
+    certificate owner's identity and the services that the owner is
+    authorized to use, issues new certificates, renews existing
+    certificates, and revokes certificates belonging to users who are no
+    longer authorized to use them.
+
+    certificate-authority certificate.  A type of certificate managed by
+    RACF.  See digital certificate.
+
+    certificate name filter.  A general resource profile created by the
+    RACDCERT MAP command that maps multiple user IDs to a digital
+    certificate in order to simplify administration of certificates,
+    conserve storage space in the RACF database, maintain
+    accountability, or maintain access control granularity.
+
+    class.  A collection of RACF-defined entities (users, groups, and
+    resources) with similar characteristics. Classes are defined in the
+    class descriptor table (CDT), except for the USER, GROUP, and
+    DATASET classes.
+
+    class authority (CLAUTH).  An attribute enabling a user to define
+    RACF profiles in a class defined in the class descriptor table. A
+    user can have class authorities to zero or more classes.
+
+    class descriptor table (CDT).  A table consisting of an entry for
+    each class except the USER, GROUP, and DATASET classes. The CDT
+    contains the classes supplied by IBM and the installation-defined
+    classes. When this term appears without the preceding modifiers
+    dynamic or static, it refers to the combination of the dynamic CDT,
+    if it exists, and the static CDT.
+
+    classification model 1.  See single-subsystem scope.
+
+    classification model 2.  See multiple-subsystem scope.
+
+    CLAUTH attribute.  See class authority.
+
+    command direction.  An RRSF function that allows a user to issue a
+    command from one user ID and direct that command to run in the RACF
+    address space on the same system or on a different RRSF node, using
+    the same or a different user ID. Before a command can be directed
+    from one user ID to another, a user ID association must be defined
+    between them using the RACLINK command.
+
+    Commercial Data Masking Facility (CDMF).  An encryption function
+    that uses a weaker key (40 bit) of the Data Encryption Standard
+    (DES) algorithm.  RACF uses CDMF to mask the data portion of RRSF
+    transaction processing message packets. CDMF is part of the IBM
+    Common Cryptographic Architecture.
+
+    conditional access list.  The portion of a resource profile that
+    specifies the users and groups that might access the resource at a
+    specified level when a specified condition is true. For example,
+    with program access to data sets, the condition is that the user
+    must be executing the program specified in the access list. Contrast
+    with standard access list.
+
+    coordinator system.  In a RACF data sharing group, the system on
+    which the system operator or administrator enters a RACF command
+    that is propagated throughout the group.  Contrast with peer system.
+
+    CPF.  See command prefix facility.
+
+    current connect group.  The group specified by a user when logging
+    on to the system, or the user's default group if the user did not
+    specify a group when logging on.  With SETROPTS NOGRPLIST in effect,
+    RACF uses the user's authority and this group's authority during
+    access checking. With SETR GRPLIST in effect, RACF includes the
+    authority of the user's other groups, if any, but the user still has
+    only one "current connect group".  You can use the &RACGPID variable
+    in members of GLOBAL profiles to refer to the user's current connect
+    group.
+
+    current security label.  The security label that RACF uses in RACF
+    authorization checking if the SECLABEL class is active. For
+    interactive users, this is the security label specified when the
+    user logged on, or (if no security label was specified) the default
+    security label in the user's user profile. For batch jobs, this is
+    the security label specified in the SECLABEL operand of the JOB
+    statement, or (if no security label was specified) the user's
+    current security label in the user profile associated with the job.
+
+    custom field.  A field in a user or group profile that can be used
+    to store installation data, and for which the installation can
+    customize the keyword name and attributes. A custom field is defined
+    in the CFDEF segment of a general resource profile in the CFIELD
+    class. Installation data contained in a custom field is stored in
+    the CSDATA segment of the user or group profile.
+
+=D
+    DASDVOL authority.  A preferred alternative to assigning the
+    OPERATIONS or group-OPERATIONS attribute, DASDVOL authority allows
+    you to authorize operations personnel to access only those volumes
+    that they must maintain.  Using DASDVOL authority is also more
+    efficient for functions such as volume dumping, because only one
+    authorization check for the volume needs to be issued, instead of
+    individual requests for each data set on the volume. Note that
+    modern data management software (such as DFSMSdss) does not require
+    DASDVOL authority. Contrast with OPERATIONS attribute, and
+    group-OPERATIONS attribute.
+
+    data security.  The protection of data from intentional or
+    unintentional unauthorized disclosure, modification, or destruction.
+
+    data security monitor (DSMON).  A RACF auditing tool that produces
+    reports enabling an installation to verify its basic system
+    integrity and data security controls.
+
+    data set profile.  A profile that provides RACF protection for one
+    or more data sets. The information in the profile can include the
+    data set profile name, profile owner, universal access authority,
+    access list, and other data. See discrete profile and generic
+    profile.
+
+    data sharing group, RACF.  A collection of one or more instances of
+    RACF in a sysplex that have been identified to XCF and assigned to
+    the group defined for RACF sysplex data sharing. RACF joins group
+    IRRXCF00 when enabled for sysplex communication.
+
+    data sharing mode.  An operational RACF mode that is available when
+    RACF is enabled for sysplex communication. Data sharing mode
+    requires installation of coupling facility hardware.
+
+    default ACL.  An ACL that is specifically associated with a
+    directory, and which gets inherited by an object created within the
+    directory.
+
+    default group.  The group specified in a user profile that provides
+    a default current connect group for the user. See current connect
+    group.
+
+    delegated resource.  A general resource that is eligible to be
+    accessed by specially programmed applications that request RACF to
+    check the daemon or application's authority for a resource when the
+    client's authority is insufficient.  Applications programmed in this
+    way, such as the FTP daemon, are said to contain support for nested
+    ACEEs because the identity of the daemon is said to be nested
+    beneath the identity of the client for authorization purposes. See
+    nested ACEE.
+
+    delegation.  The act of giving users or groups the necessary
+    authority to perform RACF operations.
+
+    digital certificate.  A digital document that binds a public key to
+    the identity of the certificate owner, thereby enabling the
+    certificate owner to be authenticated.  A certificate is issued by a
+    certificate authority.
+
+    RACF can manage three types of digital certificates:
+
+      o CERTIFICATE-AUTHORITY certificate. A certificate associated with
+        a certificate authority and is used to verify signatures in
+        other certificates.
+
+      o SITE certificate. A certificate associated with A server, or
+        network entity other than a user or certificate authority.
+
+      o USER certificate. A certificate associated with A RACF user id
+        that is used to authenticate the user's identity, and might also
+        be used to represent a server.
+
+    directed command.  A RACF command that is issued from a user ID on
+    an RRSF node. It runs in the RACF subsystem address space on the
+    same or a different RRSF node under the authority of the same or a
+    different user ID. A directed command is one that specifies AT or
+    ONLYAT. See command direction and automatic command direction.
+
+    directory default ACL.  A model ACL that gets inherited by
+    subdirectories that are created within the parent directory.
+
+    directory model ACL.  See directory default ACL.
+
+    discrete profile.  A resource profile that provides RACF protection
+    for a single resource.  Contrast with generic profile and fully
+    qualified generic profile.
+
+    discretionary access control.  An access control environment in
+    which the resource owner determines who can access the resource.
+    Contrast with mandatory access control.
+
+    disjoint.  Pertaining to security labels, when the set of security
+    categories that defines the first does not include the set of
+    security categories that defines the second, and the set of security
+    categories that defines the second does not include the set of
+    security categories that defines the first. This also means that the
+    first does not dominate the second and the second does not dominate
+    the first. See dominate.
+
+    distributed identity filter.  A mapping association between a RACF
+    user ID and one or more distributed user identities which is stored
+    in a general resource profile in the IDIDMAP class and administered
+    using the RACMAP command. A distributed identity filter consists of
+    one or more components of a distributed user's name and the name of
+    the registry where the user is defined.
+
+    dominate.  One security label dominates a second security label when
+    the security level that defines the first is equal to or greater
+    than the security level that defines the second, and the set of
+    security categories that defines the first includes the set of
+    security categories that defines the second. A security label
+    dominates itself since comparison of a security label with itself
+    meets this definition.
+
+    DSMON.  See data security monitor.
+
+    dynamic CDT.  An optional portion of the class descriptor table that
+    contains RACF classes built from profiles in the CDT general
+    resource class. It does not include the required classes that
+    comprise the supplied CDT (module ICHRRCDX) nor the optional classes
+    that comprise the installation-defined CDT (module ICHRRCDE), if it
+    exists. The dynamic CDT is processed as a logical extension of the
+    static CDT. See also static CDT.
+
+=E
+    effective group identifier (effective GID).  When the user connects
+    to the system (for example, logs on to a TSO/E session), one group
+    is selected as the user's current group. When a user becomes a z/OS
+    UNIX user, the GID of the user's current group becomes the effective
+    GID of the user's process.  The user can access resources available
+    to members of the user's effective GID. See group identifier (GID)
+    and contrast with real GID.
+
+    effective user identifier (effective UID).  When a user becomes a
+    z/OS UNIX user, the UID from the user's RACF user profile becomes
+    the effective UID of the user's process. The system uses the
+    effective UID to determine if the user is a file owner. See user
+    identifier (UID) and contrast with real UID.
+
+    entity.  A user, group, or resource (for example, a DASD data set)
+    that is defined to RACF.
+
+    envelope.  A container stored in the user's profile that contains
+    the user's encrypted password or password phrase so that it can be
+    retrieved and decrypted by authorized users of the R_Admin callable
+    service (IRRSEQ00) as part of a password synchronization solution,
+    such as IBM Tivoli Directory Integrator.
+
+    ENVR object.  A transportable form of the ACEE that can be used
+    within a single system to create the original ACEE without accessing
+    the RACF database. It can be used, with limits, elsewhere in a
+    single sysplex to recreate the original ACEE without accessing the
+    RACF database.
+
+    equivalence.  Two security labels that contain the same security
+    level and the same set of categories are considered equivalent, with
+    each being dominated by and dominating the other.
+
+    extended ACL entry.  An ACL entry for an individual user or group.
+
+=F
+    failsoft processing.  (1) Processing that occurs when no data sets
+    in the primary RACF database are available (RACF is installed but
+    inactive). RACF cannot make decisions to grant or deny access. The
+    operator is prompted frequently to grant or deny access to data
+    sets. The resource manager decides on the action for general
+    resource classes with a return code of 4.  (2) Failsoft processing
+    can also occur as the result of RVARY INACTIVE (temporary failsoft)
+    or as the result of a serious system error requiring a re-IPL
+    (permanent failsoft).
+
+    field-level access checking.  The RACF facility by which a security
+    administrator can control access to segments, other than the base
+    segment, in a RACF profile and fields in those segments.
+
+    file default ACL.  A model ACL that is inherited by files that are
+    created within the parent directory.
+
+    file model ACL.  See file default ACL.
+
+    file permission bits.  In z/OS UNIX, information about a file that
+    is used, along with other information, to determine if a process has
+    read, write, or execute/search permission to a file or directory.
+    The bits are divided into three parts, which are owner, group, and
+    other.
+
+    file security packet (FSP).  In z/OS UNIX, a control block
+    containing the security data (file's owner user identifier (UID),
+    owner group identifier (GID), and the permission bits) associated
+    with the file. This data is stored with the file in the file system.
+
+    file system object.  Used to generically refer to either a file or
+    directory.
+
+    FSP.  See file security packet.
+
+    fully qualified generic profile.  A DATASET profile that was defined
+    using the GENERIC operand and has a name that contains no generic
+    characters. A fully qualified generic profile protects only
+    resources whose names exactly match the name of the profile.
+    Contrast with discrete profile and generic profile.
+
+=G
+    general resource.  Any resource, other than an MVS data set, that is
+    defined in the class descriptor table (CDT). General resources
+    include DASD volumes, tape volumes, load modules, terminals, IMS and
+    CICS transactions, and installation-defined resource classes.
+
+    general resource profile.  A profile that provides RACF protection
+    for one or more general resources.  The information in the profile
+    can include the general resource profile name, profile owner,
+    universal access authority, access list, and other data.
+
+    general user.  A user who has limited RACF privileges, such as
+    logging on, accessing resources, and creating data sets. General
+    users typically use and create RACF-protected resources, but have no
+    authority to administer resources other than their own.
+
+    generic profile.  A resource profile that can provide RACF
+    protection for zero or more resources. The resources protected by a
+    generic profile have similar names and identical security
+    requirements, though with RACFVARS, a generic profile can protect
+    resources with dissimilar names, too. For example, a generic data
+    set profile can protect one or more data sets.  Contrast with
+    discrete profile.
+
+    global access checking.  The ability to allow an installation to
+    establish an in-storage table of default values for authorization
+    levels for selected resources. RACF refers to this table before
+    performing normal RACROUTE REQUEST=AUTH processing and grants the
+    request without performing an AUTH request if the requested access
+    authority does not exceed the global value. RACF uses this table to
+    process AUTH requests faster and with less overhead (no checking of
+    access lists, no auditing) when you have resources for which you
+    decide to grant access to all users, except those with restricted
+    user IDs. If the requested access does not exceed the access granted
+    by the table, RACF bypasses most of its normal AUTH processing.
+    Global access checking can grant the user access to the resource,
+    but it cannot deny access.
+
+    globally RACLISTed profiles.  In-storage profiles for RACF-defined
+    resources that are created by RACROUTE REQUEST=LIST and that are
+    anchored from an ACEE. Globally RACLISTed in-storage profiles are
+    shared across a system, such as the way that in-storage profiles
+    created by SETROPTS RACLIST are shared. Contrast with locally
+    RACLISTed profiles.
+
+    group.  A collection of RACF-defined users who can share access
+    authorities for protected resources.
+
+    group-ADSP attribute.  A group-related user attribute similar to the
+    ADSP attribute for a user, but assigned by using the CONNECT command
+    to restrict its effect to those cases where the user creates data
+    sets with that group as the high level qualifier of the data set
+    name (or as determined by the naming convention table or exit).
+
+    group-AUDITOR attribute.  A group-related user attribute similar to
+    the AUDITOR attribute for a user, but assigned by using the CONNECT
+    command to restrict the user's authority to resources that are
+    within the scope of the group. Contrast with AUDITOR attribute.
+
+    group authority.  An authority specifying which functions a user can
+    perform in a group. The group authorities are USE, CREATE, CONNECT,
+    and JOIN.
+
+    group data set.  A RACF-protected data set in which either the
+    high-level qualifier of the data set name or the qualifier supplied
+    by an installation-naming convention table or exit routine is a RACF
+    group name.
+
+    group-GRPACC attribute.  A group-related user attribute similar to
+    the GRPACC attribute for a user, but assigned by using the CONNECT
+    command to restrict its effect to the specific group. Contrast with
+    GRPACC attribute.
+
+    group ID.  Obsolete term for group name.
+
+    group identifier (GID).  A number between 0 and 2147483647 that
+    identifies a group of users to z/OS UNIX. The GID is associated with
+    a RACF group name when it is specified in the OMVS segment of the
+    group profile. See real GID. Contrast with effective group
+    identifier (effective GID).
+
+    group name.  A string of 1 - 8 characters that identifies a group to
+    RACF.  The first character must be A - Z, # (X'7B'), $ (X'5B'), or @
+    (X'7C'). The rest can be A - Z, #, $, @, or 0 - 9.
+
+    group-OPERATIONS attribute.  (1) A group-related user attribute
+    similar to the OPERATIONS attribute for a user, but assigned by
+    using the CONNECT command to restrict its effect to those resources
+    that are within the scope of the group.  (2) If a person needs to
+    perform maintenance activities on DASD volumes, it is more efficient
+    (for RACF processing) and better (for limiting the resources the
+    person can access) to give the person authority to those volumes
+    using the PERMIT command than to assign the person the OPERATIONS or
+    group-OPERATIONS attribute. Contrast with DASDVOL authority and
+    OPERATIONS attribute.
+
+    group profile.  A profile that defines a group. The information in
+    the profile includes the group name, profile owner, and users in the
+    group.
+
+    grouping profile.  A profile in a resource group class.
+
+    group-related user attribute.  A user attribute, assigned at the
+    group level, that enables the user to control the resource, group,
+    and user profiles associated with the group and its subgroups.
+    Group-related user attributes include group-SPECIAL attribute,
+    group-AUDITOR attribute, and group-OPERATIONS attribute. Contrast
+    with user attribute.
+
+    group-REVOKE attribute.  Assigned through the CONNECT command that
+    prevents the user from using that group as the current connect
+    group. Also prevents RACF from considering that group during
+    authorization checking.
+
+    group-SPECIAL attribute.  A group-related user attribute similar to
+    the SPECIAL user attribute, but it is assigned by the CONNECT
+    command to restrict the user's authority to users, groups, and
+    resources within the scope of the group. Within this scope, it gives
+    the user full control over everything except auditing options.
+    However, it does not give the user authority to change global RACF
+    options that will affect processing outside the group's scope.
+    Contrast with SPECIAL attribute.
+
+    GRPACC attribute.  With this attribute, any group data sets that the
+    user defines to RACF (through the ADSP attribute, the PROTECT
+    operand on the DD statement, or the ADDSD command) are automatically
+    made accessible to other users in the group at the UPDATE level of
+    access authority if the user defining the profile is a member of the
+    group. Contrast with group-GRPACC attribute.
+
+=I
+    ICB.  See inventory control block.
+
+    ICL.  See issued certificate list (ICL).
+
+    ICHRIN03.  See started procedures table.
+
+    inheritance.  The act of automatically associating an ACL with a
+    newly created object without requiring administrative action.
+
+    issued certificate list (ICL).  PKI Services database containing the
+    history of issued certificates.
+
+    interprocess communication facilities (IPC).  IPC facilities are
+    services that allow different processes to communicate.  Message
+    passing (using message queues), semaphore sets, and shared memory
+    services are forms of interprocess communication facilities.
+
+    inventory control block (ICB).  The first block in a RACF database.
+    The ICB contains a general description of the database and, for the
+    master primary data set, holds the RACF global options specified by
+    SETROPTS.
+
+    installation-defined CDT.  An optional portion of the CDT (module
+    ICHRRCDE) that is installed by the installation. The function
+    provided by this module can be replaced with the dynamic CDT
+    function.
+
+    issuer's distinguished name (IDN).  The X.509 name that is
+    associated with a certificate authority.
+
+=K
+    kernel.  The part of z/OS UNIX that provides support for such
+    services as UNIX I/O, process management, and general UNIX
+    functionality.
+
+    kernel address space.  The address space in which the z/OS UNIX
+    kernel runs. See kernel.
+
+    key.  In cryptography, a sequence of symbols that is used with a
+    cryptographic algorithm for encrypting or decrypting data. See
+    private key and public key.
+
+    key ring.  A named collection of certificates for a specific user or
+    server application used to determine the trustworthiness of a client
+    or peer entity.  Contrast to virtual key ring.
+
+=L
+    label.  A usable "handle" for a certificate.
+
+    list-of-groups checking.  A RACF option (SETROPTS GRPLIST) that
+    enables a user to access all resources available to all groups of
+    which the user is a nonrevoked member, regardless of the user's
+    current connect group. For any particular resource, RACF allows
+    access based on the highest access among the groups in which the
+    user is a member.
+
+    local mode.  An RRSF node is operating in local mode when it has no
+    RRSF logical node connection with any other RRSF node.
+
+    locally RACLISTed profiles.  In-storage profiles for RACF-defined
+    resources that are created by RACROUTE REQUEST=LIST and that are
+    anchored from an ACEE. Locally RACLISTed in-storage profiles are not
+    shared across a system, the way that in-storage profiles created by
+    SETROPTS RACLIST are shared. Contrast with globally RACLISTed
+    profiles.
+
+    logging.  The recording of audit data about specific events.
+
+    logical connection.  See RRSF logical node connection.
+
+=M
+    MAC.  See mandatory access control.
+
+    main system.  The system on a multisystem RRSF node that is
+    designated to receive most of the RRSF communications sent to the
+    node.
+
+    managed user ID association.  A user ID association in which one of
+    the associated user IDs is a managing user ID, and the other is a
+    managed user ID. The managing user ID can run allowed RACF commands
+    under the authority of the managed user ID. The managed user ID
+    cannot run commands under the authority of the managing user ID. A
+    managed user ID association does not allow password synchronization
+    between the associated user IDs. Contrast with peer user ID
+    association.
+
+    mandatory access control (MAC).  A means of restricting access to
+    objects on the basis of the sensitivity (as represented by a label)
+    of the information contained in the objects and the formal
+    authorization (clearance) of subjects to access information of such
+    sensitivity.
+
+    mask.  A technique to provide protection against casual viewing of a
+    password that has been defined or altered, when an encryption
+    function is not available.
+
+    master primary data set.  The first data set activated in the
+    primary RACF database.
+
+    member.  A user belonging to a group.
+
+    member profile.  A profile that defines a member and security level
+    for that member.
+
+    member system.  Any one of the MVS system images in a multisystem
+    RRSF node.
+
+    model ACL.  See default ACL.
+
+    modeling.  See profile modeling.
+
+    multilevel security.  A security policy that allows the
+    classification of data and users based on a system of hierarchical
+    security levels (for example: unclassified, secret, top secret)
+    combined with a system of non-hierarchical security categories (for
+    example: Project A, Project B, Project C). The system imposes
+    mandatory access controls restricting which users can access data
+    based on a comparison of the classification of the users and the
+    data.
+
+    multiple console support (MCS).  The operator interface in an MVS
+    system.
+
+    multiple-subsystem scope.  A RACF classification model used in
+    conjunction with the DB2 access control module, or RACF external
+    security module, to construct DB2 resource names with the subsystem
+    ID as part of the class name. Contrast with single-subsystem scope.
+
+    multisystem node.  See multisystem RRSF node.
+
+    multisystem RRSF node.  An RRSF node consisting of multiple MVS
+    system images that share the same RACF database. One of the systems
+    is designated to be the main system, and it receives the unsolicited
+    RRSF communications sent to the node.
+
+=N
+    nested ACEE.  An ACEE that contains the security environment (ENVR
+    object) of a daemon nested beneath the security environment of the
+    client to support daemon access to delegated resources. See ACEE and
+    delegated resource.
+
+    node.  See RRSF node.
+
+    nonautomatic profile.  A tape volume profile that RACF creates when
+    an RDEFINE command is issued or when tape data set protection is not
+    active.  A tape volume profile created in this manner is called a
+    nonautomatic profile because RACF never deletes the profile except
+    in response to the RDELETE command. Contrast with automatic profile.
+
+    non-data sharing mode.  One of two normal modes of operation when
+    RACF is enabled for sysplex communication and is the mode in which
+    RACF communicates information using sysplex facilities to other
+    instances of RACF, but does not make use of the coupling facility in
+    doing so.
+
+=O
+    OPERATIONS attribute.  A user attribute that grants the equivalent
+    of ALTER access to all data sets unless the user or one of the
+    user's connect groups appears explicitly in the access list of a
+    data set's profile. If a user needs to perform maintenance
+    activities on DASD volumes, granting DASDVOL authority to those
+    volumes using the PERMIT command is preferred over assigning the
+    OPERATIONS or group-OPERATIONS attribute. Note that most modern DASD
+    maintenance programs do not require the OPERATIONS attribute.
+    Contrast with DASDVOL authority and group-OPERATIONS attribute.
+
+    operator identification card (OIDCARD).  A small card with a
+    magnetic stripe encoded with unique characters and used to verify
+    the identity of a terminal operator to RACF.
+
+    owner.  The user or group that creates a profile, or is specified as
+    the owner of a profile. The owner can modify, list, or delete the
+    profile.
+
+=P
+    PADS.  See program access to data sets (PADS).
+
+    PassTicket.  An alternative to the RACF password that permits
+    workstations and client machines to communicate with the host. It
+    allows a user to gain access to the host system without sending the
+    RACF password across the network.
+
+    password.  A string of characters known to a user who must specify
+    it to gain full or limited access to a system and to the data stored
+    within it.  RACF uses a password to verify the identity of the user.
+
+    password envelope.  See envelope.
+
+    password synchronization.  An option that can be specified when a
+    peer user ID association is defined between two user IDs. If
+    password synchronization is specified for a user ID association,
+    then whenever the password for one of the associated user IDs is
+    changed, the password for the other user ID is automatically changed
+    to the newly defined password.  See automatic password direction.
+
+    password phrase.  A longer string of mixed characters known to a
+    user who must specify it to gain full or limited access to a system
+    and to the data stored within it. RACF uses a password phrase to
+    verify the identity of the user. Used as a more secure alternative
+    to the password.
+
+    password phrase envelope.  See envelope.
+
+    peer system.  In a RACF data sharing group, any system to which RACF
+    propagates a command entered by the system operator or
+    administrator.  Contrast with coordinator system.
+
+    peer user ID association.  A user ID association that allows either
+    user ID to run allowed RACF commands under the authority of the
+    other user ID using command direction. A peer user ID association
+    can also establish password synchronization between the associated
+    user IDs. Contrast with managed user ID association.
+
+    permission bits.  In z/OS UNIX, part of security controls for
+    directories and files stored in the z/OS UNIX file system. Used to
+    grant read, write, search (just directories), or execute (just
+    files) access to owner, file or directory owning group, or all
+    others.
+
+    PKCS.  See public key cryptographic standards.
+
+    PKI.  See public key infrastructure.
+
+    PKIX.  See public key infrastructure standards.
+
+    POSIT.  A number specified for each class in the class descriptor
+    table that identifies a set of flags that control RACF processing
+    options.
+
+    primary data set.  A data set in the primary RACF database. See
+    master primary data set.
+
+    primary RACF database.  The RACF database designated in the data set
+    name table (ICHRDSNT), or specified at IPL time, that contains the
+    RACF profiles used for authorization checking. The primary RACF
+    database might consist of as many as 90 data sets.  See backup RACF
+    database.
+
+    private key.  In public key cryptography, a key that is known only
+    to its owner.  Contrast with public key.
+
+    process.  In z/OS UNIX, a function created by a fork() request. See
+    task.
+
+    profile.  Data that describes the significant characteristics of a
+    user, a group of users, or one or more computer resources. A profile
+    contains a base segment, and optionally, a number of other segments.
+    See data set profile, discrete profile, general resource profile,
+    generic profile, group profile, and user profile.
+
+    profile list.  A list of profiles indexed by class (for general
+    resources) or by the high-level qualifier (for data set profiles)
+    and built in storage by the RACF routines.
+
+    profile modeling.  The ability for a user or an installation to copy
+    information (such as universal access authority or access lists)
+    from an existing resource profile when defining a new resource
+    profile. This might occur automatically when using ADDSD based on
+    the MODEL specification in a USER or group PROFILE, or manually with
+    the FROM keyword of the ADDSD and RDEFINE commands, or with keywords
+    on RACROUTE REQUEST=DEFINE.
+
+    program access to data sets (PADS).  A RACF function that enables an
+    authorized user or group of users to access one or more data sets at
+    a specified access authority only while running a specified
+    RACF-controlled program. See program control.
+
+    program control.  A RACF function that enables an installation to
+    control who can run RACF-controlled programs. See program access to
+    data sets.
+
+    protected resource.  A resource defined to RACF for the purpose of
+    controlling access to the resource. Some of the resources that can
+    be protected by RACF are DASD volumes, tape volumes, load modules,
+    terminals, IMS and CICS transactions, and installation-defined
+    resource classes.
+
+    protected user ID.  A user ID that cannot enter the system by any
+    means that requires a password or password phrase, and cannot be
+    revoked by incorrect password and password phrase attempts.
+    Assigning a protected user ID to z/OS UNIX, a UNIX daemon, or
+    another important started task or subsystem assures that the ID
+    cannot be used for other purposes, and that functions will not fail
+    because the ID has been revoked.
+
+    public key.  In public key cryptography, a key that is made
+    available to everyone.  Contrast with private key.
+
+    public key cryptography.  Cryptography in which public keys and
+    private keys are used for encryption and decryption. One party uses
+    a common public key and the other party uses secret private key. The
+    keys are complementary in that if one is used to encrypt data, the
+    other can be used to decrypt it.
+
+    public key cryptographic standards (PKCS).  Set of standards
+    developed by RSA Corporation to facilitate interoperability for
+    cryptographic protocols.
+
+    public key infrastructure (PKI).  The set of hardware, software,
+    people, policies, and procedures needed to create, manage, store,
+    distribute, and revoke public key certificates based on public key
+    cryptography.
+
+    public key infrastructure Standards (PKIX).  Set of standards needed
+    to support an X.509-based PKI.
+
+    PV.  See persistent verification.
+
+=R
+    RACDEF request.  The DEFINE function replaces the RACDEF function.
+    See DEFINE request.
+
+    RACF.  See Resource Access Control Facility.
+
+    RACF database.  The repository for the security information that
+    RACF maintains.
+
+    RACF data set.  One of the data sets comprising the RACF database.
+
+    RACF-indicated.  Pertaining to a data set for which the RACF
+    indicator is set on. If a data set is RACF-indicated, a user can
+    access the data set only if a RACF profile or an entry in the global
+    access checking table exists for that data set. On a system without
+    RACF, a user cannot access a RACF-indicated data set until the
+    indicator is turned off. For VSAM data sets, the indicator is in the
+    catalog entry. For non-VSAM data sets, the indicator is in the data
+    set control block (DSCB). For data sets on tape, the indicator is in
+    the RACF tape volume profile of the volume that contains the data
+    set.
+
+    RACF manager.  The routines within RACF that provide access to the
+    RACF database.  Contrast with RACF storage manager.
+
+    RACF-protected.  Pertaining to a resource that has either a discrete
+    profile or an applicable generic profile. A data set that is
+    RACF-protected by a discrete profile must also be RACF-indicated.
+
+    RACF remote sharing facility (RRSF).  RACF services that function
+    within the RACF subsystem address space to provide network
+    capabilities to RACF.
+
+    RACF remove ID utility.  A RACF utility that identifies references
+    to user IDs and group names in the RACF database. The utility can be
+    used to find references to residual user IDs and group names or
+    specified user IDs and group names. The output from this utility is
+    a set of RACF commands that can be used to remove the references
+    from the RACF database after review and possible modification. See
+    residual user ID.
+
+    RACF report writer.  A RACF function that produces reports on system
+    use and resource use from information found in the RACF SMF records.
+    However, the preferred method for producing RACF SMF reports is the
+    RACF SMF data unload utility (IRRADU00).
+
+    RACF segment.  Obsolete term for base segment.
+
+    RACF SMF data unload utility (IRRADU00).  A RACF utility that
+    enables installations to create a sequential file from the
+    security-relevant audit data. The sequential file can be viewed
+    directly, used as input for installation-written programs, and
+    manipulated with sort/merge utilities.  It can also be uploaded to a
+    database manager (such as DB2) to process complex inquiries and
+    create installation-tailored reports.  See SMF records.
+
+    RACF storage manager.  Manages the allocation of storage for the
+    RACF programs running on a system.
+
+    RACLISTed profiles.  See locally RACLISTed profiles and globally
+    RACLISTed profiles.
+
+    RACROUTE macro.  An assembler macro that provides a means of calling
+    RACF to provide security functions, including the AUDIT request,
+    AUTH request, DEFINE request, DIRAUTH request, EXTRACT request,
+    FASTAUTH request, LIST request, SIGNON request, STAT request,
+    TOKENBLD request, TOKENMAP request, TOKENXTR request, VERIFY
+    request, and VERIFYX request.
+
+    read-only mode.  A recovery mode of operation when RACF is enabled
+    for sysplex communication. Read-only mode does not allow updates to
+    be made to the RACF database except for statistics generated during
+    logon and job initiation.
+
+    real GID.  The attribute of a process that, at the time of process
+    creation, identifies the group of the user who created the process.
+    See group identifier (GID). Contrast with effective group identifier
+    (effective GID).
+
+    real UID.  The attribute of a process that, at the time of process
+    creation, identifies the user who created the process. See user
+    identifier (UID). Contrast with effective user identifier (effective
+    UID).
+
+    relative byte address (RBA).  The address in the RACF database.
+
+    relative distinguished name (RDN).  One component of a distinguished
+    name.
+
+    residual authority.  References in the RACF database to group names
+    and user IDs that have been deleted.
+
+    residual group name.  References in the RACF database to a group
+    name that has been deleted.
+
+    residual user ID.  References in the RACF database to a user ID that
+    has been deleted.
+
+    Resource Access Control Facility (RACF).  A component of z/OS
+    Security Server that provides access control by identifying and
+    verifying the users to the system, authorizing access to protected
+    resources, logging detected unauthorized attempts to enter the
+    system, logging unauthorized attempts to enter the system, and
+    logging detected accesses to protected resources.  RACF for z/VM is
+    available as a feature of z/VM.
+
+    resource group profile.  A general resource profile in a resource
+    grouping class. A resource group profile can provide RACF protection
+    for one or more resources with unlike names. See resource grouping
+    class.
+
+    resource grouping class.  A RACF class in which resource group
+    profiles can be defined. A resource grouping class is related to
+    another class, sometimes called a member class. For example, the
+    resource grouping class GTERMINL is related to the class TERMINAL.
+    See resource group profile.
+
+    resource profile.  A profile that provides RACF protection for one
+    or more resources. USER, GROUP, and CONNECT profiles are not
+    resource profiles.  The information in a resource profile can
+    include the profile name, profile owner, universal access authority,
+    access list, and other data.  Resource profiles can be discrete
+    profiles or generic profiles. See discrete profile and generic
+    profile.
+
+    RESTRICTED attribute.  A user attribute that can be assigned to a
+    shared user ID, such as PUBLIC or ANONYMOS, or a user ID used with a
+    certificate name filter, to prevent the user ID from being used to
+    access protected resources it is not specifically authorized to
+    access. Restricted users cannot gain access to protected resources
+    through global access checking, UACC, or an ID(*) entry on the
+    access list, and optionally, to a z/OS UNIX file system object
+    through the 'other' bits.
+
+    reverse mandatory access check.  A mandatory access check in which
+    the security label of the resource must dominate the security label
+    of the user in order for the user to be granted access to the
+    resource.
+
+    REVOKE attribute.  A user attribute that prevents a RACF-defined
+    user from entering the system.
+
+    RRSF.  See RACF remote sharing facility.
+
+    RRSF logical node connection.  Two RRSF nodes are logically
+    connected when they are properly configured to communicate through
+    APPC/MVS, and they have each been configured by the TARGET command
+    to have an OPERATIVE connection to the other.
+
+    RRSF network.  Two or more RRSF nodes that have established RRSF
+    logical node connections to each other.
+
+    RRSF node.  An MVS system image or a group of MVS system images
+    sharing a RACF database, which has been defined as an RRSF node,
+    single-system RRSF node, or multisystem RRSF node to RACF by a
+    TARGET command. See RRSF logical node connection.
+
+    RTOKEN.  The RACF resource security token. An RTOKEN is an
+    encapsulation or representation of the security characteristics of a
+    resource. Resource managers, for example JES, can assign RTOKENs to
+    the resources they manage; for example, JES spool files. See UTOKEN
+    and STOKEN.
+
+=S
+    SAF.  See System Authorization Facility.
+
+    secured signon.  A RACF function providing an alternative to the
+    RACF password and also providing enhanced security across a network.
+
+    security.  See data security.
+
+    security category.  A non-hierarchical grouping of sensitive
+    information used to control access to data.
+
+    security classification.  The use of security categories, a security
+    level, or both, to impose additional access controls on sensitive
+    resources. An alternative way to provide security classifications is
+    to use security labels.
+
+    security label.  An installation-defined name that corresponds to a
+    specific RACF security level with a set of zero or more security
+    categories. This is equivalent to the NCSC term sensitivity label.
+
+    security level.  An installation-defined name that corresponds to a
+    numerical security level; the higher the number, the higher the
+    security level.
+
+    security token.  A collection of identifying and security
+    information that represents data to be accessed, a user, or a job.
+    This contains a user ID, group name, security label, node of origin,
+    and other information.
+
+    segment.  A portion of a profile. The format of each segment is
+    defined by a template.
+
+    SETROPTS RACLISTed profiles.  See globally RACLISTed profiles.
+
+    SFS.  See Shared File System.
+
+    shared GID.  An OMVS GID value that has been assigned to more than
+    one group.
+
+    shared UID.  An OMVS UID value that has been assigned to more than one
+    user.
+
+    signed-on-from list.  A list of user entries identifying those users
+    who have been signed on from a partner LU to a local LU and is
+    associated with persistent verification.
+
+    single-system node.  See single-system RRSF node.
+
+    single-system RRSF node.  An RRSF node consisting of one MVS system
+    image.
+
+    site certificate.  A type of certificate managed by RACF. See
+    digital certificate.
+
+    SMF data unload utility.  See RACF SMF data unload utility.
+
+    SMF records.  (1) Records and system or job-related information
+    collected by the System Management Facility (SMF) and used in
+    billing users, reporting reliability, analyzing the configuration,
+    scheduling jobs, summarizing direct access volume activity,
+    evaluating data set activity, profiling system resource use, and
+    maintaining system security.  (2) Variable-length process or status
+    records from the SMF data set that are written to the SMF log data
+    set. These records vary in layout based on the type of system
+    information they contain. See RACF SMF data unload utility.
+
+    source user ID.  The source half of a source user ID and target user
+    ID pair that has an established user ID association between them.
+    For command direction the source user ID is the user ID that issued
+    the command that is being directed. For password synchronization the
+    source user ID is the user ID whose password changed, causing a
+    change to the password of the target user ID. Contrast with target
+    user ID.
+
+    SPECIAL attribute.  A user attribute that gives the user full
+    control over all of the RACF profiles in the RACF database and
+    allows the user to issue all RACF commands, except for commands and
+    operands related to auditing.  Contrast with group-SPECIAL
+    attribute.
+
+    split database.  A RACF database that has been divided among
+    multiple data sets.
+
+    standard access list.  The portion of a resource profile that
+    specifies the users and groups that might access the resource and
+    the level of access granted to each. Synonymous with access list.
+    Contrast with conditional access list.
+
+    started procedures table (ICHRIN03).  Associates the names of
+    started procedures with specific RACF user IDs and group names. It
+    can also contain a generic entry that assigns a user ID or group
+    name to any started task that does not have a matching entry in the
+    table. However, it is recommended that you use the STARTED class for
+    most cases rather than the started procedures table.
+
+    static CDT.  The non-dynamic portion of the class descriptor table
+    that is contained in the supplied CDT (module ICHRRCDX) and the
+    optional installation-defined CDT (module ICHRRCDE). See also
+    dynamic CDT.
+
+    STAT request.  The issuing of the RACROUTE macro with REQUEST=STAT
+    specified. A STAT request determines if RACF is active and
+    (optionally) if a given resource class is defined to RACF and
+    active. The STAT request replaces the RACSTAT function.
+
+    STOKEN.  A UTOKEN associated with a user who has submitted work. See
+    UTOKEN and RTOKEN.
+
+    subject's distinguished name (SDN).  The X.509 name in a digital
+    certificate that is associated with the name of the subject.
+
+    superuser.  In z/OS UNIX, a system user who operates with the
+    special privileges needed to perform a specified administrative
+    task.
+
+    superuser authority.  In z/OS UNIX, the unrestricted authority to
+    access and modify any part of the operating system, usually
+    associated with the user who manages the system.
+
+    supplied CDT.  The required portion of the CDT (module ICHRRCDX)
+    that is supplied by IBM and shipped with RACF. Classes defined in
+    the supplied CDT must not be modified by the installation.
+
+    syscall.  See callable service.
+
+    system authorization facility (SAF).  An interface defined by MVS
+    that enables programs to use system authorization services in order
+    to control access to resources, such as data sets and MVS commands.
+    SAF either processes security authorization requests directly or
+    works with RACF, or other security product, to process them.
+
+    system call.  In z/OS UNIX, a synonym for callable service.
+
+=T
+    tape volume set.  The collection of tape volumes on which a
+    multivolume data set resides. A volume set is represented in one
+    RACF profile.
+
+    tape volume table of contents (TVTOC).  Information about a tape
+    data set that RACF stores in the tape volume profile for the volume
+    on which the data set resides. The TVTOC includes the data set name,
+    data set sequence number, creation date, and an indicator as to
+    whether a discrete tape data set profile exists.
+
+    target node.  An RRSF node that a given RRSF node is logically
+    connected to, as a result of a TARGET command. See local node and
+    remote node.
+
+    target user ID.  The target half of a source user ID and target user
+    ID pair that has an established user ID association between them.
+    For command direction, the target user ID is the user ID specified
+    on the AT or ONLYAT keyword, and is the user ID under whose
+    authority the command is run on the specified node.  For password
+    synchronization, the target user ID is the user ID whose password
+    RACF automatically updates when the password for the source user ID
+    is changed. Contrast with source user ID.
+
+    task.  A basic unit of work to be performed or a process and the
+    procedures that run the process.
+
+    template.  Contains mappings of the profiles on the RACF database.
+
+    token.  A real or virtual device that stores cryptographic data
+    objects such as keys and digital certificates.
+
+    tranquility.  Keeping the security classification of a resource
+    constant while it is in use; keeping the security classification of
+    a user constant while active.
+
+    TVTOC.  See tape volume table of contents.
+
+=U
+    UACC.  See universal access authority.
+
+    UADS.  See user attribute data set.
+
+    universal access authority (UACC).  The default access authority
+    that applies to a resource if the user or group is not specifically
+    permitted access to the resource, unless the user is restricted. The
+    universal access authority can be any of the access authorities.
+
+    universal group.  A user group defined using the UNIVERSAL operand
+    of the ADDGROUP command.  Universal groups are expected to have a
+    large number of members and are unlikely to be deleted. Group
+    profiles for universal groups do not contain complete membership
+    information, and the LISTGRP command is not recommended to list
+    members. Using the output of the database unload utility (IRRDBU00)
+    is the best way to list members of a universal group.
+
+    user.  A person who requires the services of a computing system.
+
+    user attribute.  The extraordinary privileges, restrictions, and
+    processing environments assigned to a user. The user attributes are
+    SPECIAL, AUDITOR, CLAUTH, OPERATIONS, GRPACC, ADSP, and REVOKE.
+
+    user attribute data set (UADS).  In TSO, a partitioned data set with
+    a member for each authorized user.  Each member contains the
+    appropriate passwords, user identifications, account numbers, LOGON
+    procedure names, and user characteristics that define the user.
+
+    user certificate.  A type of certificate managed by RACF. See
+    digital certificate.
+
+    user data set.  A data set defined to RACF in which either the
+    high-level qualifier of the data set name or the qualifier supplied
+    by an installation exit routine is a RACF user ID.
+
+    user ID.  A RACF user ID. A string of 1 - 8 alphanumeric characters
+    that uniquely identifies a RACF user, procedure, or batch job to the
+    system.  For TSO users, the user ID cannot exceed 7 characters and
+    must begin with an alphabetic, #, $, or @ character. The user ID is
+    defined by a user profile in the RACF database and is used as the
+    name of the profile.
+
+    user ID association.  A relationship between two user IDs,
+    established through the RACLINK command, which is required for
+    command direction and password synchronization between the user IDs.
+    See peer user ID association and managed user ID association.
+
+    user identification.  See user ID.
+
+    user identification and verification.  The acts of identifying and
+    verifying a RACF-defined user to the system during logon or batch
+    job processing. RACF identifies the user by the user ID and verifies
+    the user by the password, password phrase, PassTicket, verified
+    digital certificate, or operator identification card supplied during
+    logon processing or the password supplied on a batch JOB statement.
+
+    user identifier (UID).  A number between 0 and 2147483647 that
+    identifies a user to z/OS UNIX. The UID is associated with a RACF
+    user ID when it is specified in the OMVS segment of the user
+    profile. It can be contained in an object of type uid_t, that is
+    used to identify a system user. When the identity of the user is
+    associated with a process, a UID value is referred to as a real UID,
+    an effective UID, or an (optional) saved set UID. See real UID.
+    Contrast with effective user identifier (effective UID).
+
+    user name.  In RACF, 1 - 20 alphanumeric characters that represent a
+    RACF-defined user. Contrast with user ID.
+
+    user profile.  A description of a RACF-defined user that includes
+    the user ID, user name, default group name, password, password
+    phrase, profile owner, user attributes, and other information. A
+    user profile can include information for subsystems such as TSO and
+    DFP.
+
+    UTOKEN.  The RACF user security token. A UTOKEN is an encapsulation
+    or representation of the security characteristics of a user. RACF
+    assigns a UTOKEN to each user in the system. See STOKEN and RTOKEN.
+
+=V
+    verification.  See user identification and verification.
+
+    virtual key ring.  The set of certificates owned by a user ID and
+    used by a user or server application to determine the
+    trustworthiness of a client or peer entity. Each RACF user ID is
+    associated with a virtual key ring.  In contrast to a real key ring,
+    a virtual key ring is not added to RACF.  In addition, the private
+    key cannot be retrieved from a CERTAUTH or SITE virtual key ring, as
+    it can be from a real key ring. The most common type is the CERTAUTH
+    virtual key ring which is used when an application uses a key ring
+    to validate the certificates of others but has no need for its own
+    certificate and private key.
+
+=W
+    workspace data sets.  VSAM data sets used by RACF for queuing
+    requests sent to and received from target nodes in an RRSF
+    environment.
+
+    writedown mode.  The setting of an address space at which it can
+    create output data at a lower security label than the current
+    security label of the address space on a system where writedown is
+    normally disallowed because the RACF MLS(FAILURES) option is in
+    effect.
+
+    writedown privilege.  The ability of users to set their address
+    spaces to writedown mode in which they are able to write data to an
+    object with a lower security label than the user's current security
+    label on a system where writedown is normally disallowed because the
+    RACF MLS(FAILURES) option is in effect.
+
+=Z
+    z/OS UNIX group identifier (GID).  See group identifier (GID).
+
+    z/OS UNIX System Services (z/OS UNIX).  The set of functions
+    provided by the shells, utilities, kernel, file system, debugger,
+    Language Environment, and other elements of the z/OS operating
+    system that allows users to write and run application programs that
+    conform to UNIX standards.
+
+    z/OS UNIX user identifier (UID).  See user identifier (UID).

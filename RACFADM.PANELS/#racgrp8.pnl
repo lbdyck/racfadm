@@ -7,6 +7,9 @@
 %Tutorial+\-\(%RACFADM - Group Profiles+)\-\%Tutorial
 %Command ===>_ZCMD
 %
++Panel Legend
+%  Description+(U)=Universal Group
+%
 +Primary Commands
 %  Find text        +Find a text string
 %  Sort column A/D  +Sort a column, in ascending or descending order

@@ -85,4 +85,7 @@ _Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  
 /*  4) The column headers are point-n-shoot fields to sort the data   */
 /*     in ascending or descending order                               */
 /*                                                                    */
+/*  5) An asterisk (*) is displayed in last position of TSO column    */
+/*     if userid has Digital Certificates                             */
+/*                                                                    */
 /*--------------------------------------------------------------------*/

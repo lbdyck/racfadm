@@ -17,17 +17,17 @@
 +  @z {m0desc   +Customize options      @z {mcdesc    +Execute RACF commands
 +  @z {m1desc   +User profiles          @z {mddesc    +Dataset list
 +  @z {m2desc   +Group profiles         @z {medesc    +Dataset enqueues
-+  @z {m3desc   +Dataset profiles       @z {mhdesc    +RACF help commands
-+  @z {m4desc   +General resources      @z {mldesc    +ISPF log file
-+  @z {m5desc   +Password reset         @z {mmdesc    +RACF messages
-+  @z {m6desc   +Group tree report      @z {modesc    +OMVS RACF commands
-+  @z {OPT1DESC ÝOPT1INFO               @z {mpdesc    ÝMPINFO
-+  @z {OPT2DESC ÝOPT2INFO               @z {mrdesc    +RACF reports
-+  @z {OPT3DESC ÝOPT3INFO               @z {msdesc    +Coding/design
-+  @z {OPT4DESC ÝOPT4INFO               @z {mtdesc    +Help
++  @z {m3desc   +Dataset profiles       @z {mgdesc    +Generate profile source
++  @z {m4desc   +General resources      @z {mhdesc    +RACF help commands
++  @z {m5desc   +Password reset         @z {mldesc    +ISPF log file
++  @z {m6desc   +Group tree report      @z {mmdesc    +RACF messages
++  @z {OPT1DESC ÝOPT1INFO               @z {modesc    +OMVS RACF commands
++  @z {OPT2DESC ÝOPT2INFO               @z {mpdesc    ÝMPINFO
++  @z {OPT3DESC ÝOPT3INFO               @z {mrdesc    +RACF reports
++  @z {OPT4DESC ÝOPT4INFO               @z {msdesc    +Coding/design
 +  @z {OPT5DESC ÝOPT5INFO               @z {mudesc    +Version/updates
-+  @z {OPT6DESC ÝOPT6INFO              @z  {mcadesc   +Digital certificates
-+
++  @z {OPT6DESC ÝOPT6INFO               @z {mcadesc   +Digital certificates
++                                       @z {mtdesc    +Help
 + ---------------------------------------------------------------------------
 +   RACF:!RACFVER        +PrmDB:!PRMDBASE
 +   FMID:!RACFFMID       +BkpDB:!BKPDBASE
@@ -38,8 +38,8 @@
 )INIT
   .CURSOR = ZCMD
   .HELP   = #RACMENU
-  .zvars  = '(m0 mc m1 md m2 me m3 mh m4 ml m5 mm m6 mo +
-             opt1 mp opt2 mr opt3 ms opt4 mt opt5 mu opt6 mca utype)'
+  .zvars  = '(m0 mc m1 md m2 me m3 mg m4 mh m5 ml m6 mm +
+             opt1 mo opt2 mp opt3 mr opt4 ms opt5 mu opt6 mca mt utype )'
   &m0 = '0'
   &m0desc = 'Settings'
   &mc = 'C'
@@ -78,6 +78,8 @@
   &msdesc = 'Standards'
   &mt = 'T'
   &mtdesc = 'Tutorial'
+  &mg = 'G'
+  &mgdesc = 'Generate'
   &mu = 'U'
   &mudesc = 'Updates'
   &mca = 'CA'
@@ -354,6 +356,7 @@
      CA,'CMD(%RACFCERT)'
       D,'CMD(%RACFDSL)'
       E,'CMD(%RACFENQS)'
+      G,'CMD(%RACFGEN)'
       H,'CMD(%RACFHELP)'
  /*   I,'CMD(%RACFLOG $ISSUES)'    Known issues (PMRs)         Hidden */
       L,'CMD(%RACFLOG ISPLOG)'
@@ -389,11 +392,12 @@
   FIELD(OPT3DESC) VAR(ZCMD) VAL('9')
   FIELD(msdesc  ) VAR(ZCMD) VAL('S')
   FIELD(OPT4DESC) VAR(ZCMD) VAL('10')
-  FIELD(mtdesc  ) VAR(ZCMD) VAL('T')
+  FIELD(mgdesc  ) VAR(ZCMD) VAL('G')
   FIELD(OPT5DESC) VAR(ZCMD) VAL('11')
   FIELD(mudesc  ) VAR(ZCMD) VAL('U')
   FIELD(OPT6DESC) VAR(ZCMD) VAL('12')
   FIELD(mcadesc ) VAR(ZCMD) VAL('CA')
+  FIELD(mtdesc  ) VAR(ZCMD) VAL('T')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

@@ -1,0 +1,46 @@
+)ATTR DEFAULT(%+_)
+  /*  % TYPE(TEXT)  INTENS(HIGH)     defaults displayed for      */
+  /*  + TYPE(TEXT)  INTENS(LOW)      information only            */
+      _ TYPE(INPUT) INTENS(HIGH) CAPS(ON) JUST(LEFT)
+      ? TYPE(INPUT) INTENS(HIGH) CAPS(ON) JUST(LEFT) HILITE(USCORE)
+)BODY EXPAND(\\)
++\-\ %Enhanced RACF Administration+ \-\
+%Option ===>_ZCMD
++
++Select one of the following and press%ENTER+:
++
++
++%1+ USER     - User profiles
++%2+ GROUP    - Group profiles
++%3+ DATA SET - Data set profiles
++%4+ GENERAL  - General resource ?CLASS   +
++%5+ RACAUTH+ - Analyze ACL
++%6+ RACOPTS+ - System Options
++
++
++%O +OPTIONS+ - ERA Options
++
++
+)INIT
+.CURSOR=ZCMD
+)PROC
+ &ZSEL=TRANS(TRUNC(&ZCMD,'.')
+     1,'CMD(%RACUSER)'
+     2,'CMD(%RACGROUP)'
+     3,'CMD(%RACDSN)'
+     4,'CMD(%RACSETR &CLASS)'
+     5,'CMD(%RACAUTH)'
+     6,'CMD(%RACOPTS)'
+     O,'PANEL(ERAPOPT)'
+   ' ',' '
+     *,'?')
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*                                                                    */
+/*  1) Original menu in Nico Rizzuto's Enhanced RACF Administration   */
+/*     (ERA) dialog                                                   */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

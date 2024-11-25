@@ -9,6 +9,30 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  25 Nov 2024 - V38R8
+     - User Profiles (Option 1)
+       -- A marker character is placed in last position of TSO Y/N
+          if userid has Digital Certificates (default = *)
+       -- Add exec RACFDCER to set the Digital Certificate indicator
+          in RACFUSR exec
+       -- Add unodocumented command NOTONLY (reverse of ONLY)
+     - Group Profiles (Option 2)
+       -- Updated RACFGRP exec to display number of users connected
+          to a group and if group is Universal - (U) in data field
+       -- Update skeleton RACFGRP8 to include Conn(ects) header
+     - Updated RACFHELP (Option H)
+       -- Added pseudo help member $GLOSSRY which is a list of
+          technical terms and abbreviations for RACF.  Copy this
+          member to the SYSHELP concatenation.
+     - Added Generate profile source (Option G)
+       -- Added RACFGEN exec to generate ADDSD/RDEFINE and
+          PERMIT commands for a filter and class
+       -- Added RACFGEN1 panel to prompt for filter and class
+       -- Added #RACGEN1 tutorial panel
+     - Main Menu
+       -- Added panel #RACHIST to document Nico Rizzuto's ERA
+          which RACFADM evolved from
+
   28 Oct 2024 - V38R7
      - Main Menu
        -- Added check in RACFMENU for PROFILE NOMSGID

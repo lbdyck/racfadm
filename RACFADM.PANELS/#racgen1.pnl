@@ -1,0 +1,29 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Generate Profile Source+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%  Generate profile source for DATASET and resource profiles
++
++  RACF profiles tend to be built up over time as a result of the TSO
++  commands issued by RACF administrators and others.  However, if you
++  want to rename your high-level qualifiers or move profiles to a
++  different RACF database, there is no IBM tool to reconstruct the
++  original commands.
++
++  This dialog provides this facility.  It accepts two parameters: the
++  first is the search filter and the second the class name.  The search
++  filter works in the same way as the RACF search command.  The class
++  defaults to DATASET but can also be a general resource class name.
++
++  The result is a file consisting of the!ADDSD/RDEFINE+and!PERMIT+
++  commands that, if re- executed, would create the same profiles that
++  currently exist.  This file can then be edited to change the
++  high-level qualifier or sent to another system before re-execution.
++  It can also be used for report generation purposes.
+)PROC
+  &ZUP     = #RACGEN1
+)END

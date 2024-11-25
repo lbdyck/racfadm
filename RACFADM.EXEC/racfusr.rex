@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F8  241114  TRIDJK   Mark userid in TABLEA if user digital certs  */
 /* @F7  241023  TRIDJK   Added RINGS/CERTS for users in TABLEA        */
 /* @F6  240917  TRIDJK   Added ERR33,34,35,35 messages for Connect    */
 /* @F5  240901  TRIDJK   Use S=Special O=Operations A=Audit in ATT    */
@@ -213,6 +214,7 @@ TABLEA      = 'TA'RANDOM(0,99999)  /* Unique table name A  */ /* @EB */
 TABLEB      = 'TB'RANDOM(0,99999)  /* Unique table name B  */ /* @EC */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @E2 */
 datesep     = racfdsep()   /* Date separator char          */ /* @F2 */
+certind     = racfdcer()   /* Digital cert indicator       */ /* @F8 */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @DZ */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @DZ */
 NULL        = ''                                              /* @ED */
@@ -1516,6 +1518,12 @@ CREATE_TABLEA:                                                /* @BE */
      /* Get further info                           -*/
      /*---------------------------------------------*/
      call GETD
+     x = outtrap("lcert.")                                    /* @F8 */
+     cmd = 'racdcert list id('user')'                         /* @F8 */
+     Address TSO cmd                                          /* @F8 */
+     x = outtrap("off")                                       /* @F8 */
+     if lcert.0 > 1 then                                      /* @F8 */
+       tsouser = left(tsouser,2)||certind /* Digital Certs */ /* @F8 */
      "TBMOD" TABLEA
   end  /* Do i=1 to var.0 */
 

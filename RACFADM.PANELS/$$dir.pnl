@@ -7,6 +7,7 @@
  $$DIR     Directory      Document members
  $CLASSES  Information    Document general resource classes
  $DEFSETG  Settings       Default site settings for new users
+ $GLOSSRY  TSO Help       Technical terms and abbreviations for RACF
  $ISSUES   Problems       Document all reported issues
  $REPORTS  Reports        ICETOOL/DSMON reports
  $STNDARD  Standards      Document coding and design
@@ -28,11 +29,14 @@
  #RACDSN2  Tutorial       Dataset profile
  #RACDSN5  Tutorial       Dataset's group/id profile
  #RACENQ   Tutorial       Enqueue information
+ #RACERA   History        Nico Rizzuto's original menu for ERA
+ #RACGEN1  Tutorial       Generate profile source
  #RACGRP5  Tutorial       Group's userids profiles
  #RACGRP8  Tutorial       Group profile
  #RACGTRE  Tutorial       Group tree report
  #RACHEL1  Tutorial       RACF help commands (1 of 2)
  #RACHEL2  Tutorial       RACF help commands (2 of 2)
+ #RACHIST  Tutorial       RACF history (Nico Rizzuto's ERA)
  #RACIBM   Tutorial       RACF IBM option
  #RACLOG   Tutorial       ISPF log file
  #RACMENU  Tutorial       Main menu, menu option T
@@ -106,6 +110,7 @@
  RACFDSN6  Dataset        Change access
  RACFDSN7  Dataset        Add access
  RACFEXP   Certificates   Certificate Export DSN
+ RACFGEN1  Generate       Generate profile source
  RACFGRP1  Group          Set filter, menu option 2
  RACFGRP2  Group          Add group
  RACFGRP4  Group          Alter profile

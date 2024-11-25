@@ -10,6 +10,7 @@
 %
 +Panel Legend
 %  ATTributes+(S=Special, O=Operations, A=Auditor)  %REVoked+(Y=Yes, N=No)
+%  TSO+(Y=Yes, N=No)  *=User Digital Certificate
 %
 +Primary Commands
 %  Find text        +Find a text string
