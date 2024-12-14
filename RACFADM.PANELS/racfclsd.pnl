@@ -11,12 +11,12 @@
 +USER:   $USER    +
 +SELECT: %S+Show,%L+List
 %
-%S  ~Class
+%S  ~Class          ~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ $Z                                                                         +
+_Z+ $Z              #Z                                                         +
 )INIT
-  .ZVARS   = '(OPTA CLASS)'
+  .ZVARS   = '(OPTA CLASS CDESC)'
   .HELP    = #RACCLS8
   IF (&SAMT = ' ')
       &SAMT = &ZSCED

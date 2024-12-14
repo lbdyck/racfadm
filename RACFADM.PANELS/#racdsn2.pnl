@@ -20,6 +20,7 @@
 %  S  !Show         +List of standard access permits defined for this profile
 %  W  !When         +List of conditional access permits defined for this profile
 %  L  !List         +Issue LISTDSD command
+%  P  !Profile      +List dataset profile using IRRXUTIL@(admin RACF API)
 %  D  !Dsn          +Display datasets
 %  C  !Change       +Change profile attributes@(admin)
 %  A  !Add          +Define a new profile@(admin)

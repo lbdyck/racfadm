@@ -14,6 +14,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @B2  241214  TRIDJK   Handle IRRXUTIL error codes                  */
 /* @B1  240906  TRIDJK   Handle _SETROPTS class and profile           */
 /* @B0  230908  TRIDJK   Handle irrcerta et al "anchor" user profiles */
 /* @AZ  200923  TRIDJK   PARSE ARG ...  (lower case for DIGTCERT/RING)*/
@@ -100,14 +101,15 @@ ADDRESS ISPEXEC
   /* Check return code and exit if problem is discovered */
   if (word(cmd_rc,1) <> 0) then do                            /* @A9 */
      select                                                   /* @A8 */
+        when (class = "DATASET") THEN NOP                     /* @B2 */
         when (class = "USER") THEN class="GROUP"              /* @A8 */
         otherwise class="USER"                                /* @A8 */
      end                                                      /* @A8 */
      call exccmd                                              /* @A9 */
      if (word(cmd_rc,1) <> 0) then do                         /* @A9 */
         call sez "Error calling IRRXUTIL: "cmd_rc             /* @A9 */
-        if (word(cmd_rc,1) = 12) then                         /* @A9 */
-           call sez "R_admin failure"
+     /* if (word(cmd_rc,1) = 12) then                         /* @B2 */
+           call sez "R_admin failure" */                      /* @B2 */
         irrxout.0 = irrx
         call do_view_stem irrxout
         call Goodbye                                          /* @AS */
@@ -282,11 +284,13 @@ EXCCMD:                                                       /* @A9 */
   profile = STRIP(profile)                                    /* @AQ */
   cmd = "IRRXUTIL('EXTRACT','"class"','"profile"','RACF',)"   /* @AP */
   interpret 'cmd_rc = 'cmd                                    /* @A9 */
-  cmd_rc = WORD(cmd_rc,1)                                     /* @AX */
+/*cmd_rc = WORD(cmd_rc,1)*/                                   /* @B2 */
   if (SETMSHOW <> 'NO') then                                  /* @AG */
      call SHOWCMD                                             /* @A9 */
-  if (WORD(cmd_rc,1) = 12) then                               /* @AN */
-     call racfmsgs ERR20                                      /* @AN */
+  if cmd_rc = '12 12 8 8 24' then                             /* @B2 */
+     call racfmsgs ERR20                                      /* @B2 */
+  if cmd_rc = '12 12 4 4 4' then                              /* @B2 */
+     call racfmsgs ERR37                                      /* @B2 */
 RETURN                                                        /* @A9 */
 /*--------------------------------------------------------------------*/
 /*  Display RACF command and return code                         @A9  */

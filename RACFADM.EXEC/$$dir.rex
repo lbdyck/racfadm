@@ -17,6 +17,7 @@
  RACFCLSR  Class          Display class profiles, menu option 4
  RACFCLSS  Class          Search and display classes
  RACFCMDS  Commands       Execute/save/display TSO RACF commands
+ RACFCOPU  User           Clone a User Profile, (line cmd K)
  RACFDB    Database       Display RACF database info, menu option 8
  RACFDCER  User           Sets the Digital Certificate indicator
  RACFDSEP  User/Group     Sets the date separator character

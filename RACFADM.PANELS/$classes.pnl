@@ -1,690 +1,473 @@
-+----------------------------------------------------------------------+
-|                  RACF, MVS, and Miscellaneous classes                |
-|----------------------------------------------------------------------|
-| ACEECHK   | Configuration of RACF ACEE Privilege Escalation Detection|
-|-----------|----------------------------------------------------------|
-| ALCSAUTH  | Supports the Airline Control System/MVS (ALCS/MVS)       |
-|           | product.                                                 |
-|-----------|----------------------------------------------------------|
-| APPCLU    | Verifying the identity of partner logical units during   |
-|           | VTAM session establishment.                              |
-|-----------|----------------------------------------------------------|
-| APPCPORT  | Controlling which user IDs can access the system from a  |
-|           | given LU (APPC port of entry). Also, conditional access  |
-|           | to resources for users entering the system from a given  |
-|           | LU.                                                      |
-|-----------|----------------------------------------------------------|
-| APPCSERV  | Controlling whether a program being run by a user can    |
-|           | act as a server for a specific APPC transaction program  |
-|           | (TP).                                                    |
-|-----------|----------------------------------------------------------|
-| APPCSI    | Controlling access to APPC side information files.       |
-|-----------|----------------------------------------------------------|
-| APPCTP    | Controlling the use of APPC transaction programs.        |
-|-----------|----------------------------------------------------------|
-| APPL      | Controlling access to applications.                      |
-|-----------|----------------------------------------------------------|
-| CACHECLS  | Contains profiles used for saving and restoring cache    |
-|           | contents from the RACF database.                         |
-|-----------|----------------------------------------------------------|
-| CBIND     | Controlling the client's ability to bind to the server.  |
-|-----------|----------------------------------------------------------|
-| CDT       | Contains profiles for installation-defined classes for   |
-|           | the dynamic CDT.    (3)                                  |
-|-----------|----------------------------------------------------------|
-| CFIELD    | Contains profiles that define the installation's custom  |
-|           | fields.    (3)                                           |
-|-----------|----------------------------------------------------------|
-| CONSOLE   | Controlling access to MCS consoles. Also, conditional    |
-|           | access to other resources for commands originating from  |
-|           | an MCS console.                                          |
-|-----------|----------------------------------------------------------|
-| DASDVOL   | DASD volumes.                                            |
-|-----------|----------------------------------------------------------|
-| DBNFORM   | Reserved for future IBM use.                             |
-|-----------|----------------------------------------------------------|
-| DEVICES   | Used by MVS allocation to control who can allocate       |
-|           | devices such as:                                         |
-|           |                                                          |
-|           | *     Unit record devices (printers and punches)         |
-|           |       (allocated only by PSF, JES2, or JES3)             |
-|           |                                                          |
-|           | *     Graphics devices (allocated only by VTAM)          |
-|           |                                                          |
-|           | *     Teleprocessing (TP) or communications devices      |
-|           |       (allocated only by VTAM)                           |
-|-----------|----------------------------------------------------------|
-| DIGTCERT  | Contains digital certificates and information related to |
-|           | them.                                                    |
-|-----------|----------------------------------------------------------|
-| DIGTCRIT  | Specifies additional criteria for certificate name       |
-|           | filters.                                                 |
-|-----------|----------------------------------------------------------|
-| DIGTNMAP  | Mapping class for certificate name filters.              |
-|-----------|----------------------------------------------------------|
-| DIGTRING  | Contains a profile for each key ring and provides        |
-|           | information about the digital certificates that are part |
-|           | of each key ring.                                        |
-|-----------|----------------------------------------------------------|
-| DIRAUTH   | Setting logging options for RACROUTE REQUEST=DIRAUTH     |
-|           | requests. Also, if the DIRAUTH class is active, security |
-|           | label authorization checking is done when a user         |
-|           | receives a message sent through the TPUT macro or the    |
-|           | TSO SEND, or LISTBC commands. (5)                        |
-|-----------|----------------------------------------------------------|
-| DLFCLASS  | The data lookaside facility.                             |
-|-----------|----------------------------------------------------------|
-| FACILITY  | Miscellaneous uses. Profiles are defined in this class   |
-|           | so resource managers (typically elements of z/OS or      |
-|           | z/VM) can check a user's access to the profiles when the |
-|           | user takes some action. Examples are the profiles used   |
-|           | to control execution of RACDCERT command functions and   |
-|           | the profiles used to control privileges in the z/OS UNIX |
-|           | environment.                                             |
-|           |                                                          |
-|           | RACF does not document all of the resources used in the  |
-|           | FACILITY class by other products. For information on the |
-|           | FACILITY class resources used by a specific product      |
-|           | (other than RACF itself), see that product's             |
-|           | documentation.                                           |
-|-----------|----------------------------------------------------------|
-| FIELD     | Fields in RACF profiles (field-level access checking).   |
-|-----------|----------------------------------------------------------|
-| GDASDVOL  | Resource group class for DASDVOL class. (1)              |
-|-----------|----------------------------------------------------------|
-| GLOBAL    | Global access checking table entry. (1)                  |
-|-----------|----------------------------------------------------------|
-| GMBR      | Member class for the GLOBAL class. (4)                   |
-|-----------|----------------------------------------------------------|
-| GSDSF     | Resource group class for SDSF class. (1)                 |
-|-----------|----------------------------------------------------------|
-| GSOMDOBJ  | Secure GSOMDOBJ for z/OS objects                         |
-|-----------|----------------------------------------------------------|
-| GTERMINL  | Resource group class for TERMINAL class. (1)             |
-|-----------|----------------------------------------------------------|
-| GXFACILI  | Grouping class for XFACILIT resources.                   |
-|-----------|----------------------------------------------------------|
-| HBRADMIN  | Controls whether server resources are enabled or disabled|
-|-----------|----------------------------------------------------------|
-| HBRCONN   | Specifies user IDs auth to connect to zRES exec rule sets|
-|-----------|----------------------------------------------------------|
-| HBRCMD    | Specifies user IDs auth to issue zRES commands           |
-|-----------|----------------------------------------------------------|
-| IBMOPC    | Controlling access to OPC/ESA subsystems.                |
-|-----------|----------------------------------------------------------|
-| IDIDMAP   | Contains distributed identity filters created with the   |
-|           | RACMAP command.                                          |
-|-----------|----------------------------------------------------------|
-| IDTDATA   | Controls Identity Tokens                                 |
-|-----------|----------------------------------------------------------|
-| IZP       | Controls resources related to the IBM Unified Mgt Server |
-|-----------|----------------------------------------------------------|
-| JESINPUT  | Conditional access support for commands or jobs entered  |
-|           | into the system through a JES input device.              |
-|-----------|----------------------------------------------------------|
-| JESJOBS   | Controlling the submission and cancellation of jobs by   |
-|           | job name.                                                |
-|-----------|----------------------------------------------------------|
-| JESSPOOL  | Controlling access to job data sets on the JES spool     |
-|           | (that is, SYSIN and SYSOUT data sets).                   |
-|-----------|----------------------------------------------------------|
-| KEYSMSTR  | Contains profiles that hold keys to encrypt data stored  |
-|           | in the RACF database, such as LDAP BIND passwords, DCE   |
-|           | passwords, and Distributed File Service (DFS) Server     |
-|           | Message Block (SMB) passwords.                           |
-|-----------|----------------------------------------------------------|
-| LDAP      | Controls authorization roles for LDAP administration.    |
-|-----------|----------------------------------------------------------|
-| LDAPBIND  | Contains the LDAP server URL, bind distinguished name,   |
-|           | and bind password.                                       |
-|-----------|----------------------------------------------------------|
-| LOGSTRM   | Controls system logger resources, such as log streams    |
-|           | and the coupling facility structures associated with log |
-|           | streams.                                                 |
-|-----------|----------------------------------------------------------|
-| NODES     | Controlling the following on MVS systems:                |
-|           |                                                          |
-|           | *     Whether jobs are allowed to enter the system from  |
-|           |       other nodes                                        |
-|           |                                                          |
-|           | *     Whether jobs that enter the system from other nodes|
-|           |       have to pass user identification and password      |
-|           |       verification checks                                |
-|-----------|----------------------------------------------------------|
-| NODMBR    | Member class for the NODES class. (4)                    |
-|-----------|----------------------------------------------------------|
-| OPERCMDS  | Controlling who can issue operator commands (for         |
-|           | example, JES and MVS, and operator commands). (2)        |
-|-----------|----------------------------------------------------------|
-| OPTAUDIT  | Contains profiles which control RACF logging behavior    |
-|-----------|----------------------------------------------------------|
-| PKISERV   | Controls access to R_PKIServ administration functions    |
-|-----------|----------------------------------------------------------|
-| PMBR      | Member class for the PROGRAM class. (4)                  |
-|-----------|----------------------------------------------------------|
-| PROGRAM   | Protects executable programs. (1)                        |
-|-----------|----------------------------------------------------------|
-| PROPCNTL  | Controlling if user ID propagation can occur, and if so, |
-|           | for which user IDs (such as the CICS or IMS main task    |
-|           | user ID), user ID propagation is not to occur.           |
-|-----------|----------------------------------------------------------|
-| PSFMPL    | Used by PSF to perform security functions for printing,  |
-|           | such as separator page labeling, data page labeling, and |
-|           | enforcement of the user printable area.                  |
-|-----------|----------------------------------------------------------|
-| PTKTDATA  | PassTicket key class enables the security administrator  |
-|           | to associate a RACF secured signon secret key with a     |
-|           | particular mainframe application that uses RACF for user |
-|           | authentication. Examples of such applications are IMS,   |
-|           | CICS, TSO, z/VM, APPC, and MVS batch.                    |
-|-----------|----------------------------------------------------------|
-| RACFEVNT  | Contains profiles that control the following events:     |
-|           |                                                          |
-|           | *     LDAP change log notification for changes to certain|
-|           |       RACF profiles                                      |
-|           | *     New password and password phrase enveloping for a  |
-|           |       given user.                                        |
-|-----------|----------------------------------------------------------|
-| RACFHC    | Used by IBM Health Checker for z/OS. Contains profiles   |
-|           | that list the resources to check for each                |
-|           | installation-defined health check. (1)                   |
-|-----------|----------------------------------------------------------|
-| RACFVARS  | RACF variables. In this class, profile names, which      |
-|           | start with & (ampersand), act as RACF variables that can |
-|           | be specified in profile names in other RACF general      |
-|           | resource classes.                                        |
-|-----------|----------------------------------------------------------|
-| RACGLIST  | Class of profiles that hold the results of RACROUTE      |
-|           | REQUEST=LIST,GLOBAL=YES or a SETROPTS RACLIST operation. |
-|-----------|----------------------------------------------------------|
-| RACHCMBR  | Used by IBM Health Checker for z/OS. Member class for    |
-|           | the RACFHC class.    (1)                                 |
-|-----------|----------------------------------------------------------|
-| RDATALIB  | Used to control use of the R_datalib callable service    |
-|           | (IRRSDL00 or IRRSDL64).                                  |
-|-----------|----------------------------------------------------------|
-| RRSFDATA  | Used to control RACF remote sharing facility (RRSF)      |
-|           | functions.                                               |
-|-----------|----------------------------------------------------------|
-| RVARSMBR  | Member class for the RACFVARS class. (4)                 |
-|-----------|----------------------------------------------------------|
-| SCDMBR    | Member class for the SECDATA class. (4)                  |
-|-----------|----------------------------------------------------------|
-| SDSF      | Controls the use of authorized commands in the System    |
-|           | Display and Search Facility (SDSF). See also GSDSF       |
-|           | class.                                                   |
-|-----------|----------------------------------------------------------|
-| SECDATA   | Security classification of users and data (security      |
-|           | levels and security categories). (1)                     |
-|-----------|----------------------------------------------------------|
-| SECLABEL  | If security labels are used, and, if so, their           |
-|           | definitions. (2)                                         |
-|-----------|----------------------------------------------------------|
-| SECLMBR   | Member class for the SECLABEL class. (4)                 |
-|-----------|----------------------------------------------------------|
-| SERVAUTH  | Contains profiles used by servers to check a client's    |
-|           | authorization to use the server or to use resources      |
-|           | managed by the server. Also, can be used to provide      |
-|           | conditional access to resources for users entering the   |
-|           | system from a given server.                              |
-|-----------|----------------------------------------------------------|
-| SERVER    | Controlling the server's ability to register with the    |
-|           | daemon.                                                  |
-|-----------|----------------------------------------------------------|
-| SMESSAGE  | Controlling to which users a user can send messages (TSO |
-|           | only).                                                   |
-|-----------|----------------------------------------------------------|
-| SOMDOBJS  | Controlling the client's ability to invoke the method in |
-|           | the class.                                               |
-|-----------|----------------------------------------------------------|
-| STARTED   | Used in preference to the started procedures table to    |
-|           | assign an identity during the processing of an MVS START |
-|           | command.                                                 |
-|-----------|----------------------------------------------------------|
-| SURROGAT  | If surrogate submission is allowed, and if allowed,      |
-|           | which user IDs can act as surrogates.                    |
-|-----------|----------------------------------------------------------|
-| SYSAUTO   | IBM Automation Control for z/OS resources                |
-|-----------|----------------------------------------------------------|
-| SYSMVIEW  | Controlling access by the SystemView for MVS Launch      |
-|           | Window to SystemView for MVS applications.               |
-|-----------|----------------------------------------------------------|
-| TAPEVOL   | Tape volumes.                                            |
-|-----------|----------------------------------------------------------|
-| TEMPDSN   | Controlling who can access residual temporary data sets. |
-|           | (5)                                                      |
-|-----------|----------------------------------------------------------|
-| TERMINAL  | Terminals (TSO or z/VM). See also GTERMINL class.        |
-|-----------|----------------------------------------------------------|
-| VTAMAPPL  | Controlling who can open ACBs from non-APF authorized    |
-|           | programs.                                                |
-|-----------|----------------------------------------------------------|
-| WBEM      | Controls access to the Common Information Model functions|
-|-----------|----------------------------------------------------------|
-| WRITER    | Controlling the use of JES writers.                      |
-|-----------|----------------------------------------------------------|
-| XFACILIT  | Miscellaneous uses. Profile names in this class can be   |
-|           | longer than 39 characters in length. Profiles are        |
-|           | defined in this class so that resource managers          |
-|           | (typically elements of z/OS) can check a user's access   |
-|           | to the resources when the users take some action.        |
-|-----------|----------------------------------------------------------|
-| ZOWE      | Controls resources related to the Zowe project           |
-|----------------------------------------------------------------------|
-|                              CICS classes                            |
-|----------------------------------------------------------------------|
-| ACICSPCT  | CICS program control table. (2)                          |
-|-----------|----------------------------------------------------------|
-| BCICSPCT  | Resource group class for the ACICSPCT class. (1)         |
-|-----------|----------------------------------------------------------|
-| CCICSCMD  | Used to verify that a user is permitted to use CICS      |
-|           | system programmer commands such as INQUIRE, SET,         |
-|           | PERFORM, and COLLECT. (1)                                |
-|-----------|----------------------------------------------------------|
-| CPSMOBJ   | Used by CICSPlex® System Manager, which provides a       |
-|           | central point of control when running multiple CICS      |
-|           | systems, to determine operational controls within a CICS |
-|           | complex.                                                 |
-|-----------|----------------------------------------------------------|
-| CPSMXMP   | Used by CICSPlex System Manager to identify exemptions   |
-|           | from security controls within a CICS complex.            |
-|-----------|----------------------------------------------------------|
-| DCICSDCT  | CICS destination control table. (2)                      |
-|-----------|----------------------------------------------------------|
-| ECICSDCT  | Resource group class for the DCICSDCT class. (1)         |
-|-----------|----------------------------------------------------------|
-| FCICSFCT  | CICS file control table. (2)                             |
-|-----------|----------------------------------------------------------|
-| GCICSTRN  | Resource group class for TCICSTRN class. (2)             |
-|-----------|----------------------------------------------------------|
-| GCPSMOBJ  | Grouping class for CPSMOBJ.                              |
-|-----------|----------------------------------------------------------|
-| HCICSFCT  | Resource group class for the FCICSFCT class. (1)         |
-|-----------|----------------------------------------------------------|
-| JCICSJCT  | CICS journal control table. (2)                          |
-|-----------|----------------------------------------------------------|
-| KCICSJCT  | Resource group class for the JCICSJCT class. (1)         |
-|-----------|----------------------------------------------------------|
-| MCICSPPT  | CICS processing program table. (2)                       |
-|-----------|----------------------------------------------------------|
-| NCICSPPT  | Resource group class for the MCICSPPT class. (1)         |
-|-----------|----------------------------------------------------------|
-| PCICSPSB  | CICS program specification blocks (PSBs).                |
-|-----------|----------------------------------------------------------|
-| QCICSPSB  | Resource group class for the PCICSPSB class. (1)         |
-|-----------|----------------------------------------------------------|
-| RCICSRES  | CICS document templates.                                 |
-|-----------|----------------------------------------------------------|
-| SCICSTST  | CICS temporary storage table. (2)                        |
-|-----------|----------------------------------------------------------|
-| TCICSTRN  | CICS transactions.                                       |
-|-----------|----------------------------------------------------------|
-| UCICSTST  | Resource group class for SCICSTST class. (1)             |
-|-----------|----------------------------------------------------------|
-| VCICSCMD  | Resource group class for the CCICSCMD class. (1)         |
-|-----------|----------------------------------------------------------|
-| WCICSRES  | Resource group class for the RCICSRES class.             |
-|----------------------------------------------------------------------|
-|                               DB2 classes                            |
-|----------------------------------------------------------------------|
-| DSNADM    | DB2 administrative authority class.                      |
-|-----------|----------------------------------------------------------|
-| DSNR      | Controls access to DB2 subsystems.                       |
-|-----------|----------------------------------------------------------|
-| GDSNBP    | Grouping class for DB2 buffer pool privileges.           |
-|-----------|----------------------------------------------------------|
-| GDSNCL    | Grouping class for DB2 collection privileges.            |
-|-----------|----------------------------------------------------------|
-| GDSNDB    | Grouping class for DB2 database privileges.              |
-|-----------|----------------------------------------------------------|
-| GDSNGV    | Grouping class for DB2 z/OS global variables.            |
-|-----------|----------------------------------------------------------|
-| GDSNJR    | Grouping class for Java archive files (JARs).            |
-|-----------|----------------------------------------------------------|
-| GDSNPK    | Grouping class for DB2 package privileges.               |
-|-----------|----------------------------------------------------------|
-| GDSNPN    | Grouping class for DB2 plan privileges.                  |
-|-----------|----------------------------------------------------------|
-| GDSNSC    | Grouping class for DB2 schemas privileges.               |
-|-----------|----------------------------------------------------------|
-| GDSNSG    | Grouping class for DB2 storage group privileges.         |
-|-----------|----------------------------------------------------------|
-| GDSNSM    | Grouping class for DB2 system privileges.                |
-|-----------|----------------------------------------------------------|
-| GDSNSP    | Grouping class for DB2 stored procedure privileges.      |
-|-----------|----------------------------------------------------------|
-| GDSNSQ    | Grouping class for DB2 sequences.                        |
-|-----------|----------------------------------------------------------|
-| GDSNTB    | Grouping class for DB2 table, index, or view privileges. |
-|-----------|----------------------------------------------------------|
-| GDSNTS    | Grouping class for DB2 tablespace privileges.            |
-|-----------|----------------------------------------------------------|
-| GDSNUF    | Grouping class for DB2 user-defined function privileges. |
-|-----------|----------------------------------------------------------|
-| GDSNUT    | Grouping class for DB2 user-defined distinct type        |
-|           | privileges.                                              |
-|-----------|----------------------------------------------------------|
-| MDSNBP    | Member class for DB2 buffer pool privileges.             |
-|-----------|----------------------------------------------------------|
-| MDSNCL    | Member class for DB2 collection privileges.              |
-|-----------|----------------------------------------------------------|
-| MDSNDB    | Member class for DB2 database privileges.                |
-|-----------|----------------------------------------------------------|
-| MDSNGV    | Member class for DB2 z/OS global variables.              |
-|-----------|----------------------------------------------------------|
-| MDSNJR    | Member class for Java archive files (JARs).              |
-|-----------|----------------------------------------------------------|
-| MDSNPK    | Member class for DB2 package privileges.                 |
-|-----------|----------------------------------------------------------|
-| MDSNPN    | Member class for DB2 plan privileges.                    |
-|-----------|----------------------------------------------------------|
-| MDSNSC    | Member class for DB2 schema privileges.                  |
-|-----------|----------------------------------------------------------|
-| MDSNSG    | Member class for DB2 storage group privileges.           |
-|-----------|----------------------------------------------------------|
-| MDSNSM    | Member class for DB2 system privileges.                  |
-|-----------|----------------------------------------------------------|
-| MDSNSP    | Member class for DB2 stored procedure privileges.        |
-|-----------|----------------------------------------------------------|
-| MDSNSQ    | Member class for DB2 sequences.                          |
-|-----------|----------------------------------------------------------|
-| MDSNTB    | Member class for DB2 table, index, or view privileges.   |
-|-----------|----------------------------------------------------------|
-| MDSNTS    | Member class for DB2 tablespace privileges.              |
-|-----------|----------------------------------------------------------|
-| MDSNUF    | Member class for DB2 user-defined function privileges.   |
-|-----------|----------------------------------------------------------|
-| MDSNUT    | Member class for DB2 user-defined distinct type          |
-|           | privileges.                                              |
-|----------------------------------------------------------------------|
-|                                DCE class                             |
-|----------------------------------------------------------------------|
-| DCEUUIDS  | Used to define the mapping between a user's RACF user ID |
-|           | and the corresponding DCE principal UUID. Also, used to  |
-|           | enable encrypted password support for Distributed File   |
-|           | Service (DFS) Server Message Block (SMB) users.          |
-|----------------------------------------------------------------------|
-|                 Enterprise Identity Mapping (EIM) class              |
-|----------------------------------------------------------------------|
-| RAUDITX   | Controls auditing for Enterprise Identity Mapping (EIM). |
-|----------------------------------------------------------------------|
-|                      Enterprise Java Beans classes                   |
-|----------------------------------------------------------------------|
-| EJBROLE   | Member class for Enterprise Java Beans authorization     |
-|           | roles.                                                   |
-|-----------|----------------------------------------------------------|
-| GEJBROLE  | Grouping class for Enterprise Java Beans authorization   |
-|           | roles.                                                   |
-|-----------|----------------------------------------------------------|
-| JAVA      | Contains profiles that are used by Java for z/OS         |
-|           | applications to perform authorization checking for Java  |
-|           | for z/OS resources.                                      |
-|----------------------------------------------------------------------|
-|                               IMS classes                            |
-|----------------------------------------------------------------------|
-| AIMS      | Application group names (AGN).                           |
-|-----------|----------------------------------------------------------|
-| CIMS      | Command.                                                 |
-|-----------|----------------------------------------------------------|
-| DIMS      | Grouping class for command.                              |
-|-----------|----------------------------------------------------------|
-| FIMS      | Field (in data segment).                                 |
-|-----------|----------------------------------------------------------|
-| GIMS      | Grouping class for transaction.                          |
-|-----------|----------------------------------------------------------|
-| HIMS      | Grouping class for field.                                |
-|-----------|----------------------------------------------------------|
-| IIMS      | Program specification block (PSB).                       |
-|-----------|----------------------------------------------------------|
-| JIMS      | Grouping class for program specification block (PSB).    |
-|-----------|----------------------------------------------------------|
-| LIMS      | Logical terminal (LTERM).                                |
-|-----------|----------------------------------------------------------|
-| MIMS      | Grouping class for logical terminal (LTERM).             |
-|-----------|----------------------------------------------------------|
-| OIMS      | Other.                                                   |
-|-----------|----------------------------------------------------------|
-| PIMS      | Database.                                                |
-|-----------|----------------------------------------------------------|
-| QIMS      | Grouping class for database.                             |
-|-----------|----------------------------------------------------------|
-| RIMS      | Open Transaction Manager Access (OTMA) transaction pipe  |
-|           | (TPIPE).                                                 |
-|-----------|----------------------------------------------------------|
-| SIMS      | Segment (in database).                                   |
-|-----------|----------------------------------------------------------|
-| TIMS      | Transaction (trancode).                                  |
-|-----------|----------------------------------------------------------|
-| UIMS      | Grouping class for segment.                              |
-|-----------|----------------------------------------------------------|
-| WIMS      | Grouping class for other.                                |
-|----------------------------------------------------------------------|
-|      Integrated Cryptographic Service Facility (ICSF) classes        |
-|----------------------------------------------------------------------|
-| CRYPTOZ   | Controls access to PKCS #11 tokens.                      |
-|-----------|----------------------------------------------------------|
-| CSFKEYS   | Controls access to ICSF cryptographic keys.              |
-|-----------|----------------------------------------------------------|
-| CSFSERV   | Controls access to ICSF cryptographic services.          |
-|-----------|----------------------------------------------------------|
-| GCSFKEYS  | Resource group class for the CSFKEYS class. (1)          |
-|-----------|----------------------------------------------------------|
-| GXCSFKEY  | Resource group class for the XCSFKEY class. (1)          |
-|-----------|----------------------------------------------------------|
-| XCSFKEY   | Controls the exportation of ICSF cryptographic keys.     |
-|----------------------------------------------------------------------|
-|                         Infoprint Server class                       |
-|----------------------------------------------------------------------|
-| PRINTSRV  | Controls access to printer definitions for Infoprint     |
-|           | Server.                                                  |
-|----------------------------------------------------------------------|
-|        Information/Management (Tivoli Service Desk) classes          |
-|----------------------------------------------------------------------|
-| GINFOMAN  | Grouping class for Information/Management (Tivoli        |
-|           | Service Desk) resources.                                 |
-|-----------|----------------------------------------------------------|
-| INFOMAN   | Member class for Information/Management (Tivoli Service  |
-|           | Desk) resources.                                         |
-|----------------------------------------------------------------------|
-|                             LFS/ESA classes                          |
-|----------------------------------------------------------------------|
-| LFSCLASS  | Controls access to file services provided by LFS/ESA.    |
-|----------------------------------------------------------------------|
-|                          License Manager class                       |
-|----------------------------------------------------------------------|
-| ILMADMIN  | Controls access to the administrative functions of IBM   |
-|           | License Manager.                                         |
-|----------------------------------------------------------------------|
-| Lotus Notes for z/OS & Novell Directory Services for OS/390 classes  |
-|----------------------------------------------------------------------|
-| NDSLINK   | Mapping class for Novell Directory Services for OS/390   |
-|           | user identities.                                         |
-|-----------|----------------------------------------------------------|
-| NOTELINK  | Mapping class for Lotus Notes for z/OS user identities.  |
-|----------------------------------------------------------------------|
-|                               MFA class                              |
-|----------------------------------------------------------------------|
-| MFADEF    | Contains profiles that define MFA factors                |
-|----------------------------------------------------------------------|
-|                            MQSeries® classes                         |
-|----------------------------------------------------------------------|
-| GMQADMIN  | Grouping class for MQSeries administrative options. (1)  |
-|-----------|----------------------------------------------------------|
-| GMQCHAN   | Reserved for MQSeries.                                   |
-|-----------|----------------------------------------------------------|
-| GMQNLIST  | Grouping class for MQSeries namelists. (1)               |
-|-----------|----------------------------------------------------------|
-| GMQPROC   | Grouping class for MQSeries processes. (1)               |
-|-----------|----------------------------------------------------------|
-| GMQQUEUE  | Grouping class for MQSeries queues. (1)                  |
-|-----------|----------------------------------------------------------|
-| MQADMIN   | Protects MQSeries administrative options.                |
-|-----------|----------------------------------------------------------|
-| MQCHAN    | Reserved for MQSeries.                                   |
-|-----------|----------------------------------------------------------|
-| MQCMDS    | Protects MQSeries commands.                              |
-|-----------|----------------------------------------------------------|
-| MQCONN    | Protects MQSeries connections.                           |
-|-----------|----------------------------------------------------------|
-| MQNLIST   | Protects MQSeries namelists.                             |
-|           |                                                          |
-|-----------|----------------------------------------------------------|
-| MQPROC    | Protects MQSeries processes.                             |
-|-----------|----------------------------------------------------------|
-| MQQUEUE   | Protects MQSeries queues.                                |
-|----------------------------------------------------------------------|
-|                             NetView classes                          |
-|----------------------------------------------------------------------|
-| NETCMDS   | Controlling which NetView commands the NetView operator  |
-|           | can issue.                                               |
-|-----------|----------------------------------------------------------|
-| NETSPAN   | Controlling which NetView commands the NetView operator  |
-|           | can issue against the resources in this span.            |
-|-----------|----------------------------------------------------------|
-| NVASAPDT  | NetView/Access Services.                                 |
-|-----------|----------------------------------------------------------|
-| PTKTVAL   | Used by NetView/Access Services Secured Single Signon to |
-|           | store information needed when generating a PassTicket.   |
-|-----------|----------------------------------------------------------|
-| RMTOPS    | NetView Remote Operations.                               |
-|-----------|----------------------------------------------------------|
-| RODMMGR   | NetView Resource Object Data Manager (RODM).             |
-|----------------------------------------------------------------------|
-|               z/OS Network Authentication Service classes            |
-|----------------------------------------------------------------------|
-| KERBLINK  | Contains profiles that map local and foreign principals  |
-|           | to RACF user IDs.    Also controls which users are       |
-|           | authorized to use the SKRBKDC started procedure to       |
-|           | decrypt service tickets for a given principal. (3)       |
-|-----------|----------------------------------------------------------|
-| REALM     | Used to define the local and foreign realms. (3)         |
-|----------------------------------------------------------------------|
-|                         SMS (DFSMSdfp) classes                       |
-|----------------------------------------------------------------------|
-| MGMTCLAS  | SMS management classes.                                  |
-|-----------|----------------------------------------------------------|
-| STORCLAS  | SMS storage classes.                                     |
-|-----------|----------------------------------------------------------|
-| SUBSYSNM  | Authorizes a subsystem (such as a particular instance of |
-|           | CICS) to open a VSAM ACB and use VSAM record level       |
-|           | sharing (RLS) functions.                                 |
-|----------------------------------------------------------------------|
-|                             Tivoli classes                           |
-|----------------------------------------------------------------------|
-| ROLE      | Specifies the complete list of resources and associated  |
-|           | access levels that are required to perform the           |
-|           | particular job function this role represents and defines |
-|           | which RACF groups are associated with this role.         |
-|-----------|----------------------------------------------------------|
-| TMEADMIN  | Maps the user IDs of Tivoli administrators to RACF user  |
-|           | IDs.                                                     |
-|----------------------------------------------------------------------|
-|                               TSO classes                            |
-|----------------------------------------------------------------------|
-| ACCTNUM   | TSO account numbers.                                     |
-|-----------|----------------------------------------------------------|
-| PERFGRP   | TSO performance groups.                                  |
-|-----------|----------------------------------------------------------|
-| TSOAUTH   | TSO user authorities such as OPER and MOUNT.             |
-|-----------|----------------------------------------------------------|
-| TSOPROC   | TSO logon procedures.                                    |
-|----------------------------------------------------------------------|
-|                          WebSphere MQ classes                        |
-|----------------------------------------------------------------------|
-| GMXADMIN  | Grouping class for WebSphere MQ administrative options.  |
-|-----------|----------------------------------------------------------|
-| GMXNLIST  | Grouping class for WebSphere MQ namelists.               |
-|-----------|----------------------------------------------------------|
-| GMXPROC   | Grouping class for WebSphere MQ processes.               |
-|-----------|----------------------------------------------------------|
-| GMXQUEUE  | Grouping class for WebSphere MQ queues.                  |
-|-----------|----------------------------------------------------------|
-| GMXTOPIC  | Grouping class for WebSphere MQ topics.                  |
-|-----------|----------------------------------------------------------|
-| MXADMIN   | Protects WebSphere MQ administrative options.            |
-|-----------|----------------------------------------------------------|
-| MXNLIST   | Protects WebSphere MQ namelists.                         |
-|-----------|----------------------------------------------------------|
-| MXPROC    | Protects WebSphere MQ processes.                         |
-|-----------|----------------------------------------------------------|
-| MXQUEUE   | Protects WebSphere MQ queues.                            |
-|-----------|----------------------------------------------------------|
-| MXTOPIC   | Protects WebSphere MQ topics.                            |
-|----------------------------------------------------------------------|
-|                             z/OSMF classes                           |
-|----------------------------------------------------------------------|
-| ZMFAPLA   | Member class for z/OSMF authorization roles.             |
-|-----------|----------------------------------------------------------|
-| GZMFAPLA  | Grouping class for z/OSMF authorization roles.           |
-|-----------|----------------------------------------------------------|
-| ZMFCLOUD  | Protects z/OS cloud resources.                           |
-|----------------------------------------------------------------------|
-|                            z/OS UNIX classes                         |
-|----------------------------------------------------------------------|
-| DIRACC    | Controls auditing (using SETROPTS LOGOPTIONS) for access |
-|           | checks for read/write access to z/OS UNIX directories.   |
-|           | This class need not be active to control auditing. (5)   |
-|-----------|----------------------------------------------------------|
-| DIRSRCH   | Controls auditing (using SETROPTS LOGOPTIONS) of z/OS    |
-|           | UNIX directory searches. This class need not be active   |
-|           | to control auditing. (5)                                 |
-|-----------|----------------------------------------------------------|
-| FSACCESS  | Controls access to z/OS UNIX file systems.               |
-|-----------|----------------------------------------------------------|
-| FSEXEC    | Controls execute access to z/OS UNIX file systems.       |
-|-----------|----------------------------------------------------------|
-| FSOBJ     | Controls auditing (using SETROPTS LOGOPTIONS) of all     |
-|           | access checks for z/OS UNIX file system objects except   |
-|           | directory searches. Controls auditing (using SETROPTS    |
-|           | AUDIT) of creation and deletion of z/OS UNIX file system |
-|           | objects. This class need not be active to control        |
-|           | auditing. (5)                                            |
-|-----------|----------------------------------------------------------|
-| FSSEC     | Controls auditing (using SETROPTS LOGOPTIONS) of changes |
-|           | to the security data (FSP) for z/OS UNIX file system     |
-|           | objects. This class need not be active to control        |
-|           | auditing. When this class is active, it also controls    |
-|           | whether ACLs are used during authorization checks to     |
-|           | z/OS UNIX files and directories. (5)                     |
-|-----------|----------------------------------------------------------|
-| IPCOBJ    | Controls auditing (using SETROPTS LOGOPTIONS) of access  |
-|           | checks for interprocess communication (IPC) objects and  |
-|           | changes to security information of IPC objects. Controls |
-|           | auditing (using SETROPTS AUDIT) of the creation and      |
-|           | deletion of IPC objects. This class need not be active   |
-|           | to control auditing.    (5)                              |
-|-----------|----------------------------------------------------------|
-| PROCACT   | Controls auditing (using SETROPTS LOGOPTIONS) of         |
-|           | functions that look at data from, or affect the          |
-|           | processing of, z/OS UNIX processes. This class need not  |
-|           | be active to control auditing. (5)                       |
-|-----------|----------------------------------------------------------|
-| PROCESS   | Controls auditing (using SETROPTS LOGOPTIONS) of changes |
-|           | to UIDs and GIDs of z/OS UNIX processes. Controls        |
-|           | auditing (using SETROPTS AUDIT) of dubbing and undubbing |
-|           | of z/OS UNIX processes. This class need not be active to |
-|           | control auditing. (5)                                    |
-|-----------|----------------------------------------------------------|
-| UNIXMAP   | Contains profiles that are used to map z/OS UNIX UIDs to |
-|           | RACF user IDs and z/OS UNIX GIDs to RACF group names.    |
-|-----------|----------------------------------------------------------|
-| UNIXPRIV  | Contains profiles that are used to grant z/OS UNIX       |
-|           | privileges.                                              |
-|----------------------------------------------------------------------|
-| Restrictions:                                                        |
-|                                                                      |
-| 1.  Do not specify this class name on the GENCMD, GENERIC, and       |
-|     GLOBAL/NOGLOBAL operands of the SETROPTS command.                |
-|                                                                      |
-| 2.  Do not specify this class name on the GLOBAL operand of SETROPTS |
-|     or, if you do, the GLOBAL checking is not performed.             |
-|                                                                      |
-| 3.  Do not specify this class name on the GENCMD and GENERIC operands|
-|     of the SETROPTS command.                                         |
-|                                                                      |
-| 4.  Do not specify this class name with any RACF command. This is a  |
-|     member class associated with a grouping class that has a special |
-|     use.                                                             |
-|                                                                      |
-| 5.  Profiles are not allowed in this class.                          |
-+----------------------------------------------------------------------+
+                   RACF, MVS, and Miscellaneous classes
+
+
+  ACEECHK     Configuration of RACF ACEE Privilege Escalation Detection
+  ALCSAUTH    Supports the Airline Control System/MVS (ALCS/MVS)
+              product.
+  APPCLU      Verifying the identity of partner logical units during
+              VTAM session establishment.
+  APPCPORT    Controlling which user IDs can access the system from a
+              given LU (APPC port of entry). Also, conditional access
+              to resources for users entering the system from a given
+              LU.
+  APPCSERV    Controlling whether a program being run by a user can
+              act as a server for a specific APPC transaction program
+              (TP).
+  APPCSI      Controlling access to APPC side information files.
+  APPCTP      Controlling the use of APPC transaction programs.
+  APPL        Controlling access to applications.
+  CACHECLS    Contains profiles used for saving and restoring cache
+              contents from the RACF database.
+  CBIND       Controlling the clients ability to bind to the server.
+  CDT         Contains profiles for installation-defined classes for
+              the dynamic CDT. (3)
+  CFIELD      Contains profiles that define the installations custom
+              fields. (3)
+  CONSOLE     Controlling access to MCS consoles. Also, conditional
+              access to other resources for commands originating from
+              an MCS console.
+  DASDVOL     DASD volumes.
+  DBNFORM     Reserved for future IBM use.
+  DEVICES     Used by MVS allocation to control who can allocate
+              devices such as:
+              *  Unit record devices (printers and punches)
+                 (allocated only by PSF, JES2, or JES3)
+              *  Graphics devices (allocated only by VTAM)
+              *  Teleprocessing (TP) or communications devices
+                 (allocated only by VTAM)
+  DIGTCERT    Contains digital certificates and information related to
+              them.
+  DIGTCRIT    Specifies additional criteria for certificate name
+              filters.
+  DIGTNMAP    Mapping class for certificate name filters.
+  DIGTRING    Contains a profile for each key ring and provides
+              information about the digital certificates that are part
+              of each key ring.
+  DIRAUTH     Setting logging options for RACROUTE REQUEST=DIRAUTH
+              requests. Also, if the DIRAUTH class is active, security
+              label authorization checking is done when a user
+              receives a message sent through the TPUT macro or the
+              TSO SEND, or LISTBC commands. (5)
+  DLFCLASS    The data lookaside facility.
+  FACILITY    Miscellaneous uses. Profiles are defined in this class
+              so resource managers (typically elements of z/OS or
+              z/VM) can check a users access to the profiles when the
+              user takes some action. Examples are the profiles used
+              to control execution of RACDCERT command functions and
+              the profiles used to control privileges in the z/OS UNIX
+              environment.
+
+              RACF does not document all of the resources used in the
+              FACILITY class by other products. For information on the
+              FACILITY class resources used by a specific product
+              (other than RACF itself), see that products
+              documentation.
+  FIELD       Fields in RACF profiles (field-level access checking).
+  GDASDVOL    Resource group class for DASDVOL class. (1)
+  GLOBAL      Global access checking table entry. (1)
+  GMBR        Member class for the GLOBAL class. (4)
+  GSDSF       Resource group class for SDSF class. (1)
+  GSOMDOBJ    Secure GSOMDOBJ for z/OS objects
+  GTERMINL    Resource group class for TERMINAL class. (1)
+  GXFACILI    Grouping class for XFACILIT resources.
+  HBRADMIN    Controls whether server resources are enabled or disabled
+  HBRCONN     Specifies user IDs auth to connect to zRES exec rule sets
+  HBRCMD      Specifies user IDs auth to issue zRES commands
+  IBMOPC      Controlling access to OPC/ESA subsystems.
+  IDIDMAP     Contains distributed identity filters created with the
+              RACMAP command.
+  IDTDATA     Controls Identity Tokens
+  IZP         Controls resources related to the IBM Unified Mgt Server
+  JESINPUT    Conditional access support for commands or jobs entered
+              into the system through a JES input device.
+  JESJOBS     Controlling the submission and cancellation of jobs by
+              job name.
+  JESSPOOL    Controlling access to job data sets on the JES spool
+              (that is, SYSIN and SYSOUT data sets).
+  KEYSMSTR    Contains profiles that hold keys to encrypt data stored
+              in the RACF database, such as LDAP BIND passwords, DCE
+              passwords, and Distributed File Service (DFS) Server
+              Message Block (SMB) passwords.
+  LDAP        Controls authorization roles for LDAP administration.
+  LDAPBIND    Contains the LDAP server URL, bind distinguished name,
+              and bind password.
+  LOGSTRM     Controls system logger resources, such as log streams
+              and the coupling facility structures associated with log
+              streams.
+  NODES       Controlling the following on MVS systems:
+              *  Whether jobs are allowed to enter the system from
+                 other nodes
+              *  Whether jobs that enter the system from other nodes
+                 have to pass user identification and password
+                 verification checks
+  NODMBR      Member class for the NODES class. (4)
+  OPERCMDS    Controlling who can issue operator commands (for
+              example, JES and MVS, and operator commands). (2)
+  OPTAUDIT    Contains profiles which control RACF logging behavior
+  PKISERV     Controls access to R_PKIServ administration functions
+  PMBR        Member class for the PROGRAM class. (4)
+  PROGRAM     Protects executable programs. (1)
+  PROPCNTL    Controlling if user ID propagation can occur, and if so,
+              for which user IDs (such as the CICS or IMS main task
+              user ID), user ID propagation is not to occur.
+  PSFMPL      Used by PSF to perform security functions for printing,
+              such as separator page labeling, data page labeling, and
+              enforcement of the user printable area.
+  PTKTDATA    PassTicket key class enables the security administrator
+              to associate a RACF secured signon secret key with a
+              particular mainframe application that uses RACF for user
+              authentication. Examples of such applications are IMS,
+              CICS, TSO, z/VM, APPC, and MVS batch.
+  RACFEVNT    Contains profiles that control the following events:
+              *  LDAP change log notification for changes to certain
+                 RACF profiles
+              *  New password and password phrase enveloping for a
+                 given user.
+  RACFHC      Used by IBM Health Checker for z/OS. Contains profiles
+              that list the resources to check for each
+              installation-defined health check. (1)
+  RACFVARS    RACF variables. In this class, profile names, which
+              start with & (ampersand), act as RACF variables that can
+              be specified in profile names in other RACF general
+              resource classes.
+  RACGLIST    Class of profiles that hold the results of RACROUTE
+              REQUEST=LIST,GLOBAL=YES or a SETROPTS RACLIST operation.
+  RACHCMBR    Used by IBM Health Checker for z/OS. Member class for
+              the RACFHC class. (1)
+  RDATALIB    Used to control use of the R_datalib callable service
+              (IRRSDL00 or IRRSDL64).
+  RRSFDATA    Used to control RACF remote sharing facility (RRSF)
+              functions.
+  RVARSMBR    Member class for the RACFVARS class. (4)
+  SCDMBR      Member class for the SECDATA class. (4)
+  SDSF        Controls the use of authorized commands in the System
+              Display and Search Facility (SDSF). See also GSDSF
+              class.
+  SECDATA     Security classification of users and data (security
+              levels and security categories). (1)
+  SECLABEL    If security labels are used, and, if so, their
+              definitions. (2)
+  SECLMBR     Member class for the SECLABEL class. (4)
+  SERVAUTH    Contains profiles used by servers to check a clients
+              authorization to use the server or to use resources
+              managed by the server. Also, can be used to provide
+              conditional access to resources for users entering the
+              system from a given server.
+  SERVER      Controlling the servers ability to register with the
+              daemon.
+  SMESSAGE    Controlling to which users a user can send messages (TSO
+              only).
+  SOMDOBJS    Controlling the clients ability to invoke the method in
+              the class.
+  STARTED     Used in preference to the started procedures table to
+              assign an identity during the processing of an MVS START
+              command.
+  SURROGAT    If surrogate submission is allowed, and if allowed,
+              which user IDs can act as surrogates.
+  SYSAUTO     IBM Automation Control for z/OS resources
+  SYSMVIEW    Controlling access by the SystemView for MVS Launch
+              Window to SystemView for MVS applications.
+  TAPEVOL     Tape volumes.
+  TEMPDSN     Controlling who can access residual temporary data sets.
+              (5)
+  TERMINAL    Terminals (TSO or z/VM). See also GTERMINL class.
+  VTAMAPPL    Controlling who can open ACBs from non-APF authorized
+              programs.
+  WBEM        Controls access to the Common Information Model functions
+  WRITER      Controlling the use of JES writers.
+  XFACILIT    Miscellaneous uses. Profile names in this class can be
+              longer than 39 characters in length. Profiles are
+              defined in this class so that resource managers
+              (typically elements of z/OS) can check a users access
+              to the resources when the users take some action.
+  ZOWE        Controls resources related to the Zowe project
+
+                               CICS classes
+
+  ACICSPCT    CICS program control table. (2)
+  BCICSPCT    Resource group class for the ACICSPCT class. (1)
+  CCICSCMD    Used to verify that a user is permitted to use CICS
+              system programmer commands such as INQUIRE, SET,
+              PERFORM, and COLLECT. (1)
+  CPSMOBJ     Used by CICSPlex® System Manager, which provides a
+              central point of control when running multiple CICS
+              systems, to determine operational controls within a CICS
+              complex.
+  CPSMXMP     Used by CICSPlex System Manager to identify exemptions
+              from security controls within a CICS complex.
+  DCICSDCT    CICS destination control table. (2)
+  ECICSDCT    Resource group class for the DCICSDCT class. (1)
+  FCICSFCT    CICS file control table. (2)
+  GCICSTRN    Resource group class for TCICSTRN class. (2)
+  GCPSMOBJ    Grouping class for CPSMOBJ.
+  HCICSFCT    Resource group class for the FCICSFCT class. (1)
+  JCICSJCT    CICS journal control table. (2)
+  KCICSJCT    Resource group class for the JCICSJCT class. (1)
+  MCICSPPT    CICS processing program table. (2)
+  NCICSPPT    Resource group class for the MCICSPPT class. (1)
+  PCICSPSB    CICS program specification blocks (PSBs).
+  QCICSPSB    Resource group class for the PCICSPSB class. (1)
+  RCICSRES    CICS document templates.
+  SCICSTST    CICS temporary storage table. (2)
+  TCICSTRN    CICS transactions.
+  UCICSTST    Resource group class for SCICSTST class. (1)
+  VCICSCMD    Resource group class for the CCICSCMD class. (1)
+  WCICSRES    Resource group class for the RCICSRES class.
+
+                                DB2 classes
+
+  DSNADM      DB2 administrative authority class.
+  DSNR        Controls access to DB2 subsystems.
+  GDSNBP      Grouping class for DB2 buffer pool privileges.
+  GDSNCL      Grouping class for DB2 collection privileges.
+  GDSNDB      Grouping class for DB2 database privileges.
+  GDSNGV      Grouping class for DB2 z/OS global variables.
+  GDSNJR      Grouping class for Java archive files (JARs).
+  GDSNPK      Grouping class for DB2 package privileges.
+  GDSNPN      Grouping class for DB2 plan privileges.
+  GDSNSC      Grouping class for DB2 schemas privileges.
+  GDSNSG      Grouping class for DB2 storage group privileges.
+  GDSNSM      Grouping class for DB2 system privileges.
+  GDSNSP      Grouping class for DB2 stored procedure privileges.
+  GDSNSQ      Grouping class for DB2 sequences.
+  GDSNTB      Grouping class for DB2 table, index, or view privileges.
+  GDSNTS      Grouping class for DB2 tablespace privileges.
+  GDSNUF      Grouping class for DB2 user-defined function privileges.
+  GDSNUT      Grouping class for DB2 user-defined distinct type
+              privileges.
+  MDSNBP      Member class for DB2 buffer pool privileges.
+  MDSNCL      Member class for DB2 collection privileges.
+  MDSNDB      Member class for DB2 database privileges.
+  MDSNGV      Member class for DB2 z/OS global variables.
+  MDSNJR      Member class for Java archive files (JARs).
+  MDSNPK      Member class for DB2 package privileges.
+  MDSNPN      Member class for DB2 plan privileges.
+  MDSNSC      Member class for DB2 schema privileges.
+  MDSNSG      Member class for DB2 storage group privileges.
+  MDSNSM      Member class for DB2 system privileges.
+  MDSNSP      Member class for DB2 stored procedure privileges.
+  MDSNSQ      Member class for DB2 sequences.
+  MDSNTB      Member class for DB2 table, index, or view privileges.
+  MDSNTS      Member class for DB2 tablespace privileges.
+  MDSNUF      Member class for DB2 user-defined function privileges.
+  MDSNUT      Member class for DB2 user-defined distinct type
+              privileges.
+
+                                 DCE class
+
+  DCEUUIDS    Used to define the mapping between a users RACF user ID
+              and the corresponding DCE principal UUID. Also, used to
+              enable encrypted password support for Distributed File
+              Service (DFS) Server Message Block (SMB) users.
+                  Enterprise Identity Mapping (EIM) class
+  RAUDITX     Controls auditing for Enterprise Identity Mapping (EIM).
+
+                       Enterprise Java Beans classes
+
+  EJBROLE     Member class for Enterprise Java Beans authorization
+              roles.
+  GEJBROLE    Grouping class for Enterprise Java Beans authorization
+              roles.
+  JAVA        Contains profiles that are used by Java for z/OS
+              applications to perform authorization checking for Java
+              for z/OS resources.
+
+                                IMS classes
+
+  AIMS        Application group names (AGN).
+  CIMS        Command.
+  DIMS        Grouping class for command.
+  FIMS        Field (in data segment).
+  GIMS        Grouping class for transaction.
+  HIMS        Grouping class for field.
+  IIMS        Program specification block (PSB).
+  JIMS        Grouping class for program specification block (PSB).
+  LIMS        Logical terminal (LTERM).
+  MIMS        Grouping class for logical terminal (LTERM).
+  OIMS        Other.
+  PIMS        Database.
+  QIMS        Grouping class for database.
+  RIMS        Open Transaction Manager Access (OTMA) transaction pipe
+              (TPIPE).
+  SIMS        Segment (in database).
+  TIMS        Transaction (trancode).
+  UIMS        Grouping class for segment.
+  WIMS        Grouping class for other.
+
+       Integrated Cryptographic Service Facility (ICSF) classes
+
+  CRYPTOZ     Controls access to PKCS #11 tokens.
+  CSFKEYS     Controls access to ICSF cryptographic keys.
+  CSFSERV     Controls access to ICSF cryptographic services.
+  GCSFKEYS    Resource group class for the CSFKEYS class. (1)
+  GXCSFKEY    Resource group class for the XCSFKEY class. (1)
+  XCSFKEY     Controls the exportation of ICSF cryptographic keys.
+
+                          Infoprint Server class
+
+  PRINTSRV    Controls access to printer definitions for Infoprint
+              Server.
+
+         Information/Management (Tivoli Service Desk) classes
+
+  GINFOMAN    Grouping class for Information/Management (Tivoli
+              Service Desk) resources.
+  INFOMAN     Member class for Information/Management (Tivoli Service
+              Desk) resources.
+
+                              LFS/ESA classes
+
+  LFSCLASS    Controls access to file services provided by LFS/ESA.
+
+                           License Manager class
+
+  ILMADMIN    Controls access to the administrative functions of IBM
+              License Manager.
+
+  Lotus Notes for z/OS & Novell Directory Services for OS/390 classes
+
+  NDSLINK     Mapping class for Novell Directory Services for OS/390
+              user identities.
+  NOTELINK    Mapping class for Lotus Notes for z/OS user identities.
+
+                                MFA class
+
+  MFADEF      Contains profiles that define MFA factors
+
+                             MQSeries® classes
+
+  GMQADMIN    Grouping class for MQSeries administrative options. (1)
+  GMQCHAN     Reserved for MQSeries.
+  GMQNLIST    Grouping class for MQSeries namelists. (1)
+  GMQPROC     Grouping class for MQSeries processes. (1)
+  GMQQUEUE    Grouping class for MQSeries queues. (1)
+  MQADMIN     Protects MQSeries administrative options.
+  MQCHAN      Reserved for MQSeries.
+  MQCMDS      Protects MQSeries commands.
+  MQCONN      Protects MQSeries connections.
+  MQNLIST     Protects MQSeries namelists.
+  MQPROC      Protects MQSeries processes.
+  MQQUEUE     Protects MQSeries queues.
+
+                              NetView classes
+
+  NETCMDS     Controlling which NetView commands the NetView operator
+              can issue.
+  NETSPAN     Controlling which NetView commands the NetView operator
+              can issue against the resources in this span.
+  NVASAPDT    NetView/Access Services.
+  PTKTVAL     Used by NetView/Access Services Secured Single Signon to
+              store information needed when generating a PassTicket.
+  RMTOPS      NetView Remote Operations.
+  RODMMGR     NetView Resource Object Data Manager (RODM).
+
+                z/OS Network Authentication Service classes
+
+  KERBLINK    Contains profiles that map local and foreign principals
+              to RACF user IDs.    Also controls which users are
+              authorized to use the SKRBKDC started procedure to
+              decrypt service tickets for a given principal. (3)
+  REALM       Used to define the local and foreign realms. (3)
+
+                          SMS (DFSMSdfp) classes
+
+  MGMTCLAS    SMS management classes.
+  STORCLAS    SMS storage classes.
+  SUBSYSNM    Authorizes a subsystem (such as a particular instance of
+              CICS) to open a VSAM ACB and use VSAM record level
+              sharing (RLS) functions.
+
+                              Tivoli classes
+
+  ROLE        Specifies the complete list of resources and associated
+              access levels that are required to perform the
+              particular job function this role represents and defines
+              which RACF groups are associated with this role.
+  TMEADMIN    Maps the user IDs of Tivoli administrators to RACF user
+              IDs.
+
+                                TSO classes
+
+  ACCTNUM     TSO account numbers.
+  PERFGRP     TSO performance groups.
+  TSOAUTH     TSO user authorities such as OPER and MOUNT.
+  TSOPROC     TSO logon procedures.
+
+                           WebSphere MQ classes
+
+  GMXADMIN    Grouping class for WebSphere MQ administrative options.
+  GMXNLIST    Grouping class for WebSphere MQ namelists.
+  GMXPROC     Grouping class for WebSphere MQ processes.
+  GMXQUEUE    Grouping class for WebSphere MQ queues.
+  GMXTOPIC    Grouping class for WebSphere MQ topics.
+  MXADMIN     Protects WebSphere MQ administrative options.
+  MXNLIST     Protects WebSphere MQ namelists.
+  MXPROC      Protects WebSphere MQ processes.
+  MXQUEUE     Protects WebSphere MQ queues.
+  MXTOPIC     Protects WebSphere MQ topics.
+
+                              z/OSMF classes
+
+  ZMFAPLA     Member class for z/OSMF authorization roles.
+  GZMFAPLA    Grouping class for z/OSMF authorization roles.
+  ZMFCLOUD    Protects z/OS cloud resources.
+
+                             z/OS UNIX classes
+
+  DIRACC      Controls auditing (using SETROPTS LOGOPTIONS) for access
+              checks for read/write access to z/OS UNIX directories.
+              This class need not be active to control auditing. (5)
+  DIRSRCH     Controls auditing (using SETROPTS LOGOPTIONS) of z/OS
+              UNIX directory searches. This class need not be active
+              to control auditing. (5)
+  FSACCESS    Controls access to z/OS UNIX file systems.
+  FSEXEC      Controls execute access to z/OS UNIX file systems.
+  FSOBJ       Controls auditing (using SETROPTS LOGOPTIONS) of all
+              access checks for z/OS UNIX file system objects except
+              directory searches. Controls auditing (using SETROPTS
+              AUDIT) of creation and deletion of z/OS UNIX file system
+              objects. This class need not be active to control
+              auditing. (5)
+  FSSEC       Controls auditing (using SETROPTS LOGOPTIONS) of changes
+              to the security data (FSP) for z/OS UNIX file system
+              objects. This class need not be active to control
+              auditing. When this class is active, it also controls
+              whether ACLs are used during authorization checks to
+              z/OS UNIX files and directories. (5)
+  IPCOBJ      Controls auditing (using SETROPTS LOGOPTIONS) of access
+              checks for interprocess communication (IPC) objects and
+              changes to security information of IPC objects. Controls
+              auditing (using SETROPTS AUDIT) of the creation and
+              deletion of IPC objects. This class need not be active
+              to control auditing. (5)
+  PROCACT     Controls auditing (using SETROPTS LOGOPTIONS) of
+              functions that look at data from, or affect the
+              processing of, z/OS UNIX processes. This class need not
+              be active to control auditing. (5)
+  PROCESS     Controls auditing (using SETROPTS LOGOPTIONS) of changes
+              to UIDs and GIDs of z/OS UNIX processes. Controls
+              auditing (using SETROPTS AUDIT) of dubbing and undubbing
+              of z/OS UNIX processes. This class need not be active to
+              control auditing. (5)
+  UNIXMAP     Contains profiles that are used to map z/OS UNIX UIDs to
+              RACF user IDs and z/OS UNIX GIDs to RACF group names.
+  UNIXPRIV    Contains profiles that are used to grant z/OS UNIX
+              privileges.
+
+
+  Restrictions:
+
+  1.  Do not specify this class name on the GENCMD, GENERIC, and
+      GLOBAL/NOGLOBAL operands of the SETROPTS command.
+
+  2.  Do not specify this class name on the GLOBAL operand of SETROPTS
+      or, if you do, the GLOBAL checking is not performed.
+
+  3.  Do not specify this class name on the GENCMD and GENERIC operands
+      of the SETROPTS command.
+
+  4.  Do not specify this class name with any RACF command. This is a
+      member class associated with a grouping class that has a special
+      use.
+
+  5.  Profiles are not allowed in this class.

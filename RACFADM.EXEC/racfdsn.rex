@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CU  241202  TRIDJK   Added line cmd 'P=Profile' for TABLEA        */
 /* @CT  241018  TRIDJK   Add Conditional Access List processing       */
 /* @CS  240915  TRIDJK   Check '*' for TYPE=GEN before ADDSD command  */
 /* @CR  240915  TRIDJK   ERR29,ERR30: Not catl'd;User|Grp not defined */
@@ -143,7 +144,7 @@ ADDRESS ISPEXEC                                               /* @AJ */
 
   If (SETMADMN = "YES") then do                               /* @B2 */
      SELCMDS2 = "ÝS¨Show,ÝL¨List,ÝD¨Dsn,ÝC¨Change,"||,        /* @B9 */
-                "ÝA¨Add,ÝR¨Remove,ÝW¨When"                    /* @CT */
+                "ÝA¨Add,ÝR¨Remove,ÝP¨Profile,ÝW¨When"         /* @CU */
      IF (SETMIRRX = "YES") THEN                               /* @BR */
         SELCMDS5 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @BH */
                    "ÝC¨Chg Access,ÝA¨Add Access,"||,          /* @BH */
@@ -320,6 +321,8 @@ PROFL:
              acclist = 'COND'                                 /* @CT */
              call Disd                                        /* @CT */
              end                                              /* @CT */
+        when (opta = 'P') then                                /* @CU */
+             call RACFPROF 'DATASET' dataset                  /* @CU */
         otherwise nop
      End
      'control display restore'                                /* @CA */

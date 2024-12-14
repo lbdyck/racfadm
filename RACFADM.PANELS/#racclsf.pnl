@@ -1,0 +1,27 @@
+)ATTR DEFAULT(%+_)
+   $  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   #  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(RED)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Authorization+)\-\%Tutorial
+%Command ===>_ZCMD
+%
++PROFILE:$**
++CLASS:  $FACILITY
++UACC:   $READ    { (Default access)     +OWNER: $SYS1    { (Owner of profile)
++WARNING:$NO      { (YES/NO)             +AUDIT: $FAILURES(READ)
++DATA:   $NONE
++
+%Group/ID     Access
+%-------------------------------------------------------------------------------
+%******************************* Bottom of data ********************************
++
++
++
+#NOTE:+ If there are no PERMITs displayed above, then the UACC
++       value determined that have authorization access.
++
+)END

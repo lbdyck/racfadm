@@ -5,6 +5,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AL  241214  TRIDJK   Added ERR37 msg, Profile not found           */
 /* @AK  240916  TRIDJK   Added ERR33,34,35,36 msgs for Connect        */
 /* @AJ  240916  TRIDJK   Added ERR29,30 msgs, Not catlg, Not defined  */
 /* @AI  240903  TRIDJK   Added ERR28 msg, Can't refresh class         */
@@ -128,12 +129,12 @@ ADDRESS ISPEXEC                                               /* @A4 */
                      'invoke RACFADM.'                        /* @AB */
      end                                                      /* @A7 */
      WHEN (code = 'ERR20') then do                            /* @A8 */
-          racfsmsg = 'Invalid security access'                /* @A8 */
-          racflmsg = 'Userid does not have',                  /* @A8 */
-                     'security access to execute',            /* @A8 */
-                     'IRRXUTIL, please see Notes in',         /* @A8 */
-                     'tutorial'                               /* @A8 */
-     end                                                      /* @A8 */
+          racfsmsg = 'R_admin auth failure'                   /* @AK */
+          racflmsg = 'Userid does not have',                  /* @AK */
+                     'security access to execute. ',          /* @AK */
+                     'IRRXUTIL 12 12 8 8 24 return',          /* @AK */
+                     'code.'                                  /* @AK */
+     end                                                      /* @AK */
      WHEN (code = 'ERR21') then do                            /* @A9 */
           racfsmsg = 'Invalid entry'                          /* @A9 */
           racflmsg = 'NO and NONE are not valid entries.'     /* @A9 */
@@ -190,6 +191,10 @@ ADDRESS ISPEXEC                                               /* @A4 */
           racfsmsg = 'Connect remove failed'                  /* @AK */
           racflmsg = 'Unable to remove the connect'           /* @AK */
      end                                                      /* @AK */
+     when (code = 'ERR37') then do                            /* @AL */
+          racfsmsg = 'Profile not found'                      /* @AL */
+          racflmsg = 'IRRXUTIL 12 12 4 4 4 return code'       /* @AL */
+     end                                                      /* @AL */
      otherwise nop
   End
   if message /= '' then                                       /* @AG */

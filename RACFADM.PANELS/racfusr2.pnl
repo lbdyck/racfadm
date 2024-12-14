@@ -19,7 +19,7 @@
 +\-\(%RACFADM - User Profiles+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+FILTER: $RFILTER                ¬SELCMD2B                                     ¬
++FILTER: $RFILTER        ¬SELCMD2B                                             ¬
 +SELECT: ¬SELCMD2A                                                             ¬
 %
 %S         ~Userid  ~Name              ~Group   ~Logon     ~Owner   ~Rev~Att~TSO
@@ -44,12 +44,12 @@ _Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  
   /* Line command: XR is not displayed (hidden) */
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL,K)
      ELSE
         VER (&OPTA,LIST,/,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,XR,Y,AL)
   ELSE
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,K)
      ELSE
         VER (&OPTA,LIST,/,S,SE,L,LC,LR,D)
 )PNTS
@@ -62,6 +62,7 @@ _Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  
   FIELD(ZPS00007) VAR(ZCMD) VAL('SORT ATT')
   FIELD(ZPS00008) VAR(ZCMD) VAL('SORT TSO')
 )END
++FILTER: $RFILTER                ¬SELCMD2B                                     ¬
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */
 /*--------------------------------------------------------------------*/

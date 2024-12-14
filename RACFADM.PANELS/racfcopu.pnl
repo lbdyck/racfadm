@@ -1,0 +1,74 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY WINDOW(60,15)
++
+%Cmd=>_ZCMD
++
++ Insert information for CLONE:
++
++ Userid  %=_CLUSER  +
++ Password%=_CLPSWD  +
++ Name    %=_CLNAME              +
++ Usercat %=_CLUCAT                                      +
++ Data    %=_CLDATA                                      @Z
++
++ PERMITs %=_Z+ (Y/N)  +Y = All{DATASET+profiles processed
++
+% ENTER+to continue or%F3+to cancel
++
+)INIT
+  .ZVARS   = '(SCIND CLPERM)'
+  &ZCMD    = ' '
+  &CLPSWD  = 'Welcome1'
+  &ZWINTTL = 'RACFADM - Clone Userid'
+  .CURSOR  = CLUSER
+  .HELP    = #RACCOPU
+  &ocluser = &cluser
+  &oclname = &clname
+)PROC
+  VER (&CLUSER,NB)
+  VER (&CLPSWD,NB)
+  VER (&CLNAME,NB)
+  VER (&CLUCAT,NB)
+  VER (&CLDATA,NB)
+  VER (&CLPERM,NB,LIST,Y,N)
+*rexx(* msg1 msg2 msg3 zedlmsg ocluser oclname)
+  parse value '' with msg1 msg2 msg3 zedlmsg null
+  if cluser = ocluser then do
+    msg1 = 'Error.'
+    zedlmsg = 'The new userid may not be the same as the original' ,
+      'clone userid.'
+  end
+  if clname = oclname then do
+    msg2 = 'Error.'
+    zedlmsg = 'The new name may not be the same as the original' ,
+      'clone name.'
+  end
+  if zedlmsg = null then do
+    call outtrap 'x.'
+    "listcat ent('"clucat"')"
+    lrc = rc
+    call outtrap 'off'
+    if lrc > 0 then do
+       msg3 = 'Error.'
+       zedlmsg = 'The specified user catalog does not exist.' ,
+                 'Try again....'
+       end
+  end
+*endrexx
+ IF (&msg1 NE &Z)
+    &zedsmsg = &msg1
+    ver (&cluser,list,'x',msg=isrz001)
+ IF (&msg2 NE &Z)
+    &zedsmsg = &msg2
+    ver (&clname,list,'x',msg=isrz001)
+ IF (&msg3 NE &Z)
+    &zedsmsg = &msg3
+    ver (&clucat,list,'x',msg=isrz001)
+)FIELD
+  FIELD(CLDATA)  IND(SCIND,'<>') LEN(255)
+)END

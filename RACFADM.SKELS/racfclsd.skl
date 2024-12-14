@@ -3,25 +3,28 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A1  241212  TRIDJK   Added Description field
 )CM*  @A0  200611  RACFA    Created skeleton
 )CM*------------------------------------------------------------------*
 )SEL &RACFSFIL = T
  &ZDATESTD ----------( RACFADM - General Resources )----------- &ZTIME
 )BLANK
- Class
+ Class           Description
  ---------------------------------------------------------------------
-)TB 2
+)TB 2 18
 )DOT &TABLEA
 )SETF CLASS   = &LEFT(&CLASS,8, )
-!&CLASS
+)SETF CDESC   = &LEFT(&CDESC,57, )
+!&CLASS!&CDESC
 )ENDDOT
 )ENDSEL
 )SEL &RACFSFIL = C
 RACFADM - General Resources
-Class
------
+Class           Description
+-------------------------------------------------------------------------
 )DOT &TABLEA
 )SETF CLASS   = &STRIP(&CLASS,, )
-&CLASS
+)SETF CDESC   = &STRIP(&CDESC,, )
+&CLASS,&CDESC
 )ENDDOT
 )ENDSEL

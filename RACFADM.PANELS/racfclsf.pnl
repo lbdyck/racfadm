@@ -21,7 +21,7 @@
 $Z           #Z
 )INIT
   .ZVARS = '(SCIND1 SCIND2 ID ACC)'
-  .HELP  = #RACMENU
+  .HELP  = #RACCLSF
   &ZCMD  = ' '
   IF (&SAMT = ' ')
       &SAMT = &ZSCED

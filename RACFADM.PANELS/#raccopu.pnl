@@ -1,0 +1,29 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(RED)   SKIP(ON)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Clone Userid+)\-\%Tutorial
+%Command ===>_ZCMD
++
++  The new userid may not be the same as the original userid and
++  the new name may not be the same as the original name.
++
++  The specified user catalog must exist on the system.
++
++  If you want to generate dataset}PERMIT(s)+for the cloned userid, all
++ }DATASET+profiles must be read and processed, which may take time
++  on systems with large RACF Databases.
++
++  A TSO batch job will be created with the following commands:
++
++    {ADDUSER
++    {ADDSD
++    {CONNECT(s)
++    {PERMIT(s)
++    {DEFINE ALIAS
+)INIT
+)END

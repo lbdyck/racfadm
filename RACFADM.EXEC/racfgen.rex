@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A2  241129  TRIDJK   Add conditional access PERMITs               */
 /* @L1  241124  LBDYCK   Add comments and sample JCL                  */
 /* @A1  241122  TRIDJK   Set SRT flag correctly                       */
 /* @A0  241122  Xephon   CBT File 836 (RGENR)                         */
@@ -155,6 +156,7 @@ IF WAR = 'YES' THEN
 CALL INCREM
 REC.K = " DATA('"INS"')"
 RETURN 0
+
 /* Produce permit list for this profile */
 ACCESS:
 START = 0
@@ -180,13 +182,59 @@ DO J = 1 TO CMDREC.0
             END
       END
    IF CLASS = 'DATASET' THEN
-      IF SUBSTR(CMDREC.J,1,17) = '    ID     ACCESS' THEN
+      IF SUBSTR(CMDREC.J,1,16) = '   ID     ACCESS' THEN
          START = 1
    IF CLASS \= 'DATASET' THEN
       IF SUBSTR(CMDREC.J,1,16) = 'USER      ACCESS' THEN
          START = 1
 END
-RETURN 0
+/* RETURN 0 */
+
+/* Produce conditional permit list for this profile */        /* @A2 */
+CACCESS:                                                      /* @A2 */
+START = 0                                                     /* @A2 */
+DO J = 1 TO CMDREC.0                                          /* @A2 */
+   IF START = 1 THEN                                          /* @A2 */
+      IF SUBSTR(CMDREC.J,1,17) = '            ' THEN          /* @A2 */
+         START = 0                                            /* @A2 */
+   IF START = 1 THEN                                          /* @A2 */
+      DO                                                      /* @A2 */
+         RID = SUBWORD(CMDREC.J,1,1)                          /* @A2 */
+         IF SUBSTR(RID,1,1) \= '-' & RID \= 'NO' THEN         /* @A2 */
+            DO                                                /* @A2 */
+               IF CLASS = 'DATASET' THEN DO                   /* @A2 */
+                  ACC = SUBWORD(CMDREC.J,2,1)                 /* @A2 */
+                  CLS = SUBWORD(CMDREC.J,3,1)                 /* @A2 */
+                  ENT = SUBWORD(CMDREC.J,4,1)                 /* @A2 */
+                  END                                         /* @A2 */
+               ELSE DO                                        /* @A2 */
+                  ACC = SUBWORD(CMDREC.J,2,1)                 /* @A2 */
+                 CCLS = SUBWORD(CMDREC.J,4,1)                 /* @A2 */
+                  ENT = SUBWORD(CMDREC.J,5,1)                 /* @A2 */
+                  END                                         /* @A2 */
+               CALL INCREM                                    /* @A2 */
+               S = SUBSTR('        ',1,8-LENGTH(RID))         /* @A2 */
+               IF CLASS = 'DATASET' THEN DO                   /* @A2 */
+                  REC.K = "PE '"PROF"' ID("RID")"S" ACC("ACC")" GEN "-"
+                  CALL INCREM                                 /* @A2 */
+                  REC.K = "    WHEN("CLS"("ENT"))"            /* @A2 */
+                  END                                         /* @A2 */
+               ELSE DO                                        /* @A2 */
+                     CLS = 'CL('CLASS')'                      /* @A2 */
+                     REC.K = "PE "PROF" ID("RID")"S" ACC("ACC")" GEN "-"
+                     CALL INCREM                              /* @A2 */
+                     REC.K = "   "CLS" WHEN("CCLS"("ENT"))"   /* @A2 */
+                  END                                         /* @A2 */
+            END                                               /* @A2 */
+      END                                                     /* @A2 */
+   IF CLASS = 'DATASET' THEN                                  /* @A2 */
+      IF SUBSTR(CMDREC.J,1,15) = '   ID    ACCESS' THEN       /* @A2 */
+         START = 1                                            /* @A2 */
+   IF CLASS \= 'DATASET' THEN                                 /* @A2 */
+      IF SUBSTR(CMDREC.J,1,16) = '   ID     ACCESS' THEN      /* @A2 */
+         START = 1                                            /* @A2 */
+END                                                           /* @A2 */
+RETURN 0                                                      /* @A2 */
 
   /* --------------------------------- *                                /*@L1*/
    | Insert record and increment rec.0 |                                /*@L1*/

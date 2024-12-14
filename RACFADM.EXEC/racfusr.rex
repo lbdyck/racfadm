@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @F9  241209  TRIDJK   K line command will clone user profile       */
 /* @F8  241114  TRIDJK   Mark userid in TABLEA if user digital certs  */
 /* @F7  241023  TRIDJK   Added RINGS/CERTS for users in TABLEA        */
 /* @F6  240917  TRIDJK   Added ERR33,34,35,35 messages for Connect    */
@@ -251,7 +252,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝLR¨Ring"||,                             /* @EZ */
+        SELCMD2B = " ÝK¨CloneÝLR¨Ring"||,                     /* @F9 */
                    "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
@@ -516,6 +517,11 @@ PROFL:
              action = '*Ring'                                 /* @EZ */
              "TBMOD" TABLEA                                   /* @EZ */
              end                                              /* @EZ */
+        when (opta = 'K') then do                             /* @F9 */
+             call RACFCOPU user name                          /* @F9 */
+             action = '*Clone'                                /* @F9 */
+             "TBMOD" TABLEA                                   /* @F9 */
+             end                                              /* @F9 */
         when (opta = 'P') then do                             /* @CK */
              call RACFPROF 'USER' user                        /* @CK */
              action = '*Prof'                                 /* @CW */
@@ -1629,6 +1635,8 @@ RETURN                                                        /* @BE */
   call @chkattr                                               /* @D4 */
   "TBMOD" TABLEA "ORDER"                                      /* @EF */
   call disd /* Connect basic group */                         /* @D4 */
+  action = '*Add'                                             /* @JK */
+  "TBMOD" TABLEA                                              /* @JK */
 RETURN                                                        /* @D4 */
 /*--------------------------------------------------------------------*/
 /*  Generate password                                            @E1  */

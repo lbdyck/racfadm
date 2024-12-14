@@ -2,6 +2,7 @@
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
+   ^  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(RED)      JUST(LEFT)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
    ¬  AREA(DYNAMIC) EXTEND(OFF)
    ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
@@ -16,7 +17,7 @@
 %S  ~Class          ~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ $Z        #Z    $Z
+_Z+ $Z        ^Z    #Z
 )INIT
   .ZVARS   = '(OPTA CLASS ACTION CDESC)'
   .HELP    = #RACCLSR

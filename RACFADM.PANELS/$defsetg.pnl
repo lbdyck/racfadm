@@ -32,7 +32,7 @@
 *     - There must be a space after the variable name, equal sign,    *
 *       and variable definition                                       *
 *     - Dataset names can contain system symbolics                    *
-*     - An asterick (*) in column one will be treated as a comment    *
+*     - An asterisk (*) in column one will be treated as a comment    *
 *                                                                     *
 *  4) The user's Settings are saved to their ISPF profile dataset in  *
 *     member RADMPROF                                                 *

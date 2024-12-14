@@ -23,6 +23,7 @@
  #RACCLS5  Tutorial       List classes
  #RACCLS8  Tutorial       List classes
  #RACCMDS  Tutorial       Execute, save and delete TSO commands
+ #RACCOPU  Tutorial       Clone a User Profile, (line cmd K)
  #RACDB    Tutorial       RACF database information
  #RACDSL   Tutorial       Dataset list
  #RACDSNA  Tutorial       Add/change dataset profile
@@ -30,6 +31,7 @@
  #RACDSN5  Tutorial       Dataset's group/id profile
  #RACENQ   Tutorial       Enqueue information
  #RACERA   History        Nico Rizzuto's original menu for ERA
+ #RACCLSF  Class          List group/ids and access (SEarch, Option 1)
  #RACGEN1  Tutorial       Generate profile source
  #RACGRP5  Tutorial       Group's userids profiles
  #RACGRP8  Tutorial       Group profile
@@ -87,7 +89,7 @@
  RACFCLSC  Class          Add class
  RACFCLSD  Class          List class profiles
  RACFCLSE  Class          Enter profile/class/user, menu opt 99 (hidden)
- RACFCLSF  Class          List group/ids and access
+ RACFCLSF  Class          List group/ids and access (SEarch, Option 1)
  RACFCLSR  Class          List classes (show, refresh), menu option 4
  RACFCLS1  Class          Set filter
  RACFCLS2  Class          List profiles and descriptions
@@ -98,6 +100,7 @@
  RACFCLS7  Class          Add access
  RACFCLS8  Class          List classes and profiles
  RACFCMDS  Commands       Execute TSO RACF commands
+ RACFCOPU  User           Clone a User Profile, (line cmd K)
  RACFDISP  Display        GrpTree/RACFdb/Enque/Chgs/Issues/ISPLog/Stds
  RACFDSC5  Dataset        Show groups and access (Conditional)
  RACFDSC6  Dataset        Change access (Conditional)

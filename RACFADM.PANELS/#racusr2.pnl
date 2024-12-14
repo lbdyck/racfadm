@@ -41,6 +41,7 @@
 %  Y  !Access       +User/Grp Access Report@(admin)
 %  LC !Cert         +List certificates for user
 %  LR !Ring         +List rings for user
+%  K  !Clone        +Clone user profile using IRRXUTIL@(admin RACF API)
 )PROC
   &ZUP     = #RACUSR2
 )END

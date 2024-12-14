@@ -9,13 +9,34 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  14 Dec 2024 - V38R9
+     - Generate profile source (Option G)
+       -- Updated RACFGEN exec to add PERMIT commands for
+          conditional access lists
+     - Dataset Profiles (Option 3)
+       -- Added line command 'P'rofile to list dataset profile using
+          Radmin extract, must have 'Administrator=YES'
+       -- Updated panels RACFDSN2/#RACDSN2 to add P(Profile) line
+          command
+       -- Updated execs RACFMSGS/RACFPROF to better handle
+          'Profile not found' and 'R_Admin Auth failure'
+          return codes from IRRXUTIL
+     - User Profiles (Option 1)
+       -- Added line command 'K'lone to clone a user profile
+          (ADDUSER, CONNECT, ADDSD, DEFINE ALIAS, and PERMIT)
+       -- Updated exec RACFCLSS to add Description field to tablea
+          (SEarch line command)
+       -- Updated panel RACFCLSD and skeleton RACFCLSD with Description
+          (SEarch line command)
+       -- Added #RACCLSF tutorial panel
+
   25 Nov 2024 - V38R8
      - User Profiles (Option 1)
        -- A marker character is placed in last position of TSO Y/N
           if userid has Digital Certificates (default = *)
        -- Add exec RACFDCER to set the Digital Certificate indicator
           in RACFUSR exec
-       -- Add unodocumented command NOTONLY (reverse of ONLY)
+       -- Add undocumented command NOTONLY (reverse of ONLY)
      - Group Profiles (Option 2)
        -- Updated RACFGRP exec to display number of users connected
           to a group and if group is Universal - (U) in data field
