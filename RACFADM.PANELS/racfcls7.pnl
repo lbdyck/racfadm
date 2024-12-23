@@ -14,7 +14,7 @@
 +TYPE   %===>$TYPE
 +
 +ID     %===>_ID      { (User or group)
-+UACC   %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
++ACCESS %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +
 {and / or
 +

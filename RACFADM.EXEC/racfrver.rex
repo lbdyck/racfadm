@@ -1,8 +1,9 @@
   /* --------------------------- REXX -------------------------------- */
-   return 'V38R9'
+   return 'V39R0'
   /* RACFRVER defines the version of the dialog                        |
    |                                                                   |
    | History:                                                          |
+   | 14DEC2024 JPK Updated to version V39R0                            |
    | 29NOV2024 JPK Updated to version V38R9                            |
    | 12NOV2024 JPK Updated to version V38R8                            |
    | 28OCT2024 JPK Updated to version V38R7                            |

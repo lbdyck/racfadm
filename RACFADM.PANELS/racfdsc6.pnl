@@ -14,7 +14,7 @@
 +PROFILE%===>$DATASET                                     +$TYPE
 +ID     %===>$ID
 +
-+UACC   %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
++ACCESS %===>_ACC     { (Access level, NONE/EXECUTE/READ/UPDATE/ALTER/CONTROL)
 +
 %Conditional Access List:
 +CLASS  %===>_CLS     { (Class)
@@ -32,5 +32,5 @@
   .HELP   = #RACDSNA
   &OTH = ''
 )PROC
-  VER (&UACC,NB,LIST,NONE,EXECUTE,READ,ALTER,CONTROL,UPDATE)
+  VER (&ACC,NB,LIST,NONE,EXECUTE,READ,ALTER,CONTROL,UPDATE)
 )END

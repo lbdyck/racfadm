@@ -12,7 +12,7 @@
 +PROFILE%===>$USER    +$NAME
 +
 +ID     %===>$ID      { (User or group)
-+ACC    %===>_ACC     { (Access level, USE/JOIN)
++AUTH   %===>_ACC     { (Authority, USE/JOIN)
 +
 +
 +

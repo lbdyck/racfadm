@@ -26,7 +26,7 @@
 + %7 ~Password reset      %17~ISPF log file       %27~Installation notes
 + %8 ~Group tree report   %18~RACF messages       %28~Acknowledgements
 + %9 ~RACF data (Showmvs) %19~OMVS RACF commands  %29~History
-+ %10~RACF databases      %20~RACF Pswd/Phrase Rpt
++ %10~RACF databases      %20~RACF Pswd/Phrase Rpt%30~LC and LR edit macros
 )PROC
   &ZSEL = TRANS(&ZCMD 1,#RACMEN1  2,#RACSET1  3,#RACUSR2  4,#RACGRP8
                       5,#RACDSN2  6,#RACCLSR  7,#RACPSWD  8,#RACGTRE
@@ -35,7 +35,7 @@
                      17,#RACLOG  18,#RACMSG  19,#RACOMVS 20,#RACFPP
                      21,#RACRPT1 22,#RACGEN1 23,#RACCERT 24,#RACDSNA
                      25,#RACCLSA 26,#RACPUB1 27,#RACNOT1 28,#RACACKN
-                     29,#RACHIST
+                     29,#RACHIST 30,#RACMACS
                       *,'?')
   &ZUP  = #RACMENU
 )PNTS
@@ -68,6 +68,7 @@
   FIELD(ZPS00027) VAR(ZCMD) VAL('29')
   FIELD(ZPS00028) VAR(ZCMD) VAL('10')
   FIELD(ZPS00029) VAR(ZCMD) VAL('20')
+  FIELD(ZPS00030) VAR(ZCMD) VAL('30')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

@@ -15,7 +15,7 @@
 +
 +Change the field below:
 +
-+ACCESS %===>_ACC     { (Access level, USE/JOIN)
++AUTH   %===>_ACC     { (Authority, USE/JOIN)
 +
 +
 +

@@ -8,7 +8,6 @@
  $CLASSES  Information    Document general resource classes
  $DEFSETG  Settings       Default site settings for new users
  $GLOSSRY  TSO Help       Technical terms and abbreviations for RACF
- $ISSUES   Problems       Document all reported issues
  $REPORTS  Reports        ICETOOL/DSMON reports
  $STNDARD  Standards      Document coding and design
  $UPDATES  Updates        Document version/updates
@@ -41,6 +40,7 @@
  #RACHIST  Tutorial       RACF history (Nico Rizzuto's ERA)
  #RACIBM   Tutorial       RACF IBM option
  #RACLOG   Tutorial       ISPF log file
+ #RACMACS  Tutorial       LC and LR edit macros
  #RACMENU  Tutorial       Main menu, menu option T
  #RACMEN1  Tutorial       Menu
  #RACMVS   Tutorial       RACF data (Showmvs)
@@ -149,7 +149,6 @@
  RACFUSR5  User           Change user
  RACFUSR6  User           Add user
  RACFUSR7  User           Change connection
- RACFUSR8  User           Alter TSO segment
 
  Notes:
    - Class is 'General Resources'

@@ -6,6 +6,10 @@
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
  $STUB     Invocation     Can place rexx in site's REXX dataset
+ LC        Edit Macro     RACDCERT LIST(LABEL('labelname')) ID(userid)
+                          on User Profile CERTS/RINGS command output
+ LR        Edit Macro     RACDCERT LISTRING(*) ID(userid)
+                          on User Profile CERTS/RINGS command output
  OPERMIT   IBM TSO Cmd    Unix Access Control List, like PERMIT
  ORALTER   IBM TSO Cmd    Unix Security Attribute, like ALTER
  ORLIST    IBM TSO Cmd    Unix Dir/File Security, like RLIST
@@ -36,6 +40,8 @@
  RACFMSG   Messages       RACF messages, menu option M
  RACFMSGC  Message        Display 'Confirm Request' panel
  RACFMSGS  Message        Display error message
+ RACFNOTE  Edit Macro     Display MSG and NOTE lines in menu option 1
+                          CERTS and RINGS command output
  RACFOMVS  OMVS Commands  Exec RACF OMVS cmds (OPERMIT/ORALTER/ORLIST)
  RACFPRMS  Parameter      Display RACF parameters, menu option 7
  RACFPROF  Profile        Execute line cmd 'P', extract/display profile

@@ -9,7 +9,7 @@
 + !RSH RACF Tip: How to Clear a User's Password and Phrase History
 +
 +  To clear a user's password and password phrase history, execute the
-+  follwing commands.  The first command makes the ID PROTECTED.
++  following commands.  The first command makes the ID PROTECTED.
 +  PWCLEAN then removes the entire password and phrase history. As this
 +  process also deletes the user's current password and/or phrase along
 +  with the history, it will be necessary to set the user's password and

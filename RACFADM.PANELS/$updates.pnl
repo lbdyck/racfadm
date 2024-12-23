@@ -9,13 +9,29 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  23 Dec 2024 - V39R0
+     - User Profiles (Option 1)
+       -- Added edit macros LC and LR for use on the
+          CERTS and RINGS primary command output
+       -- Added edit macro RACFNOTE to generate MSG and NOTE lines for
+          CERTS and RINGS primary command output
+       -- Updated panel RACFCOPU to remove non-blank verification for
+          installation data and add JOB card sequence
+       -- Updated RACFCOPU exec to properly handle base attributes
+       -- Deleted RACFUSR panel (Alter TSO segment) - not used
+     - Tutorial (Option T)
+       -- Added 'LC and LR edit macros'
+     - General Cleanup
+       -- Changed various panel field captions to better describe
+          access and authority fields
+
   14 Dec 2024 - V38R9
      - Generate profile source (Option G)
        -- Updated RACFGEN exec to add PERMIT commands for
           conditional access lists
      - Dataset Profiles (Option 3)
        -- Added line command 'P'rofile to list dataset profile using
-          Radmin extract, must have 'Administrator=YES'
+          Radmin extract
        -- Updated panels RACFDSN2/#RACDSN2 to add P(Profile) line
           command
        -- Updated execs RACFMSGS/RACFPROF to better handle

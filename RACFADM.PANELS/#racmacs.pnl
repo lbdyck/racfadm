@@ -1,0 +1,30 @@
+)ATTR DEFAULT(%+~)
+   $  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   #  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(RED)
+   ~  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) COLOR(RED)   HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(YELLOW)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+)BODY EXPAND(\\)
+{_______________________________________________________________________________
+$VIEW       SYS24354.T115541.RA000.TRIDJK.R0107780          Columns 00001 00072
+$Command ===>~ZCMD                                            $Scroll ===>#CSR
+{***************************** Top of Data *************************************
+{000001
+#==MSG>%Edit macro LC can be used to list a certificate
+#=NOTE={  Place cursor on --->label name and press Enter
+#==MSG>%Edit macro LR can be used to list rings for a user
+#=NOTE={  Place cursor on --->userid and press Enter
+#=NOTE=
+{000002$User: AZFWEB
+{000003+LN=CBT_AZFWEB                       ST=2022/03/23 EN=2051/03/28 TR=TRUST
+{000004
+{000005$User: CBT001
+{000006+LN=SMPE SHOPZ client certificate    ST=2024/11/25 EN=2025/11/25 TR=TRUST
+{000007
+{000008$User: IZUSVR
+{000009+LN=DefaultzOSMFCert.IZUDFLT         ST=2024/02/06 EN=2050/05/17 TR=TRUST
++
+}Note:{The above screen was created by the User Profile%CERTS{primary command.
+{      Use the%LC{and%LR{edit macros to list certificate and ring information.
+)END

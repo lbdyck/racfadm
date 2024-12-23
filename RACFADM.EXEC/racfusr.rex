@@ -202,7 +202,6 @@ PANEL04     = "RACFUSR4"   /* Connect profile              */ /* @BL */
 PANEL05     = "RACFUSR5"   /* Alter userids (admin)        */ /* @E6 */
 PANEL06     = "RACFUSR6"   /* Add/change userid            */ /* @DT */
 PANEL07     = "RACFUSR7"   /* Change connection            */ /* @BL */
-PANEL08     = "RACFUSR8"   /* Alter TSO segment            */ /* @BL */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */ /* @BL */
 PANELM3     = "RACFMSG3"   /* Display RACF IRXXUTIL Cmd    */ /* @D4 */
 PANELMU     = "RACFMSGU"   /* Display line Cmd popup       */ /* @F4 */
@@ -408,7 +407,9 @@ PROFL:
                 else do                                       /* @F7 */
                    x = outtrap("off")                         /* @F7 */
                    call get_rings                             /* @F7 */
+                   EDITMACR = "RACFNOTE"
                    call display_info                          /* @F7 */
+                   EDITMACR = "RACFEMAC"
                    'tbtop' TABLEA                             /* @F7 */
                    leave                                      /* @F7 */
                    end                                        /* @F7 */
@@ -428,7 +429,9 @@ PROFL:
                 else do                                       /* @F7 */
                    x = outtrap("off")                         /* @F7 */
                    call get_certs                             /* @F7 */
+                   EDITMACR = "RACFNOTE"
                    call display_info                          /* @F7 */
+                   EDITMACR = "RACFEMAC"
                    'tbtop' TABLEA                             /* @F7 */
                    leave                                      /* @F7 */
                    end                                        /* @F7 */

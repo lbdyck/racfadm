@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A1  241223  TRIDJK   Process base attributes correctly            */
 /* @A0  241208  TRIDJK   Creation                                     */
 /*====================================================================*/
 PANELCL     = 'RACFCOPU'           /* Clone prompt popup panel */
@@ -50,21 +51,15 @@ cmd. = ""
 y = 0
 do i=1 to RACF.0 /* get the segment names */
   segment=RACF.i
-  if segment = 'BASE' then do
-    if racf.base.special.1 = 'TRUE' then
-      special  = 'SPECIAL'
-    if racf.base.oper.1    = 'TRUE' then
-      oper     = 'OPERATIONS'
-    if racf.base.grpacc.1  = 'TRUE' then
-      grpacc   = 'GRPACC'
-    if racf.base.auditor.1 = 'TRUE' then
-      auditor  = 'AUDITOR'
-    if racf.base.roaudit.1 = 'TRUE' then
-      roaudit  = 'ROAUDIT'
-    if racf.base.rest.1    = 'TRUE' then
-      rest     = 'RESTRICTED'
-    if racf.base.adsp.1    = 'TRUE' then
-      adsp     = 'ADSP'
+  if segment = 'BASE' then do                                 /* @A1 */
+    clat = ''
+    if racf.base.special.1 = 'TRUE' then clat = clat || 'SPECIAL '
+    if racf.base.oper.1    = 'TRUE' then clat = clat || 'OPERATIONS '
+    if racf.base.grpacc.1  = 'TRUE' then clat = clat || 'GRPACC '
+    if racf.base.auditor.1 = 'TRUE' then clat = clat || 'AUDITOR '
+    if racf.base.roaudit.1 = 'TRUE' then clat = clat || 'ROAUDIT '
+    if racf.base.rest.1    = 'TRUE' then clat = clat || 'RESTRICTED '
+    if racf.base.adsp.1    = 'TRUE' then clat = clat || 'ADSP '
 
     Address ISPexec
     'vget (zllgjob1 zllgjob2 zllgjob3 zllgjob4) profile'
@@ -94,13 +89,15 @@ do i=1 to RACF.0 /* get the segment names */
     y = y + 1
     cmd.y = "  PASSWORD("clpswd")" "-"
     y = y + 1
-    cmd.y = "  "special oper grpacc auditor roaudit rest adsp "-"
+    cmd.y = "  "clat "-"
     y = y + 1
     cmd.y = "  OWNER("racf.base.owner.1")" "-"
     y = y + 1
     cmd.y = "  DFLTGRP("racf.base.dfltgrp.1")" "-"
-    y = y + 1
-    cmd.y = "  DATA('"cldata"')" "-"
+    if cldata <> '' then do
+      y = y + 1
+      cmd.y = "  DATA('"cldata"')" "-"
+      end
     iterate
     end
 
