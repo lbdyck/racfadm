@@ -49,11 +49,11 @@ _ZLLGJOB4
     zedlmsg = 'The new userid may not be the same as the original' ,
       'clone userid.'
   end
-  if clname = oclname then do
+/*if clname = oclname then do
     msg2 = 'Error.'
     zedlmsg = 'The new name may not be the same as the original' ,
       'clone name.'
-  end
+  end */
   if zedlmsg = null then do
     call outtrap 'x.'
     "listcat ent('"clucat"')"

@@ -437,6 +437,26 @@ PROFL:
                    end                                        /* @F7 */
                 end                                           /* @F7 */
         END                                                   /* @F7 */
+        WHEN (ABBREV("NOINT",ZCMD,5) = 1) THEN DO /*UNDOC*/   /* @JK */
+             y = 0                                            /* @JK */
+             cmdrec. = ''                                     /* @JK */
+             'tbtop ' TABLEA                                  /* @JK */
+             do forever                                       /* @JK */
+                'tbskip' TABLEA                               /* @JK */
+                if (rc = 0) then do                           /* @JK */
+                 if tsouser = 'N' then iterate                /* @JK */
+                 y = y + 1                                    /* @JK */
+                 cmdrec.y = 'PASSWORD NOINTERVAL USER('user')'/* @JK */
+                 end                                          /* @JK */
+              else do                                         /* @JK */
+                 x = outtrap("off")                           /* @JK */
+                 cmdrec.0 = y                                 /* @JK */
+                 call display_info                            /* @JK */
+                 'tbtop' TABLEA                               /* @JK */
+                 leave                                        /* @JK */
+                 end                                          /* @JK */
+              end                                             /* @JK */
+        END                                                   /* @JK */
         WHen (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
              if (parm <> '') then                             /* @E4 */
