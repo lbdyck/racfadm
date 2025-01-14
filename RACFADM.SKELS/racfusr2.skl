@@ -12,12 +12,12 @@
 )TB 2 11
 !FILTER:!&RFILTER
 )BLANK
- Userid   Name                Group    Logon      Owner    Rev Att TSO
+ Userid   Name               Group    Logon      Owner    Rev Att TSO
  ---------------------------------------------------------------------
-)TB 2 11 31 40 51 60 64 68
+)TB 2 11 30 39 50 59 63 67
 )DOT &TABLEA
 )SETF USER    = &LEFT(&USER,8, )
-)SETF NAME    = &LEFT(&NAME,19, )
+)SETF NAME    = &LEFT(&NAME,18, )
 )SETF DEFGRP  = &LEFT(&DEFGRP,8, )
 )SETF DATELGN = &LEFT(&DATELGN,10, )
 )SETF OWNER   = &LEFT(&OWNER,8, )

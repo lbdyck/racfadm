@@ -9,6 +9,23 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  14 Jan 2025 - V39R1
+     - User Profiles (Option 1)
+       -- Update panel RACFMSGU to add K Clone and CK CkPW
+          line commands
+       -- Add undocumented command NOINT to generate
+          PASSWORD NOINTERVAL for all userids in tablea
+       -- Add primary command NEXT to cycle between normal list
+          user panel (RACFUSR2) and alternate list user panel
+          (RACFUS2A) with password date and interval information
+       -- Added RACFU2A skeleton for alternate list user panel
+       -- Added line command CK to check the days until the
+          password changes
+       -- Added RACFCHKP exec for CK line command
+     - Dataset Profiles (Option 3)
+       -- Updated exec RACFDSN to add Owner and UACC to tablea
+       -- Updated panel RACFDSN2 to display Owner and UACC
+
   23 Dec 2024 - V39R0
      - User Profiles (Option 1)
        -- Added edit macros LC and LR for use on the

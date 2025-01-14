@@ -8,6 +8,7 @@
   07  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRATTR)
   08  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRTSOU)
    $  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(TURQ)     JUST(LEFT)
+   `  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(GREEN)    JUST(LEFT)
    ^  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(RED)      JUST(LEFT)
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)      HILITE(USCORE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
@@ -22,13 +23,13 @@
 +FILTER: $RFILTER ¬SELCMD2B                                                    ¬
 +SELECT: ¬SELCMD2A                                                             ¬
 %
-%S         ~Userid  ~Name              ~Group   ~Logon     ~Owner   ~Rev~Att~TSO
+%S         ~Userid  ~Name              ~Group   ~Logon     ~PswDt ~PswInt~PhrsDt
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  Z
+_Z ^Z      Z       Z                 Z       Z         `Z     `Z     `Z
 )INIT
-  .ZVARS = '(OPTA ACTION USER NAME DEFGRP DATELGN OWNER REVOKED +
-             ATTR2 TSOUSER)'
+  .ZVARS = '(OPTA ACTION USER NAME DEFGRP DATELGN +
+             DATEPASS INTPASS DATEPHRS)'
   .HELP  = #RACUSR2
   &ZCMD  = ' '
   IF (&SAMT = ' ')
@@ -57,10 +58,9 @@ _Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT NAME')
   FIELD(ZPS00003) VAR(ZCMD) VAL('SORT GROUP')
   FIELD(ZPS00004) VAR(ZCMD) VAL('SORT LOGON')
-  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT OWNER')
-  FIELD(ZPS00006) VAR(ZCMD) VAL('SORT REV')
-  FIELD(ZPS00007) VAR(ZCMD) VAL('SORT ATT')
-  FIELD(ZPS00008) VAR(ZCMD) VAL('SORT TSO')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT DATEPASS')
+  FIELD(ZPS00006) VAR(ZCMD) VAL('SORT INTPASS')
+  FIELD(ZPS00007) VAR(ZCMD) VAL('SORT DATEPHRS')
 )END
 +FILTER: $RFILTER                ¬SELCMD2B                                     ¬
 /*--------------------------------------------------------------------*/

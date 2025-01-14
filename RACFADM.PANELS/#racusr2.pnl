@@ -19,6 +19,7 @@
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
+%  Next             +Cycle between normal and alternate list user display
 %  CERTS            +List Digital cert information for users in table
 %  RINGS            +List Digital ring information for users in table
 ^Linec -----------------------------------------------------------------^
@@ -42,6 +43,7 @@
 %  LC !Cert         +List certificates for user
 %  LR !Ring         +List rings for user
 %  K  !Clone        +Clone user profile using IRRXUTIL@(admin RACF API)
+%  CK !CkPW         +Check the days until the password changes
 )PROC
   &ZUP     = #RACUSR2
 )END

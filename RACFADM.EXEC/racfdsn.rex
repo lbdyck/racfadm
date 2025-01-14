@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CV  250114  TRIDJK   Added OWNER and UACC to TABLEA               */
 /* @CU  241202  TRIDJK   Added line cmd 'P=Profile' for TABLEA        */
 /* @CT  241018  TRIDJK   Add Conditional Access List processing       */
 /* @CS  240915  TRIDJK   Check '*' for TYPE=GEN before ADDSD command  */
@@ -262,7 +263,7 @@ PROFL:
              'tbtop ' TABLEA                                  /* @AL */
              'tbskip' TABLEA                                  /* @AL */
              do forever                                       /* @AL */
-                str = translate(dataset type)                 /* @AL */
+                str = translate(dataset type owner uacc)      /* @CV */
                 if (pos(find_str,str) > 0) then nop           /* @AL */
                 else 'tbdelete' TABLEA                        /* @AL */
                 'tbskip' TABLEA                               /* @AL */
@@ -289,6 +290,10 @@ PROFL:
                      call sortseq 'DATASET'                   /* @BL */
                 when (ABBREV("TYPE",PARM,1) = 1) then         /* @AQ */
                      call sortseq 'TYPE'                      /* @BL */
+                when (ABBREV("OWNER",PARM,1) = 1) then        /* @CV */
+                     call sortseq 'OWNER'                     /* @CV */
+                when (ABBREV("UACC",PARM,1) = 1) then         /* @CV */
+                     call sortseq 'UACC'                      /* @CV */
                 otherwise NOP                                 /* @AN */
              END                                              /* @AN */
              CLRDATA = "GREEN"; CLRTYPE = "GREEN"             /* @CA */
@@ -355,7 +360,7 @@ DO_FINDa:                                                     /* @C9 */
         'tbtop' TABLEA                                        /* @C9 */
      end                                                      /* @C9 */
      else do                                                  /* @C9 */
-        testit = translate(dataset type)                      /* @C9 */
+        testit = translate(dataset type owner uacc)           /* @CV */
         if (pos(findit,testit) > 0) then do                   /* @C9 */
            'tbquery' TABLEA 'position(srow)'                  /* @C9 */
            'tbtop'   TABLEA                                   /* @C9 */
@@ -1145,7 +1150,8 @@ RETURN                                                        /* @AI */
 /*  Create table 'A'                                             @AL  */
 /*--------------------------------------------------------------------*/
 CREATE_TABLEA:
-  "TBCREATE" TABLEA "KEYS(DATASET TYPE) REPLACE NOWRITE"
+  "TBCREATE" TABLEA "KEYS(DATASET TYPE) NAMES(OWNER UACC)",
+                  "REPLACE NOWRITE"
   cmd = "SEARCH FILTER("RFILTER") CLASS(DATASET)"             /* @AI */
   x = OUTTRAP('var.')
   address TSO cmd                                             /* @AI */
@@ -1180,6 +1186,7 @@ CREATE_TABLEA:
      END                                                      /* @BZ */
 
      dataset = SUBWORD(temp,1,1)
+     call get_owner_uacc                                      /* @CV */
      t       = INDEX(temp,'(G)')
      if (t > 0) then
         type = 'GEN'
@@ -1360,3 +1367,26 @@ LIST_FULL_DSN:                                                /* @CL */
   if (cmd_rc > 0) then                                        /* @CL */
      CALL racfmsgs "ERR10" /* Generic failure */              /* @CL */
 RETURN                                                        /* @CL */
+/*--------------------------------------------------------------------*/
+/*  Get Owner and UACC from DSD profile                               */
+/*--------------------------------------------------------------------*/
+GET_OWNER_UACC:                                               /* @CV */
+  cmd  = "LISTDSD DA('"DATASET"') AUTH"                       /* @CV */
+  x = OUTTRAP('VARO.')                                        /* @CV */
+  address TSO cmd                                             /* @CV */
+  cmd_rc = rc                                                 /* @CV */
+  x = OUTTRAP('OFF')                                          /* @CV */
+  Do j = 3 to varo.0         /* Scan output */                /* @CV */
+     tempo = varo.j                                           /* @CV */
+     if (rlv > '1081') then  /* RACF 1.9 add blank */         /* @CV */
+        tempo = ' 'tempo                                      /* @CV */
+     l = LENGTH(tempo)                                        /* @CV */
+     if (substr(tempo,2,12)= 'LEVEL  OWNER') then do          /* @CV */
+        j     = j + 2                                         /* @CV */
+        tempo = varo.j                                        /* @CV */
+        owner = subword(tempo,2,1)                            /* @CV */
+        uacc  = subword(tempo,3,1)                            /* @CV */
+        leave                                                 /* @CV */
+        end                                                   /* @CV */
+    end                                                       /* @CV */
+RETURN                                                        /* @CV */

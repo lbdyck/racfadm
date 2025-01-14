@@ -9,8 +9,7 @@
 %Tutorial+\-\(%RACFADM - Clone Userid+)\-\%Tutorial
 %Command ===>_ZCMD
 +
-+  The new userid may not be the same as the original userid and
-+  the new name may not be the same as the original name.
++  The new userid may not be the same as the original userid.
 +
 +  The specified user catalog must exist on the system.
 +
@@ -26,4 +25,6 @@
 +    {PERMIT(s)
 +    {DEFINE ALIAS
 )INIT
+)PROC
+  &ZUP     = #RACCOPU
 )END

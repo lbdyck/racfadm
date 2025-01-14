@@ -144,6 +144,7 @@
  RACFUSRT  User           Add, change and delete a TSO userid
  RACFUSR1  User           Set filter, menu option 1
  RACFUSR2  User           List userids (admin/user)
+ RACFUS2A  User           List userids (admin/user) - PW date/interval
  RACFUSR3  User           Show groups and access
  RACFUSR4  User           Connect profile
  RACFUSR5  User           Change user

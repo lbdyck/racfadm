@@ -1,0 +1,42 @@
+)CM*------------------------------------------------------------------*
+)CM*  Purpose:  RACFADM - User Profile - SAve command
+)CM*------------------------------------------------------------------*
+)CM*  FLG  YYMMDD  USERID   DESCRIPTION
+)CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A0  250111  RACFA    Created skeleton
+)CM*------------------------------------------------------------------*
+)SEL &RACFSFIL = T
+ &ZDATESTD -----------( RACFADM - User Profiles )-------------- &ZTIME
+)BLANK
+)TB 2 11
+!FILTER:!&RFILTER
+)BLANK
+ Userid   Name               Group    Logon      PswDt  PswInt PhrsDt
+ ---------------------------------------------------------------------
+)TB 2 11 30 39 50 57 64
+)DOT &TABLEA
+)SETF USER     = &LEFT(&USER,8, )
+)SETF NAME     = &LEFT(&NAME,18, )
+)SETF DEFGRP   = &LEFT(&DEFGRP,8, )
+)SETF DATELGN  = &LEFT(&DATELGN,10, )
+)SETF DATEPASS = &LEFT(&DATEPASS,6, )
+)SETF INTPASS  = &LEFT(&INTPASS,3, )
+)SETF DATEPHRS = &LEFT(&DATEPHRS,6, )
+!&USER!&NAME!&DEFGRP!&DATELGN!&DATEPASS!&INTPASS!&DATEPHRS
+)ENDDOT
+)ENDSEL
+)SEL &RACFSFIL = C
+RACFADM - User Profiles
+Userid,Name,Group,Logon,Owner,PswdDt,Int,PhrsDt
+------,----,-----,-----,-----,------,---,------
+)DOT &TABLEA
+)SETF USER     = &STRIP(&USER,, )
+)SETF NAME     = &STRIP(&NAME,, )
+)SETF DEFGRP   = &STRIP(&DEFGRP,, )
+)SETF DATELGN  = &STRIP(&DATELGN,, )
+)SETF DATEPASS = &STRIP(&DATEPASS,, )
+)SETF INTPASS  = &STRIP(&INTPASS,, )
+)SETF DATEPHRS = &STRIP(&DATEPHRS,, )
+&USER,&NAME,&DEFGRP,&DATELGN,&DATEPASS,&INTPASS,&DATEPHRS
+)ENDDOT
+)ENDSEL

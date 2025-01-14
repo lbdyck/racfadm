@@ -62,7 +62,7 @@ DISPLAY_PANEL:
    call add_rec '//TMP      EXEC  PGM=IKJEFT01'                         /*@L1*/
    call add_rec '//SYSTSPRT DD  SYSOUT=*      '                         /*@L1*/
    call add_rec '//SYSTSIN  DD  *             '                         /*@L1*/
-   call add_rec '//REMOVE   DD  *     /* REMOVE BEFORE USE */'           /*@L1*/
+/* call add_rec '//REMOVE   DD  *     /* REMOVE BEFORE USE */' */        /*@L1*/
    call add_rec '  '                                                    /*@L1*/
 
 LIST:

@@ -27,4 +27,6 @@ $Command ===>~ZCMD                                            $Scroll ===>#CSR
 +
 }Note:{The above screen was created by the User Profile%CERTS{primary command.
 {      Use the%LC{and%LR{edit macros to list certificate and ring information.
+)PROC
+  &ZUP     = #RACMACS
 )END

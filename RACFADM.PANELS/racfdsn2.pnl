@@ -15,12 +15,12 @@
 +FILTER: $RFILTER
 +SELECT: ¬SELCMDS2                                                             ¬
 %
-%S  ~Profile                                     ~Type
+%S  ~Profile                                     ~Type      ~Owner    ~UACC
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                                           Z
+_Z+ Z                                           Z         Z        Z
 )INIT
-  .ZVARS   = '(OPTA DATASET TYPE)'
+  .ZVARS   = '(OPTA DATASET TYPE OWNER UACC)'
   .HELP    = #RACDSN2
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -39,6 +39,8 @@ _Z+ Z                                           Z
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT PROFILE')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT TYPE')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT OWNER')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT UACC')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

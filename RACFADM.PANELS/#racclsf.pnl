@@ -24,4 +24,6 @@
 #NOTE:+ If there are no PERMITs displayed above, then the UACC
 +       value determined that have authorization access.
 +
+)PROC
+  &ZUP     = #RACCLSF
 )END

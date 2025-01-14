@@ -11,6 +11,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FB  250102  TRIDJK   CK line cmd - check days until pswd changes  */
+/* @FA  250101  TRIDJK   NEXT command - cycle between RACFUSR2/US2A   */
 /* @F9  241209  TRIDJK   K line command will clone user profile       */
 /* @F8  241114  TRIDJK   Mark userid in TABLEA if user digital certs  */
 /* @F7  241023  TRIDJK   Added RINGS/CERTS for users in TABLEA        */
@@ -208,6 +210,7 @@ PANELMU     = "RACFMSGU"   /* Display line Cmd popup       */ /* @F4 */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */ /* @EK */
 PANELD1     = "RACFDISP"   /* Display report with colors   */ /* @F7 */
 SKELETON1   = "RACFUSR2"   /* Save tablea to dataset       */ /* @EK */
+SKELETO1A   = "RACFUS2A"   /* Save tablea to dataset       */ /* @FA */
 SKELETON2   = "RACFUSR3"   /* Save tableb to dataset       */ /* @EK */
 EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */ /* @CZ */
 TABLEA      = 'TA'RANDOM(0,99999)  /* Unique table name A  */ /* @EB */
@@ -251,7 +254,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝK¨CloneÝLR¨Ring"||,                     /* @F9 */
+        SELCMD2B = " ÝCK¨CkPWÝK¨CloneÝLR¨Ring"||,             /* @FB */
                    "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
@@ -260,7 +263,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "        "||,                              /* @EZ */
+        SELCMD2B = "ÝCK¨CkPW"||,                              /* @FB */
                    "ÝLR¨RingÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EZ */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
@@ -437,7 +440,7 @@ PROFL:
                    end                                        /* @F7 */
                 end                                           /* @F7 */
         END                                                   /* @F7 */
-        WHEN (ABBREV("NOINT",ZCMD,5) = 1) THEN DO /*UNDOC*/   /* @JK */
+        WHEN (ABBREV("NOINT",ZCMD,5) = 1) THEN DO   /*UNDOC*/ /* @JK */
              y = 0                                            /* @JK */
              cmdrec. = ''                                     /* @JK */
              'tbtop ' TABLEA                                  /* @JK */
@@ -457,6 +460,18 @@ PROFL:
                  end                                          /* @JK */
               end                                             /* @JK */
         END                                                   /* @JK */
+        WHEN (ABBREV("ALT",ZCMD,3) = 1) THEN DO     /*UNDOC*/ /* @FA */
+          panel02 = 'RACFUS2A'                                /* @FA */
+        END                                                   /* @FA */
+        WHEN (ABBREV("NORM",ZCMD,4) = 1) THEN DO    /*UNDOC*/ /* @FA */
+          panel02 = 'RACFUSR2'                                /* @FA */
+        END                                                   /* @FA */
+        WHEN (ABBREV("NEXT",ZCMD,1) = 1) THEN DO              /* @FA */
+          if panel02 = 'RACFUSR2' then                        /* @FA */
+            panel02 = 'RACFUS2A'                              /* @FA */
+          else                                                /* @FA */
+            panel02 = 'RACFUSR2'                              /* @FA */
+        END                                                   /* @FA */
         WHen (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
              if (parm <> '') then                             /* @E4 */
@@ -470,7 +485,10 @@ PROFL:
              else attyn = 'Y'                                 /* @F5 */
         END                                                   /* @F5 */
         When (abbrev("SAVE",zcmd,2) = 1) then DO              /* @EK */
-             TMPSKELT = SKELETON1                             /* @EK */
+             if panel02 = 'RACFUSR2' THEN                     /* @FA */
+               TMPSKELT = SKELETON1                           /* @EK */
+             else                                             /* @FA */
+               TMPSKELT = SKELETO1A                           /* @FA */
              call do_SAVE                                     /* @EK */
         END                                                   /* @EK */
         WHEN (ABBREV("SORT",ZCMD,1) = 1) THEN DO              /* @AT */
@@ -545,6 +563,11 @@ PROFL:
              action = '*Clone'                                /* @F9 */
              "TBMOD" TABLEA                                   /* @F9 */
              end                                              /* @F9 */
+        when (opta = 'CK') then do                            /* @FB */
+             call RACFCHKP DATEPASS INTPASS DATEPHRS          /* @FB */
+             action = '*CkPswd'                               /* @FB */
+             "TBMOD" TABLEA                                   /* @FB */
+             end                                              /* @FB */
         when (opta = 'P') then do                             /* @CK */
              call RACFPROF 'USER' user                        /* @CK */
              action = '*Prof'                                 /* @CW */
@@ -750,24 +773,27 @@ LISD:
   END                                                         /* @C6 */
   if (user = 'irrcerta') then do                              /* @AP */
      CMDREC. = ''                                             /* @AP */
-     CMDREC.0 = 3                                             /* @AP */
-     CMDREC.1 = irrcerta.1                                    /* @AP */
-     CMDREC.2 = irrcerta.3                                    /* @AP */
-     CMDREC.3 = irrcerta.6                                    /* @AP */
+     CMDREC.0 = 4                                             /* @FA */
+     CMDREC.1 = irrcerta.1                                    /* @FA */
+     CMDREC.2 = irrcerta.2                                    /* @FA */
+     CMDREC.3 = irrcerta.3                                    /* @FA */
+     CMDREC.4 = irrcerta.6                                    /* @FA */
   end                                                         /* @AP */
   if (user = 'irrmulti') then do                              /* @AP */
      CMDREC. = ''                                             /* @AP */
-     CMDREC.0 = 3                                             /* @AP */
-     CMDREC.1 = irrmulti.1                                    /* @AP */
-     CMDREC.2 = irrmulti.3                                    /* @AP */
-     CMDREC.3 = irrmulti.6                                    /* @AP */
+     CMDREC.0 = 4                                             /* @FA */
+     CMDREC.1 = irrmulti.1                                    /* @FA */
+     CMDREC.2 = irrmulti.2                                    /* @FA */
+     CMDREC.3 = irrmulti.3                                    /* @FA */
+     CMDREC.4 = irrmulti.6                                    /* @FA */
   end                                                         /* @AP */
   if (user = 'irrsitec') then do                              /* @AP */
      CMDREC. = ''                                             /* @AP */
-     CMDREC.0 = 3                                             /* @AP */
-     CMDREC.1 = irrsitec.1                                    /* @AP */
-     CMDREC.2 = irrsitec.3                                    /* @AP */
-     CMDREC.3 = irrsitec.6                                    /* @AP */
+     CMDREC.0 = 4                                             /* @FA */
+     CMDREC.1 = irrsitec.1                                    /* @FA */
+     CMDREC.2 = irrsitec.2                                    /* @FA */
+     CMDREC.3 = irrsitec.3                                    /* @FA */
+     CMDREC.4 = irrsitec.6                                    /* @FA */
   end                                                         /* @AP */
   call display_info                                           /* @D2 */
   if (cmd_rc = 0) then                                        /* @C8 */
@@ -1219,6 +1245,7 @@ GETD:
   datelgn  = ' '
   datepass = ' '
   intpass  = ' '
+  datephrs = ' '                                              /* @FA */
   revoked  = ' N '                                            /* @BP */
   tsouser  = ''
   attr     = ''
@@ -1237,6 +1264,7 @@ GETD:
 
   if (user = 'irrcerta') then do                              /* @AP */
      details.1 = irrcerta.1                                   /* @AP */
+     details.2 = irrcerta.2                                   /* @FA */
      details.3 = irrcerta.3                                   /* @AP */
      details.6 = irrcerta.6                                   /* @AP */
   end                                                         /* @AP */
@@ -1263,7 +1291,8 @@ GETD:
 
   parse var details.2 ,
         'DEFAULT-GROUP=' defgrp 'PASSDATE=',
-        datepass 'PASS-INTERVAL=' Intpass
+        datepass 'PASS-INTERVAL=' Intpass,                    /* @FA */
+        'PHRASEDATE=' datephrs                                /* @FA */
 
   parse var details.3 'ATTRIBUTES='attribute1                 /* @AB */
   parse var details.4 'ATTRIBUTES='attribute2                 /* @AB */
@@ -1423,16 +1452,22 @@ DIGITAL_CERTS:                                                /* @AP */
 
   irrcerta.1 = 'USER=irrcerta  NAME=CERTAUTH Anchor',         /* @AP */
                'OWNER=irrcerta  CREATED=99.195'               /* @AP */
+  irrcerta.2 = ' DEFAULT-GROUP=         PASSDATE=00.000',     /* @FA */
+               'PASS-INTERVAL=N/A PHRASEDATE=N/A'             /* @FA */
   irrcerta.3 = ' ATTRIBUTES=REVOKED'                          /* @AP */
   irrcerta.6 = ' LAST-ACCESS=UNKNOWN'                         /* @AP */
 
   irrmulti.1 = 'USER=irrmulti  NAME=Criteria Anchor',         /* @AP */
                'OWNER=irrmulti  CREATED=99.195'               /* @AP */
+  irrmulti.2 = ' DEFAULT-GROUP=         PASSDATE=00.000',     /* @FA */
+               'PASS-INTERVAL=N/A PHRASEDATE=N/A'             /* @FA */
   irrmulti.3 = ' ATTRIBUTES=REVOKED'                          /* @AP */
   irrmulti.6 = ' LAST-ACCESS=UNKNOWN'                         /* @AP */
 
   irrsitec.1 = 'USER=irrsitec  NAME=SITE Anchor',             /* @AP */
                'OWNER=irrsitec  CREATED=99.195'               /* @AP */
+  irrsitec.2 = ' DEFAULT-GROUP=         PASSDATE=00.000',     /* @FA */
+               'PASS-INTERVAL=N/A PHRASEDATE=N/A'             /* @FA */
   irrsitec.3 = ' ATTRIBUTES=REVOKED'                          /* @AP */
   irrsitec.6 = ' LAST-ACCESS=UNKNOWN'                         /* @AP */
 RETURN                                                        /* @AP */
@@ -1465,7 +1500,8 @@ CREATE_TABLEA:                                                /* @BE */
   seconds   = TIME('S')
   "TBCREATE" TABLEA ,
        "KEYS(USER) NAMES(ACTION NAME OWNER DEFGRP DATELGN DATECRE",
-                        "REVOKED ATTR TSOUSER DATA ATTR2)",
+                        "REVOKED ATTR TSOUSER DATA ATTR2",
+                        "DATEPASS INTPASS DATEPHRS)",         /* @FA */
                         "REPLACE NOWRITE"
   cmd = "SEARCH FILTER("RFILTER") CLASS("rclass")"            /* @BB */
   x = OUTTRAP('var.')

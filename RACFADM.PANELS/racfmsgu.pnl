@@ -26,7 +26,7 @@
       m4 = '   `PW ~Password        `R  ~Remove          `RS ~Resume   '
       m5 = '   `RV ~Revoke          `X  ~Xref            `Y  ~Access   '
       if setmirrx = 'YES' then
-        m6 = '   `P  ~Profile      '
+        m6 = '   `P  ~Profile         `K  ~Clone           `CK ~CkPW   '
       else
         m6 = ''
       end
@@ -34,7 +34,7 @@
       m1 = '   `D  ~Dsn             `L  ~List            `LC ~List Cert'
       m2 = '   `LR ~List Ring       `S  ~Show            `SE ~Search   '
       if setmirrx = 'YES' then
-        m3 = '   `P  ~Profile      '
+        m3 = '   `P  ~Profile         `K  ~Clone           `CK ~CkPW   '
       else
         m3 = ''
       end
@@ -43,12 +43,12 @@
 )PROC
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,Y,AL)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,Y,AL,K,CK)
      ELSE
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,Y,AL)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,Y,AL,CK)
   ELSE
      IF (&SETMIRRX = YES)
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,K,CK)
      ELSE
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,D)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,D,CK)
 )END

@@ -15,6 +15,7 @@
  ORLIST    IBM TSO Cmd    Unix Dir/File Security, like RLIST
  RACFADM   Software       Dynamically allocate and invoke software
  RACFCERT  CertAuth       Display Digital Certificates, menu opt CA
+ RACFCHKP  User           Check the days until the password changes
  RACFCLOG  Documentation  Determine LOG type (rc=0 SYSLOG, rc=1 OPERLOG)
  RACFCLSA  Authorization  Display authorization on profile, menu opt 9
  RACFCLSG  Class          Extract generic class profiles
