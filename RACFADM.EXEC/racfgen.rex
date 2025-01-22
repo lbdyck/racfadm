@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A3  250120  TRIDJK   Display MSG about RACRUN macro               */
 /* @A2  241129  TRIDJK   Add conditional access PERMITs               */
 /* @L1  241124  LBDYCK   Add comments and sample JCL                  */
 /* @A1  241122  TRIDJK   Set SRT flag correctly                       */
@@ -10,6 +11,7 @@
 /*====================================================================*/
 PANEL01     = "RACFGEN1"   /* Set filter, menu option G    */
 PANELD1     = "RACFDISP"   /* Display report with colors   */
+EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
@@ -280,6 +282,7 @@ EDIT_INFO:
   ADDRESS ISPEXEC
   "LMINIT DATAID(CMDDATID) DDNAME("DDNAME")"
   "EDIT DATAID("CMDDATID")",
-       "PANEL("PANELD1")"
+       "PANEL("PANELD1")",
+       "MACRO("EDITMACR")"                                    /* @A3 */
   ADDRESS TSO "FREE FI("DDNAME")"
 RETURN

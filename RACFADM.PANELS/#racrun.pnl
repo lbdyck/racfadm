@@ -1,0 +1,36 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   ~  TYPE(TEXT)    INTENS(LOW)  COLOR(TURQ)  SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(RED)   SKIP(ON) HILITE(USCORE)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - RACRUN Edit Macro+)\-\%Tutorial
+%Command ===>_ZCMD
++
++The%RACRUN+ISPF Edit macro will execute any RACF commands found
++on the selected records within the active ISPF data.
++
++Records are selected using the line tags of:
++ %C +for a single record
++ %C#+for the current and # records (e.g. C4)
++ %CC+for the 1st record to select and CC on the last record to define a range
++
++Records with%*+in column 1 will be ignored as will all blank records.
++
+~VIEW            AD.RACF.COMMANDS(LWB) - 01.85              Columns 00001 00072
+~Command ===>}racrun                                          ~Scroll ===>}CSR +
++00c001+LU LADY
++000002+LG DOOL
++
+~VIEW       SYS25018.T140253.RA000.TRIDJK.R0114430          Columns 00001 00072
+~Command ===>}                                                ~Scroll ===>}CSR +
++000001 USER=LADY  NAME=WHISTLE BLOWER        OWNER=JANKO     CREATED=24.180
++000002  DEFAULT-GROUP=DOOL     PASSDATE=24.180 PASS-INTERVAL=250 PHRASEDATE=N/A
+)INIT
+)PROC
+  &ZUP     = #RACRUN
+)END
+****** ***************************** Top of Data ***********************

@@ -7,13 +7,13 @@
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
 )BODY EXPAND(\\)
 {_______________________________________________________________________________
-$VIEW       SYS24354.T115541.RA000.TRIDJK.R0107780          Columns 00001 00072
+$VIEW                  RACFADM LC/LR Edit Macros            Columns 00001 00072
 $Command ===>~ZCMD                                            $Scroll ===>#CSR
 {***************************** Top of Data *************************************
 {000001
-#==MSG>%Edit macro LC can be used to list a certificate
+#==MSG>%The LC macro can be used to list a certificate
 #=NOTE={  Place cursor on --->label name and press Enter
-#==MSG>%Edit macro LR can be used to list rings for a user
+#==MSG>%The LR macro can be used to list rings for a user
 #=NOTE={  Place cursor on --->userid and press Enter
 #=NOTE=
 {000002$User: AZFWEB
@@ -26,7 +26,9 @@ $Command ===>~ZCMD                                            $Scroll ===>#CSR
 {000009+LN=DefaultzOSMFCert.IZUDFLT         ST=2024/02/06 EN=2050/05/17 TR=TRUST
 +
 }Note:{The above screen was created by the User Profile%CERTS{primary command.
-{      Use the%LC{and%LR{edit macros to list certificate and ring information.
++
++ \ \ (press%ENTER+to continue) \ \
 )PROC
   &ZUP     = #RACMACS
+  &ZCONT   = #RACRUN
 )END

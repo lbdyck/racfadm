@@ -9,6 +9,14 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  22 Jan 2025 - V39R2
+     - User Profiles (Option 1)
+       -- Updated RACFCOPU exec to add OWNER to CONNECT
+       -- Added RACRUN Edit macro to run RACF commands in Edit buffer
+       -- Added RACFMRUN Edit macro to display MSG line about RACRUN
+       -- Added #RACRUN tutorial panel
+       -- Added #RACUSR3 tutorial panel
+
   14 Jan 2025 - V39R1
      - User Profiles (Option 1)
        -- Update panel RACFMSGU to add K Clone and CK CkPW

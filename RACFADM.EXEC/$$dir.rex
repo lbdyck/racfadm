@@ -37,6 +37,7 @@
  RACFHELP  Help           Display TSO HELP on RACF commands
  RACFIBM   IBM's RACF     RACF Menu options: System, RRSF, Certificates
  RACFLOG   Documentation  Display changes/issues/isplog, opt C/I/L
+ RACFMRUN  Edit Macro     Display MSG line about RACRUN
  RACFMVS   Showmvs        Execute/display Showmvs RACF data, menu opt 7
  RACFMSG   Messages       RACF messages, menu option M
  RACFMSGC  Message        Display 'Confirm Request' panel
@@ -57,6 +58,7 @@
  RACFUSRT  User           Add, delete and change TSO userid
  RACFUSRX  User           Userid cross reference report (line cmd X)
  RACFUSRY  User           Userid dsn/rsrc access report (line cmd Y)
+ RACRUN    Edit Macro     Run RACF commands in Edit buffer
 
  Notes
    - Class is 'General Resources'

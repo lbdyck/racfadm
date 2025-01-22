@@ -3,11 +3,14 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
+/* @A2  250120  TRIDJK   Display MSG about RACRUN macro               */
 /* @A1  241223  TRIDJK   Process base attributes correctly            */
 /* @A0  241208  TRIDJK   Creation                                     */
 /*====================================================================*/
 PANELCL     = 'RACFCOPU'           /* Clone prompt popup panel */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
+EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
 
@@ -63,7 +66,6 @@ do i=1 to RACF.0 /* get the segment names */
 
     Address ISPexec
     'vget (zllgjob1 zllgjob2 zllgjob3 zllgjob4) profile'
-    zllgjob1 = '//RACCLONE'||substr(zllgjob1,11)
     y = y + 1
     cmd.y = zllgjob1
     if zllgjob2 <> '' then do
@@ -136,7 +138,8 @@ do i=1 to RACF.0 /* get the segment names */
 
   do i = 1 to racf.base.connects.repeatcount
     y = y + 1
-    cmd.y = " CONNECT" cluser "GROUP("racf.base.cgroup.i")"
+    cmd.y = " CONNECT" cluser "GROUP("racf.base.cgroup.i")",
+            "OWNER("racf.base.cowner.1")"                     /* @A3 */
     end
 
   y = y + 1
@@ -185,7 +188,7 @@ Display_Commands:
   drop cmd.
 
   "lminit dataid(cmddatid) ddname("ddname")"
-  "edit dataid("cmddatid")"
+  "edit dataid("cmddatid") macro("editmacr")"
   Address TSO "free fi("ddname")"
 return
 
