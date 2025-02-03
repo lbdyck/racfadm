@@ -3,6 +3,7 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @L5  250203  LBD      Fix typo in BLKSIZE from 8LKSIZE :(
 )CM*  @L4  231019  LBD      Change unload blksize to 0
 )CM*  @L3  230319  LBD      Add TODATE, TIME, TOTIME
 )CM*                        Change Date to FROMDATE
@@ -29,7 +30,7 @@
 //BKPLOG   DD  DISP=SHR,DSN=#TMPDMSG1
 )ENDSEL
 //ERRORS   DD  DISP=(NEW,PASS),DSN=&&ERRORS,
-//             DCB=(RECFM=VB,LRECL=132,8LKSIZE=0),
+//             DCB=(RECFM=VB,LRECL=132,BLKSIZE=0),
 //             UNIT=SYSALLDA,SPACE=(CYL,(100,100),RLSE)
 //SYSTSPRT DD  SYSOUT=*
 //SYSTSIN  DD  DUMMY
