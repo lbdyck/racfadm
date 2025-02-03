@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AM  250124  TRIDJK   If Opt is "L R", then reverse LOG date order */
 /* @AL  200616  RACFA    Chg panel name RACFRPTS to RACFDISP          */
 /* @AK  200524  TRIDJK   Fixed displaying error message               */
 /* @AJ  200519  TRIDJK   Support ISPLOG SYSOUT datasets - SDSF/(E)JES */
@@ -32,7 +33,8 @@ parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @AE */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @AE */
 
 ADDRESS ISPEXEC                                               /* @A3 */
-  PARSE ARG MEMBER                                            /* @A5 */
+  PARSE ARG MEMBER OPERAND                                    /* @A5 */
+  OPERAND = STRIP(OPERAND)                                    /* @AM */
   "VGET (SETGDISP SETMTRAC) PROFILE"                          /* @A2 */
   If (SETMTRAC <> 'NO') then do                               /* @AA */
      Say "*"COPIES("-",70)"*"                                 /* @AA */
@@ -100,10 +102,18 @@ ISPLOG_FILE:                                                  /* @AF */
   END                                                         /* @AK */
 
   K = 0                                                       /* @AI */
-  DO J = RECIN.0 To 1 by -1                                   /* @AI */
-     K = K + 1                                                /* @AI */
-     RECOUT.K = RECIN.J                                       /* @AI */
-  END                                                         /* @AI */
+  /* Reverse chronological LOG order? */                      /* @AM */
+  if (abbrev("REVERSE",operand,1) = 1) then do                /* @AM */
+    DO J = RECIN.0 To 1 by -1                                 /* @AI */
+       K = K + 1                                              /* @AI */
+       RECOUT.K = RECIN.J                                     /* @AI */
+    END                                                       /* @AI */
+    end                                                       /* @AM */
+  else                                                        /* @AM */
+    DO J = 1 TO RECIN.0                                       /* @AM */
+       K = K + 1                                              /* @AM */
+       RECOUT.K = RECIN.J                                     /* @AM */
+    END                                                       /* @AM */
   RECOUT.0 = K                                                /* @AI */
   DROP RECIN.
 

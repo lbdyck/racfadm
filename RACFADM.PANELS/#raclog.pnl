@@ -6,7 +6,9 @@
 %Tutorial+\-\(%RACFADM - ISPF Log File+)\-\%Tutorial
 %Command ===>_ZCMD
 %
-+ %ISPLog+will display the ISPF log file in reverse chronological order.
++ %ISPLog+will display the ISPF log file in chronological order.
++  If you want the log file displayed in reverse chronological order,
++  then enter%L R(everse)+on the RACFADM Menu.
 +
 +  To use%ISPLog,+the following must be activated/defined:
 +    - From the ISPF primary menu, select option!0, Settings

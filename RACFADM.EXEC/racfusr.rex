@@ -460,6 +460,29 @@ PROFL:
                  end                                          /* @JK */
               end                                             /* @JK */
         END                                                   /* @JK */
+        WHEN (ABBREV("CKPW",ZCMD,4) = 1) THEN DO    /*UNDOC*/ /* @JK */
+             y = 0                                            /* @JK */
+             cmdrec. = ''                                     /* @JK */
+             'tbtop ' TABLEA                                  /* @JK */
+             do forever                                       /* @JK */
+                'tbskip' TABLEA                               /* @JK */
+                if (rc = 0) then do                           /* @JK */
+                 if tsouser = 'N' then iterate                /* @JK */
+                 y = y + 1                                    /* @JK */
+                 lid = 'USER='user                            /* @JK */
+                 call RACFCHKP DATEPASS INTPASS DATEPHRS LID  /* @JK */
+                 address ispexec 'vget (racflmsg)'            /* @JK */
+                 cmdrec.y = left(user,8) racflmsg             /* @JK */
+                 end                                          /* @JK */
+              else do                                         /* @JK */
+                 x = outtrap("off")                           /* @JK */
+                 cmdrec.0 = y                                 /* @JK */
+                 call display_info                            /* @JK */
+                 'tbtop' TABLEA                               /* @JK */
+                 leave                                        /* @JK */
+                 end                                          /* @JK */
+              end                                             /* @JK */
+        END                                                   /* @JK */
         WHEN (ABBREV("ALT",ZCMD,3) = 1) THEN DO     /*UNDOC*/ /* @FA */
           panel02 = 'RACFUS2A'                                /* @FA */
         END                                                   /* @FA */
@@ -564,7 +587,7 @@ PROFL:
              "TBMOD" TABLEA                                   /* @F9 */
              end                                              /* @F9 */
         when (opta = 'CK') then do                            /* @FB */
-             call RACFCHKP DATEPASS INTPASS DATEPHRS          /* @FB */
+             call RACFCHKP DATEPASS INTPASS DATEPHRS USER     /* @JK */
              action = '*CkPswd'                               /* @FB */
              "TBMOD" TABLEA                                   /* @FB */
              end                                              /* @FB */

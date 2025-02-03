@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A4  250201  TRIDJK   Log Clone message                            */
 /* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
 /* @A2  250120  TRIDJK   Display MSG about RACRUN macro               */
 /* @A1  241223  TRIDJK   Process base attributes correctly            */
@@ -26,6 +27,7 @@ cluser = user
 clname = name
 clucat = settctlg
 'vput (cluser clname clucat)'
+saveuser = user                                               /* @A4 */
 
 'addpop'
 'display panel('PANELCL')'
@@ -139,7 +141,7 @@ do i=1 to RACF.0 /* get the segment names */
   do i = 1 to racf.base.connects.repeatcount
     y = y + 1
     cmd.y = " CONNECT" cluser "GROUP("racf.base.cgroup.i")",
-            "OWNER("racf.base.cowner.1")"                     /* @A3 */
+            "OWNER("racf.base.cowner.i")"                     /* @A3 */
     end
 
   y = y + 1
@@ -154,6 +156,9 @@ do i=1 to RACF.0 /* get the segment names */
 
   cmd.0 = y
   call Display_Commands
+  zerrsm = "RACFADM "REXXPGM" RC=0"                           /* @A4 */
+  zerrlm = "CLONE "cluser" FROM("saveuser")"                  /* @A4 */
+  'log msg(isrz003)'                                          /* @A4 */
 exit
 
 /* Adjust operand names to ADDUSER conventions */

@@ -1,0 +1,16 @@
+01 Feb 2025:  Undocumented Primary commands in User Profile dialog
+
+/* The reverse of ONLY                                            */
+               WHEN (ABBREV("NOTONLY",ZCMD,3) = 1) THEN DO /*UNDOC*/
+
+/* Generate PASSWORD NOINTERVAL commands for tablea entries       */
+               WHEN (ABBREV("NOINT",ZCMD,5) = 1) THEN DO   /*UNDOC*/
+
+/* Generate password change date for tablea entries           */
+               WHEN (ABBREV("CKPW",ZCMD,4) = 1) THEN DO    /*UNDOC*/
+
+/* Display alternate panel in User Profile display                */
+               WHEN (ABBREV("ALT",ZCMD,3) = 1) THEN DO     /*UNDOC*/
+
+/* Display normal panel in User Profile display                   */
+               WHEN (ABBREV("NORM",ZCMD,4) = 1) THEN DO    /*UNDOC*/

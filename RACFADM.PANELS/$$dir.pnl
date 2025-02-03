@@ -10,6 +10,7 @@
  $GLOSSRY  TSO Help       Technical terms and abbreviations for RACF
  $REPORTS  Reports        ICETOOL/DSMON reports
  $STNDARD  Standards      Document coding and design
+ $UNDOC    Commands       Undocumented User Profile primary commands
  $UPDATES  Updates        Document version/updates
  #RACACC   Tutorial       DSN/Resource Access Report
  #RACACKN  Tutorial       Acknowledgements

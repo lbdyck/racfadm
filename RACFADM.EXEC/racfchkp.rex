@@ -3,10 +3,11 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A2  250201  TRIDJK   Support CKPW primary command                 */
 /* @A1  250101  TRIDJK   Modified for RACFUSR line command CK         */
 /* @A0  200911  LBDYCK   Logon exec                                   */
 /*====================================================================*/
-Arg padate pdays phdate
+Arg padate pdays phdate user
 Check_PW:
   expdt  = ''
   if datatype(padate) == 'NUM' then
@@ -38,6 +39,9 @@ Check_PW:
   exit
 Pswd_msg:
   Address ISPExec
-  racflmsg = 'Days until Password Change:' change '  Date:' expdt
-  'setmsg msg(racf011)'
+  racflmsg = 'Days until Password Change:' left(change,5) ' Date:' expdt
+  if pos('USER=',user) = 0 then   /* CKPW Command?       */
+    'setmsg msg(racf011)'         /* No, CK line command */
+  else
+    'vput (racflmsg)'             /* Yes, do not display */
   return

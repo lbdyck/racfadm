@@ -9,6 +9,15 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  02 Feb 2025 - V39R3
+     - ISPLog (Option L)
+       -- Default ISPF log display is in chronological order.
+          If you want reverse chronological order, invoke with "L R".
+       -- Updated #RACLOG tutorial panel
+     - User Profiles (Option 1)
+       -- Updated RACFCOPU exec to add Clone message to ISPF Log file
+       -- Updated RACFMRUN Edit macro to display help information
+
   22 Jan 2025 - V39R2
      - User Profiles (Option 1)
        -- Updated RACFCOPU exec to add OWNER to CONNECT

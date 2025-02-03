@@ -336,7 +336,9 @@
      &ZCMD = X
      .RESP = END
 )PROC
-  &ZSEL=TRANS(TRUNC(&ZCMD,'.')
+  &NEWZCMD=TRUNC(&ZCMD,' ')
+  &OPERAND=.TRAIL
+  &ZSEL=TRANS(TRUNC(&NEWZCMD,'.')
       0,'CMD(%RACFSETG)'
       1,'CMD(%RACFUSR)'
       2,'CMD(%RACFGRP)'
@@ -359,7 +361,7 @@
       G,'CMD(%RACFGEN)'
       H,'CMD(%RACFHELP)'
  /*   I,'CMD(%RACFLOG $ISSUES)'    Known issues (PMRs)         Hidden */
-      L,'CMD(%RACFLOG ISPLOG)'
+      L,'CMD(%RACFLOG ISPLOG &OPERAND)' /* R to reverse LOG date order*/
       M,'CMD(%RACFMSG)'
       O,'CMD(%RACFOMVS)'
       P,&mpcmd
