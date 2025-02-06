@@ -1,0 +1,80 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(OFF) JUST(LEFT)   HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
+)BODY EXPAND(\\)
++\-\(%RACFADM - User Profiles+)\-\
+%Command ===>_ZCMD
+%
++Alt RACF%USER+profile: %ALTUSER+command            %F1+- Segment syntax
++
++PROFILE %===>_USER    {
++
+%Select the segments that you want to ALTER:
+_z+CICS      {SNT identification information (e.g., OPIDENT)
+_z+DCE       {Associates DCE Principle Identity (e.g., uuid) to RACF Userid
+_z+DFP       {SMS data management and DASD storage (e.g., MGMTCLAS)
+_z+EIM       {LDAP profile
+_z+KERB      {Kerberos user attributes
+_z+LANGUAGE  {Preferred National Language
+_z+LNOTES    {Lotus Notes user (e.g., SNAME)
+_z+NDS       {Map Novell Directory Service user name to RACF Userid
+_z+NETVIEW   {Application access information
+_z+OMVS      {UNIX user attributes (e.g., UID)
+_z+OPERPARM  {Extended MCS Console Session attributes (e.g., AUTH)
+_z+OVM       {Specifies OpenExtensions VM information
+_z+PROXY     {LDAP characteristics (e.g., LDAPHOST)
+_z+TSO       {TSO UADS logon and authority information (e.g., ACCTNUM)
+_z+WORKATTR  {APPC User characteristics (e.g., WANAME for SYSOUT)
+)INIT
+  .CURSOR  = USER
+  .HELP    = #RACUSR5
+  &ucics    = ''
+  &udce     = ''
+  &udfp     = ''
+  &ueim     = ''
+  &ukerb    = ''
+  &ulang    = ''
+  &ulnotes  = ''
+  &unds     = ''
+  &unetv    = ''
+  &uomvs    = ''
+  &uoper    = ''
+  &uovm     = ''
+  &uproxy   = ''
+  &utso     = ''
+  &uwork    = ''
+  .zvars   = '(ucics udce udfp ueim ukerb ulang ulnotes +
+               unds unetv uomvs uoper uovm uproxy utso uwork)'
+)PROC
+  VER (&USER,NB,NAME)
+  *rexx(* usegs)
+    usegs = ''
+    if ucics    <> '' then usegs = usegs 'CICS'
+    if udce     <> '' then usegs = usegs 'DCE'
+    if udfp     <> '' then usegs = usegs 'DFP'
+    if ueim     <> '' then usegs = usegs 'EIM'
+    if ukerb    <> '' then usegs = usegs 'KERB'
+    if ulang    <> '' then usegs = usegs 'LANGUAGE'
+    if ulnotes  <> '' then usegs = usegs 'LNOTES'
+    if unds     <> '' then usegs = usegs 'NDS'
+    if unetv    <> '' then usegs = usegs 'NETVIEW'
+    if uomvs    <> '' then usegs = usegs 'OMVS'
+    if uoper    <> '' then usegs = usegs 'OPERPARM'
+    if uovm     <> '' then usegs = usegs 'OVM'
+    if uproxy   <> '' then usegs = usegs 'PROXY'
+    if utso     <> '' then usegs = usegs 'TSO'
+    if uwork    <> '' then usegs = usegs 'WORKATTR'
+  *endrexx
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) To display/use this panel, the user must have the Settings     */
+/*     (menu option 0) turned on:                                     */
+/*       Administrator ..... Y                                        */
+/*       Admin RACF API .... Y                                        */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

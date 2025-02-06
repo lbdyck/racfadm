@@ -495,6 +495,12 @@ PROFL:
           else                                                /* @FA */
             panel02 = 'RACFUSR2'                              /* @FA */
         END                                                   /* @FA */
+        WHEN (ABBREV("ALTUSER",ZCMD,7) = 1) THEN DO /*UNDOC*/ /* @JK */
+          call racfaltu parm                                  /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("UNDOC",ZCMD,5) = 1) THEN DO   /*UNDOC*/ /* @JK */
+          call racflog $undoc                                 /* @JK */
+        END                                                   /* @JK */
         WHen (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
              if (parm <> '') then                             /* @E4 */
@@ -627,6 +633,7 @@ PROFL:
              'TBMOD 'tablea                                   /* @EX */
         end
         when (opta = 'AL') then call Altd                     /* @E6 */
+        when (opta = 'AU') then call RACFALTU user            /* @JK */
         otherwise nop
      End
      'control display restore'                                /* @EE */

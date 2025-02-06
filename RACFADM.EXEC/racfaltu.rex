@@ -1,21 +1,18 @@
 /*%NOCOMMENT====================* REXX *==============================*/
-/*PURPOSE:  RACFADM - Clone a Userid, line command K                  */
+/*PURPOSE:  RACFADM - Alter selected User Profile segments            */
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @A4  250201  TRIDJK   Log Clone message                            */
-/* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
-/* @A2  250120  TRIDJK   Display MSG about RACRUN macro               */
-/* @A1  241223  TRIDJK   Process base attributes correctly            */
-/* @A0  241208  TRIDJK   Creation                                     */
+/* @A0  250205  TRIDJK   Creation                                     */
 /*====================================================================*/
-PANELCL     = 'RACFCOPU'           /* Clone prompt popup panel */
+TRACE
+PANELAL     = 'RACFUS5A'           /* Alter prompt popup panel */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
 
-Arg user name
+Arg user
 
 Address ISPexec
 "CONTROL ERRORS RETURN"
@@ -23,19 +20,24 @@ Address ISPexec
       "SETMIRRX SETMSHOW SETMTRAC SETTPSWD",
       "SETTPROF SETTUDSN SETMPHRA SETTCTLG) PROFILE"
 
-cluser = user
-clname = name
-clucat = settctlg
-'vput (cluser clname clucat)'
-saveuser = user                                               /* @A4 */
-
-'addpop'
-'display panel('PANELCL')'
+Display_Panel:
+'display panel('PANELAL')'
  disprc = RC
-'rempop'
 if (disprc > 0) then do
    exit
    end
+
+cmd  = 'SEARCH USER('user')'
+x    = outtrap('search.')
+Address TSO cmd
+x    = outtrap('off')
+
+if pos('NOT DEFINED TO RACF',search.1) > 1 then do
+  racfsmsg = 'Not defined'
+  racflmsg = 'User 'user' not defined to RACF'
+  'setmsg msg(RACF011)'
+  signal Display_Panel
+  end
 
 If (SETMTRAC <> 'NO') then do
    Say "*"COPIES("-",70)"*"
@@ -50,60 +52,42 @@ rxrc=IRRXUTIL("EXTRACT","USER",user,"RACF","")
 if (word(rxrc,1) <> 0) then do
    'IRRXUTIL return code:'rxrc
    exit
-end
+   end
 
 cmd. = ""
 y = 0
 do i=1 to RACF.0 /* get the segment names */
   segment=RACF.i
   if segment = 'BASE' then do                                 /* @A1 */
-    clat = ''
-    if racf.base.special.1 = 'TRUE' then clat = clat || 'SPECIAL '
-    if racf.base.oper.1    = 'TRUE' then clat = clat || 'OPERATIONS '
-    if racf.base.grpacc.1  = 'TRUE' then clat = clat || 'GRPACC '
-    if racf.base.auditor.1 = 'TRUE' then clat = clat || 'AUDITOR '
-    if racf.base.roaudit.1 = 'TRUE' then clat = clat || 'ROAUDIT '
-    if racf.base.rest.1    = 'TRUE' then clat = clat || 'RESTRICTED '
-    if racf.base.adsp.1    = 'TRUE' then clat = clat || 'ADSP '
+    uattr = ''
+    if racf.base.special.1 = 'TRUE' then uattr = uattr || 'SPECIAL '
+    if racf.base.oper.1    = 'TRUE' then uattr = uattr || 'OPERATIONS '
+    if racf.base.grpacc.1  = 'TRUE' then uattr = uattr || 'GRPACC '
+    if racf.base.auditor.1 = 'TRUE' then uattr = uattr || 'AUDITOR '
+    if racf.base.roaudit.1 = 'TRUE' then uattr = uattr || 'ROAUDIT '
+    if racf.base.rest.1    = 'TRUE' then uattr = uattr || 'RESTRICTED '
+    if racf.base.adsp.1    = 'TRUE' then uattr = uattr || 'ADSP '
 
-    Address ISPexec
-    'vget (zllgjob1 zllgjob2 zllgjob3 zllgjob4) profile'
     y = y + 1
-    cmd.y = zllgjob1
-    if zllgjob2 <> '' then do
-      y = y + 1
-      cmd.y = zllgjob2
-      end
-    if zllgjob3 <> '' then do
-      y = y + 1
-      cmd.y = zllgjob3
-      end
-    if zllgjob4 <> '' then do
-      y = y + 1
-      cmd.y = zllgjob4
-      end
+    cmd.y = " ALTUSER " user "NAME('"racf.base.name.1"')" "-"
     y = y + 1
-    cmd.y = "//TSO      EXEC  PGM=IKJEFT01"
-    y = y + 1
-    cmd.y = "//SYSTSPRT DD  SYSOUT=*"
-    y = y + 1
-    cmd.y = "//SYSTSIN  DD  *"
-    y = y + 1
-    cmd.y = " ADDUSER " cluser "NAME('"clname"')" "-"
-    y = y + 1
-    cmd.y = "  PASSWORD("clpswd")" "-"
-    y = y + 1
-    cmd.y = "  "clat "-"
+    cmd.y = "  "uattr "-"
     y = y + 1
     cmd.y = "  OWNER("racf.base.owner.1")" "-"
     y = y + 1
     cmd.y = "  DFLTGRP("racf.base.dfltgrp.1")" "-"
-    if cldata <> '' then do
+    y = y + 1
+    cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')"
+    if usegs <> '' then do
       y = y + 1
-      cmd.y = "  DATA('"cldata"')" "-"
+      cmd.y = " -"
       end
+
     iterate
     end
+
+  if wordpos(segment,usegs) = 0 then
+    iterate
 
   y = y + 1
   cmd.y = " "segment"(" "-"
@@ -128,6 +112,7 @@ do i=1 to RACF.0 /* get the segment names */
     y = y + 1
     cmd.y = "  "aufld"("racf.segment.field.1")" "-"
     end
+
     if i = racf.0 then do
       y = y + 1
       cmd.y = " )"
@@ -138,27 +123,12 @@ do i=1 to RACF.0 /* get the segment names */
       end
   end
 
-  do i = 1 to racf.base.connects.repeatcount
-    y = y + 1
-    cmd.y = " CONNECT" cluser "GROUP("racf.base.cgroup.i")",
-            "OWNER("racf.base.cowner.i")"                     /* @A3 */
-    end
-
-  y = y + 1
-  cmd.y = " ADDSD ('"cluser".**') UACC(READ) OWNER("||,
-    racf.base.dfltgrp.1")"
-
-  y = y + 1
-  cmd.y = " DEFINE ALIAS (NAME('"cluser"') RELATE('"clucat"'))"
-
-  if clperm = 'Y' then
-    call Datasets
-
   cmd.0 = y
   call Display_Commands
-  zerrsm = "RACFADM "REXXPGM" RC=0"                           /* @A4 */
-  zerrlm = "CLONE "cluser" FROM("saveuser")"                  /* @A4 */
-  'log msg(isrz003)'                                          /* @A4 */
+  zerrsm = "RACFADM "REXXPGM" RC=0"
+  zerrlm = "ALTUSER "user usegs
+  Address ISPexec
+  'log msg(isrz003)'
 exit
 
 /* Adjust operand names to ADDUSER conventions */
@@ -192,50 +162,11 @@ Display_Commands:
   Address TSO "execio * diskw "ddname" (stem cmd. finis"
   drop cmd.
 
+  Address ISPexec
   "lminit dataid(cmddatid) ddname("ddname")"
   "edit dataid("cmddatid") macro("editmacr")"
   Address TSO "free fi("ddname")"
 return
 
-Datasets:
-x = outtrap("dsn.")
-Address TSO 'search filter(**)'
-x = outtrap("off")
-do i = 1 to dsn.0
-  type = ''
-  profile = dsn.i
-  if pos('(G)',profile) > 0 then do
-    profile = strip(substr(profile,1,pos('(G)',profile)-1))
-    type = 'GEN'
-    end
-  call Get_Profile
-  end
-return
-
-Get_Profile:
-myrc=IRRXUTIL("EXTRACT","DATASET",profile,"RACF","")
-if (word(myrc,1)<>0) then do
-   return
-   end
-if racf.base.aclcnt.repeatcount <> '' then do
-  do a=1 to racf.base.aclcnt.repeatcount
-    if user = racf.base.aclid.a then do
-      y = y + 1
-      cmd.y = " PERMIT '"profile"' ID("cluser")",
-          "ACC("racf.base.aclacs.a")" type
-      end
-    end
-  end
-if racf.base.acl2cnt.repeatcount <> '' then do
-  do a=1 to racf.base.acl2cnt.repeatcount
-    if user = racf.base.acl2id.a then do
-      y = y + 1
-      cmd.y = " PERMIT '"profile"' ID("cluser")",
-          "ACC("racf.base.acl2acs.a")",
-          "WHEN("racf.base.acl2cond.a"("racf.base.acl2ent.a"))",
-           type
-      end
-    end
-  end
 drop racf.
 return

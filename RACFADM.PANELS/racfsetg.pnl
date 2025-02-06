@@ -28,10 +28,10 @@
 +  REXX trace{........_Z~ (L=Labels, P=Pgms, R=Results, N=No)  {Trace REXX pgms
 +
 ^Adding TSO userids
-+  Default password{..@Z             ~ +Passphrase_Z{ { New/chg user's password
-+  User catalog{......_Z                              { z/OS alias catalog
-+  ISPPROF dataset{..._Z                              { Append qualifiers to id
-+  User dataset{......_Z                              { Append qualifiers to id
++  Default password{..@Z                  +Passphrase_Z{New/chg user's password
++  User catalog{......_Z                               {z/OS alias catalog
++  ISPPROF dataset{..._Z                               {Append qualifiers to id
++  User dataset{......_Z                               {Append qualifiers to id
 )INIT
   VGET (SETGFLTR SETGSTA  SETGSTAP SETGDISP  SETGCONF SETGMVS  +
         SETGMVSD SETGPREF +

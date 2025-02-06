@@ -9,6 +9,14 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  06 Feb 2025 - V39R4
+     - User Profiles (Option 1)
+       -- Added line command AU to alter selected user segments
+       -- Added primary command ALTUSER to alter selected user segments
+       -- Added RACFALTU exec to generate ALTUSER source statements
+          using IRRXUTIL
+       -- Added RACFUS5A panel to prompt for selected user segments
+
   02 Feb 2025 - V39R3
      - ISPLog (Option L)
        -- Default ISPF log display is in chronological order.
@@ -54,7 +62,7 @@
        -- Updated RACFCOPU exec to properly handle base attributes
        -- Deleted RACFUSR panel (Alter TSO segment) - not used
      - Tutorial (Option T)
-       -- Added 'LC and LR edit macros'
+       -- Added 'RACFADM edit macros'
      - General Cleanup
        -- Changed various panel field captions to better describe
           access and authority fields
@@ -2339,7 +2347,7 @@
           was done for RACFPROF module, in next bullet
      - User and Group (Option 1/2)
        -- Line command 'P'rofile, when executing IRRXUTIL to obtain
-          information, the parameters needed have single quotes
+          information, the parameters needed to have single quotes
           around them (PGM=RACFPROF)
 
   04 Apr 2020 - V13R3
