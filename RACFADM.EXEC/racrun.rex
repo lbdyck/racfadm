@@ -94,6 +94,11 @@ do l = start to stop
      CALL SHOWCMD
   end
 Call Outtrap 'OFF'
+zerrlm = cmd 'return code is 'cmd_rc
+zerrsm = 'RC:'cmd_rc
+zerralrm = 'NO'
+Address ISPExec
+'setmsg msg(isrz002)'
 if rec.0 = 0 then do                                          /* @A2 */
   Address ISRedit                                             /* @A2 */
   'End'                                                       /* @A2 */
