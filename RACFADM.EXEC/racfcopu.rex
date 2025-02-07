@@ -125,6 +125,10 @@ do i=1 to RACF.0 /* get the segment names */
 
     aufld = field
     call Adduser_Fields
+    if racf.segment.field.1 = 'TRUE' then
+      racf.segment.field.1 = 'YES'
+    if racf.segment.field.1 = 'FALSE' then
+      racf.segment.field.1 = 'NO'
     y = y + 1
     cmd.y = "  "aufld"("racf.segment.field.1")" "-"
     end
