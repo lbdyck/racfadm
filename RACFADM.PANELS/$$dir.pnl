@@ -150,8 +150,9 @@
  RACFUS2A  User           List userids (admin/user) - PW date/interval
  RACFUSR3  User           Show groups and access
  RACFUSR4  User           Connect profile
- RACFUSR5  User           Change user
- RACFUSR6  User           Add user
+ RACFUSR5  User           Alter user
+ RACFUS5A  User           Alter selected user segments
+ RACFUSR6  User           Add/Change user
  RACFUSR7  User           Change connection
 
  Notes:

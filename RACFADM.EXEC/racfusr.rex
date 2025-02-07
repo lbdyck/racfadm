@@ -254,7 +254,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝCK¨CkPWÝK¨CloneÝLR¨Ring"||,             /* @FB */
+        SELCMD2B = " ÝAU¨AltUÝK¨CloneÝLR¨Ring"||,             /* @FB */
                    "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
@@ -263,7 +263,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "ÝCK¨CkPW"||,                              /* @FB */
+        SELCMD2B = "ÝAU¨AltU"||,                              /* @FB */
                    "ÝLR¨RingÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EZ */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
@@ -633,7 +633,11 @@ PROFL:
              'TBMOD 'tablea                                   /* @EX */
         end
         when (opta = 'AL') then call Altd                     /* @E6 */
-        when (opta = 'AU') then call RACFALTU user            /* @JK */
+        when (opta = 'AU') then do                            /* @JK */
+             call RACFALTU user                               /* @JK */
+             action = '*Altusr'                               /* @JK */
+             "TBMOD" TABLEA                                   /* @JK */
+             end                                              /* @JK */
         otherwise nop
      End
      'control display restore'                                /* @EE */

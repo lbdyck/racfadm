@@ -7,4 +7,5 @@ NOINT     Generate PASSWORD NOINTERVAL commands for tablea entries
 CKPW      Generate password change date for tablea entries
 ALT       Display alternate panel in User Profile display
 NORM      Display normal panel in User Profile display
+ALTUSER   Alter user selected segments
 UNDOC     What you are reading now

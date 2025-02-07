@@ -4,7 +4,7 @@
    `  TYPE(DATAOUT) INTENS(LOW)  COLOR(WHITE)
    ~  TYPE(DATAOUT) INTENS(LOW)  COLOR(BLUE)
    ^  AREA(DYNAMIC) EXTEND(OFF)
-)BODY WINDOW(64,10) EXPAND(\\)
+)BODY WINDOW(64,11) EXPAND(\\)
 %Command ===>_ZCMD                                             +
 +                                                             +
 +Enter a valid selection option for User &user   _z +
@@ -15,6 +15,7 @@
 ^m4                                                            ^
 ^m5                                                            ^
 ^m6                                                            ^
+^m7                                                            ^
 )INIT
  .help  = #RACUSR2
  .zvars = '(opta)'
@@ -25,30 +26,38 @@
       m3 = '   `A  ~Add             `AL ~Alter           `C  ~Change   '
       m4 = '   `PW ~Password        `R  ~Remove          `RS ~Resume   '
       m5 = '   `RV ~Revoke          `X  ~Xref            `Y  ~Access   '
-      if setmirrx = 'YES' then
-        m6 = '   `P  ~Profile         `K  ~Clone           `CK ~CkPW   '
-      else
+      if setmirrx = 'YES' then do
+        m6 = '   `P  ~Profile         `K  ~Clone           `AU ~Altuser'
+        m7 = '   `CK ~CkPW                                             '
+        end
+      else do
         m6 = ''
+        m7 = ''
+        end
       end
     else do
       m1 = '   `D  ~Dsn             `L  ~List            `LC ~List Cert'
       m2 = '   `LR ~List Ring       `S  ~Show            `SE ~Search   '
-      if setmirrx = 'YES' then
-        m3 = '   `P  ~Profile         `K  ~Clone           `CK ~CkPW   '
-      else
+      if setmirrx = 'YES' then do
+        m3 = '   `P  ~Profile         `K  ~Clone           `AU ~Altuser'
+        m4 = '   `CK ~CkPW                                             '
+        end
+      else do
         m3 = ''
+        m4 = ''
+        end
       end
   *Endrexx
   &zwinttl = 'RACFADM - User Profile Line Commands'
 )PROC
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,Y,AL,K,CK)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,Y,AL,K,CK,AU)
      ELSE
         VER (&opta,nb,LIST,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,Y,AL,CK)
   ELSE
      IF (&SETMIRRX = YES)
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,K,CK)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,K,CK,AU)
      ELSE
         VER (&opta,nb,LIST,S,SE,L,LC,LR,D,CK)
 )END

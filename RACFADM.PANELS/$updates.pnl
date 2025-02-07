@@ -12,7 +12,6 @@
   06 Feb 2025 - V39R4
      - User Profiles (Option 1)
        -- Added line command AU to alter selected user segments
-       -- Added primary command ALTUSER to alter selected user segments
        -- Added RACFALTU exec to generate ALTUSER source statements
           using IRRXUTIL
        -- Added RACFUS5A panel to prompt for selected user segments
