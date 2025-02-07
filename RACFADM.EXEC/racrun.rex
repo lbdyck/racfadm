@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A2  250207  TRIDJK   If no command output, then no Edit           */
 /* @A1  250116  TRIDJK   Modified for RACFADM                         */
 /* @A0  161028  LBDYCK   RUNTSOC exec (inspired by Bill Smith)        */
 /*====================================================================*/
@@ -93,6 +94,11 @@ do l = start to stop
      CALL SHOWCMD
   end
 Call Outtrap 'OFF'
+if rec.0 = 0 then do                                          /* @A2 */
+  Address ISRedit                                             /* @A2 */
+  'End'                                                       /* @A2 */
+  exit                                                        /* @A2 */
+  end                                                         /* @A2 */
 Call Edit_Info
 Exit
 /*--------------------------------------------------------------------*/

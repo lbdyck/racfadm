@@ -77,12 +77,11 @@ do i=1 to RACF.0 /* get the segment names */
     y = y + 1
     cmd.y = "  DFLTGRP("racf.base.dfltgrp.1")" "-"
     y = y + 1
-    cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')"
-    if usegs <> '' then do
-      y = y + 1
-      cmd.y = " -"
-      end
-
+    if usegs <> '' then
+      cont = " -"
+    else
+      cont = ""
+    cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')"cont
     iterate
     end
 
