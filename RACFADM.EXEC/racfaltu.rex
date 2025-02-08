@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A1  250208  TRIDJK   Return to panel display after processing     */
 /* @A0  250205  TRIDJK   Creation                                     */
 /*====================================================================*/
 TRACE
@@ -21,6 +22,8 @@ Address ISPexec
       "SETTPROF SETTUDSN SETMPHRA SETTCTLG) PROFILE"
 
 Display_Panel:
+Do Forever                                                    /* @A1 */
+Address ISPexec
 'display panel('PANELAL')'
  disprc = RC
 if (disprc > 0) then do
@@ -36,7 +39,7 @@ if pos('NOT DEFINED TO RACF',search.1) > 1 then do
   racfsmsg = 'Not defined'
   racflmsg = 'User 'user' not defined to RACF'
   'setmsg msg(RACF011)'
-  signal Display_Panel
+  iterate                                                     /* @A1 */
   end
 
 If (SETMTRAC <> 'NO') then do
@@ -50,7 +53,7 @@ If (SETMTRAC <> 'NO') then do
 Address TSO
 rxrc=IRRXUTIL("EXTRACT","USER",user,"RACF","")
 if (word(rxrc,1) <> 0) then do
-   'IRRXUTIL return code:'rxrc
+   say 'IRRXUTIL return code:'rxrc
    exit
    end
 
@@ -58,7 +61,7 @@ cmd. = ""
 y = 0
 do i=1 to RACF.0 /* get the segment names */
   segment=RACF.i
-  if segment = 'BASE' then do                                 /* @A1 */
+  if segment = 'BASE' then do
     uattr = ''
     if racf.base.special.1 = 'TRUE' then uattr = uattr || 'SPECIAL '
     if racf.base.oper.1    = 'TRUE' then uattr = uattr || 'OPERATIONS '
@@ -77,11 +80,7 @@ do i=1 to RACF.0 /* get the segment names */
     y = y + 1
     cmd.y = "  DFLTGRP("racf.base.dfltgrp.1")" "-"
     y = y + 1
-    if usegs <> '' then
-      cont = " -"
-    else
-      cont = ""
-    cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')"cont
+    cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')" "-"
     iterate
     end
 
@@ -93,7 +92,7 @@ do i=1 to RACF.0 /* get the segment names */
   do j=1 to RACF.segment.0
     field=RACF.segment.j
 
-/* ADDUSER edits */
+    /* ALTUSER edits */
     if racf.segment.field.1 = '' then
       iterate
     if field = 'UID' then do
@@ -107,7 +106,7 @@ do i=1 to RACF.0 /* get the segment names */
       racf.segment.field.1 = "'"||racf.segment.field.1||"'"
 
     aufld = field
-    call Adduser_Fields
+    call Altuser_Fields
     if racf.segment.field.1 = 'TRUE' then
       racf.segment.field.1 = 'YES'
     if racf.segment.field.1 = 'FALSE' then
@@ -116,26 +115,26 @@ do i=1 to RACF.0 /* get the segment names */
     cmd.y = "  "aufld"("racf.segment.field.1")" "-"
     end
 
-    if i = racf.0 then do
-      y = y + 1
-      cmd.y = " )"
-      end
-    else do
-      y = y + 1
-      cmd.y = " )" "-"
-      end
+    y = y + 1
+    cmd.y = " )" "-"
   end
+
+  if lastpos("-",cmd.y) > 0 then
+    cmd.y = delstr(cmd.y,lastpos("-",cmd.y))
 
   cmd.0 = y
   call Display_Commands
+
+  end  /* Forever */                                          /* @A1 */
+
   zerrsm = "RACFADM "REXXPGM" RC=0"
   zerrlm = "ALTUSER "user usegs
   Address ISPexec
   'log msg(isrz003)'
 exit
 
-/* Adjust operand names to ADDUSER conventions */
-Adduser_Fields:
+/* Adjust operand names to ALTUSER conventions */
+Altuser_Fields:
   select
     when field = 'AUTOLOG'  then aufld = 'AUTOLOGIN'   /* DCE      */
     when field = 'MAXTKTLF' then aufld = 'MAXTKTLFE'   /* KERB     */

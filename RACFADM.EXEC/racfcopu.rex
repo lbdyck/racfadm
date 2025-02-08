@@ -48,7 +48,7 @@ If (SETMTRAC <> 'NO') then do
 Address TSO
 rxrc=IRRXUTIL("EXTRACT","USER",user,"RACF","")
 if (word(rxrc,1) <> 0) then do
-   'IRRXUTIL return code:'rxrc
+   say 'IRRXUTIL return code:'rxrc
    exit
 end
 
@@ -110,7 +110,7 @@ do i=1 to RACF.0 /* get the segment names */
   do j=1 to RACF.segment.0
     field=RACF.segment.j
 
-/* ADDUSER edits */
+    /* ADDUSER edits */
     if racf.segment.field.1 = '' then
       iterate
     if field = 'UID' then do
