@@ -26,9 +26,8 @@ Do Forever                                                    /* @A1 */
 Address ISPexec
 'display panel('PANELAL')'
  disprc = RC
-if (disprc > 0) then do
-   exit
-   end
+if (disprc > 0) then
+  exit
 
 cmd  = 'SEARCH USER('user')'
 x    = outtrap('search.')
@@ -124,13 +123,12 @@ do i=1 to RACF.0 /* get the segment names */
 
   cmd.0 = y
   call Display_Commands
-
-  end  /* Forever */                                          /* @A1 */
-
   zerrsm = "RACFADM "REXXPGM" RC=0"
   zerrlm = "ALTUSER "user usegs
   Address ISPexec
   'log msg(isrz003)'
+
+  end  /* Forever */                                          /* @A1 */
 exit
 
 /* Adjust operand names to ALTUSER conventions */

@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A3  250209  LBDYCK   Remove Edit END command to remain in Edit    */
 /* @A2  250207  TRIDJK   If no command output, then no Edit           */
 /* @A1  250116  TRIDJK   Modified for RACFADM                         */
 /* @A0  161028  LBDYCK   RUNTSOC exec (inspired by Bill Smith)        */
@@ -101,7 +102,9 @@ Address ISPExec
 'setmsg msg(isrz002)'
 if rec.0 = 0 then do                                          /* @A2 */
   Address ISRedit                                             /* @A2 */
+  /* Comment Start                                            /* @A3 */
   'End'                                                       /* @A2 */
+     Comment End */                                           /* @A3 */
   exit                                                        /* @A2 */
   end                                                         /* @A2 */
 Call Edit_Info
