@@ -46,6 +46,7 @@
  #RACMEN1  Tutorial       Menu
  #RACMVS   Tutorial       RACF data (Showmvs)
  #RACMSG   Tutorial       RACF messages
+ #RACMSGU  Tutorial       User Profile (/ line command)
  #RACNOT1  Tutorial       Installation notes (1 of 3)
  #RACNOT2  Tutorial       Installation notes (2 of 3)
  #RACNOT3  Tutorial       Installation notes (3 of 3)

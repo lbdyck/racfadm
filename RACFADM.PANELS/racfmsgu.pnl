@@ -17,7 +17,7 @@
 ^m6                                                            ^
 ^m7                                                            ^
 )INIT
- .help  = #RACUSR2
+ .help  = #RACMSGU
  .zvars = '(opta)'
   *Rexx(* SETMADMN SETMIRRX)
     if setmadmn = 'YES' then do
@@ -27,7 +27,7 @@
       m4 = '   `PW ~Password        `R  ~Remove          `RS ~Resume   '
       m5 = '   `RV ~Revoke          `X  ~Xref            `Y  ~Access   '
       if setmirrx = 'YES' then do
-        m6 = '   `P  ~Profile         `K  ~Clone           `AU ~Altuser'
+        m6 = '   `P  ~Profile         `K  ~Clone           `M  ~Modify '
         m7 = '   `CK ~CkPW                                             '
         end
       else do
@@ -39,7 +39,7 @@
       m1 = '   `D  ~Dsn             `L  ~List            `LC ~List Cert'
       m2 = '   `LR ~List Ring       `S  ~Show            `SE ~Search   '
       if setmirrx = 'YES' then do
-        m3 = '   `P  ~Profile         `K  ~Clone           `AU ~Altuser'
+        m3 = '   `P  ~Profile         `K  ~Clone           `M  ~Modify '
         m4 = '   `CK ~CkPW                                             '
         end
       else do

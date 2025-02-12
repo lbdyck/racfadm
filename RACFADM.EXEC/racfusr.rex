@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FC  250212  TRIDJK   M line cmd - modify selected user segments   */
 /* @FB  250102  TRIDJK   CK line cmd - check days until pswd changes  */
 /* @FA  250101  TRIDJK   NEXT command - cycle between RACFUSR2/US2A   */
 /* @F9  241209  TRIDJK   K line command will clone user profile       */
@@ -254,7 +255,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝAU¨AltUÝK¨CloneÝLR¨Ring"||,             /* @FB */
+        SELCMD2B = "   ÝM¨ModÝK¨CloneÝLR¨Ring"||,             /* @FB */
                    "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
@@ -263,7 +264,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "ÝAU¨AltU"||,                              /* @FB */
+        SELCMD2B = "  ÝM¨Mod"||,                              /* @FB */
                    "ÝLR¨RingÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EZ */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
@@ -633,11 +634,16 @@ PROFL:
              'TBMOD 'tablea                                   /* @EX */
         end
         when (opta = 'AL') then call Altd                     /* @E6 */
-        when (opta = 'AU') then do                            /* @JK */
-             call RACFALTU user                               /* @JK */
-             action = '*Altusr'                               /* @JK */
-             "TBMOD" TABLEA                                   /* @JK */
-             end                                              /* @JK */
+        when (opta = 'AU') then do                            /* @FC */
+             call RACFALTU user                               /* @FC */
+             action = '*Altusr'                               /* @FC */
+             "TBMOD" TABLEA                                   /* @FC */
+             end                                              /* @FC */
+        when (opta = 'M') then do                             /* @FC */
+             call RACFALTU user                               /* @FC */
+             action = '*Modify'                               /* @FC */
+             "TBMOD" TABLEA                                   /* @FC */
+             end                                              /* @FC */
         otherwise nop
      End
      'control display restore'                                /* @EE */

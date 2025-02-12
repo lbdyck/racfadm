@@ -22,7 +22,7 @@
 %  Next             +Cycle between normal and alternate list user display
 %  CERTS            +List Digital cert information for users in table
 %  RINGS            +List Digital ring information for users in table
-^Linec ------------------------------------------------------------------^
+^Linec -------------------------------------------------------------------^
 )Area Linec
 +Line Commands
 %  /  !             +Display line command prompt panel (pop-up)
@@ -38,7 +38,7 @@
 %  RS !Resume       +Resume user@(admin)
 %  RV !Revoke       +Revoke the user@(admin)
 %  AL !Alter        +Alter user profile segments@(admin)
-%  AU !Alter        +Alter selected user profile segments@(admin RACF API)
+%  M  !Modify       +Modify selected user profile segments@(admin RACF API)
 %  X  !Xref         +Create JCL for Cross Reference Report@(admin)
 %  Y  !Access       +User/Grp Access Report@(admin)
 %  LC !Cert         +List certificates for user

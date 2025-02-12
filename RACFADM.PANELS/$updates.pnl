@@ -9,12 +9,14 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
-  06 Feb 2025 - V39R4
+  12 Feb 2025 - V39R4
      - User Profiles (Option 1)
-       -- Added line command AU to alter selected user segments
+       -- Added line command M to modify selected user segments
        -- Added RACFALTU exec to generate ALTUSER source statements
           using IRRXUTIL
        -- Added RACFUS5A panel to prompt for selected user segments
+       -- Added #RACMSGU tutorial panel
+       -- Added UNDOC primary command to display undocumented commands
 
   02 Feb 2025 - V39R3
      - ISPLog (Option L)

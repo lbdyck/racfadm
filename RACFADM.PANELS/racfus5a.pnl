@@ -77,4 +77,7 @@ _z+WORKATTR  {APPC User characteristics (e.g., WANAME for SYSOUT)
 /*       Administrator ..... Y                                        */
 /*       Admin RACF API .... Y                                        */
 /*                                                                    */
+/*  2) Descriptive text from Robert S. Hansel                         */
+/*     https://www.rshconsulting.com/                                 */
+/*                                                                    */
 /*--------------------------------------------------------------------*/
