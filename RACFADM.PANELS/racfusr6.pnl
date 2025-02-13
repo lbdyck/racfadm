@@ -16,7 +16,7 @@
 ^USRTITL                                           ^
 +
 %Base Segment:
-+ PROFILE%===>_USER    {^USERTXT           ^+ ^PSWDFLD                     ^+
++ PROFILE%===>_USER    {^USERTXT           ^+ ^PSWDFLD                      ^+
 + OWNER  %===>_BOWNER  { (Owner of profile)
 + DFLTGRP%===>_DEFGRP  { (Default group)
 + NAME   %===>_NAME                { (Last, first name)
@@ -54,7 +54,7 @@
   *Rexx(* SETMIRRX SETMPHRA, PSWDFLD, PSWD ACTION)
      IF ACTION = '*Add' THEN  DO
         IF SETMPHRA = 'YES' THEN DO
-          PSWD = LEFT(PSWD,14)
+          PSWD = LEFT(PSWD,16)
           PSWDFLD = 'ÝPHRASE  ¨===>!'pswd||'¨'
           END
         ELSE DO
@@ -186,7 +186,7 @@
 )PROC
   *REXX (PSWDFLD, PSWD, USER, ZRXMSG, OHOME, OPROGRAM, RACFSMSG RACFLMSG)
      IF SUBSTR(PSWDFLD,2,6) = 'PHRASE' THEN DO
-       PSWD = SUBSTR(PSWDFLD,16,14)
+       PSWD = SUBSTR(PSWDFLD,16,16)
 
        alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
        pswd_upper = translate(pswd)
@@ -196,7 +196,7 @@
          zrxmsg = 'RACF011'
          end
        x = 0; y= 0
-       do n = 1 to 14
+       do n = 1 to 16
          if verify(substr(pswd,n,1),alpha) = 0 then
            x = x + 1
          else
@@ -212,7 +212,7 @@
          RACFLMSG = 'Phrase must contain 2 non-alpha chars'
          zrxmsg = 'RACF011'
          end
-       do n = 1 to 12
+       do n = 1 to 14
          if substr(pswd,n,1) = substr(pswd,n+1,1) then
            if substr(pswd,n,1) = substr(pswd,n+2,1) then do
              zrxrc  = 8

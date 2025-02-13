@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
 /* @FC  250212  TRIDJK   M line cmd - modify selected user segments   */
 /* @FB  250102  TRIDJK   CK line cmd - check days until pswd changes  */
 /* @FA  250101  TRIDJK   NEXT command - cycle between RACFUSR2/US2A   */
@@ -729,11 +730,11 @@ RESR:
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
      if (SETTPSWD = "") then do                               /* @F3 */
-        userp =  left(newpswd()||newpswd(),14)                /* @F3 */
+        userp =  left(newpswd()||newpswd(),16)                /* @PV */
         userw =  newpswd()                                    /* @F3 */
         end                                                   /* @F3 */
      else do                                                  /* @F3 */
-        userp = left(SETTPSWD,14)                             /* @EQ */
+        userp = left(SETTPSWD,16)                             /* @PV */
         userw = left(SETTPSWD,8)                              /* @F3 */
         end                                                   /* @F3 */
      if SETMPHRA = 'YES' then                                 /* @EQ */
@@ -1649,15 +1650,21 @@ RETURN                                                        /* @BE */
 /*--------------------------------------------------------------------*/
 @ADDD:                                                        /* @D4 */
   action = '*Add'                                             /* @E7 */
-  if (SETTPSWD = "") then                                     /* @E9 */
-     pswd = newpswd()                                         /* @E1 */
-  else                                                        /* @E8 */
-     pswd = SETTPSWD                                          /* @E9 */
+  if (SETTPSWD = "") then do                                  /* @JK */
+     userp =  left(newpswd()||newpswd(),16)                   /* @JK */
+     userw =  newpswd()                                       /* @JK */
+    end                                                       /* @JK */
+  else do                                                     /* @JK */
+     userp = left(SETTPSWD,16)                                /* @JK */
+     userw = left(SETTPSWD,8)                                 /* @JK */
+    end                                                       /* @JK */
+  if SETMPHRA = 'YES' then                                    /* @JK */
+    pswd = userp                                              /* @JK */
+  else                                                        /* @JK */
+    pswd = userw                                              /* @JK */
   "DISPLAY PANEL("PANEL06")"                                  /* @DS */
   if (rc = 8) then                                            /* @D4 */
      return                                                   /* @D4 */
-  if (pswd = '') then                                         /* @DE */
-     pswd = user                                              /* @DE */
   if SETMPHRA = 'YES' then                                    /* @EQ */
      add1 = "ADDUSER "user" OWNER("bowner") PHRASE('"pswd"')" /* @EQ */
   else                                                        /* @EQ */
@@ -1741,8 +1748,8 @@ RETURN                                                        /* @D4 */
 /*  Generate password                                            @E1  */
 /*--------------------------------------------------------------------*/
 NEWPSWD:                                                      /* @E1 */
-  /* No vowels, or "V" or "Z" */                              /* @E1 */
-  choices  = 'BCDFGHJKLMNPQRSTWXY'                            /* @E5 */
+  choices  =            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'          /* @PV */
+  choices  = choices || 'abcdefghijklmnopqrstuvwxyz'          /* @PV */
   chars.   = ''                                               /* @E1 */
   password = ''                                               /* @E1 */
   /* Initialize stem variables */                             /* @E1 */
@@ -1765,6 +1772,16 @@ NEWPSWD:                                                      /* @E1 */
   number   = random(1,9)                                      /* @E1 */
   place    = random(2,psize-2)                                /* @EQ */
   password = overlay(number,password,place,1)                 /* @E1 */
+  /* Plug in 2nd numeric character */                         /* @PV */
+  /*                                                          /* @PV */
+  number2  = random(1,9)                                      /* @PV */
+  place2   = place                                            /* @PV */
+  do while place2 = place                                     /* @PV */
+   place2   = random(2,psize-2)                               /* @PV */
+   if place2 <> place then                                    /* @PV */
+    password = overlay(number2,password,place2,1)             /* @PV */
+  end                                                         /* @PV */
+  */                                                          /* @PV */
 RETURN password                                               /* @E1 */
 /*--------------------------------------------------------------------*/
 /*  Change profile                                               @DT  */

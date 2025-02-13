@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A5  250213  TRIDJK   Support PHRASE operand                       */
 /* @A4  250201  TRIDJK   Log Clone message                            */
 /* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
 /* @A2  250120  TRIDJK   Display MSG about RACRUN macro               */
@@ -91,7 +92,10 @@ do i=1 to RACF.0 /* get the segment names */
     y = y + 1
     cmd.y = " ADDUSER " cluser "NAME('"clname"')" "-"
     y = y + 1
-    cmd.y = "  PASSWORD("clpswd")" "-"
+    if length(clpswd) < 9 then
+      cmd.y = "  PASSWORD("clpswd")" "-"                      /* @A5 */
+    else                                                      /* @A5 */
+      cmd.y = "  PHRASE("clpswd")" "-"                        /* @A5 */
     y = y + 1
     cmd.y = "  "clat "-"
     y = y + 1

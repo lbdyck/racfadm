@@ -9,6 +9,11 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  13 Feb 2025 - V39R5
+     - User and Password (Options 1/5)
+       -- Added 'Passphrase' support for 16 characters
+       -- Changed 'Default password/phrase' length to 16 characters
+
   12 Feb 2025 - V39R4
      - User Profiles (Option 1)
        -- Added line command M to modify selected user segments
