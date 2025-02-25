@@ -11,5 +11,6 @@
 +Enter%Userid+Filter:_userid +  %**+= all users
 +
 )Init
+.help = #RACFPP
 )Proc
 )End

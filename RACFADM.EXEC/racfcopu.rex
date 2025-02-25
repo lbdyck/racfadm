@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A6  250217  TRIDJK   Change OMVS HOME user to clone userid        */
 /* @A5  250213  TRIDJK   Support PHRASE operand                       */
 /* @A4  250201  TRIDJK   Log Clone message                            */
 /* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
@@ -120,6 +121,15 @@ do i=1 to RACF.0 /* get the segment names */
     if field = 'UID' then do
       y = y + 1
       cmd.y = "  AUTOUID" "-"
+      iterate
+      end
+    if field = 'HOME' then do                                 /* @A6 */
+      homeuser = translate(cluser,"abcdefghijklmnopqrstuvwxyz", ,
+                                  "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+      lslash = lastpos('/',racf.segment.field.1)
+      homedir = substr(racf.segment.field.1,1,lslash)||homeuser
+      y = y + 1
+      cmd.y = "  "field"("homedir")" "-"
       iterate
       end
     if field = 'AUTOLOG' then

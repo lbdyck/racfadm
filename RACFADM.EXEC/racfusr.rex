@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @LD  250225  LBDYCK   Check for automount                          */
 /* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
 /* @FC  250212  TRIDJK   M line cmd - modify selected user segments   */
 /* @FB  250102  TRIDJK   CK line cmd - check days until pswd changes  */
@@ -1045,10 +1046,13 @@ DELD:
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
      if (tsouser = ' Y ') then do
+        /*
         msg    = user'.'SETTPROF                              /* @CF */
         if SETTUDSN <> '' then                                /* @CF */
         msg    = msg || ' and 'user'.'SETTUDSN                /* @CF */
         msg    = msg || ' will be deleted'                    /* @CF */
+        */
+        msg    = msg || ' and ALL 'user' datasets'            /* @JK */
         Sure_? = RACFMSGC(msg)
         if (sure_? = 'YES') then
            ret_code = RACFUSRT('DELD' user tsoproc,           /* @C4 */
@@ -1080,6 +1084,29 @@ DISD:
   tmpsort   = sort                                            /* @CY */
   tmprsels  = rsels                                           /* @EI */
   tmpxtdtop = xtdtop                                          /* @EJ */
+
+  /* ------------------------------------------------- *
+   | Check to verify if the target home base directory |
+   | is automounted and if not tell the user           |
+   * ------------------------------------------------- */
+  call syscalls 'ON'
+  address syscall ,
+     'getpwnam (user) pw.'
+  home = pw.pw_dir
+  parse value ohome with '/'thome'/'.
+  thome = '/'thome
+  env.0 = 1
+  env.1 = 'HOME='home
+  cmd = 'automount -q | grep -i' thome
+  x = bpxwunix(cmd,,amdsout.,amderr.,env.,1)
+  l = amdsout.0
+  if pos(thome,amdsout.l) = 0 then do
+     racfsmsg = ''
+     racflmsg = 'automount is not enabled so a mkdir for the users' ,
+                'home directory will be required.'
+     'setmsg msg(RACF011)'
+     end
+
   Do until (RB='NO')   /* allow rebuild option to loop */
      call CREATE_TABLEB                                       /* @CY */
      rb     = 'NO'

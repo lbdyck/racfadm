@@ -31,6 +31,6 @@
 )INIT
   &ZCMD    = ' '
   &ZWINTTL = 'RACFADM - User Profile Administration'
-  .HELP    = #RACNOOB
+  .HELP    = #RACMSGU
 )PROC
 )END

@@ -52,12 +52,12 @@
 )PROC
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,Y,AL,K,CK,AU)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,Y,AL,K,CK,M,AU)
      ELSE
         VER (&opta,nb,LIST,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,Y,AL,CK)
   ELSE
      IF (&SETMIRRX = YES)
-        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,K,CK,AU)
+        VER (&opta,nb,LIST,S,SE,L,LC,LR,P,D,K,CK,M,AU)
      ELSE
         VER (&opta,nb,LIST,S,SE,L,LC,LR,D,CK)
 )END

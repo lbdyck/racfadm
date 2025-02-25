@@ -14,6 +14,10 @@
  ORALTER   IBM TSO Cmd    Unix Security Attribute, like ALTER
  ORLIST    IBM TSO Cmd    Unix Dir/File Security, like RLIST
  RACFADM   Software       Dynamically allocate and invoke software
+ RACFADMC  Software       Check RACFADM version with GitHub version
+ RACFALTU  User           Alter selected user segments
+ RACFDCON  Group          Sets the group connection display option
+ RACFPWPH  PassType       Word or Phrase Report
  RACFCERT  CertAuth       Display Digital Certificates, menu opt CA
  RACFCHKP  User           Check the days until the password changes
  RACFCLOG  Documentation  Determine LOG type (rc=0 SYSLOG, rc=1 OPERLOG)
