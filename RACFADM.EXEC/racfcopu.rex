@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A6  250217  TRIDJK   Change OMVS HOME user to clone userid        */
+/* @A5  250213  TRIDJK   Support PHRASE operand                       */
 /* @A4  250201  TRIDJK   Log Clone message                            */
 /* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
 /* @A2  250120  TRIDJK   Display MSG about RACRUN macro               */
@@ -48,7 +50,7 @@ If (SETMTRAC <> 'NO') then do
 Address TSO
 rxrc=IRRXUTIL("EXTRACT","USER",user,"RACF","")
 if (word(rxrc,1) <> 0) then do
-   cmd.y 'IRRXUTIL return code:'rxrc
+   say 'IRRXUTIL return code:'rxrc
    exit
 end
 
@@ -91,7 +93,10 @@ do i=1 to RACF.0 /* get the segment names */
     y = y + 1
     cmd.y = " ADDUSER " cluser "NAME('"clname"')" "-"
     y = y + 1
-    cmd.y = "  PASSWORD("clpswd")" "-"
+    if length(clpswd) < 9 then
+      cmd.y = "  PASSWORD("clpswd")" "-"                      /* @A5 */
+    else                                                      /* @A5 */
+      cmd.y = "  PHRASE("clpswd")" "-"                        /* @A5 */
     y = y + 1
     cmd.y = "  "clat "-"
     y = y + 1
@@ -110,12 +115,21 @@ do i=1 to RACF.0 /* get the segment names */
   do j=1 to RACF.segment.0
     field=RACF.segment.j
 
-/* ADDUSER edits */
+    /* ADDUSER edits */
     if racf.segment.field.1 = '' then
       iterate
     if field = 'UID' then do
       y = y + 1
       cmd.y = "  AUTOUID" "-"
+      iterate
+      end
+    if field = 'HOME' then do                                 /* @A6 */
+      homeuser = translate(cluser,"abcdefghijklmnopqrstuvwxyz", ,
+                                  "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+      lslash = lastpos('/',racf.segment.field.1)
+      homedir = substr(racf.segment.field.1,1,lslash)||homeuser
+      y = y + 1
+      cmd.y = "  "field"("homedir")" "-"
       iterate
       end
     if field = 'AUTOLOG' then
@@ -125,6 +139,10 @@ do i=1 to RACF.0 /* get the segment names */
 
     aufld = field
     call Adduser_Fields
+    if racf.segment.field.1 = 'TRUE' then
+      racf.segment.field.1 = 'YES'
+    if racf.segment.field.1 = 'FALSE' then
+      racf.segment.field.1 = 'NO'
     y = y + 1
     cmd.y = "  "aufld"("racf.segment.field.1")" "-"
     end

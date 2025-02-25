@@ -18,6 +18,7 @@
  #RACCERG  Tutorial       Generate a Digital Certificate
  #RACCERT  Tutorial       Digital certificates
  #RACCLSA  Tutorial       Add/Change class profile
+ #RACCLSF  Class          List group/ids and access (SEarch, Option 1)
  #RACCLSR  Tutorial       List classes (show, refresh)
  #RACCLS2  Tutorial       List classes
  #RACCLS5  Tutorial       List classes
@@ -31,7 +32,7 @@
  #RACDSN5  Tutorial       Dataset's group/id profile
  #RACENQ   Tutorial       Enqueue information
  #RACERA   History        Nico Rizzuto's original menu for ERA
- #RACCLSF  Class          List group/ids and access (SEarch, Option 1)
+ #RACFPP   Tutorial       Word or Phrase Report
  #RACGEN1  Tutorial       Generate profile source
  #RACGRP5  Tutorial       Group's userids profiles
  #RACGRP8  Tutorial       Group profile
@@ -46,6 +47,7 @@
  #RACMEN1  Tutorial       Menu
  #RACMVS   Tutorial       RACF data (Showmvs)
  #RACMSG   Tutorial       RACF messages
+ #RACMSGU  Tutorial       User Profile (/ line command)
  #RACNOT1  Tutorial       Installation notes (1 of 3)
  #RACNOT2  Tutorial       Installation notes (2 of 3)
  #RACNOT3  Tutorial       Installation notes (3 of 3)
@@ -80,6 +82,7 @@
  #RACUSR2  Tutorial       User profile
  #RACUSR3  Tutorial       User profile
  #RACUSR5  Tutorial       User profile
+ #RACUS5A  Tutorial       User profile
  #RACUSR6  Tutorial       User profile
  OPERMIT   TSO Help       Unix Access Control List, like PERMIT
  ORALTER   TSO Help       Unix Security Attribute, like ALTER
@@ -131,6 +134,7 @@
  RACFMSG3  Message        'RACF Command = Y', 7 lines (pop-up panel)
  RACFMSGU  User           / line command prompt (pop-up panel)
  RACFOMVS  RACFCmds       Exec RACF OMVS cmds (OPERMIT/ORALTER/ORLIST)
+ RACFPPP   Passtype       Word or Phrase Report
  RACFPRMS  Parameter      RACF parameters, menu option 6
  RACFPSWD  Password       Reset userid password, opt 5 and line cmd PW
  RACFPSWE  Password       Reset userid password with expire keyword
@@ -150,8 +154,9 @@
  RACFUS2A  User           List userids (admin/user) - PW date/interval
  RACFUSR3  User           Show groups and access
  RACFUSR4  User           Connect profile
- RACFUSR5  User           Change user
- RACFUSR6  User           Add user
+ RACFUSR5  User           Alter user
+ RACFUS5A  User           Alter selected user segments
+ RACFUSR6  User           Add/Change user
  RACFUSR7  User           Change connection
 
  Notes:

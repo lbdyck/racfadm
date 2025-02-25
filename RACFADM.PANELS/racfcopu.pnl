@@ -11,7 +11,7 @@
 +Update information for CLONE:
 +
 +Userid  %=_CLUSER  +
-+Password%=_CLPSWD  +
++Password%=_CLPSWD          +
 +Name    %=_CLNAME              +
 +Usercat %=_CLUCAT                                      +
 +Data    %=_CLDATA                                      @Z
@@ -29,7 +29,8 @@ _ZLLGJOB4
 )INIT
   .ZVARS   = '(SCIND CLPERM)'
   &ZCMD    = ' '
-  &CLPSWD  = 'Welcome1'
+  vget (settpswd) profile
+  &CLPSWD  = &settpswd
   &ZWINTTL = 'RACFADM - Clone Userid'
   .CURSOR  = CLUSER
   .HELP    = #RACCOPU

@@ -34,7 +34,7 @@
 +                    (User Profile/Add User).  Phrase will be edited
 +                    for 2 alphabetic, 2 non-alphabetic, no Userid, and
 +                    no more than 2 repeating characters.  Phrase is a
-+                    14 character field.
++                    16 character field.
 +
 +                    If Passphrase%N+then a "Password" field will be
 +                    displayed instead of a "Phrase" field.  Password

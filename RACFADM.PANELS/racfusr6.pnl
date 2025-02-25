@@ -16,7 +16,7 @@
 ^USRTITL                                           ^
 +
 %Base Segment:
-+ PROFILE%===>_USER    {^USERTXT           ^+ ^PSWDFLD                     ^+
++ PROFILE%===>_USER    {^USERTXT           ^+ ^PSWDFLD                      ^+
 + OWNER  %===>_BOWNER  { (Owner of profile)
 + DFLTGRP%===>_DEFGRP  { (Default group)
 + NAME   %===>_NAME                { (Last, first name)
@@ -54,7 +54,7 @@
   *Rexx(* SETMIRRX SETMPHRA, PSWDFLD, PSWD ACTION)
      IF ACTION = '*Add' THEN  DO
         IF SETMPHRA = 'YES' THEN DO
-          PSWD = LEFT(PSWD,14)
+          PSWD = LEFT(PSWD,16)
           PSWDFLD = 'ÝPHRASE  ¨===>!'pswd||'¨'
           END
         ELSE DO
@@ -183,20 +183,27 @@
   IF (&ACTION = '*Add')
      &USER = &Z
      &NAME = &Z
+     *REXX(*)
+     parse value ohome with '/'ohome'/'
+     ohome = '/'ohome'/<userid>'
+     *ENDRexx
 )PROC
-  *REXX (PSWDFLD, PSWD, USER, ZRXMSG, OHOME, OPROGRAM, RACFSMSG RACFLMSG)
+  &resp = .resp
+  *REXX (PSWDFLD, PSWD, USER, ZRXMSG, OHOME, OPROGRAM, RACFSMSG RACFLMSG RESP)
+     if resp = 'END' then return
      IF SUBSTR(PSWDFLD,2,6) = 'PHRASE' THEN DO
-       PSWD = SUBSTR(PSWDFLD,16,14)
+       PSWD = SUBSTR(PSWDFLD,16,16)
 
        alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
        pswd_upper = translate(pswd)
        if pos(user,pswd_upper) > 0 then do
          zrxrc  = 8
+         RACFSMSG = 'Do not enter userid'
          RACFLMSG = 'Phrase contains Userid'
          zrxmsg = 'RACF011'
          end
        x = 0; y= 0
-       do n = 1 to 14
+       do n = 1 to 16
          if verify(substr(pswd,n,1),alpha) = 0 then
            x = x + 1
          else
@@ -204,18 +211,21 @@
          end
        if x < 2 then do
          zrxrc  = 8
+         RACFSMSG = 'Enter 2 alpha chars'
          RACFLMSG = 'Phrase must contain 2 alpha chars'
          zrxmsg = 'RACF011'
          end
        if y < 2 then do
          zrxrc  = 8
+         RACFSMSG = 'Enter 2 non-alpha chars'
          RACFLMSG = 'Phrase must contain 2 non-alpha chars'
          zrxmsg = 'RACF011'
          end
-       do n = 1 to 12
+       do n = 1 to 14
          if substr(pswd,n,1) = substr(pswd,n+1,1) then
            if substr(pswd,n,1) = substr(pswd,n+2,1) then do
              zrxrc  = 8
+             RACFSMSG = 'Enter < 3 repeating chars'
              RACFLMSG = 'Phrase contains repeating characters'
              zrxmsg = 'RACF011'
              end
@@ -232,7 +242,22 @@
         end
   if zrxrc /= 8 then
   if length(ohome) > 0 then do
-     parse value ohome with '/'thome'/'.
+     parse value ohome with '/'thome'/'newhome'/' .
+     newuser = lower(user)
+     if newhome = '<userid>'
+        then do
+             newuser = lower(user)
+             ohome = '/'thome'/'newuser
+             newhome = newuser
+             end
+     if newhome /= newuser then do
+        zrxrc = 8
+        racfsmsg = 'Invalid Home.'
+        racflmsg = left('Invalid Home Path.' ohome,74),
+                   'The new home should be /'thome'/'newuser
+        zrxmsg = 'racf011'
+       end
+     if zrxrc /= 8 then do
      thome = '/'thome
      address syscall
      'lstat (thome) op.'
@@ -240,8 +265,9 @@
      if op.0 = 0 then do
         zrxrc = 8
         racfsmsg = 'Invalid Home.'
-        racflmsg = 'Invalid Home Path. /'thome
+        racflmsg = 'Invalid Home Path. 'thome
         zrxmsg = 'racf011'
+        end
         end
      end
   if zrxrc /= 8 then
@@ -251,11 +277,18 @@
      address TSO
      if op.0 = 0 then do
         zrxrc = 8
-        racfsmsg = 'Bad Path.'
+        racfsmsg = 'Invalid Program.'
         racflmsg = 'Invalid Shell Program Path.'
         zrxmsg = 'racf011'
         end
      end
+if 0 = 1 then do
+ Lower:
+ parse arg input
+ out = translate(input,"abcdefghijklmnopqrstuvwxyz",,
+                       "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+ return out
+ end
   *ENDREXX
   IF (&ACTION = '*Add')
      IF (&OLDUSR = &USER)

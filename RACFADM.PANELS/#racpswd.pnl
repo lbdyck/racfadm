@@ -18,7 +18,7 @@
 +  If Passphrase%Y+then a "Phrase" field will displayed in Option 5
 +  (Password) and Option 1 (User Profile/Add User).  Phrase will be
 +  edited for 2 alphabetic, 2 non-alphabetic, no Userid, and no more
-+  than 2 repeating characters.  Phrase is a 14 character field.
++  than 2 repeating characters.  Phrase is a 16 character field.
 +
 +  If Passphrase%N+then a "Password" field will be displayed instead
 +  of a "Phrase" field.  Password is an 8 character field.

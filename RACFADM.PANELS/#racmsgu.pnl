@@ -1,0 +1,36 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(RED)   SKIP(ON)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)Body window(64,22) expand(\\)
+%Command ===>_ZCMD                                             +
++
+%Option 1, User Profiles                           Line Command
++
+  {Add user    (TSO, CICS, DFP, OMVS segments)         } A
+  {Change user (TSO, CICS, DFP, OMVS segments)         } C
+  {Delete user                                         } R
+  {Modify user (select 1-15 user segments)             } M
+  {Clone a user                                        } K
+  {List of groups user is connected to                 } S
+  {List user profile using LISTUSER                    } L
+  {List user profile using IRRXUTIL                    } P
+  {Display user datasets using DSLIST                  } D
+  {Create JCL for Cross Reference Report               } X
+  {User/Group Access Report                            } Y
+  {Password reset                                      }PW
+  {Resume user                                         }RS
+  {Revoke user                                         }RV
+  {Check the days until the password changes           }CK
+  {Analyze user access to general resource profiles    }SE
+  {List certificates for user                          }LC
+  {List rings for user                                 }LR
+)INIT
+  &ZCMD    = ' '
+  &ZWINTTL = 'RACFADM - User Profile Administration'
+  .HELP    = #RACMSGU
+)PROC
+)END

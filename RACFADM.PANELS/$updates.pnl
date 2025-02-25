@@ -9,6 +9,33 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+
+  25 Feb 2025 - V39R6
+     - User Profiles (Option 1)
+       -- Updated RACFCOPU exec to use cloned userid in OMVS HOME field
+       -- Updated RACFUSR6 panel to display short messages for PHRASE
+          edit errors.  Edit OMVS HOME field to match new userid.
+       -- Updated RACFUSR exec to test for AUTOMOUNT and issue message
+       -- Updated RACFUS5A panel to display existing user segments
+          with the color turquoise
+       -- Created help panel #RACUS5A for RACFUSR5 panel
+          Note:  PF7/PF8 in Tutorial will switch between user segments
+          and base segment
+
+  13 Feb 2025 - V39R5
+     - User and Password (Options 1/5)
+       -- Added 'Passphrase' support for 16 characters
+       -- Changed 'Default password/phrase' length to 16 characters
+
+  12 Feb 2025 - V39R4
+     - User Profiles (Option 1)
+       -- Added line command M to modify selected user segments
+       -- Added RACFALTU exec to generate ALTUSER source statements
+          using IRRXUTIL
+       -- Added RACFUS5A panel to prompt for selected user segments
+       -- Added #RACMSGU tutorial panel
+       -- Added UNDOC primary command to display undocumented commands
+
   02 Feb 2025 - V39R3
      - ISPLog (Option L)
        -- Default ISPF log display is in chronological order.
@@ -54,7 +81,7 @@
        -- Updated RACFCOPU exec to properly handle base attributes
        -- Deleted RACFUSR panel (Alter TSO segment) - not used
      - Tutorial (Option T)
-       -- Added 'LC and LR edit macros'
+       -- Added 'RACFADM edit macros'
      - General Cleanup
        -- Changed various panel field captions to better describe
           access and authority fields
@@ -390,7 +417,7 @@
      - RACFMSG  (Skeleton)
        - Updated with FROMDATE (was Date) and added
          TODATE, TOTIME, FROMTIME
-     - #RACFMSG tutorial panel updated
+     - #RACMSG tutorial panel updated
      - RACFDISP panel
        - bypass colorization on a 80 column (STD) terminal display
        - updated to highlight all of the userid group, and name in a
@@ -2204,8 +2231,8 @@
 
   11 Apr 2020 - V14R7
      - Other Items
-       -- Updated tutorials (#RACFCLS2, #RACFGRP5/8, #RACFDSN5 and
-          #RACFUSR2
+       -- Updated tutorials (#RACCLS2, #RACGRP5/8, #RACDSN5 and
+          #RACUSR2
        -- Minor code tweak/cleanup in several modules
        -- Updated $DIR members
        -- Corrected bullets in $CHANGES
@@ -2216,7 +2243,7 @@
           names, 'USER' to 'USERID' and 'ACC' to 'ACCESS'
        -- Added two new tutorial panels, #RACDSN5/GRP5, updated
           RACFDSN5/GRP5 to display these tutorials when F1 is pressed
-       -- Updated tutorial panel #RACFGRP8
+       -- Updated tutorial panel #RACGRP8
        -- Corrected several bullets in $CHANGES
        -- Updated $DIR panel member
 
@@ -2339,7 +2366,7 @@
           was done for RACFPROF module, in next bullet
      - User and Group (Option 1/2)
        -- Line command 'P'rofile, when executing IRRXUTIL to obtain
-          information, the parameters needed have single quotes
+          information, the parameters needed to have single quotes
           around them (PGM=RACFPROF)
 
   04 Apr 2020 - V13R3

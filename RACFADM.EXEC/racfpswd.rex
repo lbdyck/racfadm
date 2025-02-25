@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
 /* @AH  240903  TRIDJK   Chg random password length to 8              */
 /* @AG  200908  TRIDJK   Minor update/fix to 'Passphrase'             */
 /* @AF  200821  TRIDJK   Password phrase support                      */
@@ -93,8 +94,8 @@ EXIT cmd_rc                                                   /* @A4 */
 /*  Generate password                                                 */
 /*--------------------------------------------------------------------*/
 NEWPSWD:
-  /* No vowels, or "V" or "Z" */
-  choices  = 'BCDFGHJKLMNPQRSTWXY'                            /* @AH */
+  choices  =            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'          /* @PV */
+  choices  = choices || 'abcdefghijklmnopqrstuvwxyz'          /* @PV */
   chars.   = ''
   password = ''
   /* Initialize stem variables */
@@ -117,6 +118,16 @@ NEWPSWD:
   number   = random(1,9)
   place    = random(2,psize-2)                                /* @AF */
   password = overlay(number,password,place,1)
+  /* Plug in 2nd numeric character */                         /* @PV */
+  /*                                                          /* @PV */
+  number2  = random(1,9)                                      /* @PV */
+  place2   = place                                            /* @PV */
+  do while place2 = place                                     /* @PV */
+   place2   = random(2,psize-2)                               /* @PV */
+   if place2 <> place then                                    /* @PV */
+    password = overlay(number2,password,place2,1)             /* @PV */
+  end                                                         /* @PV */
+  */                                                          /* @PV */
 RETURN password
 /*--------------------------------------------------------------------*/
 /*  Exec command                                                      */

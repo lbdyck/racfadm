@@ -1,0 +1,47 @@
+)ATTR DEFAULT(%+})
+   #  AREA(SCRL) EXTEND(ON)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
+%Command ===>}ZCMD
+%
+#RELATED ----------------------------------------------------------------------#
+)AREA RELATED
+%User Profile Segments:+
+!BASE+
+   Basic information that is needed to define a user to RACF
+   .--------------------------------------------------------------.
+   |   ADDCATEGORY(category-name ...)                             |
+   |   ADSP | NOADSP                                              |
+   |   AT(node.userid ...) | ONLYAT(node.userid ...)              |
+   |   AUDITOR | NOAUDITOR                                        |
+   |   AUTHORITY(group-authority)                                 |
+   |   CLAUTH(class-name ...) | NOCLAUTH                          |
+   |   DATA('installation-defined-data')                          |
+   |   DFLTGRP(group-name)                                        |
+   |   GRPACC | NOGRPACC                                          |
+   |   MODEL(dsname)                                              |
+   |   NAME(user-name)                                            |
+   |   OIDCARD | NOOIDCARD                                        |
+   |   OPERATIONS | NOOPERATIONS                                  |
+   |   OWNER(userid or group-name)                                |
+   |   PASSWORD(password) | NOPASSWORD                            |
+   |   PHRASE('password-phrase')                                  |
+   |   RESTRICTED | NORESTRICTED                                  |
+   |   ROAUDIT | NOROAUDIT                                        |
+   |   SECLABEL(seclabel-name)                                    |
+   |   SECLEVEL(seclevel-name)                                    |
+   |   SPECIAL | NOSPECIAL                                        |
+   |   UACC(access-authority)                                     |
+   |   WHEN(                                                      |
+   |     DAYS(day-info)                                           |
+   |     TIME(time-info)                                          |
+   |     )                                                        |
+   .--------------------------------------------------------------.
+)PROC
+  &ZUP     = #RACUSR5
+)END

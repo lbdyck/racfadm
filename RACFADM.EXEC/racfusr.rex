@@ -11,6 +11,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @LD  250225  LBDYCK   Check for automount                          */
+/* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
+/* @FC  250212  TRIDJK   M line cmd - modify selected user segments   */
 /* @FB  250102  TRIDJK   CK line cmd - check days until pswd changes  */
 /* @FA  250101  TRIDJK   NEXT command - cycle between RACFUSR2/US2A   */
 /* @F9  241209  TRIDJK   K line command will clone user profile       */
@@ -254,7 +257,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨ListÝP¨Prof"||,         /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨Res"                                  /* @DI */
-        SELCMD2B = " ÝCK¨CkPWÝK¨CloneÝLR¨Ring"||,             /* @FB */
+        SELCMD2B = "   ÝM¨ModÝK¨CloneÝLR¨Ring"||,             /* @FB */
                    "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
@@ -263,7 +266,7 @@ ADDRESS ISPEXEC                                               /* @BC */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
                    "ÝD¨DsnÝPW¨PswdÝC¨ChgÝA¨AddÝR¨Rem"||,      /* @DI */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
-        SELCMD2B = "ÝCK¨CkPW"||,                              /* @FB */
+        SELCMD2B = "  ÝM¨Mod"||,                              /* @FB */
                    "ÝLR¨RingÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EZ */
         SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
                    "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
@@ -495,6 +498,12 @@ PROFL:
           else                                                /* @FA */
             panel02 = 'RACFUSR2'                              /* @FA */
         END                                                   /* @FA */
+        WHEN (ABBREV("ALTUSER",ZCMD,7) = 1) THEN DO /*UNDOC*/ /* @JK */
+          call racfaltu parm                                  /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("UNDOC",ZCMD,5) = 1) THEN DO   /*UNDOC*/ /* @JK */
+          call racflog $undoc                                 /* @JK */
+        END                                                   /* @JK */
         WHen (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @L1 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @L1 */
              if (parm <> '') then                             /* @E4 */
@@ -627,6 +636,16 @@ PROFL:
              'TBMOD 'tablea                                   /* @EX */
         end
         when (opta = 'AL') then call Altd                     /* @E6 */
+        when (opta = 'AU') then do                            /* @FC */
+             call RACFALTU user                               /* @FC */
+             action = '*Altusr'                               /* @FC */
+             "TBMOD" TABLEA                                   /* @FC */
+             end                                              /* @FC */
+        when (opta = 'M') then do                             /* @FC */
+             call RACFALTU user                               /* @FC */
+             action = '*Modify'                               /* @FC */
+             "TBMOD" TABLEA                                   /* @FC */
+             end                                              /* @FC */
         otherwise nop
      End
      'control display restore'                                /* @EE */
@@ -712,11 +731,11 @@ RESR:
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
      if (SETTPSWD = "") then do                               /* @F3 */
-        userp =  left(newpswd()||newpswd(),14)                /* @F3 */
+        userp =  left(newpswd()||newpswd(),16)                /* @PV */
         userw =  newpswd()                                    /* @F3 */
         end                                                   /* @F3 */
      else do                                                  /* @F3 */
-        userp = left(SETTPSWD,14)                             /* @EQ */
+        userp = left(SETTPSWD,16)                             /* @PV */
         userw = left(SETTPSWD,8)                              /* @F3 */
         end                                                   /* @F3 */
      if SETMPHRA = 'YES' then                                 /* @EQ */
@@ -1027,10 +1046,13 @@ DELD:
   Sure_? = RACFMSGC(msg)
   if (sure_? = 'YES') then do
      if (tsouser = ' Y ') then do
+        /*
         msg    = user'.'SETTPROF                              /* @CF */
         if SETTUDSN <> '' then                                /* @CF */
         msg    = msg || ' and 'user'.'SETTUDSN                /* @CF */
         msg    = msg || ' will be deleted'                    /* @CF */
+        */
+        msg    = msg || ' and ALL 'user' datasets'            /* @JK */
         Sure_? = RACFMSGC(msg)
         if (sure_? = 'YES') then
            ret_code = RACFUSRT('DELD' user tsoproc,           /* @C4 */
@@ -1062,6 +1084,29 @@ DISD:
   tmpsort   = sort                                            /* @CY */
   tmprsels  = rsels                                           /* @EI */
   tmpxtdtop = xtdtop                                          /* @EJ */
+
+  /* ------------------------------------------------- *
+   | Check to verify if the target home base directory |
+   | is automounted and if not tell the user           |
+   * ------------------------------------------------- */
+  call syscalls 'ON'
+  address syscall ,
+     'getpwnam (user) pw.'
+  home = pw.pw_dir
+  parse value ohome with '/'thome'/'.
+  thome = '/'thome
+  env.0 = 1
+  env.1 = 'HOME='home
+  cmd = 'automount -q | grep -i' thome
+  x = bpxwunix(cmd,,amdsout.,amderr.,env.,1)
+  l = amdsout.0
+  if pos(thome,amdsout.l) = 0 then do
+     racfsmsg = ''
+     racflmsg = 'automount is not enabled so a mkdir for the users' ,
+                'home directory will be required.'
+     'setmsg msg(RACF011)'
+     end
+
   Do until (RB='NO')   /* allow rebuild option to loop */
      call CREATE_TABLEB                                       /* @CY */
      rb     = 'NO'
@@ -1632,15 +1677,21 @@ RETURN                                                        /* @BE */
 /*--------------------------------------------------------------------*/
 @ADDD:                                                        /* @D4 */
   action = '*Add'                                             /* @E7 */
-  if (SETTPSWD = "") then                                     /* @E9 */
-     pswd = newpswd()                                         /* @E1 */
-  else                                                        /* @E8 */
-     pswd = SETTPSWD                                          /* @E9 */
+  if (SETTPSWD = "") then do                                  /* @JK */
+     userp =  left(newpswd()||newpswd(),16)                   /* @JK */
+     userw =  newpswd()                                       /* @JK */
+    end                                                       /* @JK */
+  else do                                                     /* @JK */
+     userp = left(SETTPSWD,16)                                /* @JK */
+     userw = left(SETTPSWD,8)                                 /* @JK */
+    end                                                       /* @JK */
+  if SETMPHRA = 'YES' then                                    /* @JK */
+    pswd = userp                                              /* @JK */
+  else                                                        /* @JK */
+    pswd = userw                                              /* @JK */
   "DISPLAY PANEL("PANEL06")"                                  /* @DS */
   if (rc = 8) then                                            /* @D4 */
      return                                                   /* @D4 */
-  if (pswd = '') then                                         /* @DE */
-     pswd = user                                              /* @DE */
   if SETMPHRA = 'YES' then                                    /* @EQ */
      add1 = "ADDUSER "user" OWNER("bowner") PHRASE('"pswd"')" /* @EQ */
   else                                                        /* @EQ */
@@ -1724,8 +1775,8 @@ RETURN                                                        /* @D4 */
 /*  Generate password                                            @E1  */
 /*--------------------------------------------------------------------*/
 NEWPSWD:                                                      /* @E1 */
-  /* No vowels, or "V" or "Z" */                              /* @E1 */
-  choices  = 'BCDFGHJKLMNPQRSTWXY'                            /* @E5 */
+  choices  =            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'          /* @PV */
+  choices  = choices || 'abcdefghijklmnopqrstuvwxyz'          /* @PV */
   chars.   = ''                                               /* @E1 */
   password = ''                                               /* @E1 */
   /* Initialize stem variables */                             /* @E1 */
@@ -1748,6 +1799,16 @@ NEWPSWD:                                                      /* @E1 */
   number   = random(1,9)                                      /* @E1 */
   place    = random(2,psize-2)                                /* @EQ */
   password = overlay(number,password,place,1)                 /* @E1 */
+  /* Plug in 2nd numeric character */                         /* @PV */
+  /*                                                          /* @PV */
+  number2  = random(1,9)                                      /* @PV */
+  place2   = place                                            /* @PV */
+  do while place2 = place                                     /* @PV */
+   place2   = random(2,psize-2)                               /* @PV */
+   if place2 <> place then                                    /* @PV */
+    password = overlay(number2,password,place2,1)             /* @PV */
+  end                                                         /* @PV */
+  */                                                          /* @PV */
 RETURN password                                               /* @E1 */
 /*--------------------------------------------------------------------*/
 /*  Change profile                                               @DT  */
