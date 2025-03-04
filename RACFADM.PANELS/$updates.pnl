@@ -10,6 +10,13 @@
 *----------------------------------------------------------------------*
 
 
+  03 Mar 2025 - V39R7
+     - Main Menu
+       -- Return to RACFADM menu if entered via Option
+     - User Profiles (Option 1)
+       -- Updated RACFUSR exec to only test for AUTOMOUNT during the
+          first execution of ADDUSER
+
   25 Feb 2025 - V39R6
      - User Profiles (Option 1)
        -- Updated RACFCOPU exec to use cloned userid in OMVS HOME field
@@ -17,7 +24,7 @@
           edit errors.  Edit OMVS HOME field to match new userid.
        -- Updated RACFUSR exec to test for AUTOMOUNT and issue message
        -- Updated RACFUS5A panel to display existing user segments
-          with the color turquoise
+          with turquoise underscored
        -- Created help panel #RACUS5A for RACFUSR5 panel
           Note:  PF7/PF8 in Tutorial will switch between user segments
           and base segment

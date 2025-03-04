@@ -20,8 +20,8 @@
 !    Dyck, Lionel B.         Rizzuto, Nico
 !    Golob, Sam              Smith, William
 !    Jaffe, Ed               Turner, Jim
-!    Kalinich, John          Wells, Bruce
-!    Koss, Bruce
+!    Kalinich, John          Vels, Peter
+!    Koss, Bruce             Wells, Bruce
 )PROC
   &ZUP     = #RACACKN
 )END

@@ -16,6 +16,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A3  250228  LBD      Return to RACFADM menu if entered via option */
 /* @A2  200622  LBD      Support a passed option                      */
 /* @AC  200619  RACFA    Initialize the variable NULL                 */
 /* @AB  200619  LBD      Fixed datasets w/ last qual. as 'SKEL'       */
@@ -48,6 +49,7 @@ ADDRESS ISPEXEC
   call Setup
   'Select cmd('REXXPGM1')  NewAppl(RADM) PassLib'             /* @A4 */
 
+  do forever
   if radmopt /= null then 'control nondispl enter'            /* @A2 */
 
   'Select Panel('PANEL01') Opt('radmopt')' ,                  /* @A2 */
@@ -59,6 +61,9 @@ ADDRESS ISPEXEC
      Address TSO 'altlib deact app(exec)'
   END                                                         /* @A9 */
   'tbclose radmcmds'                                          /* @A7 */
+  if radmopt = null then exit 0
+  radmopt = null
+  end
 EXIT 0
 /*--------------------------------------------------------------------*/
 /*  Obtain dataset names and LIBDEF/ALTLIB them                       */

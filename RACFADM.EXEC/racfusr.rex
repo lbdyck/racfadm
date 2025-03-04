@@ -221,6 +221,7 @@ TABLEB      = 'TB'RANDOM(0,99999)  /* Unique table name B  */ /* @EC */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @E2 */
 datesep     = racfdsep()   /* Date separator char          */ /* @F2 */
 certind     = racfdcer()   /* Digital cert indicator       */ /* @F8 */
+automount   = 0            /* Check for Automount once     */ /* @JK */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @DZ */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @DZ */
 NULL        = ''                                              /* @ED */
@@ -1085,28 +1086,6 @@ DISD:
   tmprsels  = rsels                                           /* @EI */
   tmpxtdtop = xtdtop                                          /* @EJ */
 
-  /* ------------------------------------------------- *
-   | Check to verify if the target home base directory |
-   | is automounted and if not tell the user           |
-   * ------------------------------------------------- */
-  call syscalls 'ON'
-  address syscall ,
-     'getpwnam (user) pw.'
-  home = pw.pw_dir
-  parse value ohome with '/'thome'/'.
-  thome = '/'thome
-  env.0 = 1
-  env.1 = 'HOME='home
-  cmd = 'automount -q | grep -i' thome
-  x = bpxwunix(cmd,,amdsout.,amderr.,env.,1)
-  l = amdsout.0
-  if pos(thome,amdsout.l) = 0 then do
-     racfsmsg = ''
-     racflmsg = 'automount is not enabled so a mkdir for the users' ,
-                'home directory will be required.'
-     'setmsg msg(RACF011)'
-     end
-
   Do until (RB='NO')   /* allow rebuild option to loop */
      call CREATE_TABLEB                                       /* @CY */
      rb     = 'NO'
@@ -1766,6 +1745,7 @@ RETURN                                                        /* @BE */
      return                                                   /* @D6 */
   end                                                         /* @DL */
   call @chkattr                                               /* @D4 */
+  call @automount                                             /* @JK */
   "TBMOD" TABLEA "ORDER"                                      /* @EF */
   call disd /* Connect basic group */                         /* @D4 */
   action = '*Add'                                             /* @JK */
@@ -1971,6 +1951,32 @@ RETURN                                                        /* @D4 */
     temp = left(temp,2)||'A'                                  /* @F5 */
   attr2 = temp                                                /* @F5 */
 RETURN                                                        /* @F5 */
+/* ------------------------------------------------- *        /* @LD */
+ | Check to verify if the target home base directory |        /* @LD */
+ | is automounted and if not tell the user           |        /* @LD */
+ * ------------------------------------------------- */       /* @LD */
+@AUTOMOUNT:
+  if automount = 0 then do                                    /* @JK */
+    call syscalls 'ON'                                        /* @LD */
+    address syscall ,                                         /* @LD */
+       'getpwnam (user) pw.'                                  /* @LD */
+    home = pw.pw_dir                                          /* @LD */
+    parse value ohome with '/'thome'/'.                       /* @LD */
+    thome = '/'thome                                          /* @LD */
+    env.0 = 1                                                 /* @LD */
+    env.1 = 'HOME='home                                       /* @LD */
+    cmd = 'automount -q | grep -i' thome                      /* @LD */
+    x = bpxwunix(cmd,,amdsout.,amderr.,env.,1)                /* @LD */
+    l = amdsout.0                                             /* @LD */
+    if pos(thome,amdsout.l) = 0 then do                       /* @LD */
+       racfsmsg = ''                                          /* @LD */
+       racflmsg = 'Automount is not enabled so a MKDIR for' , /* @LD */
+                'the users home directory will be required.'  /* @LD */
+       'setmsg msg(RACF011)'                                  /* @LD */
+       end                                                    /* @LD */
+    automount = 1                                             /* @JK */
+    end                                                       /* @JK */
+RETURN                                                        /* @JK */
 /*--------------------------------------------------------------------*/
 /*  Save table to dataset                                        @EK  */
 /*--------------------------------------------------------------------*/
