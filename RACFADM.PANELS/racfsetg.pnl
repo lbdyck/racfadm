@@ -10,8 +10,6 @@
 +\-\(^RACFADM - Settings+)\-\
 ^Command ===>_ZCMD
 ^
-[radm -------------------------------------------------------------------------[
-)Area radm
 ^General
 +  Default filter{...._Z                              { Search string (optional)
 +  Status interval{..._Z   ~(0-9999){or_Z ~% (0-99)    {Progress message number
@@ -19,24 +17,23 @@
 +  Confirm panel{....._Z~ (Y=Yes, N=No)                {Confirm command request
 +  Showmvs data{......_Z~ (Y=Yes, N=No)+Pgm/DSN_Z{      Showmvs RACF data
 +  Prefix dataset{...._Z~ (Y=Yes, N=No)                {Use TSO prefix as HLQ
-+
 ^Management
 +  Administrator{....._Z~ (Y=Yes, N=No)                {Line cmds add/chg/etc.
 +  Admin RACF API{...._Z~ (Y=Yes, N=No)                {IRRXUTIL to add/chg/prof
 +  IBM RACF opts{....._Z~ (Y=Yes, N=No)+Panel/DSNs_Z{   RACF Systems/RRSF/Certs
 +  RACF commands{....._Z~ (D=Display, L=Log, B=Both, N=No)     {View  RACF cmds
 +  REXX trace{........_Z~ (L=Labels, P=Pgms, R=Results, N=No)  {Trace REXX pgms
-+
 ^Adding TSO userids
 +  Default password{..@Z               +Passphrase_Z{ { New/chg user's password
 +  User catalog{......_Z                              { z/OS alias catalog
 +  ISPPROF dataset{..._Z                              { Append qualifiers to id
 +  User dataset{......_Z                              { Append qualifiers to id
++  Check AutoMount{..._Z~ (Y=Yes, N=No)                {Check AutoMount for Home
 )INIT
   VGET (SETGFLTR SETGSTA  SETGSTAP SETGDISP  SETGCONF SETGMVS  +
         SETGMVSD SETGPREF +
         SETMADMN SETMIRRX SETMIBMM SETMIBMD  SETMSHOW SETMTRAC +
-        SETTPSWD SETMPHRA SETTCTLG SETTPROF SETTUDSN) PROFILE
+        SETTPSWD SETMPHRA SETTCTLG SETTPROF SETTUDSN SETAMTCK) PROFILE
 
   /* General Settings */
   IF (&SETGSTA NE &Z)
@@ -46,6 +43,7 @@
   &SETGMVS  = TRANS (&SETGMVS  YES,Y NO,N *,*)
   &SETGMVSD = TRANS (&SETGMVSD YES,Y NO,N *,*)
   &SETGPREF = TRANS (&SETGPREF YES,Y NO,N *,*)
+  &SETAMTCK = TRANS (&SETAMTCK YES,Y NO,N &Z,Y *,*)
 
   /* Management Settings */
   &SETMADMN = TRANS (&SETMADMN YES,Y NO,N *,*)
@@ -59,7 +57,7 @@
   .ZVARS = '(SETGFLTR SETGSTA  SETGSTAP SETGDISP SETGCONF +
              SETGMVS  SETGMVSD SETGPREF +
              SETMADMN SETMIRRX SETMIBMM SETMIBMD SETMSHOW SETMTRAC +
-             SETTPSWD SETMPHRA SETTCTLG SETTPROF SETTUDSN)'
+             SETTPSWD SETMPHRA SETTCTLG SETTPROF SETTUDSN SETAMTCK)'
 
   .HELP   = #RACSET1
   .CURSOR = SETGFLTR
@@ -70,6 +68,7 @@
   &SETGMVS  = TRANS (&SETGMVS  Y,YES, N,NO *,*)
   &SETGMVSD = TRANS (&SETGMVSD Y,YES, N,NO *,*)
   &SETGPREF = TRANS (&SETGPREF Y,YES, N,NO *,*)
+  &SETAMTCK = TRANS (&SETAMTCK YES,Y NO,N &Z,Y *,*)
 
   /* Management Settings */
   &SETMADMN = TRANS (&SETMADMN Y,YES, N,NO *,*)
@@ -112,7 +111,7 @@
   *ENDREXX
 
   VPUT (SETGFLTR SETGSTA  SETGSTAP SETGDISP  SETGCONF SETGMVS  +
-        SETGMVSD SETGPREF +
+        SETGMVSD SETGPREF SETAMTCK +
         SETMADMN SETMIRRX SETMIBMM SETMIBMD  SETMSHOW SETMTRAC +
         SETTPSWD SETMPHRA SETTCTLG SETTPROF SETTUDSN) PROFILE
 )END

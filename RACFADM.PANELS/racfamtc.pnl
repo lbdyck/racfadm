@@ -1,0 +1,27 @@
+)ATTR DEFAULT(%+_)
+   $  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF)  COLOR(TURQ)  JUST(LEFT)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)   JUST(LEFT)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+)Body Window(59,9)
++
++The specified home directory location is not managed by
++automount. A%mkdir+will be required.
++
+$thome
++
++Automount Verification:_z+  (Y=Yes, N=No)
++
++Press%ENTER+to continue.
+)Init
+ .zvars = '(SETAMTCK)'
+ &zwinttl = 'Automount Notification'
+ VGET (SETAMTCK) Profile
+ &SETAMTCK = TRANS (&SETAMTCK YES,Y NO,N &Z,Y *,*)
+ .help = #racamtc
+)PROC
+  &CKEY = .PFKEY
+  IF (&CKEY = ' ')
+      &CKEY = 'ENTER'
+  VPUT (CKEY) SHARED
+  VPUT (SETAMTCK) Profile
+)END

@@ -13,7 +13,6 @@
 %Option ===>_ZCMD                                                              +
 ]sam --------------------------------------------------------------------------]
 )Area Sam
-+
 +  @z {m0desc   +Customize options      @z {mcdesc    +Execute RACF commands
 +  @z {m1desc   +User profiles          @z {mddesc    +Dataset list
 +  @z {m2desc   +Group profiles         @z {medesc    +Dataset enqueues

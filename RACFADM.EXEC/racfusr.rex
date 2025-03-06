@@ -11,7 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @LD  250225  LBDYCK   Check for automount                          */
+/* @LD  250306  LBDYCK   Check for automount                          */
 /* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
 /* @FC  250212  TRIDJK   M line cmd - modify selected user segments   */
 /* @FB  250102  TRIDJK   CK line cmd - check days until pswd changes  */
@@ -221,7 +221,6 @@ TABLEB      = 'TB'RANDOM(0,99999)  /* Unique table name B  */ /* @EC */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @E2 */
 datesep     = racfdsep()   /* Date separator char          */ /* @F2 */
 certind     = racfdcer()   /* Digital cert indicator       */ /* @F8 */
-automount   = 0            /* Check for Automount once     */ /* @JK */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @DZ */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @DZ */
 NULL        = ''                                              /* @ED */
@@ -238,6 +237,7 @@ ADDRESS ISPEXEC                                               /* @BC */
   "CONTROL ERRORS RETURN"                                     /* @B1 */
   "VGET (SETGSTA  SETGSTAP SETGDISP SETMADMN",                /* @EA */
         "SETMIRRX SETMSHOW SETMTRAC SETTPSWD",                /* @EA */
+        "setamtck automnts" ,                                 /* @LD */
         "SETTPROF SETTUDSN SETMPHRA) PROFILE"                 /* @EA */
 
   If (SETMTRAC <> 'NO') then do                               /* @DK */
@@ -1956,25 +1956,28 @@ RETURN                                                        /* @F5 */
  | is automounted and if not tell the user           |        /* @LD */
  * ------------------------------------------------- */       /* @LD */
 @AUTOMOUNT:
-  if automount = 0 then do                                    /* @JK */
+  if setamtck = 'Y' then do                                   /* @LD */
+    parse value ohome with '/'thome'/'.                       /* @LD */
+    thome = '/'thome                                          /* @LD */
+    if wordpos(thome,automnts) > 0 then return
     call syscalls 'ON'                                        /* @LD */
     address syscall ,                                         /* @LD */
        'getpwnam (user) pw.'                                  /* @LD */
     home = pw.pw_dir                                          /* @LD */
-    parse value ohome with '/'thome'/'.                       /* @LD */
-    thome = '/'thome                                          /* @LD */
     env.0 = 1                                                 /* @LD */
     env.1 = 'HOME='home                                       /* @LD */
     cmd = 'automount -q | grep -i' thome                      /* @LD */
     x = bpxwunix(cmd,,amdsout.,amderr.,env.,1)                /* @LD */
     l = amdsout.0                                             /* @LD */
     if pos(thome,amdsout.l) = 0 then do                       /* @LD */
-       racfsmsg = ''                                          /* @LD */
-       racflmsg = 'Automount is not enabled so a MKDIR for' , /* @LD */
-                'the users home directory will be required.'  /* @LD */
-       'setmsg msg(RACF011)'                                  /* @LD */
+       'addpop'                                               /* @LD */
+       'display panel(racfamtc)'                              /* @LD */
+       'rempop'                                               /* @LD */
        end                                                    /* @LD */
-    automount = 1                                             /* @JK */
+    else do                                                   /* @LD */
+         automnts = automnts thome                            /* @LD */
+         'vput (automnts) profile'                            /* @LD */
+         end                                                  /* @LD */
     end                                                       /* @JK */
 RETURN                                                        /* @JK */
 /*--------------------------------------------------------------------*/

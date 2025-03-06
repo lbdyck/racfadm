@@ -61,6 +61,7 @@ SETMIBMD = N       /* Define IBM RACF ALTLIB/LIBDEF datasets         */
 SETMSHOW = N       /* RACF commands (D=Display, L=Log, B=Both, N=No) */
 SETMTRAC = N       /* REXX trace (L=Labels, P=Pgms, R=Results, N=No) */
 SETMPHRA = N       /* Passphrases (Y=Yes, N=No)                      */
+SETAMTCK = Y       /* Check if Home directory automount enabled.     */
 *---------------------------------------------------------------------*
 *  Adding TSO userids                                                 *
 *---------------------------------------------------------------------*

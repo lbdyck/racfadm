@@ -14,6 +14,7 @@
  $UPDATES  Updates        Document version/updates
  #RACACC   Tutorial       DSN/Resource Access Report
  #RACACKN  Tutorial       Acknowledgements
+ #RACAMTC  Tutorial       OMVS Home Directory Automount Check
  #RACCERA  Tutorial       Add new certificate
  #RACCERG  Tutorial       Generate a Digital Certificate
  #RACCERT  Tutorial       Digital certificates
@@ -88,6 +89,7 @@
  ORALTER   TSO Help       Unix Security Attribute, like ALTER
  ORLIST    TSO Help       Unix Dir/File Security, like RLIST
  RACFACC   User/Group     DSN/Resource Access Report Prompt (pop-up)
+ RACFAMTC  User           OMVS Home Directory Automount Check
  RACFCERA  Certificates   Add new certificate
  RACFCERG  Certificates   Generate a Digital Certificate
  RACFCERT  Certificates   Digital certificates, menu opt CA

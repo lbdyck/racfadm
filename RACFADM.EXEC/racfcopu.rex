@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A7  250304  TRIDJK   Allocate ISPF Profile if TSO segment exists  */
 /* @A6  250217  TRIDJK   Change OMVS HOME user to clone userid        */
 /* @A5  250213  TRIDJK   Support PHRASE operand                       */
 /* @A4  250201  TRIDJK   Log Clone message                            */
@@ -54,10 +55,12 @@ if (word(rxrc,1) <> 0) then do
    exit
 end
 
+tso  = 'N'                                                    /* @A7 */
 cmd. = ""
 y = 0
 do i=1 to RACF.0 /* get the segment names */
   segment=RACF.i
+  if segment = 'TSO' then tso = 'Y'                           /* @A7 */
   if segment = 'BASE' then do                                 /* @A1 */
     clat = ''
     if racf.base.special.1 = 'TRUE' then clat = clat || 'SPECIAL '
@@ -168,6 +171,18 @@ do i=1 to RACF.0 /* get the segment names */
 
   y = y + 1
   cmd.y = " DEFINE ALIAS (NAME('"cluser"') RELATE('"clucat"'))"
+
+  if tso = 'Y' then do                                        /* @A7 */
+    /* Allocate ISPF profile */                               /* @A7 */
+    y = y + 1                                                 /* @A7 */
+    cmd.y = " ALLOC FI(PROF) DA('"cluser"."SETTPROF"') -"     /* @A7 */
+    y = y + 1                                                 /* @A7 */
+    cmd.y = "   NEW SPACE(5,5) CYLINDERS -"                   /* @A7 */
+    y = y + 1                                                 /* @A7 */
+    cmd.y = "   BLKSIZE(0) LRECL(80) RECFM(F B) -"            /* @A7 */
+    y = y + 1                                                 /* @A7 */
+    cmd.y = "   CATALOG DIR(250) REUSE"                       /* @A7 */
+    end                                                       /* @A7 */
 
   if clperm = 'Y' then
     call Datasets

@@ -1,0 +1,23 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE) HILITE(USCORE)
+)Body Window(74,14) Expand(\\)
+%Tutorial+\-\(%RACFADM - OMVS Home Directory Automount Check+)\-\%Tutorial
+%Command ===>_ZCMD
+%
++  This pop-up prompting panel will inform the user when the specified
++  OMVS Home directory is%not+under automount management. This will
++  require that the user utilize%mkdir+to manually define the new users
++  OMVS Home directory.
++
++  To enable automount and allow the system to dynamically create and
++  mount the OMVS users Home directory consult the IBM z/OS UNIX System
++  Services Planning publication.
++
++  The option is provided to disable Automount checking without using
++  the RACFADM Setting dialog.
+)PROC
+  &ZUP     = #RACAMTC
+)END

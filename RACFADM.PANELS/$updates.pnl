@@ -9,6 +9,18 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  06 Mar 2025 - V39R8
+     - Default Settings (Option 0)
+       -- Add option to enable or disable automount checking
+     - User Profiles (Option 1)
+       -- Updated RACFUSR exec to:
+          -- Honor the automount check setting
+          -- Display a popup if the requested home directory is not
+             under automount
+          -- Bypass automount checking if the home directory root has
+             been validated as under automount
+       -- Updated RACFCOPU K(lone) exec to allocate an ISPF Profile
+          if the TSO segment exists
 
   03 Mar 2025 - V39R7
      - Main Menu
