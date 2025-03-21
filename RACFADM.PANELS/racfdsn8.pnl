@@ -1,0 +1,67 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(OFF) JUST(LEFT)   HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
+  01  TYPE(DATAOUT) COLOR(RED)
+  02  TYPE(DATAOUT) COLOR(BLUE)
+  03  TYPE(DATAOUT) COLOR(TURQ)  SKIP(ON)  HILITE(USCORE)
+  04  TYPE(DATAOUT) COLOR(WHITE)
+  05  TYPE(DATAOUT) COLOR(GREEN) SKIP(ON)
+  ^   AREA(DYNAMIC) EXTEND(OFF)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Dataset Profiles+)\-\
+%Command ===>_ZCMD
+%
++Alter RACF%DATASET+profile: %ALTDSD+command        %F1+- Segment syntax
++
++PROFILE %===>_DSN                                         {
++
+%Select the segments that you want to ALTER:
+_z^DF      ^ {SMS data management and DASD storage (e.g., DATAKEY)
+_z^TM      ^ {Tivoli Management Environment
+)INIT
+  .CURSOR  = DSN
+  .HELP    = #RACDSN8
+  &ddfp     = ''
+  &dtme     = ''
+  .zvars   = '(ddfp dtme)'
+  *rexx(*)
+    DF = '05'x||'DFP'
+    TM = '05'x||'TME'
+
+    rxrc=IRRXUTIL("EXTRACT","DATASET",dsn,"RACF","")
+    if (word(rxrc,1) <> 0) then
+      exit
+    do i=1 to RACF.0 /* get the segment names */
+      segment=RACF.i
+      select
+        when segment = 'DFP'      then DF  = '03'x||'DFP'||'02'x
+        when segment = 'TME'      then TM  = '03'x||'TME'||'02'x
+        otherwise nop
+        end
+      end
+  *endrexx
+)REINIT
+  REFRESH(*)
+)PROC
+  VER (&DSN,NB)
+  *rexx(* dsegs)
+    dsegs = ''
+    if ddfp     <> '' then dsegs = dsegs 'DFP'
+    if dtme     <> '' then dsegs = dsegs 'TME'
+  *endrexx
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) To display/use this panel, the user must have the Settings     */
+/*     (menu option 0) turned on:                                     */
+/*       Administrator ..... Y                                        */
+/*       Admin RACF API .... Y                                        */
+/*                                                                    */
+/*  2) Descriptive text from Robert S. Hansel                         */
+/*     https://www.rshconsulting.com/                                 */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

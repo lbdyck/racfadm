@@ -22,6 +22,7 @@
 %  L  !List         +Issue LISTDSD command
 %  P  !Profile      +List dataset profile using IRRXUTIL@(admin RACF API)
 %  D  !Dsn          +Display datasets
+%  M  !Modify       +Modify selected dataset profile segments@(admin RACF API)
 %  C  !Change       +Change profile attributes@(admin)
 %  A  !Add          +Define a new profile@(admin)
 %  R  !Remove       +Remove profile from RACF@(admin)

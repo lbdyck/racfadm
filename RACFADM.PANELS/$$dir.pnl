@@ -31,12 +31,14 @@
  #RACDSNA  Tutorial       Add/change dataset profile
  #RACDSN2  Tutorial       Dataset profile
  #RACDSN5  Tutorial       Dataset's group/id profile
+ #RACDSN8  Tutorial       Dataset profile
  #RACENQ   Tutorial       Enqueue information
  #RACERA   History        Nico Rizzuto's original menu for ERA
  #RACFPP   Tutorial       Word or Phrase Report
  #RACGEN1  Tutorial       Generate profile source
  #RACGRP5  Tutorial       Group's userids profiles
  #RACGRP8  Tutorial       Group profile
+ #RACGRP9  Tutorial       Group profile
  #RACGTRE  Tutorial       Group tree report
  #RACHEL1  Tutorial       RACF help commands (1 of 2)
  #RACHEL2  Tutorial       RACF help commands (2 of 2)
@@ -120,6 +122,7 @@
  RACFDSN5  Dataset        Show groups and access
  RACFDSN6  Dataset        Change access
  RACFDSN7  Dataset        Add access
+ RACFDSN8  Dataset        Alter selected dataset segments
  RACFEXP   Certificates   Certificate Export DSN
  RACFGEN1  Generate       Generate profile source
  RACFGRP1  Group          Set filter, menu option 2
@@ -129,6 +132,7 @@
  RACFGRP6  Group          Change connection
  RACFGRP7  Group          Add connection
  RACFGRP8  Group          List groups and descriptions
+ RACFGRP9  Group          Alter selected group segments
  RACFMENU  Menu           Main menu
  RACFMSG   Messages       RACF messages, menu option M
  RACFMSG1  Message        'Confirm Request' (pop-up panel)

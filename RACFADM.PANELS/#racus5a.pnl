@@ -4,7 +4,7 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
-   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(YELLOW)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
 %Command ===>}ZCMD
@@ -13,8 +13,8 @@
 )AREA RELATED
 %User Profile Segments:+
 !BASE+
-   Basic information that is needed to define a user to RACF
-   .--------------------------------------------------------------.
+  ~Basic information that is needed to define a user to RACF
+  +.--------------------------------------------------------------.
    |   ADDCATEGORY(category-name ...)                             |
    |   ADSP | NOADSP                                              |
    |   AT(node.userid ...) | ONLYAT(node.userid ...)              |

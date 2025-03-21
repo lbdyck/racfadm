@@ -6,15 +6,16 @@
    ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
-%Command ===>_ZCMD
-%
+%Command ===>_ZCMD                                         a
+^Linec -------------------------------------------------------------------^
+)Area Linec
 +Panel Legend
 %  ATTributes+(S=Special, O=Operations, A=Auditor)  %REVoked+(Y=Yes, N=No)
 %  TSO+(Y=Yes, N=No)  *=User Digital Certificate
 %
 +Primary Commands
 %  Find text        +Find a text string
-%  Sort column A/D  +Sort column, ascending/descending, cols are point-and-shoot
+%  Sort column A/D  +Sort column, ascending/descending, columns are PAS
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
@@ -22,8 +23,7 @@
 %  Next             +Cycle between normal and alternate list user display
 %  CERTS            +List Digital cert information for users in table
 %  RINGS            +List Digital ring information for users in table
-^Linec -------------------------------------------------------------------^
-)Area Linec
+%
 +Line Commands
 %  /  !             +Display line command prompt panel (pop-up)
 %  S  !Show         +List of groups user is connected to

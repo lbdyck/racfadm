@@ -13,7 +13,7 @@
 +\-\(%RACFADM - User Profiles+)\-\
 %Command ===>_ZCMD
 %
-+Alt RACF%USER+profile: %ALTUSER+command            %F1+- Segment syntax
++Alter RACF%USER+profile: %ALTUSER+command          %F1+- Segment syntax
 +
 +PROFILE %===>_USER    {
 +

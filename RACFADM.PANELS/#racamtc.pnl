@@ -17,7 +17,7 @@
 +  Services Planning publication.
 +
 +  The option is provided to disable Automount checking without using
-+  the RACFADM Setting dialog.
++  the RACFADM Settings dialog.
 )PROC
   &ZUP     = #RACAMTC
 )END

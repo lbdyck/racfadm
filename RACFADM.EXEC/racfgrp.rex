@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @D8  250315  TRIDJK   M line cmd - modify selected group segments  */
 /* @D7  241117  TRIDJK   Display connects in TABLEA                   */
 /* @D6  240826  LBD      Support FILter as alist of Reset             */
 /* @D5  240824  TRIDJK   Use ISO Extended date format                 */
@@ -157,11 +158,11 @@ ADDRESS ISPEXEC                                               /* @AO */
      If (SETMIRRX = "YES") then                               /* @BS */
         SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,            /* @BH */
                   "ÝC¨Change,ÝA¨Add,"||,                      /* @BH */
-                  "ÝR¨Remove,ÝX¨XrefÝY¨Acc"                   /* @D3 */
+                  "ÝR¨Remove,ÝM¨Mod,ÝY¨Acc"                   /* @D8 */
      Else                                                     /* @BS */
         SELCMDS = "ÝS¨Show,ÝL¨List,"||,                       /* @BS */
                   "ÝC¨Change,ÝA¨Add,"||,                      /* @BS */
-                  "ÝR¨Remove,ÝX¨XrefÝY¨Acc"                   /* @D3 */
+                  "ÝR¨Remove,ÝM¨Mod,ÝY¨Acc"                   /* @D8 */
   else do                                                     /* @CM */
      If (SETMIRRX = "YES") then                               /* @CM */
         SELCMDS = "ÝS¨Show,ÝL¨list,ÝP¨Profile"                /* @CM */
@@ -304,6 +305,8 @@ PROFL:
         when (opta = 'L') then call Lisd
         when (opta = 'X') then Call RACFUSRX group JCC        /* @CY */
         when (opta = 'Y') then Call RACFUSRY group            /* @D3 */
+        when (opta = 'M') then                                /* @D8 */
+             call RACFALTG group                              /* @D8 */
         when (opta = 'P') then                                /* @BE */
              call RACFPROF 'GROUP' group                      /* @BF */
         when (opta = 'R') then call Deld

@@ -1,13 +1,25 @@
 *----------------------------------------------------------------------*
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
-
-*----------------------------------------------------------------------*
 * Warning: As of z/OS 2.5 all RACF TSO Help members have been removed  *
 * from the distribution. If you want to keep them around you need to   *
 * copy them from a prior release SYS1.HELP into a new library and then *
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
+
+  15 Mar 2025 - V39R9
+     - Group Profiles (Option 2)
+       -- Added line command M to modify selected group segments
+       -- Added RACFALTG exec to generate ALTGROUP source statements
+          using IRRXUTIL
+       -- Added RACFGRP9 panel to prompt for selected group segments
+       -- Created help panel #RACGRP9 for RACFGRP9 panel
+     - Dataset Profiles (Option 3)
+       -- Added line command M to modify selected dataset segments
+       -- Added RACFALTD exec to generate ALTDSD source statements
+          using IRRXUTIL
+       -- Added RACFDSN8 panel to prompt for selected dataset segments
+       -- Created help panel #RACDSN8 for RACFDSN8 panel
 
   06 Mar 2025 - V39R8
      - Default Settings (Option 0)

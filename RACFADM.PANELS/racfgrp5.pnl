@@ -21,7 +21,7 @@
 +DATA:   $DATA                                                               @Z
 +SUBGRPS:$SUBGRP                                                             @Z
 +                                                                  +
-+SELECT: ¬SELCMDS                                                              ¬
++SELECT: ¬SELCMDX                                                              ¬
 +
 %S  ~Userid    ~Access
 %-------------------------------------------------------------------------------
@@ -33,6 +33,12 @@ _Z+ Z         Z
   IF (&SAMT = ' ')
       &SAMT = &ZSCED
   &ZCMD = ' '
+  *Rexx(* SELCMDS)
+     SELCMDX = STRIP(SELCMDS)
+     IF RIGHT(SELCMDX,13) = "ÝM¨Mod,ÝY¨Acc" THEN
+        SELCMDX = SUBSTR(SELCMDX,1,LENGTH(SELCMDX)-13)||,
+                            "ÝX¨XrefÝY¨Acc"
+  *EndRexx
 )PROC
   &SROW = &Z
   IF (&ZCMD = &Z)

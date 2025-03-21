@@ -1,0 +1,60 @@
+)ATTR DEFAULT(%+})
+   #  AREA(SCRL) EXTEND(ON)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(YELLOW)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Group Profiles+)\-\%Tutorial
+%Command ===>}ZCMD
+%
+#RELATED ----------------------------------------------------------------------#
+)AREA RELATED
+%Group Profile Segments:+
+!DFP+
+  ~SMS data management and DASD storage (e.g., MGMTCLAS)
+  +.--------------------------------------------------------------.
+   |   DFP(                                                       |
+   |     DATAAPPL(application-name) | NODATAAPPL                  |
+   |     DATACLAS(data-class-name) | NODATACLAS                   |
+   |     MGMTCLAS(management-class-name) | NOMGMTCLAS             |
+   |     STORCLAS(storage-class-name) | NOSTORCLAS                |
+   |     )                                                        |
+   |    | NODFP                                                   |
+   .--------------------------------------------------------------.
+!OMVS+
+  ~UNIX user attributes (e.g., GID)
+  +.--------------------------------------------------------------.
+   |   OMVS(                                                      |
+   |     AUTOGID                                                  |
+   |       | GID(group-identifier) SHARED                         |
+   |       | NOGID                                                |
+   |      )                                                       |
+   |    | NOOMVS                                                  |
+   .--------------------------------------------------------------.
+!OVM+
+  ~OpenExtensions VM information
+  +.--------------------------------------------------------------.
+   | OVM(                                                         |
+   |   GID(group-identifier) | NOGID                              |
+   |    )                                                         |
+   |  | NOOVM                                                     |
+   .--------------------------------------------------------------.
+!TME+
+  ~Tivoli Management Environment
+  +.--------------------------------------------------------------.
+   | TME(                                                         |
+   |   ROLES(profile-name ...)                                    |
+   |     | ADDROLES(profile-name ...)                             |
+   |     | DELROLES(profile-name ...)                             |
+   |     | NOROLES                                                |
+   |   )                                                          |
+   |  | NOTME                                                     |
+   .--------------------------------------------------------------.
+)PROC
+  &ZUP     = #RACGRP9
+)END
+( AUTOGID | GID(group-identifier) SHARED )
+OVM
+  ( GID(group-identifier) )

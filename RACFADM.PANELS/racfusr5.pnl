@@ -7,7 +7,7 @@
 +\-\(%RACFADM - User Profiles+)\-\
 %Command ===>_ZCMD
 %
-+Alt RACF%USER+profile: %ALTUSER+command
++Alter RACF%USER+profile: %ALTUSER+command
 +
 +PROFILE %===>_USER    {
 +

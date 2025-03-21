@@ -21,7 +21,7 @@
 +                    this field contains%JCL.CNTL,+the dataset name allocated
 +                    will be%userid.JCL.CNTL
 +
-+
+!  Check AutoMount  +Check if%OMVS Home+directory is under AutoMount control
 +
 +
 +

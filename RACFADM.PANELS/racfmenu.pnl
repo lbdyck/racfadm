@@ -26,7 +26,7 @@
 +  @z {OPT4DESC ÝOPT4INFO               @z {msdesc    +Coding/design
 +  @z {OPT5DESC ÝOPT5INFO               @z {mudesc    +Version/updates
 +  @z {OPT6DESC ÝOPT6INFO               @z {mcadesc   +Digital certificates
-+                                       @z {mtdesc    +Help
++                                       @z {mtdesc    Ýmthelp
 + ---------------------------------------------------------------------------
 +   RACF:!RACFVER        +PrmDB:!PRMDBASE
 +   FMID:!RACFFMID       +BkpDB:!BKPDBASE
@@ -75,8 +75,14 @@
   &mrdesc = 'Reports'
   &ms = 'S'
   &msdesc = 'Standards'
-  &mt = 'T'
-  &mtdesc = 'Tutorial'
+
+  &mt = 'T'                  /*    Tutorial entry      */
+  &mtdesc = 'Tutorial'       /*         "              */
+  &mthelp = 'Help'           /*         "              */
+  &mt = ' '                  /*      Nullify           */
+  &mtdesc = '        '       /*         "              */
+  &mthelp = '    '           /*         "              */
+
   &mg = 'G'
   &mgdesc = 'Generate'
   &mu = 'U'

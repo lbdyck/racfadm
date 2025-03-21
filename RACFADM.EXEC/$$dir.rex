@@ -15,6 +15,8 @@
  ORLIST    IBM TSO Cmd    Unix Dir/File Security, like RLIST
  RACFADM   Software       Dynamically allocate and invoke software
  RACFADMC  Software       Check RACFADM version with GitHub version
+ RACFALTD  Dataset        Alter selected dataset segments
+ RACFALTG  Group          Alter selected group segments
  RACFALTU  User           Alter selected user segments
  RACFDCON  Group          Sets the group connection display option
  RACFPWPH  PassType       Word or Phrase Report

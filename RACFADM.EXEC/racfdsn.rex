@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CW  250315  TRIDJK   M line cmd - modify selected dataset segments*/
 /* @CV  250114  TRIDJK   Added OWNER and UACC to TABLEA               */
 /* @CU  241202  TRIDJK   Added line cmd 'P=Profile' for TABLEA        */
 /* @CT  241018  TRIDJK   Add Conditional Access List processing       */
@@ -144,7 +145,7 @@ ADDRESS ISPEXEC                                               /* @AJ */
   end                                                         /* @BV */
 
   If (SETMADMN = "YES") then do                               /* @B2 */
-     SELCMDS2 = "ÝS¨Show,ÝL¨List,ÝD¨Dsn,ÝC¨Change,"||,        /* @B9 */
+     SELCMDS2 = "ÝS¨Show,ÝL¨List,ÝM¨Mod,ÝC¨Change,"||,        /* @CW */
                 "ÝA¨Add,ÝR¨Remove,ÝP¨Profile,ÝW¨When"         /* @CU */
      IF (SETMIRRX = "YES") THEN                               /* @BR */
         SELCMDS5 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @BH */
@@ -328,6 +329,8 @@ PROFL:
              end                                              /* @CT */
         when (opta = 'P') then                                /* @CU */
              call RACFPROF 'DATASET' dataset                  /* @CU */
+        when (opta = 'M') then                                /* @CW */
+             call RACFALTD dataset                            /* @CW */
         otherwise nop
      End
      'control display restore'                                /* @CA */
@@ -1058,7 +1061,7 @@ RETURN
 /*  List dataset                                                      */
 /*--------------------------------------------------------------------*/
 LISD:                                                         /* @A1 */
-  CMDPRM  = "ALL DSNS DFP"                                    /* @CP */
+  CMDPRM  = "ALL DSNS DFP TME"                                /* @CP */
   CMD     = "LISTDSD DATASET('"DATASET"')" CMDPRM             /* @B2 */
   X = OUTTRAP("CMDREC.")                                      /* @A1 */
   ADDRESS TSO cmd                                             /* @AI */

@@ -1,0 +1,44 @@
+)ATTR DEFAULT(%+})
+   #  AREA(SCRL) EXTEND(ON)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(YELLOW)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Dataset Profiles+)\-\%Tutorial
+%Command ===>}ZCMD
+%
+#RELATED ----------------------------------------------------------------------#
+)AREA RELATED
+%Dataset Profile Segments:+
+!DFP+
+  ~SMS data management and DASD storage (e.g., DATAKEY)
+  +.--------------------------------------------------------------.
+   | DFP(                                                         |
+   |   RESOWNER(userid or group-name) | NORESOWNER                |
+   |   DATAKEY(CKDS key label) | NODATAKEY                        |
+   |   ENCRYPTTYPES(                                              |
+   |     ALL |                                                    |
+   |     INTAPE | EXTAPE | NOTAPE                                 |
+   |     INPDSE | EXPDSE | NOPDSE                                 |
+   |     INSEQ  | EXSEQ  | NOSEQ                                  |
+   |     )                                                        |
+   |    | NOENCRYPTTYPES                                          |
+   |     )                                                        |
+   |  | NODFP                                                     |
+   .--------------------------------------------------------------.
+!TME+
+  ~Tivoli Management Environment
+  +.--------------------------------------------------------------.
+   | TME(                                                         |
+   |   ROLES(role-access-specification ...)                       |
+   |     | ADDROLES(role-access-specification ...)                |
+   |     | DELROLES(role-access-specification ...)                |
+   |     | NOROLES                                                |
+   |     )                                                        |
+   |  | NOTME                                                     |
+   .--------------------------------------------------------------.
+)PROC
+  &ZUP     = #RACDSN8
+)END

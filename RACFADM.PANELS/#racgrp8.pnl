@@ -3,22 +3,23 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - Group Profiles+)\-\%Tutorial
 %Command ===>_ZCMD
-%
+^Linec ---------------------------------------------------------------------^
+)Area Linec
 +Panel Legend
 %  Description+(U)=Universal Group
 %
 +Primary Commands
 %  Find text        +Find a text string
-%  Sort column A/D  +Sort a column, in ascending or descending order
-+                   +(Column headers are point-and-shoot sort fields)
+%  Sort column A/D  +Sort column, ascending/descending, columns are PAS
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
-+
+%
 +Line Commands
 %  S  !Show         +List of users connected to the group
 %  L  !List         +Issue LISTGROUP command
@@ -26,6 +27,7 @@
 %  C  !Change       +Change group attributes@(admin)
 %  A  !Add          +Define a new group@(admin)
 %  R  !Remove       +Remove group from RACF@(admin)
+%  M  !Modify       +Modify selected group profile segments@(admin RACF API)
 %  X  !Xref         +Create JCL for Cross Reference Report@(admin)
 %  Y  !Access       +User/Grp Access Report@(admin)
 )PROC
