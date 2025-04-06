@@ -12,6 +12,7 @@
  $STNDARD  Standards      Document coding and design
  $UNDOC    Commands       Undocumented User Profile primary commands
  $UPDATES  Updates        Document version/updates
+ $UTILS    TSO HELP       RACF Utilities
  #RACACC   Tutorial       DSN/Resource Access Report
  #RACACKN  Tutorial       Acknowledgements
  #RACAMTC  Tutorial       OMVS Home Directory Automount Check
@@ -24,6 +25,7 @@
  #RACCLS2  Tutorial       List classes
  #RACCLS5  Tutorial       List classes
  #RACCLS8  Tutorial       List classes
+ #RACCLS9  Tutorial       List classes
  #RACCMDS  Tutorial       Execute, save and delete TSO commands
  #RACCOPU  Tutorial       Clone a User Profile, (line cmd K)
  #RACDB    Tutorial       RACF database information
@@ -87,6 +89,8 @@
  #RACUSR5  Tutorial       User profile
  #RACUS5A  Tutorial       User profile
  #RACUSR6  Tutorial       User profile
+ ADDSDE    TSO Help       Updates for DFP(ENCRYPTTYPES) parameter
+ ALTDSDE   TSO Help       Updates for DFP(ENCRYPTTYPES) parameter
  OPERMIT   TSO Help       Unix Access Control List, like PERMIT
  ORALTER   TSO Help       Unix Security Attribute, like ALTER
  ORLIST    TSO Help       Unix Dir/File Security, like RLIST
@@ -109,6 +113,7 @@
  RACFCLS6  Class          Change access
  RACFCLS7  Class          Add access
  RACFCLS8  Class          List classes and profiles
+ RACFCLS9  Class          Alter selected resource segments
  RACFCMDS  Commands       Execute TSO RACF commands
  RACFCOPU  User           Clone a User Profile, (line cmd K)
  RACFDISP  Display        GrpTree/RACFdb/Enque/Chgs/Issues/ISPLog/Stds

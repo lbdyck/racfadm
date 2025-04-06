@@ -1,0 +1,133 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(OFF) JUST(LEFT)   HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+  01  TYPE(DATAOUT) COLOR(RED)
+  02  TYPE(DATAOUT) COLOR(BLUE)
+  03  TYPE(DATAOUT) COLOR(TURQ)  SKIP(ON)  HILITE(USCORE)
+  04  TYPE(DATAOUT) COLOR(WHITE)
+  05  TYPE(DATAOUT) COLOR(GREEN) SKIP(ON)
+  ^   AREA(DYNAMIC) EXTEND(OFF)
+)BODY EXPAND(\\)
++\-\(%RACFADM - Resource Profiles+)\-\
+%Command ===>_ZCMD
+%
++Alter RACF%RESOURCE+profile: %RALTER+command       %F1+- Segment syntax
++
++PROFILE%===>_PROFILE                                                        @Z
++CLASS  %===>_RCLASS  {
++
+%Select the segments that you want to ALTER:
+_z^CD      ^ {Installation-defined class in the dynamic CDT
+_z^CF      ^ {Defines a custom field for profiles in the CFIELD class
+_z^DL      ^ {Specifies information used in the control of DLF objects
+_z^EI      ^ {LDAP profile
+_z^IC      ^ {ICSF attributes for the keys
+_z^IX      ^ {ICTX config options that control the ICTX identity cache
+_z^KE      ^ {Kerberos user attributes
+_z^PR      ^ {LDAP characteristics (e.g., LDAPHOST)
+_z^SE      ^ {Controls creation of sessions between logical units under LU6.2
+_z^SI      ^ {Specifies options for verifying the signatures of programs
+_z^SS      ^ {Defines PassTicket key and method used to protect the key value
+_z^ST      ^ {Used to control security for started tasks
+_z^SV      ^ {Profiles associated with a particular SystemView
+_z^TM      ^ {Tivoli Management Environment
+)INIT
+  .CURSOR  = PROFILE
+  .HELP    = #RACCLS9
+  &rcdtinfo = ''
+  &rcfdef   = ''
+  &rdlfdata = ''
+  &reim     = ''
+  &ricsf    = ''
+  &rictx    = ''
+  &rkerb    = ''
+  &rproxy   = ''
+  &rsession = ''
+  &rsigver  = ''
+  &rssignon = ''
+  &rstdata  = ''
+  &rsvfmr   = ''
+  &rtme     = ''
+  .zvars   = '(scind rcdtinfo rcfdef rdlfdata reim ricsf rictx rkerb +
+               rproxy rsession rsigver rssignon rstdata rsvfmr rtme)'
+  *rexx(*)
+    CD = '05'x||'CDTINFO'
+    CF = '05'x||'CFDEF'
+    DL = '05'x||'DLFDATA'
+    EI = '05'x||'EIM'
+    IC = '05'x||'ICSF'
+    IX = '05'x||'ICTX'
+    KE = '05'x||'KERB'
+    PR = '05'x||'PROXY'
+    SE = '05'x||'SESSION'
+    SI = '05'x||'SIGVER'
+    SS = '05'x||'SSIGNON'
+    ST = '05'x||'STDATA'
+    SV = '05'x||'SVFMR'
+    TM = '05'x||'TME'
+
+    rxrc=IRRXUTIL("EXTRACT",rclass,profile,"RACF","")
+    if (word(rxrc,1) <> 0) then
+      exit
+    do i=1 to RACF.0 /* get the segment names */
+      segment=RACF.i
+      select
+        when segment = 'CDTINFO'  then CD  = '03'x||'CDTINFO'||'02'x
+        when segment = 'CFDEF'    then CF  = '03'x||'CFDEF'||'02'x
+        when segment = 'DLFDATA'  then DL  = '03'x||'DLFDATA'||'02'x
+        when segment = 'EIM'      then EI  = '03'x||'EIM'||'02'x
+        when segment = 'ICSF'     then IC  = '03'x||'ICSF'||'02'x
+        when segment = 'ICTX'     then IX  = '03'x||'ICTX'||'02'x
+        when segment = 'KERB'     then KE  = '03'x||'KERB'||'02'x
+        when segment = 'PROXY'    then PR  = '03'x||'PROXY'||'02'x
+        when segment = 'SESSION'  then SE  = '03'x||'SESSION'||'02'x
+        when segment = 'SIGVER'   then SI  = '03'x||'SIGVER'||'02'x
+        when segment = 'SSIGNON'  then SS  = '03'x||'SSIGNON'||'02'x
+        when segment = 'STDATA'   then ST  = '03'x||'STDATA'||'02'x
+        when segment = 'SVFMR'    then SV  = '03'x||'SVFMR'||'02'x
+        when segment = 'TME'      then TM  = '03'x||'TME'||'02'x
+        otherwise nop
+        end
+      end
+  *endrexx
+)REINIT
+  REFRESH(*)
+)PROC
+  VER (&PROFILE,NB)
+  VER (&RCLASS,NB)
+  *rexx(* rsegs)
+    rsegs = ''
+    if rcdtinfo <> '' then rsegs = rsegs 'CDTINFO'
+    if rcfdef   <> '' then rsegs = rsegs 'CFDEF'
+    if rdlfdata <> '' then rsegs = rsegs 'DLFDATA'
+    if reim     <> '' then rsegs = rsegs 'EIM'
+    if ricsf    <> '' then rsegs = rsegs 'ICSF'
+    if rictx    <> '' then rsegs = rsegs 'ICTX'
+    if rkerb    <> '' then rsegs = rsegs 'KERB'
+    if rproxy   <> '' then rsegs = rsegs 'PROXY'
+    if rsession <> '' then rsegs = rsegs 'SESSION'
+    if rsigver  <> '' then rsegs = rsegs 'SIGVER'
+    if rssignon <> '' then rsegs = rsegs 'SSIGNON'
+    if rstdata  <> '' then rsegs = rsegs 'STDATA'
+    if rsvfmr   <> '' then rsegs = rsegs 'SVFMR'
+    if rtme     <> '' then rsegs = rsegs 'TME'
+  *endrexx
+)FIELD
+  FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
+)END
+/*--------------------------------------------------------------------*/
+/*                             Comments                               */
+/*--------------------------------------------------------------------*/
+/*                                                                    */
+/*  1) To display/use this panel, the user must have the Settings     */
+/*     (menu option 0) turned on:                                     */
+/*       Administrator ..... Y                                        */
+/*       Admin RACF API .... Y                                        */
+/*                                                                    */
+/*  2) Descriptive text from Robert S. Hansel                         */
+/*     https://www.rshconsulting.com/                                 */
+/*                                                                    */
+/*--------------------------------------------------------------------*/

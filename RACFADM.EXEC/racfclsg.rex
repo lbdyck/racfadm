@@ -133,7 +133,7 @@ ADDRESS ISPEXEC                                               /* @AG */
   If (SETMADMN = "YES") then do                               /* @B5 */
      IF (SETMIRRX = "YES") THEN                               /* @BH */
         SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,            /* @BB */
-                  "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                /* @B5 */
+                  "ÝC¨Change,ÝA¨Add,ÝR¨Remove,ÝU¨Update"      /* @JK */
      ELSE                                                     /* @BH */
         SELCMDS = "ÝS¨Show,ÝL¨List,"||,                       /* @BH */
                   "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                /* @BH */
@@ -289,6 +289,11 @@ PROFL:
         when (opta = 'O') then call Othl                      /* @CB */
         when (opta = 'P') then                                /* @BA */
              call RACFPROF rclass profile                     /* @BA */
+        when (opta = 'U') then do                             /* @JK */
+             call RACFALTR rclass profile                     /* @JK */
+             action = '*Update'                               /* @JK */
+             "TBMOD" TABLEA                                   /* @JK */
+             end                                              /* @JK */
         when (opta = 'R') then call Deld
         when (opta = 'S') then call Disd
         otherwise nop
@@ -516,10 +521,10 @@ DISM:
         'vput (radmrfnd)'                                     /* @BW */
         "TBDISPL" TABLEB "PANEL("PANEL12")"                   /* @BW */
      end                                                      /* @BW */
-     else 'tbdispl' tablea                                    /* @BW */
+     else 'tbdispl' tableb                                    /* @JK */
      if (rc > 4) then do                                      /* @C9 */
         src = rc                                              /* @C9 */
-        'tbclose' tablea                                      /* @C9 */
+        'tbclose' tableb                                      /* @JK */
         rc = src                                              /* @C9 */
         leave                                                 /* @C9 */
         end                                                   /* @C9 */
@@ -904,7 +909,8 @@ GETD:
            memcls        = subword(getd_temp,1,1)
            If (SETMADMN = "YES") then                         /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,      /* @AL */
-                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member"         /* @C7 */
+                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member,"||,     /* @JK */
+                         "ÝU¨Update"                          /* @JK */
            else                                               /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list"                    /* @AL */
         end
@@ -938,7 +944,8 @@ GETD:
      if (OTHER_LIST <> '') then do                            /* @CB */
       if (SETMADMN = "YES") then                              /* @CB */
          SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,            /* @CB */
-                    "ÝA¨Add,ÝR¨Remove,ÝO¨Other,ÝM¨Member"     /* @CB */
+                    "ÝA¨Add,ÝR¨Remove,ÝO¨Other,ÝM¨Member,"||, /* @JK */
+                    "ÝU¨Update"                               /* @JK */
       else                                                    /* @CB */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝO¨Other"           /* @CB */
      end                                                      /* @CB */

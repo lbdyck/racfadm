@@ -1,0 +1,78 @@
+)F FUNCTION -
+ This help member has information about RACF Utilities.
+
+Utility   Description
+
+IRRMIN00  RACF database initialization utility.
+
+          IRRMIN00 can be used to initialize a new database or to
+          update an existing RACF database with a new set of RACF
+          templates.
+
+IRRUT400  RACF database split/merge/extend utility.
+
+          IRRUT400 physically reorganizes the RACF profiles and         es
+          compress the RACF database.
+
+IRRDBU00  RACF database unload utility.
+
+          IRRDBU00 gives access to the information in the RACF
+          database. This utility can be used to unload the RACF
+          database into a sequential data set and then use the
+          output in a variety of ways.
+
+          In addition, the sequential dataset can be uploaded into
+          a database manager such as DB2, where data can be
+          queried and reports created.
+
+IRRUT200  RACF database verification utility.
+
+          IRRUT200 can be used to identify inconsistencies in the
+          internal organization of a RACF database. It can also be
+          used to make an exact, block-by-block copy of the RACF
+          database.
+
+IRRUT100  RACF cross-reference utility.
+
+          IRRUT100 lists all occurrences of a specified userid or
+          group name that appear in a RACF database. This can help
+          discovering the relationships between various users and
+          groups, and learn other important information about
+          users, groups, and the resources they control. Generic
+          profile names will be followed by the letter "G" in
+          parentheses.
+
+          All users can run IRRUT100 for their own userids or any
+          userids they own. To run IRRUT100 for other userids, the
+          user must be defined to RACF with one of these
+          attributes:
+
+             o  AUDITOR
+             o  SPECIAL
+             o  Group-AUDITOR
+             o  Group-SPECIAL
+
+IRRRID00  RACF remove ID utility.
+
+          IRRRID00 can help keeping the RACF database current.
+          This utility can be used to remove all references to
+          group names and userids that no longer exist or are
+          about to be removed from the RACF database. Also, a
+          replacement ID can be specified for those IDs that will
+          be removed.
+
+IRRADU00  RACF SMF data unload utility.
+
+          IRRADU00 can be used to create a sequential file from
+          security-related audit data. Once the sequential file is
+          created, it can be used in a variety of ways. In
+          addition, the sequential file can be uploaded into a
+          database manager such as DB2, where you data can be
+          easily queried and reports created.
+
+          This utility can be used to create reports for RACF
+          audit records that the RACF report writer is unable to
+          process.
+
+For more details on the RACF utilities, please refer to IBM's manual
+z/OS Security Server RACF System Programmer's Guide.

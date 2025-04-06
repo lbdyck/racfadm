@@ -7,6 +7,21 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  01 Apr 2025 - V40R0
+     - Updated RACFHELP (Option H)
+       -- Added pseudo help member $UTILS which is information
+          about RACF Utilities.  Copy this member to the
+          SYSHELP concatenation.
+       -- Updated exec RACFHELP
+       -- Added TSO Help updates to document the new DFP(ENCRYPTTYPES)
+          parameter (ADDSDE and ALTDSDE)
+     - General resources (Option 4)
+       -- Added line command U to update selected resource segments
+       -- Added RACFALTR exec to generate RALTER source statements
+          using IRRXUTIL
+       -- Added RACFCLS9 panel to prompt for selected resource segments
+       -- Created help panel #RACCLS9 for RACFCLS9 panel
+
   15 Mar 2025 - V39R9
      - Group Profiles (Option 2)
        -- Added line command M to modify selected group segments

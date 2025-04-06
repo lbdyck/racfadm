@@ -1,0 +1,49 @@
+ +--------------------------------------------------------------+
+ |   DFP(RESOWNER(userid or group-name) DATAKEY(CKDS key        |
+ | label) ENCRYPTTYPES(data set type) )                         |
+ +--------------------------------------------------------------+
+
+    ENCRYPTTYPES(data set type)
+       Specifies the data set types (in addition to extended format)
+       that are eligible for data set encryption, or are excluded from
+       data set encryption, for data sets covered by this profile.
+       The setting applies to data sets created after establishment of
+       of the options. For a description of how the system determines
+       eligibility for data set encryption, see z/OS DFSMS Using Data
+       Sets.
+
+       Each data set type has two possible prefixes:
+
+           IN - Include the type for encryption
+           EX - Exclude the type from encryption.
+
+       If neither option is specified for a given type, SMS does not
+       consider ENCRYPTTYPES for the data set type when determining
+       encryption eligibility.
+
+       The data set key label used for encryption can come from a source
+       other than the DATAKEY operand in the DFP segment.
+
+       ALL
+           All the supported data set types (TAPE, PDSE, and SEQ)
+           covered by this profile are eligible for data set encryption.
+           The LISTDSD command displays  ALL" followed by all the
+           supported types.
+       INTAPE
+           Tape data sets covered by this profile are eligible for data
+           set encryption.
+       EXTAPE
+           Tape data sets covered by this profile are excluded from data
+           set encryption.
+       INPDSE
+           PDSE data sets covered by this profile are eligible for data
+           set encryption.
+       EXPDSE
+           PDSE data sets covered by this profile are excluded from data
+           set encryption.
+       INSEQ
+           Sequential basic format and large format data sets covered by
+           this profile are eligible for data set encryption.
+       EXSEQ
+           Sequential basic format and large format data sets covered by
+           this profile are excluded from data set encryption.
