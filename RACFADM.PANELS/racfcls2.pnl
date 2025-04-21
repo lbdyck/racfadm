@@ -38,12 +38,12 @@ _Z+]Z                                                                        @Z
 
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,S,L,O,P,C,A,R,M,U)
+        VER (&OPTA,LIST,S,L,O,P,C,A,R,M,U,K)
      ELSE
-        VER (&OPTA,LIST,S,L,O,C,A,R,M)
+        VER (&OPTA,LIST,S,L,O,C,A,R,M,K)
   ELSE
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,S,L,O,,P,U)
+        VER (&OPTA,LIST,S,L,O,P)
      ELSE
         VER (&OPTA,LIST,S,L,O)
 )PNTS

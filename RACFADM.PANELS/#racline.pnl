@@ -1,0 +1,80 @@
+)ATTR DEFAULT(%+_)
+   #  AREA(SCRL) EXTEND(ON)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(RED)   SKIP(ON)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+)Body expand(\\)
++\-\(%RACFADM - Line Commands+)\-\
+%Command ===>_ZCMD                                             +
+#RELATED ----------------------------------------------------------------------#
+)AREA RELATED
+%                          User Profiles
++
++Line Command     Description
+   } A           {Add user    (TSO, CICS, DFP, OMVS segments)
+   } C           {Change user (TSO, CICS, DFP, OMVS segments)
+   } D           {Display user datasets using DSLIST
+   } K           {Clone a user
+   } L           {Issue LISTUSER command
+   } M           {Modify selected user profile segments
+   } P           {List user profile using IRRXUTIL
+   } R           {Delete user
+   } S           {List of groups user is connected to
+   } U           {Alias for M
+   } X           {Create JCL for Cross Reference Report
+   } Y           {User/Group Access Report
+   }CK           {Check the days until the password changes
+   }LC           {List certificates for user
+   }LR           {List rings for user
+   }PW           {Password reset
+   }RS           {Resume user
+   }RV           {Revoke user
+   }SE           {Analyze user access to general resource profiles
++
+%                          Group Profiles
++
++Line Command     Description
+   } A           {Define a new group
+   } C           {Change group attributes
+   } L           {Issue LISTGROUP command
+   } M           {Modify selected group profile segments
+   } P           {List group profile using IRRXUTIL
+   } R           {Remove group from RACF
+   } S           {List of users connected to the group
+   } U           {Alias for M
+   } X           {Create JCL for Cross Reference Report
+   } Y           {User/Grp Access Report
++
+%                          Dataset Profiles
++
++Line Command     Description
+   } A           {Define a new profile
+   } C           {Change profile attributes
+   } D           {Display datasets
+   } L           {Issue LISTDSD command
+   } M           {Modify selected dataset profile segments
+   } P           {List dataset profile using IRRXUTIL
+   } R           {Remove profile from RACF
+   } S           {List of standard access permits defined for this profile
+   } U           {Alias for M
+   } W           {List of conditional access permits defined for this profile
++
+%                          Resource Profiles
++
++Line Command     Description
+   } A           {Add profile to RACF
+   } C           {Change profile attributes
+   } K           {Clone a resource profile
+   } L           {Issue RLIST command
+   } M           {Addmen/Delmem for resource group profile
+   } O           {Issue RLIST command to retrieve segment info for profile
+   } P           {List profile using IRRXUTIL
+   } R           {Remove profile from RACF
+   } S           {List of permits defined for this profile
+   } U           {Modify selected resource profile segments
+)INIT
+  &ZUP     = #RACLINE
+)PROC
+)END

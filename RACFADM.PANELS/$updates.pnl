@@ -7,7 +7,7 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
-  01 Apr 2025 - V40R0
+  15 Apr 2025 - V40R0
      - Updated RACFHELP (Option H)
        -- Added pseudo help member $UTILS which is information
           about RACF Utilities.  Copy this member to the
@@ -16,21 +16,37 @@
        -- Added TSO Help updates to document the new DFP(ENCRYPTTYPES)
           parameter (ADDSDE and ALTDSDE)
      - General resources (Option 4)
-       -- Added line command U to update selected resource segments
+       -- Added line command 'U' to update selected resource segments
+          (RDEFINE and PERMIT)
        -- Added RACFALTR exec to generate RALTER source statements
           using IRRXUTIL
        -- Added RACFCLS9 panel to prompt for selected resource segments
        -- Created help panel #RACCLS9 for RACFCLS9 panel
+       -- Created help panel #RACCLSB for RACFCLSB panel
+       -- Added line command 'K' to clone a resource profile
+       -- Added RACFCOPR exec to generate RDEFINE and PERMIT statements
+          using IRRXUTIL
+       -- Updated #RACCLS2 panel to add 'K' line command
+       -- Added RACFCOPR and #RACCOPR panels
+     - Tutorial (Option T)
+       -- Updated panel #RACMENU
+       -- Created help panel #RACLINE to document RACFADM line commands
+     - User Profiles (Option 1)
+       -- Line command 'U' is an alias for 'M' Modify
+     - Group Profiles (Option 2)
+       -- Line command 'U' is an alias for 'M' Modify
+     - Dataset Profiles (Option 3)
+       -- Line command 'U' is an alias for 'M' Modify
 
   15 Mar 2025 - V39R9
      - Group Profiles (Option 2)
-       -- Added line command M to modify selected group segments
+       -- Added line command 'M' to modify selected group segments
        -- Added RACFALTG exec to generate ALTGROUP source statements
           using IRRXUTIL
        -- Added RACFGRP9 panel to prompt for selected group segments
        -- Created help panel #RACGRP9 for RACFGRP9 panel
      - Dataset Profiles (Option 3)
-       -- Added line command M to modify selected dataset segments
+       -- Added line command 'M' to modify selected dataset segments
        -- Added RACFALTD exec to generate ALTDSD source statements
           using IRRXUTIL
        -- Added RACFDSN8 panel to prompt for selected dataset segments
@@ -75,7 +91,7 @@
 
   12 Feb 2025 - V39R4
      - User Profiles (Option 1)
-       -- Added line command M to modify selected user segments
+       -- Added line command 'M' to modify selected user segments
        -- Added RACFALTU exec to generate ALTUSER source statements
           using IRRXUTIL
        -- Added RACFUS5A panel to prompt for selected user segments
@@ -109,9 +125,9 @@
           user panel (RACFUSR2) and alternate list user panel
           (RACFUS2A) with password date and interval information
        -- Added RACFU2A skeleton for alternate list user panel
-       -- Added line command CK to check the days until the
+       -- Added line command 'CK' to check the days until the
           password changes
-       -- Added RACFCHKP exec for CK line command
+       -- Added RACFCHKP exec for 'CK' line command
      - Dataset Profiles (Option 3)
        -- Updated exec RACFDSN to add Owner and UACC to tablea
        -- Updated panel RACFDSN2 to display Owner and UACC
@@ -145,7 +161,7 @@
           'Profile not found' and 'R_Admin Auth failure'
           return codes from IRRXUTIL
      - User Profiles (Option 1)
-       -- Added line command 'K'lone to clone a user profile
+       -- Added line command 'K' to clone a user profile
           (ADDUSER, CONNECT, ADDSD, DEFINE ALIAS, and PERMIT)
        -- Updated exec RACFCLSS to add Description field to tablea
           (SEarch line command)

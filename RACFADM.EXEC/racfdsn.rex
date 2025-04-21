@@ -329,7 +329,7 @@ PROFL:
              end                                              /* @CT */
         when (opta = 'P') then                                /* @CU */
              call RACFPROF 'DATASET' dataset                  /* @CU */
-        when (opta = 'M') then                                /* @CW */
+        when (opta = 'M' | opta = 'U') then                   /* @JK */
              call RACFALTD dataset                            /* @CW */
         otherwise nop
      End

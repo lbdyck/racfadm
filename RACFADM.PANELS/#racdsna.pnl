@@ -24,6 +24,9 @@
 !   CONTROL  +For VSAM data sets, it allows users to perform improved
 !            +control interval processing.  For non-VSAM data sets,
 !            +CONTROL is equivalent to UPDATE.
++
++ \ \ (press%ENTER+to continue) \ \
 )PROC
   &ZUP     = #RACDSNA
+  &ZCONT   = #RACCLSA
 )END

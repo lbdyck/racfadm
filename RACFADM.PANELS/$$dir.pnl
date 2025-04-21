@@ -20,13 +20,15 @@
  #RACCERG  Tutorial       Generate a Digital Certificate
  #RACCERT  Tutorial       Digital certificates
  #RACCLSA  Tutorial       Add/Change class profile
- #RACCLSF  Class          List group/ids and access (SEarch, Option 1)
+ #RACCLSB  Tutorial       ADDMEM/DELMEM to/from member list
+ #RACCLSF  Tutorial       List group/ids and access (SEarch, Option 1)
  #RACCLSR  Tutorial       List classes (show, refresh)
  #RACCLS2  Tutorial       List classes
  #RACCLS5  Tutorial       List classes
  #RACCLS8  Tutorial       List classes
  #RACCLS9  Tutorial       List classes
  #RACCMDS  Tutorial       Execute, save and delete TSO commands
+ #RACCOPR  Tutorial       Clone a Resource Profile, (line cmd K)
  #RACCOPU  Tutorial       Clone a User Profile, (line cmd K)
  #RACDB    Tutorial       RACF database information
  #RACDSL   Tutorial       Dataset list
@@ -46,6 +48,7 @@
  #RACHEL2  Tutorial       RACF help commands (2 of 2)
  #RACHIST  Tutorial       RACF history (Nico Rizzuto's ERA)
  #RACIBM   Tutorial       RACF IBM option
+ #RACLINE  Tutorial       RACFADM line commands
  #RACLOG   Tutorial       ISPF log file
  #RACMACS  Tutorial       LC and LR edit macros
  #RACMENU  Tutorial       Main menu, menu option T
@@ -115,6 +118,7 @@
  RACFCLS8  Class          List classes and profiles
  RACFCLS9  Class          Alter selected resource segments
  RACFCMDS  Commands       Execute TSO RACF commands
+ RACFCOPR  Class          Clone a Resource Profile, (line cmd K)
  RACFCOPU  User           Clone a User Profile, (line cmd K)
  RACFDISP  Display        GrpTree/RACFdb/Enque/Chgs/Issues/ISPLog/Stds
  RACFDSC5  Dataset        Show groups and access (Conditional)
