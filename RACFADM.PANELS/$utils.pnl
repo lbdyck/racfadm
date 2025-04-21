@@ -11,7 +11,7 @@ IRRMIN00  RACF database initialization utility.
 
 IRRUT400  RACF database split/merge/extend utility.
 
-          IRRUT400 physically reorganizes the RACF profiles and         es
+          IRRUT400 physically reorganizes the RACF profiles and
           compress the RACF database.
 
 IRRDBU00  RACF database unload utility.
