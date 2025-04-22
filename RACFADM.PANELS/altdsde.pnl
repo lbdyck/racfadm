@@ -1,0 +1,72 @@
+ +--------------------------------------------------------------+
+ |   DFP(                                                       |
+ |     RESOWNER(userid or group-name) | NORESOWNER              |
+ |     DATAKEY(CKDS key label) | NODATAKEY                      |
+ |     ENCRYPTTYPES(data set type) | NOENCRYPTTYPES             |
+ |    )                                                         |
+ |    | NODFP                                                   |
+ +--------------------------------------------------------------+
+
+    ENCRYPTTYPES(data set type)
+       Specifies the data set types (in addition to extended format)
+       that are eligible for data set encryption, or are excluded from
+       data set encryption, for data sets covered by this profile.
+       The setting applies to data sets created after establishment of
+       of the options. For a description of how the system determines
+       eligibility for data set encryption, see z/OS DFSMS Using Data
+       Sets.
+
+       Each data set type has three possible prefixes:
+
+           IN - Include the type for encryption
+           EX - Exclude the type from encryption.
+           NO - Removes the IN and EX settings for that type.
+                This means that SMS does not consider ENCRYPTTYPES
+                for the data set type when determining encryption
+                eligibility. This is the default behavior.
+
+       The data set key label used for encryption can come from a source
+       other than the DATAKEY operand in the DFP segment.
+
+       Specifying ENCRYPTTYPES with no value is equivalent to specifying
+       NOENCRYPTTYPES.
+
+       ALL
+           All the supported data set types (TAPE, PDSE, and SEQ)
+           covered by this profile are eligible for data set encryption.
+           The LISTDSD command displays  ALL" followed by all the
+           supported types.
+       INTAPE
+           Tape data sets covered by this profile are eligible for data
+           set encryption.
+       EXTAPE
+           Tape data sets covered by this profile are excluded from data
+           set encryption.
+       NOTAPE
+           This removes INTAPE or EXTAPE if it had previously been
+           specified. SMS does not consider ENCRYPTTYPES for the data
+           set type when determining encryption eligibility.
+       INPDSE
+           PDSE data sets covered by this profile are eligible for data
+           set encryption.
+       EXPDSE
+           PDSE data sets covered by this profile are excluded from data
+           set encryption.
+       NOPDSE
+           This removes INPDSE or EXPDSE if it had previously been
+           specified. SMS does not consider ENCRYPTTYPES for the data
+           set type when determining encryption eligibility.
+       INSEQ
+           Sequential basic format and large format data sets covered by
+           this profile are eligible for data set encryption.
+       EXSEQ
+           Sequential basic format and large format data sets covered by
+           this profile are excluded from data set encryption.
+       NOSEQ
+           This removes INSEQ or EXSEQ if it had previously been
+           specified. SMS does not consider ENCRYPTTYPES for the data
+           set type when determining encryption eligibility.
+
+       If NOENCRYPTTYPES is specified, all settings are removed. SMS
+       does not consider ENCRYPTTYPES for the data set type when
+       determining encryption eligibility.

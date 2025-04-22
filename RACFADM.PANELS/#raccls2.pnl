@@ -19,12 +19,14 @@
 +Line Commands
 %  S  !Show         +List of permits defined for this profile
 %  L  !List         +Issue RLIST command
-%  O  !Other        +Issue RLIST command to retrieve specific info of profile
+%  O  !Other        +Issue RLIST command to retrieve segment info for profile
 %  P  !Profile      +List profile using IRRXUTIL@(admin RACF API)
 %  C  !Change       +Change profile attributes@(admin)
 %  A  !Add          +Add profile to RACF@(admin)
 %  R  !Remove       +Remove profile from RACF@(admin)
 %  M  !Member       +Addmen/Delmem for resource group profile@(admin)
+%  U  !Update       +Modify selected resource profile segments@(admin RACF API)
+%  K  !Clone        +Clone profile using IRRXUTIL@(admin RACF API)
 )PROC
   &ZUP     = #RACCLS2
 )END

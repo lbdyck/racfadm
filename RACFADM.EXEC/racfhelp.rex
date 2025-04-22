@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A7  250327  TRIDJK   X line cmd - Exclude a command from the list */
+/* @A6  250325  TRIDJK   Add $UTILS   - RACF Utilites                 */
 /* @A5  241120  TRIDJK   Add $GLOSSRY - RACF Tech terms and abbrevs   */
 /* @L1  231018  LBD      Move set defaults higher in the code         */
 /* @A4  231006  DT       Check/allocate dd:syshelp                    */
@@ -392,6 +394,11 @@
        end
 
     if datatype(row) /= 'NUM' then row = 0
+    if zsel = 'X' then do                                     /* @A7 */
+      ssel = zsel                                             /* @A7 */
+      "TBDELETE" ztsohtbl                                     /* @A7 */
+      zsel = ssel                                             /* @A7 */
+      end                                                     /* @A7 */
     if row /= 0 then do
       ssel = zsel
       "TBTOP" ztsohtbl
@@ -505,7 +512,7 @@
         end
       end
     end
-    if zsel /= null then
+    if (zsel /= null) & (zsel /= 'X') then                    /* @A7 */
     call do_it
   end
 
@@ -1045,7 +1052,7 @@ View_it:
 )Proc
 if (&zsel = _)
     &zsel = &z
-ver (&zsel,list,S,'=')
+ver (&zsel,list,S,'=',X)
 if (&ztdsels = 0000)
    &row = .csrrow
    if (&row ^= 0)
@@ -1114,6 +1121,7 @@ field(se) var(zcmd) val(set)
 +
 +Line Selections: !(point-and-shoot field)+
 %    S+               +Select a command to be browsed under View or FSHelp
+%    X+               +Exclude a command from the list
 +
 %Note: +Column headers are point and shoot to sort. 1st use sort Ascending
 +        and 2nd use sort Descending, etc.
@@ -1620,6 +1628,7 @@ SYSHelp:                                                      /* @A4 */
 /* enclosed as a REXX comment to avoid REXX syntax errors
 RACF:
 $GLOSSRY   Technical terms and abbreviations for RACF
+$UTILS     RACF Utilities
 ADDGROUP   Add group profile
 ADDSD      Add data set profile
 ADDUSER    Add user profile

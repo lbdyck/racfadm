@@ -305,7 +305,7 @@ PROFL:
         when (opta = 'L') then call Lisd
         when (opta = 'X') then Call RACFUSRX group JCC        /* @CY */
         when (opta = 'Y') then Call RACFUSRY group            /* @D3 */
-        when (opta = 'M') then                                /* @D8 */
+        when (opta = 'M' | opta = 'U') then                   /* @JK */
              call RACFALTG group                              /* @D8 */
         when (opta = 'P') then                                /* @BE */
              call RACFPROF 'GROUP' group                      /* @BF */

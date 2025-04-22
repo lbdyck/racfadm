@@ -637,12 +637,7 @@ PROFL:
              'TBMOD 'tablea                                   /* @EX */
         end
         when (opta = 'AL') then call Altd                     /* @E6 */
-        when (opta = 'AU') then do                            /* @FC */
-             call RACFALTU user                               /* @FC */
-             action = '*Altusr'                               /* @FC */
-             "TBMOD" TABLEA                                   /* @FC */
-             end                                              /* @FC */
-        when (opta = 'M') then do                             /* @FC */
+        when (opta = 'M' | opta = 'U') then do                /* @JK */
              call RACFALTU user                               /* @FC */
              action = '*Modify'                               /* @FC */
              "TBMOD" TABLEA                                   /* @FC */
@@ -1550,6 +1545,15 @@ CREATE_TABLEA:                                                /* @BE */
                         "REVOKED ATTR TSOUSER DATA ATTR2",
                         "DATEPASS INTPASS DATEPHRS)",         /* @FA */
                         "REPLACE NOWRITE"
+  /*
+  TRACE I
+  if seq = 'SEQ' |,                                           /* @JK */
+     seq = ''    then                                         /* @JK */
+    cmd = "SEARCH FILTER("RFILTER") CLASS("rclass")"          /* @BB */
+  else                                                        /* @JK */
+    cmd = "SEARCH FILTER("RFILTER") CLASS("rclass") AGE("seq")"
+  TRACE
+  */
   cmd = "SEARCH FILTER("RFILTER") CLASS("rclass")"            /* @BB */
   x = OUTTRAP('var.')
   address TSO cmd                                             /* @BB */

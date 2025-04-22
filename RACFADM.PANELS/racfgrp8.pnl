@@ -39,7 +39,7 @@ _Z+ Z        Z        Z        Z   Z                                    
 
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,S,L,C,A,R,P,X,Y,M)
+        VER (&OPTA,LIST,S,L,C,A,R,P,X,Y,M,U)
   ELSE
      IF (&SETMIRRX = YES)
         VER (&OPTA,LIST,S,L,P)

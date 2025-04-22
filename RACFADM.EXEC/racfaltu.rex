@@ -134,16 +134,6 @@ exit
 /* Adjust operand names to ALTUSER conventions */
 Altuser_Fields:
   select
-    when field = 'AUTOLOG'  then aufld = 'AUTOLOGIN'   /* DCE      */
-    when field = 'MAXTKTLF' then aufld = 'MAXTKTLFE'   /* KERB     */
-    when field = 'SECOND'   then aufld = 'SECONDARY'   /* LANGUAGE */
-    when field = 'ASSIZE'   then aufld = 'ASSIZEMAX'   /* OMVS     */
-    when field = 'CPUTIME'  then aufld = 'CPUTIMEMAX'  /* OMVS     */
-    when field = 'FILEPROC' then aufld = 'FILEPROCMAX' /* OMVS     */
-    when field = 'MMAPAREA' then aufld = 'MMAPAREAMAX' /* OMVS     */
-    when field = 'PROCUSER' then aufld = 'PROCUSERMAX' /* OMVS     */
-    when field = 'THREADS'  then aufld = 'THREADSMAX'  /* OMVS     */
-    when field = 'LOGCMD'   then aufld = 'LOGCMDRESP'  /* OPERPARM */
     when field = 'OPERAUTH' then aufld = 'AUTH'        /* OPERPARM */
     when field = 'VHOME'    then aufld = 'HOME'        /* OVM      */
     when field = 'VPROGRAM' then aufld = 'PROGRAM'     /* OVM      */

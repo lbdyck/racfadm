@@ -1,0 +1,271 @@
+)ATTR DEFAULT(%+})
+   #  AREA(SCRL) EXTEND(ON)
+   }  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(YELLOW)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Resource Profiles+)\-\%Tutorial
+%Command ===>}ZCMD
+%
+#RELATED ----------------------------------------------------------------------#
+)AREA RELATED
+%Resource Profile Segments:+
+!CDTINFO+
+  ~Installation-defined class in the dynamic CDT
+  +.-------------------------------------------------------------.
+   |   CDTINFO(                                                  |
+   |     CASE ( UPPER | ASIS ) | NOCASE                          |
+   |     DEFAULTRC ( 0 | 4 | 8 ) | NODEFAULTRC                   |
+   |     DEFAULTUACC (ACEE | ALTER | CONTROL                     |
+   |                | UPDATE | READ | NONE)                      |
+   |       | NODEFAULTUACC                                       |
+   |     FIRST ( characters-allowed ... ) | NOFIRST              |
+   |     GENERIC ( ALLOWED | DISALLOWED ) | NOGENERIC            |
+   |     GENLIST ( ALLOWED | DISALLOWED ) | NOGENLIST            |
+   |     GROUP ( grouping-class-name ) | NOGROUP                 |
+   |     KEYQUALIFIERS ( nnn ) | NOKEYQUALIFIERS                 |
+   |     MACPROCESSING ( NORMAL | REVERSE | EQUAL )              |
+   |      | NOMACPROCESSING                                      |
+   |     MAXLENGTH ( nnn ) | NOMAXLENGTH                         |
+   |     MAXLENX ( nnn ) | NOMAXLENX                             |
+   |     MEMBER ( member-class-name ) | NOMEMBER                 |
+   |     OPERATIONS ( YES | NO ) | NOOPERATIONS                  |
+   |     OTHER ( characters-allowed ...) | NOOTHER               |
+   |     POSIT ( nnn ) | NOPOSIT                                 |
+   |     PROFILESALLOWED ( YES | NO )                            |
+   |       | NOPROFILESALLOWED                                   |
+   |     RACLIST ( ALLOWED | DISALLOWED | REQUIRED )             |
+   |       | NORACLIST                                           |
+   |     SECLABELSREQUIRED ( YES | NO )                          |
+   |       | NOSECLABELSREQUIRED                                 |
+   |     SIGNAL ( YES | NO ) | NOSIGNAL                          |
+   |     )                                                       |
+   |    | NOCDTINFO                                              |
+   .-------------------------------------------------------------.
+!CFDEF+
+  ~Defines a custom field for profiles in the CFIELD class
+  +.-------------------------------------------------------------.
+   |   CFDEF(                                                    |
+   |     FIRST( ALPHA | ALPHANUM | ANY                           |
+   |       | NONATABC | NONATNUM | NUMERIC )                     |
+   |     HELP( help-text )                                       |
+   |     LISTHEAD( list-heading-text )                           |
+   |     MAXLENGTH( maximum-field-length )                       |
+   |     MAXVALUE( maximum-numeric-value ) | NOMAXVALUE          |
+   |     MINVALUE( minimum-numeric-value ) | NOMINVALUE          |
+   |     MIXED( YES | NO )                                       |
+   |     OTHER( ALPHA | ALPHANUM | ANY                           |
+   |       | NONATABC | NONATNUM | NUMERIC )                     |
+   |     VALREXX( REXX-exec-name )                               |
+   |      )                                                      |
+   |    | NOCFDEF                                                |
+   .-------------------------------------------------------------.
+!DLFDATA+
+  ~Information used in the control of DLF objects
+  +.-------------------------------------------------------------.
+   |   DLFDATA(                                                  |
+   |     RETAIN ( YES | NO ) | NORETAIN                          |
+   |     JOBNAMES(jobname1 ...)                                  |
+   |       | NOJOBNAMES                                          |
+   |       | ADDJOBNAMES(jobname1 ...)                           |
+   |       | DELJOBNAMES(jobname1 ...)                           |
+   |     )                                                       |
+   |    | NODLFDATA                                              |
+   .-------------------------------------------------------------.
+!EIM+
+  ~LDAP profile
+  +.-------------------------------------------------------------.
+   |   EIM(                                                      |
+   |     DOMAINDN (eim_domain_dn) | NODOMAINDN                   |
+   |     OPTIONS (ENABLE | DISABLE) | NOOPTIONS                  |
+   |     LOCALREGISTRY (registry_name) | NOLOCALREGISTRY         |
+   |     KERBREGISTRY (registry_name) | NOKERBREGISTRY           |
+   |     X509REGISTRY (registry_name) | NOX509REGISTRY           |
+   |     )                                                       |
+   |    | NOEIM                                                  |
+   .-------------------------------------------------------------.
+!ICSF+
+  ~ICSF attributes for the keys
+  +.-------------------------------------------------------------.
+   |   ICSF(                                                     |
+   |     ASYMUSAGE(                                              |
+   |       HANDSHAKE | NOHANDSHAKE                               |
+   |       SECUREEXPORT | NOSECUREEXPORT                         |
+   |      )                                                      |
+   |      | NOASYMUSAGE                                          |
+   |     SYMEXPORTABLE(BYANY | BYLIST | BYNONE)                  |
+   |      | NOSYMEXPORTABLE                                      |
+   |     SYMEXPORTCERTS(qualifier/label-name ... | *)            |
+   |      | ADDSYMEXPORTCERTS(qualifier/label-name ... | *)      |
+   |      | DELSYMEXPORTCERTS(qualifier/label-name ... | *)      |
+   |      | NOSYMEXPORTCERTS                                     |
+   |     SYMEXPORTKEYS(ICSF-key-label ... | *)                   |
+   |      | ADDSYMEXPORTKEYS(ICSF-key-label ... | *)             |
+   |      | DELSYMEXPORTKEYS(ICSF-key-label ... | *)             |
+   |      | NOSYMEXPORTKEYS                                      |
+   |     SYMCPACFWRAP ( YES | NO )                               |
+   |     SYMCPACFRET ( YES | NO )                                |
+   |      )                                                      |
+   |    | NOICSF                                                 |
+   .-------------------------------------------------------------.
+!ICTX+
+  ~ICTX config options that control the ICTX identity cache
+  +.-------------------------------------------------------------.
+   |   ICTX(                                                     |
+   |     USEMAP( YES | NO ) | NOUSEMAP                           |
+   |     DOMAP( YES | NO ) | NODOMAP                             |
+   |     MAPREQUIRED( YES | NO ) | NOMAPREQUIRED                 |
+   |     MAPPINGTIMEOUT(nnnn) | NOMAPPINGTIMEOUT                 |
+   |      )                                                      |
+   |    | NOICTX                                                 |
+   .-------------------------------------------------------------.
+!IDTPARMS+
+  ~Define and control generation and validation of Identity Tokens (IDTs)
+  +.-------------------------------------------------------------.
+   |   IDTPARMS(                                                 |
+   |     SIGTOKEN(pkcs11-token-name ) | NOSIGTOKEN               |
+   |     SIGSEQNUM( pkcs11-sequence-number ) | NOSIGSEQNUM       |
+   |     SIGCAT( pkcs11-category ) | NOSIGCAT                    |
+   |     SIGALG( HS256 | HS384 | HS512) | NOSIGALG               |
+   |     ANYAPPL(YES | NO)                                       |
+   |     IDTTIMEOUT( timeout-minutes ) | NOIDTTIMEOUT            |
+   |      )                                                      |
+   |    | NOIDTPARMS                                             |
+   .-------------------------------------------------------------.
+!JES+
+  ~Name of an ICSF key label when encrypting spool data
+  +.-------------------------------------------------------------.
+   |   JES(                                                      |
+   |     KEYLABEL(key-label)                                     |
+   |     )                                                       |
+   .-------------------------------------------------------------.
+!KERB+
+  ~Kerberos user attributes
+  +.-------------------------------------------------------------.
+   |   KERB(                                                     |
+   |     CHECKADDRS( YES | NO ) | NOCHECKADDRS                   |
+   |     DEFTKTLFE(def-ticket-life) | NODEFTKTLFE                |
+   |     ENCRYPT(                                                |
+   |       DES | NODES                                           |
+   |       DES3 | NODES3                                         |
+   |       DESD | NODESD                                         |
+   |       AES128 | NOAES128                                     |
+   |       AES256 | NOAES256                                     |
+   |       AES128SHA2 | NOAES128SHA2                             |
+   |       AES256SHA2 | NOAES256SHA2                             |
+   |       )                                                     |
+   |      | NOENCRYPT                                            |
+   |     KERBNAME(kerberos-realm-name) | NOKERBNAME              |
+   |     MAXTKTLFE(max-ticket-life) | NOMAXTKTLFE                |
+   |     MINTKTLFE(min-ticket-life) | NOMINTKTLFE                |
+   |     PASSWORD(kerberos-password) | NOPASSWORD                |
+   |     )                                                       |
+   |    | NOKERB                                                 |
+   .-------------------------------------------------------------.
+!MFPOLICY+
+  ~Information about the Multi-Factor Authentication policy
+  +.-------------------------------------------------------------.
+   |   MFPOLICY(                                                 |
+   |     FACTORS(factor-name ...)                                |
+   |      | ADDFACTORS(factor-name ...)                          |
+   |      | DELFACTORS(factor-name ...)                          |
+   |      | NOFACTORS                                            |
+   |     TOKENTIMEOUT(timeout-seconds)                           |
+   |     REUSE(YES|NO)                                           |
+   |     )                                                       |
+   |    | NOMFPOLICY                                             |
+   .--------------------------------------------------------------.
+!PROXY+
+  ~LDAP characteristics (e.g., LDAPHOST)
+  +.--------------------------------------------------------------.
+   |   PROXY(                                                    |
+   |   LDAPHOST (ldap_url) | NOLDAPHOST                          |
+   |   BINDDN (bind_distinguished_name) | NOBINDDN               |
+   |   BINDPW (bind_password) | NOBINDPW                         |
+   |   )                                                         |
+   |  | NOPROXY                                                  |
+   .-------------------------------------------------------------.
+!SESSION+
+  ~Controls creation of sessions between logical units under LU6.2
+  +.-------------------------------------------------------------.
+   |   SESSION(                                                  |
+   |     CONVSEC( NONE | CONV | ALREADYV | PERSISTV | AVPV )     |
+   |      | NOCONVSEC                                            |
+   |     INTERVAL(n) | NOINTERVAL                                |
+   |     LOCK | NOLOCK                                           |
+   |     SESSKEY(session-key) | NOSESSKEY                        |
+   |     )                                                       |
+   |    | NOSESSION                                              |
+   .-------------------------------------------------------------.
+!SIGVER+
+  ~Specifies options for verifying the signatures of programs
+  +.-------------------------------------------------------------.
+   |   SIGVER(                                                   |
+   |     SIGREQUIRED( YES | NO ) | NOSIGREQUIRED                 |
+   |     FAILLOAD( ANYBAD | BADSIGONLY | NEVER ) | NOFAILLOAD    |
+   |     SIGAUDIT( ALL | SUCCESS | ANYBAD | BADSIGONLY | NONE )  |
+   |      | NOSIGAUDIT                                           |
+   |     )                                                       |
+   |    | NOSIGVER                                               |
+   .-------------------------------------------------------------.
+!SSIGNON+
+  ~Defines PassTicket key and method used to protect the key value
+  +.-------------------------------------------------------------.
+   |   SSIGNON(                                                  |
+   |     KEYMASKED(key-value)                                    |
+   |      | KEYENCRYPTED(key-value)                              |
+   |      | ENCRYPTKEY                                           |
+   |      | KEYLABEL(label-value)                                |
+   |     )                                                       |
+   |    | NOSSIGNON                                              |
+   .-------------------------------------------------------------.
+!STDATA+
+  ~Used to control security for started tasks
+  +.-------------------------------------------------------------.
+   |   STDATA(                                                   |
+   |     USER(userid | =MEMBER) | NOUSER                         |
+   |     GROUP(group-name | =MEMBER) | NOGROUP                   |
+   |     PRIVILEGED( YES | NO ) | NOPRIVILEGED                   |
+   |     TRACE( YES | NO ) | NOTRACE                             |
+   |     TRUSTED( YES | NO ) | NOTRUSTED                         |
+   |     )                                                       |
+   |    | NOSTDATA                                               |
+   .-------------------------------------------------------------.
+!SVFMR+
+  ~Profiles associated with a particular SystemView
+  +.-------------------------------------------------------------.
+   |   SVFMR(                                                    |
+   |     SCRIPTNAME(script-name) | NOSCRIPTNAME                  |
+   |     PARMNAME(parm-name) | NOPARMNAME                        |
+   |     )                                                       |
+   |    | NOSVFMR                                                |
+   .-------------------------------------------------------------.
+!TME+
+  ~Tivoli Management Environment
+  +.-------------------------------------------------------------.
+   |   TME(                                                      |
+   |     CHILDREN(profile-name ...)                              |
+   |      | ADDCHILDREN(profile-name ...)                        |
+   |      | DELCHILDREN(profile-name ...)                        |
+   |      | NOCHILDREN                                           |
+   |     GROUPS(group-name ...)                                  |
+   |      | ADDGROUPS(group-name ...)                            |
+   |      | DELGROUPS(group-name ...)                            |
+   |      | NOGROUPS                                             |
+   |     PARENT(profile-name) | NOPARENT                         |
+   |     RESOURCE(resource-access-specification ...)             |
+   |      | ADDRESOURCE(resource-access-specification ...)       |
+   |      | DELRESOURCE(resource-access-specification ...)       |
+   |      | NORESOURCE                                           |
+   |     ROLES(role-access-specification ...)                    |
+   |      | ADDROLES(role-access-specification ...)              |
+   |      | DELROLES(role-access-specification ...)              |
+   |      | NOROLES                                              |
+   |     )                                                       |
+   |    | NOTME                                                  |
+   .-------------------------------------------------------------.
+)PROC
+  &ZUP     = #RACCLS9
+)END

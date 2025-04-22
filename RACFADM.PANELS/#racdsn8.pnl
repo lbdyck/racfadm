@@ -15,29 +15,29 @@
 !DFP+
   ~SMS data management and DASD storage (e.g., DATAKEY)
   +.--------------------------------------------------------------.
-   | DFP(                                                         |
-   |   RESOWNER(userid or group-name) | NORESOWNER                |
-   |   DATAKEY(CKDS key label) | NODATAKEY                        |
-   |   ENCRYPTTYPES(                                              |
-   |     ALL |                                                    |
-   |     INTAPE | EXTAPE | NOTAPE                                 |
-   |     INPDSE | EXPDSE | NOPDSE                                 |
-   |     INSEQ  | EXSEQ  | NOSEQ                                  |
-   |     )                                                        |
-   |    | NOENCRYPTTYPES                                          |
-   |     )                                                        |
-   |  | NODFP                                                     |
+   |   DFP(                                                       |
+   |     RESOWNER(userid or group-name) | NORESOWNER              |
+   |     DATAKEY(CKDS key label) | NODATAKEY                      |
+   |     ENCRYPTTYPES(                                            |
+   |       ALL |                                                  |
+   |       INTAPE | EXTAPE | NOTAPE                               |
+   |       INPDSE | EXPDSE | NOPDSE                               |
+   |       INSEQ  | EXSEQ  | NOSEQ                                |
+   |       )                                                      |
+   |      | NOENCRYPTTYPES                                        |
+   |       )                                                      |
+   |    | NODFP                                                   |
    .--------------------------------------------------------------.
 !TME+
   ~Tivoli Management Environment
   +.--------------------------------------------------------------.
-   | TME(                                                         |
-   |   ROLES(role-access-specification ...)                       |
-   |     | ADDROLES(role-access-specification ...)                |
-   |     | DELROLES(role-access-specification ...)                |
-   |     | NOROLES                                                |
-   |     )                                                        |
-   |  | NOTME                                                     |
+   |   TME(                                                       |
+   |     ROLES(role-access-specification ...)                     |
+   |       | ADDROLES(role-access-specification ...)              |
+   |       | DELROLES(role-access-specification ...)              |
+   |       | NOROLES                                              |
+   |       )                                                      |
+   |    | NOTME                                                   |
    .--------------------------------------------------------------.
 )PROC
   &ZUP     = #RACDSN8

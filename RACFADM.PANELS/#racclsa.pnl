@@ -27,5 +27,5 @@
 !   UPDATE   +portions of the profile and grant resource access in
 !   READ     +a variety of ways, depending on the class.
 )PROC
-  &ZUP     = #RACCLSA
+  &ZUP     = #RACDSNA
 )END

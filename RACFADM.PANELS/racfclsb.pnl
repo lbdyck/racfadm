@@ -7,8 +7,10 @@
 +\-\(%RACFADM - General Resources+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+PROFILE:_PROFILE                                                            $Z
-+CLASS:  _RCLASS    +
++Change+RACF%&RCLASS +profile: %RALTER+ADDMEM/DELMEM command
++
++PROFILE:$PROFILE                                                            $Z
++CLASS:  $RCLASS    +
 +TYPE:   $TYPE    +
 +UACC:   $UACC    { (Default access)     +OWNER:  $OWNER   { (Owner of profile)
 +WARNING:$WARN    { (YES/NO)             +AUDIT:  $AUDIT
@@ -23,7 +25,7 @@ _Z+  $Z                             +
 )INIT
   .ZVARS   = '(SCIND OPTB ID)'
   .CURSOR  = OPTB
-  .HELP    = #RACMENU
+  .HELP    = #RACCLSB
   &ZCMD    = ' '
   IF (&SAMT = ' ')
       &SAMT = &ZSCED

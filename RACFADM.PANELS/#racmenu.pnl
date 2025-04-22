@@ -20,8 +20,8 @@
 + %1 ~Menu                %11~RACF parameters     %21~RACF reports
 + %2 ~Settings            %12~RACF IBM options    %22~Generate profile source
 + %3 ~User profiles       %13~Execute RACF cmds   %23~Digital certificates
-+ %4 ~Group profiles      %14~Dataset list        %24~DSN access authority
-+ %5 ~Dataset profiles    %15~Dataset enqueues    %25~Res access authority
++ %4 ~Group profiles      %14~Dataset list        %24~DSN/Res access authority
++ %5 ~Dataset profiles    %15~Dataset enqueues    %25~RACFADM line commands
 + %6 ~General resources   %16~RACF help commands  %26~Publications
 + %7 ~Password reset      %17~ISPF log file       %27~Installation notes
 + %8 ~Group tree report   %18~RACF messages       %28~Acknowledgements
@@ -34,7 +34,7 @@
                      13,#RACCMDS 14,#RACDSL  15,#RACENQ  16,#RACHEL1
                      17,#RACLOG  18,#RACMSG  19,#RACOMVS 20,#RACFPP
                      21,#RACRPT1 22,#RACGEN1 23,#RACCERT 24,#RACDSNA
-                     25,#RACCLSA 26,#RACPUB1 27,#RACNOT1 28,#RACACKN
+                     25,#RACLINE 26,#RACPUB1 27,#RACNOT1 28,#RACACKN
                      29,#RACHIST 30,#RACMACS
                       *,'?')
   &ZUP  = #RACMENU

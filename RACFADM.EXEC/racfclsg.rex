@@ -3,6 +3,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CF  250416  TRIDJK   Add Other segments to L(ist) line command    */
+/* @CE  250416  TRIDJK   K line cmd - clone resource profile          */
+/* @CD  250406  TRIDJK   U line cmd - modify selected user segments   */
 /* @CC  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @CB  240206  GA       New Other command to get specific class info */
 /* @CA  230830  TRIDJK   Issue SETROPTS for RDELETE                   */
@@ -132,8 +135,9 @@ ADDRESS ISPEXEC                                               /* @AG */
 
   If (SETMADMN = "YES") then do                               /* @B5 */
      IF (SETMIRRX = "YES") THEN                               /* @BH */
-        SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,            /* @BB */
-                  "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                /* @B5 */
+        SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Prof,"||,               /* @BB */
+                  "ÝC¨Change,ÝA¨Add,ÝR¨Remove,"||,            /* @CD */
+                  "ÝU¨Update,ÝK¨Klone"                        /* @CD */
      ELSE                                                     /* @BH */
         SELCMDS = "ÝS¨Show,ÝL¨List,"||,                       /* @BH */
                   "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                /* @BH */
@@ -289,6 +293,10 @@ PROFL:
         when (opta = 'O') then call Othl                      /* @CB */
         when (opta = 'P') then                                /* @BA */
              call RACFPROF rclass profile                     /* @BA */
+        when (opta = 'U') then                                /* @CD */
+             call RACFALTR rclass profile                     /* @CD */
+        when (opta = 'K') then                                /* @CE */
+             call RACFCOPR rclass profile                     /* @CD */
         when (opta = 'R') then call Deld
         when (opta = 'S') then call Disd
         otherwise nop
@@ -516,10 +524,10 @@ DISM:
         'vput (radmrfnd)'                                     /* @BW */
         "TBDISPL" TABLEB "PANEL("PANEL12")"                   /* @BW */
      end                                                      /* @BW */
-     else 'tbdispl' tablea                                    /* @BW */
+     else 'tbdispl' tableb                                    /* @CD */
      if (rc > 4) then do                                      /* @C9 */
         src = rc                                              /* @C9 */
-        'tbclose' tablea                                      /* @C9 */
+        'tbclose' tableb                                      /* @CD */
         rc = src                                              /* @C9 */
         leave                                                 /* @C9 */
         end                                                   /* @C9 */
@@ -595,9 +603,11 @@ GETM:
   dism_max = var.0
   rsce_beg = 0
   rsce_end = 0
+  save_rsce_beg = 0                                           /* @CD */
   Do dism_count=0 to dism_max
      rsce_beg = POS('RESOURCES IN GROUP',var.dism_count)
-     if rsce_beg then
+     if rsce_beg then do                                      /* @CD */
+        save_rsce_beg = rsce_beg                              /* @CD */
         do until rsce_end
            dism_count = dism_count+1
            parse var var.dism_count id rest
@@ -605,7 +615,12 @@ GETM:
            if (id <> '') & (id <> '---------') & ^rsce_end
              then "TBMOD" TABLEB
         end
-  end
+     end                                                      /* @CD */
+  end                                                         /* @CD */
+  if save_rsce_beg = 0 then do                                /* @CD */
+    id = 'NONE'                                               /* @CD */
+    "TBMOD" TABLEB                                            /* @CD */
+    end                                                       /* @CD */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Display profile permits                                           */
@@ -623,6 +638,9 @@ DISD:
      Profchg = 'NO'
      xtdtop  = 0                                              /* @BW */
      rsels   = 0                                              /* @BW */
+     save_selcmds = selcmds                                   /* @JK */
+     selcmds = "ÝS¨Show,ÝL¨List,ÝP¨Prof,"||,                  /* @JK */
+               "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                   /* @JK */
      do forever                                               /* @BW */
         if (rsels < 2) then do                                /* @BW */
            optb = ' '                                         /* @BW */
@@ -638,6 +656,7 @@ DISD:
            src = rc                                           /* @C9 */
            'tbclose' tableb                                   /* @C9 */
            rc = src                                           /* @C9 */
+           selcmds = save_selcmds                             /* @JK */
            leave                                              /* @C9 */
            end                                                /* @C9 */
         xtdtop   = ztdtop                                     /* @BW */
@@ -904,7 +923,8 @@ GETD:
            memcls        = subword(getd_temp,1,1)
            If (SETMADMN = "YES") then                         /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,      /* @AL */
-                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member"         /* @C7 */
+                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member,"||,     /* @CD */
+                         "ÝU¨Update,ÝK¨Clone"                 /* @CD */
            else                                               /* @AL */
                SELCMDS = "ÝS¨Show,ÝL¨list"                    /* @AL */
         end
@@ -935,6 +955,7 @@ GETD:
       when RCLASS='TAPEVOL'  then OTHER_LIST='TVTOC'          /* @CB */
       otherwise OTHER_LIST = ''                               /* @CB */
      end                                                      /* @CB */
+     /*
      if (OTHER_LIST <> '') then do                            /* @CB */
       if (SETMADMN = "YES") then                              /* @CB */
          SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,            /* @CB */
@@ -942,6 +963,7 @@ GETD:
       else                                                    /* @CB */
                SELCMDS = "ÝS¨Show,ÝL¨list,ÝO¨Other"           /* @CB */
      end                                                      /* @CB */
+     */
      if (audit = ' ') then
         if (substr(getd_temp,2,8) = 'AUDITING') then do
            getd_i    = getd_i + 2
@@ -1112,7 +1134,7 @@ RETURN
 /*  List class's profile                                              */
 /*--------------------------------------------------------------------*/
 LISD:                                                         /* @A1 */
-  cmd = "RLIST "RCLASS PROFILE" AUTH"                         /* @AF */
+  cmd = "RLIST "RCLASS PROFILE OTHER_LIST "AUTH"              /* @CF */
   X = OUTTRAP("CMDREC.")                                      /* @A1 */
   ADDRESS TSO cmd                                             /* @AF */
   cmd_rc = rc                                                 /* @AR */

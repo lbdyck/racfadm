@@ -45,7 +45,7 @@ _Z ^Z      Z       Z                 Z       Z         `Z     `Z     `Z
   /* Line command: XR is not displayed (hidden) */
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL,K,CK,AU,M)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL,K,CK,U,M)
      ELSE
         VER (&OPTA,LIST,/,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,XR,Y,AL,CK)
   ELSE

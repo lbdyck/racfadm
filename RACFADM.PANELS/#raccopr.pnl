@@ -1,0 +1,19 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(RED)   SKIP(ON)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Clone Resource Profile+)\-\%Tutorial
+%Command ===>_ZCMD
++
++  The new resource profile may not be the same as the original.
++
++ }PERMIT(s)+for the cloned resource profile will be generated.
++
+)INIT
+)PROC
+  &ZUP     = #RACCOPR
+)END

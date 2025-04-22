@@ -1,0 +1,32 @@
+)ATTR DEFAULT(%+~)
+   $  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   ~  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - General Resources+)\-\%Tutorial
+%Command ===>~ZCMD                                              +
+%
++Change+RACF%GSDSF   +profile: %RALTER+ADDMEM/DELMEM command
++
++PROFILE:$JANKO
++CLASS:  $GSDSF
++TYPE:   $DISCRETE
++UACC:   $READ     {(Default access)     +OWNER:   TRIDJK   {(Owner of profile)
++WARNING:$YES      {(YES/NO)             +AUDIT:   FAILURES(READ)
++DATA:   $
++
++SELECT: %A+Add     %ADDMEM+to member list
++        %R+Remove  %DELMEM+from member list
++
+%S    Member
+%-----------------------------------------------------------------------
+}_+  $'AD.CMDLIB'/CBTU03/NOPADCHK
+}_+  $'TRIDJK.LOAD'/CBTU03/NOPADCHK
+}_+  $CBTMBR
+)INIT
+  &ZUP     = #RACCLSB
+  &ZCMD    = ' '
+)PROC
+)END
