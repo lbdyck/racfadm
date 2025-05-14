@@ -13,6 +13,7 @@
 +                   +(Column headers are point-and-shoot sort fields)
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
+%  EXclude text     +Do not display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
 +

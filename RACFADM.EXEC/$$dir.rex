@@ -5,6 +5,7 @@
   Member      Subject                   Description
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
+ $CALLS    Documentation  Calls to other RACFADM rexx programs
  $STUB     Invocation     Can place rexx in site's REXX dataset
  LC        Edit Macro     RACDCERT LIST(LABEL('labelname')) ID(userid)
                           on User Profile CERTS/RINGS command output
@@ -43,6 +44,7 @@
  RACFHELP  Help           Display TSO HELP on RACF commands
  RACFIBM   IBM's RACF     RACF Menu options: System, RRSF, Certificates
  RACFLOG   Documentation  Display changes/issues/isplog, opt C/I/L
+ RACFLOGR  Logger         General Command Logger to ZFS file (Prototype)
  RACFMRUN  Edit Macro     Display MSG line about RACRUN
  RACFMVS   Showmvs        Execute/display Showmvs RACF data, menu opt 7
  RACFMSG   Messages       RACF messages, menu option M
@@ -60,6 +62,7 @@
  RACFRVER  Version        Sets the version for this application
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked
  RACFSETG  Settings       Customize settings, menu option 0
+ RACFTSOV  Documentation  Trap TSO command output and invoke ISPF View
  RACFUSR   User           Display userid profiles, menu option 1
  RACFUSRT  User           Add, delete and change TSO userid
  RACFUSRX  User           Userid cross reference report (line cmd X)

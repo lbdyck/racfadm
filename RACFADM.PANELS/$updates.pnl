@@ -7,6 +7,24 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  13 May 2025 - V40R1
+     - General Cleanup
+       -- Changed various panel Select fields to eliminate commas
+     - User Profiles (Option 1)
+       -- Updated RACFUSR to add EXCLUDE primary command
+       -- Updated panel #RACUSR2 to document EXclude primary command
+     - Group Profiles (Option 2)
+       -- Updated RACFGRP to add EXCLUDE primary command
+       -- Updated panel #RACGRP8 to document EXclude primary command
+     - Dataset Profiles (Option 3)
+       -- Updated RACFDSN to add EXCLUDE primary command
+       -- Updated panel #RACDSN2 to document EXclude primary command
+     - General resources (Option 4)
+       -- Add primary command ALL to list all z/OS profiles
+       -- Updated panel #RACCLSR to document ALL primary command
+     - Generate profile source (Option G)
+       -- Updated RACFGEN exec to use IRRXUTIL
+
   15 Apr 2025 - V40R0
      - Updated RACFHELP (Option H)
        -- Added pseudo help member $UTILS which is information
@@ -175,7 +193,7 @@
           if userid has Digital Certificates (default = *)
        -- Add exec RACFDCER to set the Digital Certificate indicator
           in RACFUSR exec
-       -- Add undocumented command NOTONLY (reverse of ONLY)
+       -- Add undocumented command EXCLUDE (reverse of ONLY)
      - Group Profiles (Option 2)
        -- Updated RACFGRP exec to display number of users connected
           to a group and if group is Universal - (U) in data field

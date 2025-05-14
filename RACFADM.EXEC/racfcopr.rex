@@ -96,7 +96,8 @@ do i=1 to RACF.0 /* get the segment names */
   cmd.y = " "segment"(" "-"
   do j=1 to RACF.segment.0
     field=RACF.segment.j
-
+    if racf.segment.field.1 = '' then
+      iterate
     arfld = field
     call Rdefine_Fields
     if racf.segment.field.1 = 'TRUE' then

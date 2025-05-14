@@ -16,7 +16,7 @@
 +WARNING:$WARN    { (YES/NO)             +AUDIT:  $AUDIT
 +DATA:   $DATA
 +                                           +
-+SELECT: %A+Add,%R+Remove
++SELECT: %A+Add%R+Remove
 +
 %S    Member
 %-------------------------------------------------------------------------------

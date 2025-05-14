@@ -3,11 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @A3  250120  TRIDJK   Display MSG about RACRUN macro               */
-/* @A2  241129  TRIDJK   Add conditional access PERMITs               */
-/* @L1  241124  LBDYCK   Add comments and sample JCL                  */
-/* @A1  241122  TRIDJK   Set SRT flag correctly                       */
-/* @A0  241122  Xephon   CBT File 836 (RGENR)                         */
+/* @A0  250503  Janko    IRRXUTIL verson                              */
 /*====================================================================*/
 PANEL01     = "RACFGEN1"   /* Set filter, menu option G    */
 PANELD1     = "RACFDISP"   /* Display report with colors   */
@@ -15,10 +11,8 @@ EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
-NULL        = ''
-K           = 0                                                         /*@L1*/
 
-ADDRESS ISPEXEC
+Address ISPEXEC
 "CONTROL ERRORS RETURN"
 "VGET (SETGSTA  SETGSTAP SETGDISP SETMADMN",
       "SETMIRRX SETMSHOW SETMTRAC SETTPSWD",
@@ -32,20 +26,19 @@ If (SETMTRAC <> 'NO') then do
 end
 
 /* Produce list of profiles for filter */
-DISPLAY_PANEL:
-  DO WHILE DISP_RC < 8
-  "DISPLAY PANEL("PANEL01")" /* get filter and class */
+Display_panel:
+  do while disp_rc < 8
+  "display panel("panel01")" /* get filter and class */
   disp_rc = rc
   if disp_rc = 8 then
     exit
-  IF CLASS = ' ' THEN
-     CLASS = 'DATASET'
-  REC.0 = 0
-  X = OUTTRAP('SER.')
+  if class = ' ' then
+     class = 'DATASET'
+  x = outtrap('ser.')
   cmd = "SEARCH FILTER("FILTER") CLASS("CLASS")"
-  ADDRESS TSO cmd
+  Address TSO cmd
   cmd_rc = rc
-  X = OUTTRAP('OFF')
+  x = outtrap('off')
   IF SETMSHOW <> 'NO' THEN
      CALL SHOWCMD
   if cmd_rc > 0 then do
@@ -54,205 +47,196 @@ DISPLAY_PANEL:
   else
     leave
   end
-                                                                        /*@L1*/
-  /* ----------------------------- *                                    /*@L1*/
-   | Insert model JCL and comments |                                    /*@L1*/
-   * ----------------------------- */                                   /*@L1*/
-   call add_rec '//*** Sample JCL to invoke the generated RACF commands'/*@L1*/
-   call add_rec '//*** Copy into a permanent dataset, Edit, then Submit'/*@L1*/
-   call add_rec '//***                              '                   /*@L1*/
-   call add_rec '//TMP      EXEC  PGM=IKJEFT01'                         /*@L1*/
-   call add_rec '//SYSTSPRT DD  SYSOUT=*      '                         /*@L1*/
-   call add_rec '//SYSTSIN  DD  *             '                         /*@L1*/
-/* call add_rec '//REMOVE   DD  *     /* REMOVE BEFORE USE */' */        /*@L1*/
-   call add_rec '  '                                                    /*@L1*/
 
-LIST:
-DO I = 1 TO SER.0
-   PROF = STRIP(SER.I)
-   LPROF = LENGTH(PROF)
-   IF LPROF > 3 THEN
-      IF SUBSTR(PROF,LPROF-3,4) = ' (G)' THEN
-         DO
-            PROF = SUBSTR(PROF,1,LPROF-4)
-            GEN = 'GEN'
-         END
-      ELSE
-         GEN = ' '
-   X = OUTTRAP('CMDREC.')
-   IF CLASS = 'DATASET' THEN
-      cmd = "LISTDSD DA('"PROF"') AUTH"
-   ELSE
-      cmd = "RLIST "CLASS" "PROF" AUTH"
-  ADDRESS TSO cmd
-  cmd_rc = rc
-  X = OUTTRAP('OFF')
-  IF SETMSHOW <> 'NO' THEN
-     CALL SHOWCMD
-   SRT = 1                                                    /* @A1 */
-   CALL DEFINE
-   CALL INCREM
-   REC.K = ' '
-   CALL ACCESS
-   CALL INCREM
-   REC.K = ' '
-END
-K = REC.0 + 1
-REC.K = '/*'
-CALL EDIT_INFO
-EXIT 0
+cmd. = ""
+y = 0
+Address ISPexec
+'vget (zllgjob1 zllgjob2 zllgjob3 zllgjob4) profile'
+y = y + 1
+cmd.y = zllgjob1
+if zllgjob2 <> '' then do
+  y = y + 1
+  cmd.y = zllgjob2
+  end
+if zllgjob3 <> '' then do
+  y = y + 1
+  cmd.y = zllgjob3
+  end
+if zllgjob4 <> '' then do
+  y = y + 1
+  cmd.y = zllgjob4
+  end
+y = y + 1
+cmd.y = "//TSO      EXEC  PGM=IKJEFT01"
+y = y + 1
+cmd.y = "//SYSTSPRT DD  SYSOUT=*"
+y = y + 1
+cmd.y = "//SYSTSIN  DD  *"
 
-/* Produce definitions for this profile */
-DEFINE:
-AUD = ' '; INS = ''; LEV = ' '; OWN = ' '; UAC = ' '; WAR = ' '
-IF CLASS = 'DATASET' THEN
-   WSB = 4
-ELSE
-   WSB = 5
-DO J = 1 TO CMDREC.0
-   IF SUBSTR(CMDREC.J,SRT,12) = 'LEVEL  OWNER' THEN
-      DO
-         K = J + 2
-         LEV = SUBWORD(CMDREC.K,1,1)
-         OWN = SUBWORD(CMDREC.K,2,1)
-         UAC = SUBWORD(CMDREC.K,3,1)
-         WAR = SUBWORD(CMDREC.K,WSB,1)
-      END
-   IF SUBSTR(CMDREC.J,SRT,8) = 'AUDITING' THEN
-      DO
-         K = J + 2
-         AUD = SUBWORD(CMDREC.K,1,1)
-      END
-   IF SUBSTR(CMDREC.J,SRT,6) = 'NOTIFY' THEN
-      DO
-         K = J + 2
-         NOT = SUBWORD(CMDREC.K,1,1)
-         IF NOT = 'NO' THEN
-            NOT = ''
-         ELSE
-            NOT = "NOTIFY("NOT")"
-      END
-   IF SUBSTR(CMDREC.J,SRT,17) = 'INSTALLATION DATA' THEN
-      DO
-         K = J + 2
-         INS = STRIP(SUBSTR(CMDREC.K,SRT))
-         K = J + 3
-         INS = INS STRIP(SUBSTR(CMDREC.K,SRT))
-         INS = STRIP(INS)
-      END
-END
-CALL INCREM
-IF CLASS = 'DATASET' THEN
-   REC.K = "ADDSD '"PROF"' "GEN" -"
-ELSE
-   REC.K = "RDEFINE "CLASS" "PROF" -"
-CALL INCREM
-REC.K = " LEVEL("LEV") OWNER("OWN") "NOT" -"
-CALL INCREM
-REC.K = " UACC("UAC") AUDIT("AUD") -"
-IF WAR = 'YES' THEN
-   DO
-      CALL INCREM
-      REC.K = " WARNING -"
-   END
-CALL INCREM
-REC.K = " DATA('"INS"')"
-RETURN 0
+do s = 1 to ser.0
+  profile = strip(ser.s)
+  lprof = length(profile)
+  if lprof > 3 then
+     if substr(profile,lprof-3,4) = ' (G)' then
+        do
+          profile = substr(profile,1,lprof-4)
+          gen = 'GEN'
+          end
+     else
+        gen = ' '
 
-/* Produce permit list for this profile */
-ACCESS:
-START = 0
-DO J = 1 TO CMDREC.0
-   IF START = 1 THEN
-      IF SUBSTR(CMDREC.J,1,17) = '            ' THEN
-         START = 0
-   IF START = 1 THEN
-      DO
-         RID = SUBWORD(CMDREC.J,1,1)
-         IF SUBSTR(RID,1,1) \= '-' & RID \= 'NO' THEN
-            DO
-               ACC = SUBWORD(CMDREC.J,2,1)
-               CALL INCREM
-               S = SUBSTR('        ',1,8-LENGTH(RID))
-               IF CLASS = 'DATASET' THEN
-                  REC.K = "PE '"PROF"' ID("RID")"S" ACC("ACC")" GEN
-               ELSE
-                  DO
-                     CLS = 'CL('CLASS')'
-                     REC.K = "PE "PROF" ID("RID")"S" ACC("ACC")" GEN CLS
-                  END
-            END
-      END
-   IF CLASS = 'DATASET' THEN
-      IF SUBSTR(CMDREC.J,1,16) = '   ID     ACCESS' THEN
-         START = 1
-   IF CLASS \= 'DATASET' THEN
-      IF SUBSTR(CMDREC.J,1,16) = 'USER      ACCESS' THEN
-         START = 1
-END
-/* RETURN 0 */
+  Address TSO
+  rxrc=IRRXUTIL("EXTRACT",class,profile,"RACF","")
+  if (word(rxrc,1) <> 0) then do
+     /* Probably a discrete profile defined as generic
+     say 'IRRXUTIL return code:'rxrc
+     */
+     iterate
+     end
 
-/* Produce conditional permit list for this profile */        /* @A2 */
-CACCESS:                                                      /* @A2 */
-START = 0                                                     /* @A2 */
-DO J = 1 TO CMDREC.0                                          /* @A2 */
-   IF START = 1 THEN                                          /* @A2 */
-      IF SUBSTR(CMDREC.J,1,17) = '            ' THEN          /* @A2 */
-         START = 0                                            /* @A2 */
-   IF START = 1 THEN                                          /* @A2 */
-      DO                                                      /* @A2 */
-         RID = SUBWORD(CMDREC.J,1,1)                          /* @A2 */
-         IF SUBSTR(RID,1,1) \= '-' & RID \= 'NO' THEN         /* @A2 */
-            DO                                                /* @A2 */
-               IF CLASS = 'DATASET' THEN DO                   /* @A2 */
-                  ACC = SUBWORD(CMDREC.J,2,1)                 /* @A2 */
-                  CLS = SUBWORD(CMDREC.J,3,1)                 /* @A2 */
-                  ENT = SUBWORD(CMDREC.J,4,1)                 /* @A2 */
-                  END                                         /* @A2 */
-               ELSE DO                                        /* @A2 */
-                  ACC = SUBWORD(CMDREC.J,2,1)                 /* @A2 */
-                 CCLS = SUBWORD(CMDREC.J,4,1)                 /* @A2 */
-                  ENT = SUBWORD(CMDREC.J,5,1)                 /* @A2 */
-                  END                                         /* @A2 */
-               CALL INCREM                                    /* @A2 */
-               S = SUBSTR('        ',1,8-LENGTH(RID))         /* @A2 */
-               IF CLASS = 'DATASET' THEN DO                   /* @A2 */
-                  REC.K = "PE '"PROF"' ID("RID")"S" ACC("ACC")" GEN "-"
-                  CALL INCREM                                 /* @A2 */
-                  REC.K = "    WHEN("CLS"("ENT"))"            /* @A2 */
-                  END                                         /* @A2 */
-               ELSE DO                                        /* @A2 */
-                     CLS = 'CL('CLASS')'                      /* @A2 */
-                     REC.K = "PE "PROF" ID("RID")"S" ACC("ACC")" GEN "-"
-                     CALL INCREM                              /* @A2 */
-                     REC.K = "   "CLS" WHEN("CCLS"("ENT"))"   /* @A2 */
-                  END                                         /* @A2 */
-            END                                               /* @A2 */
-      END                                                     /* @A2 */
-   IF CLASS = 'DATASET' THEN                                  /* @A2 */
-      IF SUBSTR(CMDREC.J,1,15) = '   ID    ACCESS' THEN       /* @A2 */
-         START = 1                                            /* @A2 */
-   IF CLASS \= 'DATASET' THEN                                 /* @A2 */
-      IF SUBSTR(CMDREC.J,1,16) = '   ID     ACCESS' THEN      /* @A2 */
-         START = 1                                            /* @A2 */
-END                                                           /* @A2 */
-RETURN 0                                                      /* @A2 */
+  type = ''
+  if pos('*',profile) > 0 then
+    type = 'GEN'
 
-  /* --------------------------------- *                                /*@L1*/
-   | Insert record and increment rec.0 |                                /*@L1*/
-   * --------------------------------- */                               /*@L1*/
-Add_Rec:                                                                /*@L1*/
-  parse arg addrec                                                      /*@L1*/
-  k = k + 1                                                             /*@L1*/
-  rec.0 = k                                                             /*@L1*/
-  rec.k = addrec                                                        /*@L1*/
-  return                                                                /*@L1*/
+  do i=1 to RACF.0 /* get the segment names */
+    segment=RACF.i
+    if segment = 'BASE' then do
+      y = y + 1
+      if class = 'DATASET' then
+        cmd.y = " ADDSD "profile"" "-"
+      else
+        cmd.y = " RDEFINE "class profile"" "-"
+      y = y + 1
+      cmd.y = "  LEVEL("racf.base.level.1")" "-"
+      y = y + 1
+      cmd.y = "  OWNER("racf.base.owner.1")" "-"
+      y = y + 1
+      cmd.y = "  UACC("racf.base.uacc.1")" "-"
+      y = y + 1
+      cmd.y = "  AUDIT("racf.base.raudit.1")" "-"
+      y = y + 1
+      cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')" "-"
+      call Addmem
+    iterate
+    end
 
-/* Increment counter in output array */
-INCREM:
-REC.0 = REC.0 + 1
-K = REC.0
-RETURN 0
+    y = y + 1
+    cmd.y = " "segment"(" "-"
+    do j=1 to RACF.segment.0
+      field=RACF.segment.j
+      if racf.segment.field.1 = '' then
+        iterate
+      arfld = field
+      call Rdefine_Fields
+      if racf.segment.field.1 = 'TRUE' then
+        racf.segment.field.1 = 'YES'
+      if racf.segment.field.1 = 'FALSE' then
+        racf.segment.field.1 = 'NO'
+      y = y + 1
+      cmd.y = "  "arfld"("racf.segment.field.1")" "-"
+      end
+      if i = racf.0 then do
+        y = y + 1
+        cmd.y = " )"
+        end
+      else do
+        y = y + 1
+        cmd.y = " )" "-"
+        end
+      end
+
+  if RACF.0 = 1 then
+    cmd.y = strip(cmd.y,t,'-')
+
+  if racf.base.aclcnt.repeatcount <> '' then do
+    do a=1 to racf.base.aclcnt.repeatcount
+      y = y + 1
+      cmd.y = " PERMIT '"profile"' CLASS("class")",
+          "ID("racf.base.aclid.a")",
+          "ACC("racf.base.aclacs.a")" type
+      end
+    end
+  if racf.base.acl2cnt.repeatcount <> '' then do
+    do a=1 to racf.base.acl2cnt.repeatcount
+      y = y + 1
+      cmd.y = " PERMIT '"profile"' CLASS("class")",
+          "ID("racf.base.acl2id.a")",
+          "ACC("racf.base.acl2acs.a")" type "-"
+      y = y + 1
+      cmd.y = "   WHEN("racf.base.acl2cond.a"("racf.base.acl2ent.a"))"
+      end
+    end
+    drop racf.
+  end
+
+    cmd.0 = y
+    call Display_Commands
+    Address ISPExec
+    zerrsm = "RACFADM "REXXPGM" RC=0"
+    zerrlm = "GENERATE "filter class" CLASS PROFILES"
+    'log msg(isrz003)'
+  exit
+
+/* Adjust operand names to RDEFINE conventions */
+Rdefine_Fields:
+  select
+    when field = 'PRIVLEGE' then arfld = 'PRIVILEGED'  /* STDATA   */
+    when field = 'CHKADDRS' then arfld = 'CHECKADDRS'  /* KERB     */
+    when field = 'MAPTIMEO' then arfld = 'MAPPINGTIMEOUT' /* ICTX  */
+    when field = 'SIGREQD'  then arfld = 'SIGREQUIRED' /* SIGVER   */
+    when field = 'KEYCRYPT' then arfld = 'KEYENCRYPT'  /* SSIGNON  */
+    when field = 'CDTCASE'  then arfld = 'CASE'        /* CDTINFO  */
+    when field = 'CDTDFTRC' then arfld = 'DEFAULTRC'   /* CDTINFO  */
+    when field = 'CDTFIRST' then arfld = 'FIRST'       /* CDTINFO  */
+    when field = 'CDTGEN'   then arfld = 'GENERIC'     /* CDTINFO  */
+    when field = 'CDTGENL'  then arfld = 'GENLIST'     /* CDTINFO  */
+    when field = 'CDTGROUP' then arfld = 'GROUP'       /* CDTINFO  */
+    when field = 'CDTKEYQL' then arfld = 'KEYQUALIFIERS' /*     "  */
+    when field = 'CDTMAC'   then arfld = 'MACPROCESSING' /*     "  */
+    when field = 'CDTMAXLN' then arfld = 'MAXLENGTH'   /* CDTINFO  */
+    when field = 'CDTMAXLX' then arfld = 'MAXLENX'     /* CDTINFO  */
+    when field = 'CDTMEMBR' then arfld = 'MEMBER'      /* CDTINFO  */
+    when field = 'CDTOPER'  then arfld = 'OPERATIONS'  /* CDTINFO  */
+    when field = 'CDTOTHER' then arfld = 'OTHER'       /* CDTINFO  */
+    when field = 'CDTPOSIT' then arfld = 'POSIT'       /* CDTINFO  */
+    when field = 'CDTPRFAL' then arfld = 'PROFILESALLOWED' /*   "  */
+    when field = 'CDTRACL'  then arfld = 'RACLIST'     /* CDTINFO  */
+    when field = 'CDTSIGL'  then arfld = 'SIGNAL'      /* CDTINFO  */
+    when field = 'CDTSLREQ' then arfld = 'SECLABELSREQUIRED' /* "  */
+    when field = 'CDTUACC'  then arfld = 'DEFAULTUACC' /* CDTINFO  */
+    when field = 'CFACEE'   then arfld = 'ACEE'           /* CFDEF */
+    when field = 'CFDTYPE'  then arfld = 'TYPE'           /* CFDEF */
+    when field = 'CFFIRST'  then arfld = 'FIRST'          /* CFDEF */
+    when field = 'CFHELP'   then arfld = 'HELP'           /* CFDEF */
+    when field = 'CFLIST'   then arfld = 'LISTHEAD'       /* CFDEF */
+    when field = 'CFMIXED'  then arfld = 'MIXED'          /* CFDEF */
+    when field = 'CFMNVAL'  then arfld = 'MINVALUE'       /* CFDEF */
+    when field = 'CFMXLEN'  then arfld = 'MAXLENGTH'      /* CFDEF */
+    when field = 'CFMXVAL'  then arfld = 'MAXVALUE'       /* CFDEF */
+    when field = 'CFOTHER'  then arfld = 'OTHER'          /* CFDEF */
+    when field = 'CFVALRX'  then arfld = 'VALREXX'        /* CFDEF */
+    when field = 'CRTLBLS'  then arfld = 'SYMEXPORTCERTS' /* ICSF  */
+    when field = 'EXPORT'   then arfld = 'SYMEXPORTABLE'  /* ICSF  */
+    when field = 'KEYLBLS'  then arfld = 'SYMEXPORTKEYS'  /* ICSF  */
+    when field = 'SCPWRAP'  then arfld = 'SYMCPACFWRAP'   /* ICSF  */
+    when field = 'USAGE'    then arfld = 'ASYMUSAGE'      /* ICSF  */
+    otherwise nop
+    end
+return
+/* Adjust operand names to RDEFINE conventions */
+Addmem:
+if racf.base.memcnt.repeatcount <> '' then do
+  do a=1 to racf.base.memcnt.repeatcount
+    y = y + 1
+    if a = 1 then
+      cmd.y = "  ADDMEM ("racf.base.member.a "-"
+    else
+      cmd.y = "          "racf.base.member.a "-"
+    end
+  y = y + 1
+  cmd.y = "         ) -"
+  end
+return
 /*--------------------------------------------------------------------*/
 /*  Display RACF command and return code                              */
 /*--------------------------------------------------------------------*/
@@ -273,16 +257,14 @@ RETURN
 /*--------------------------------------------------------------------*/
 /*  Edit information                                                  */
 /*--------------------------------------------------------------------*/
-EDIT_INFO:
-  ADDRESS TSO "ALLOC F("DDNAME") NEW REUSE",
-              "LRECL(80) BLKSIZE(0) RECFM(F B)",
-              "UNIT(VIO) SPACE(1 5) CYLINDERS"
-  ADDRESS TSO "EXECIO * DISKW "DDNAME" (STEM REC. FINIS"
-  DROP REC.
-  ADDRESS ISPEXEC
-  "LMINIT DATAID(CMDDATID) DDNAME("DDNAME")"
-  "EDIT DATAID("CMDDATID")",
-       "PANEL("PANELD1")",
-       "MACRO("EDITMACR")"                                    /* @A3 */
-  ADDRESS TSO "FREE FI("DDNAME")"
-RETURN
+Display_Commands:
+  Address TSO "alloc f("ddname") new reuse",
+              "lrecl(80) blksize(0) recfm(f b)",
+              "unit(vio) space(1 5) cylinders"
+  Address TSO "execio * diskw "ddname" (stem cmd. finis"
+  drop cmd.
+  Address ISPExec
+  "lminit dataid(cmddatid) ddname("ddname")"
+  "edit dataid("cmddatid") macro("editmacr")"
+  Address TSO "free fi("ddname")"
+return

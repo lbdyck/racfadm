@@ -15,13 +15,14 @@
 +
 +  The following people participated in developing%RACFADM+in alphabetical
 +  order by last name:
-!    Andreani, Giovanni      Kuiper, Henri
-!    Beaver, Steve           Pratt, Hailey
-!    Dyck, Lionel B.         Rizzuto, Nico
-!    Golob, Sam              Smith, William
-!    Jaffe, Ed               Turner, Jim
-!    Kalinich, John          Vels, Peter
-!    Koss, Bruce             Wells, Bruce
+!    Andreani, Giovanni      Pratt, Hailey
+!    Beaver, Steve           Rizzuto, Nico
+!    Dyck, Lionel B.         Smith, William
+!    Golob, Sam              Turner, Jim
+!    Jaffe, Ed               Vels, Peter
+!    Kalinich, John          Wells, Bruce
+!    Koss, Bruce             Zelden, Mark
+!    Kuiper, Henri
 )PROC
   &ZUP     = #RACACKN
 )END

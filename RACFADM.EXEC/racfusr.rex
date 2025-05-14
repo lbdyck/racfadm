@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FD  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @LD  250306  LBDYCK   Check for automount                          */
 /* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
 /* @FC  250212  TRIDJK   M line cmd - modify selected user segments   */
@@ -260,8 +261,8 @@ ADDRESS ISPEXEC                                               /* @BC */
                    "ÝRS¨Res"                                  /* @DI */
         SELCMD2B = "   ÝM¨ModÝK¨CloneÝLR¨Ring"||,             /* @FB */
                    "ÝLC¨CertÝRV¨RevÝAL¨AltÝX¨XrefÝY¨Acc"      /* @EY */
-        SELCMDS3 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @CO */
-                   "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @CO */
+        SELCMDS3 = "ÝS¨ShowÝL¨ListÝP¨Profile"||,              /* @CO */
+                   "ÝC¨ChangeÝA¨AddÝR¨Remove"                 /* @CO */
      end                                                      /* @D7 */
      else do                                                  /* @D7 */
         SELCMD2A = "ÝS¨ShowÝSE¨SrchÝL¨List"||,                /* @DI */
@@ -269,20 +270,20 @@ ADDRESS ISPEXEC                                               /* @BC */
                    "ÝRS¨ResÝRV¨Rev"                           /* @DJ */
         SELCMD2B = "  ÝM¨Mod"||,                              /* @FB */
                    "ÝLR¨RingÝLC¨CertÝAL¨AltÝX¨XrefÝY¨Acc"     /* @EZ */
-        SELCMDS3 = "ÝS¨Show,ÝL¨List,"||,                      /* @D7 */
-                   "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @D7 */
+        SELCMDS3 = "ÝS¨ShowÝL¨List"||,                        /* @D7 */
+                   "ÝC¨ChangeÝA¨AddÝR¨Remove"                 /* @D7 */
      end                                                      /* @D7 */
   end
   else do
      IF (SETMIRRX = "YES") then do                            /* @EH */
-        SELCMD2A = "ÝS¨Show,ÝSE¨Search,ÝL¨list,"||,           /* @EH */
-                   "ÝLR¨RingÝLC¨CertÝP¨Profile,ÝD¨Dsn"        /* @EZ  */
-        SELCMDS3 = "ÝS¨Show,ÝL¨list,ÝP¨Profile"               /* @EH */
+        SELCMD2A = "ÝS¨ShowÝSE¨SearchÝL¨List"||,              /* @EH */
+                   "ÝLR¨RingÝLC¨CertÝP¨ProfileÝD¨Dsn"         /* @EZ  */
+        SELCMDS3 = "ÝS¨ShowÝL¨listÝP¨Profile"                 /* @EH */
      end
      else do                                                  /* @EH */
-        SELCMD2A = "ÝS¨Show,ÝSE¨Search,ÝL¨list,"||,           /* @EZ */
-                   "ÝLR¨Ring,ÝLC¨Cert,ÝD¨Dsn"                 /* @EZ */
-        SELCMDS3 = "ÝS¨Show,ÝL¨list"                          /* @B8 */
+        SELCMD2A = "ÝS¨ShowÝSE¨SearchÝL¨List"||,              /* @EZ */
+                   "ÝLR¨RingÝLC¨CertÝD¨Dsn"                   /* @EZ */
+        SELCMDS3 = "ÝS¨ShowÝL¨List"                           /* @B8 */
      end                                                      /* @EH */
      SELCMD2B = ""                                            /* @DI */
   end
@@ -384,22 +385,22 @@ PROFL:
                 end                                           /* @BE */
              end                                              /* @BE */
         END                                                   /* @LB */
-        WHEN (ABBREV("NOTONLY",ZCMD,3) = 1) THEN DO /*UNDOC*/ /* @JK */
-             find_str = translate(parm)                       /* @JK */
-             'tbtop ' TABLEA                                  /* @JK */
-             'tbskip' TABLEA                                  /* @JK */
-             do forever                                       /* @JK */
-                str = translate(user name defgrp owner attr2) /* @JK */
-                if (pos(find_str,str) > 0) then               /* @JK */
-                  'tbdelete' TABLEA                           /* @JK */
-                else nop                                      /* @JK */
-                'tbskip' TABLEA                               /* @JK */
-                if (rc > 0) then do                           /* @JK */
-                   'tbtop' TABLEA                             /* @JK */
-                   leave                                      /* @JK */
-                end                                           /* @JK */
-             end                                              /* @JK */
-        END                                                   /* @JK */
+        WHEN (ABBREV("EXCLUDE",ZCMD,2) = 1) THEN DO           /* @FD */
+             find_str = translate(parm)                       /* @FD */
+             'tbtop ' TABLEA                                  /* @FD */
+             'tbskip' TABLEA                                  /* @FD */
+             do forever                                       /* @FD */
+                str = translate(user name defgrp owner attr2) /* @FD */
+                if (pos(find_str,str) > 0) then               /* @FD */
+                  'tbdelete' TABLEA                           /* @FD */
+                else nop                                      /* @FD */
+                'tbskip' TABLEA                               /* @FD */
+                if (rc > 0) then do                           /* @FD */
+                   'tbtop' TABLEA                             /* @FD */
+                   leave                                      /* @FD */
+                end                                           /* @FD */
+             end                                              /* @FD */
+        END                                                   /* @FD */
         WHEN (ABBREV("RINGS",ZCMD,4) = 1) THEN DO             /* @F7 */
              x = outtrap("ring.")                             /* @F7 */
              'tbtop ' TABLEA                                  /* @F7 */

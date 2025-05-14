@@ -6,7 +6,7 @@
    ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
-%Command ===>_ZCMD                                         a
+%Command ===>_ZCMD
 ^Linec -------------------------------------------------------------------^
 )Area Linec
 +Panel Legend
@@ -18,11 +18,11 @@
 %  Sort column A/D  +Sort column, ascending/descending, columns are PAS
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
+%  EXclude text     +Do not display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
 %  Next             +Cycle between normal and alternate list user display
-%  CERTS            +List Digital cert information for users in table
-%  RINGS            +List Digital ring information for users in table
+%  CERTS/RINGS      +List Digital cert/ring information for users in table
 %
 +Line Commands
 %  /  !             +Display line command prompt panel (pop-up)

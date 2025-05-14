@@ -1,11 +1,12 @@
 )ATTR DEFAULT(%+_)
    !  TYPE(OUTPUT)  INTENS(HIGH) CAPS(OFF) SKIP(ON)     COLOR(TURQ)
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
-   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
-   @  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF) COLOR(WHITE)
-   [  TYPE(OUTPUT)  INTENS(High) CAPS(ON) COLOR(WHITE)
-   Ý  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF) COLOR(GREEN)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(&clrplus)
+   @  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF) COLOR(&clrat)
+   [  TYPE(OUTPUT)  INTENS(High) CAPS(ON)  COLOR(WHITE)
+   Ý  TYPE(OUTPUT)  INTENS(LOW)  CAPS(OFF) COLOR(&clrptrd)
    {  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF)
+   }  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF) COLOR(TURQ)
    ] area(SCRL) Extend(ON)
    ~  TYPE(PS)
 )BODY EXPAND(\\)
@@ -32,11 +33,20 @@
 +   FMID:!RACFFMID       +BkpDB:!BKPDBASE
 +   z/OS:!ZOSVER         +Plex: !ZSYSPLEX       +Lpar:!ZSYSID
 +   Date:!RDATE          +JDate:!ZJDATE         +Time:!ZTIME
-+  Ýz    !ZUSER    @UATT +Group:!RACFGRP        +Name:!RACFNAM
++  Ýz    }ZUSERX   [UATT +Group:!RACFGRP        +Name:!RACFNAM
 + ---------------------------------------------------------------------------
 )INIT
   .CURSOR = ZCMD
   .HELP   = #RACMENU
+  &zuserx = &zuser
+  &clrplus = 'GREEN'          /* Default color */
+  &clrat   = 'WHITE'          /* Default color */
+  &clrptrd = 'GREEN'          /* Default color */
+  &id = trunc(&zuser,3)
+  if (&id = 'TRI')            /* Janko? */
+    &clrplus = 'BLUE'
+    &clrat   = 'YELLOW'
+    &clrptrd = 'BLUE'
   .zvars  = '(m0 mc m1 md m2 me m3 mg m4 mh m5 ml m6 mm +
              opt1 mo opt2 mp opt3 mr opt4 ms opt5 mu opt6 mca mt utype )'
   &m0 = '0'
@@ -367,6 +377,7 @@
       H,'CMD(%RACFHELP)'
  /*   I,'CMD(%RACFLOG $ISSUES)'    Known issues (PMRs)         Hidden */
       L,'CMD(%RACFLOG ISPLOG &OPERAND)' /* R to reverse LOG date order*/
+     LU,'CMD(%RACFTSOV LISTUSER &OPERAND)'
       M,'CMD(%RACFMSG)'
       O,'CMD(%RACFOMVS)'
       P,&mpcmd
@@ -405,6 +416,7 @@
   FIELD(OPT6DESC) VAR(ZCMD) VAL('12')
   FIELD(mcadesc ) VAR(ZCMD) VAL('CA')
   FIELD(mtdesc  ) VAR(ZCMD) VAL('T')
+  FIELD(zuserx  ) VAR(ZCMD) VAL('LU')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

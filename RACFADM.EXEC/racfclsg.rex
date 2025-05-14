@@ -135,18 +135,18 @@ ADDRESS ISPEXEC                                               /* @AG */
 
   If (SETMADMN = "YES") then do                               /* @B5 */
      IF (SETMIRRX = "YES") THEN                               /* @BH */
-        SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Prof,"||,               /* @BB */
-                  "ÝC¨Change,ÝA¨Add,ÝR¨Remove,"||,            /* @CD */
-                  "ÝU¨Update,ÝK¨Klone"                        /* @CD */
+        SELCMDS = "ÝS¨ShowÝL¨ListÝP¨Profile"||,               /* @BB */
+                  "ÝC¨ChangeÝA¨AddÝR¨Remove"||,               /* @CD */
+                  "ÝU¨UpdateÝK¨Clone"                         /* @CD */
      ELSE                                                     /* @BH */
-        SELCMDS = "ÝS¨Show,ÝL¨List,"||,                       /* @BH */
-                  "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                /* @BH */
+        SELCMDS = "ÝS¨ShowÝL¨List"||,                         /* @BH */
+                  "ÝC¨ChangeÝA¨AddÝR¨Remove"                  /* @BH */
   end                                                         /* @B5 */
   else do                                                     /* @BZ */
      IF (SETMIRRX = "YES") THEN                               /* @BH */
-        SELCMDS = "ÝS¨Show,ÝL¨list,ÝP¨Profile"                /* @BZ */
+        SELCMDS = "ÝS¨ShowÝL¨listÝP¨Profile"                  /* @BZ */
      ELSE                                                     /* @BZ */
-        SELCMDS = "ÝS¨Show,ÝL¨list"                           /* @AB */
+        SELCMDS = "ÝS¨ShowÝL¨list"                            /* @AB */
   end                                                         /* @BZ */
 
   rlv    = SYSVAR('SYSLRACF')
@@ -639,8 +639,8 @@ DISD:
      xtdtop  = 0                                              /* @BW */
      rsels   = 0                                              /* @BW */
      save_selcmds = selcmds                                   /* @JK */
-     selcmds = "ÝS¨Show,ÝL¨List,ÝP¨Prof,"||,                  /* @JK */
-               "ÝC¨Change,ÝA¨Add,ÝR¨Remove"                   /* @JK */
+     selcmds = "ÝS¨ShowÝL¨ListÝP¨Profile"||,                  /* @JK */
+               "ÝC¨ChangeÝA¨AddÝR¨Remove"                     /* @JK */
      do forever                                               /* @BW */
         if (rsels < 2) then do                                /* @BW */
            optb = ' '                                         /* @BW */
@@ -922,11 +922,11 @@ GETD:
            getd_temp     = getd_var.getd_i
            memcls        = subword(getd_temp,1,1)
            If (SETMADMN = "YES") then                         /* @AL */
-               SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,      /* @AL */
-                         "ÝA¨Add,ÝR¨Remove,ÝM¨Member,"||,     /* @CD */
-                         "ÝU¨Update,ÝK¨Clone"                 /* @CD */
+               SELCMDS = "ÝS¨ShowÝL¨listÝC¨Change"||,         /* @AL */
+                         "ÝA¨AddÝR¨RemoveÝM¨Member"||,        /* @CD */
+                         "ÝU¨UpdateÝK¨Clone"                  /* @CD */
            else                                               /* @AL */
-               SELCMDS = "ÝS¨Show,ÝL¨list"                    /* @AL */
+               SELCMDS = "ÝS¨ShowÝL¨list"                     /* @AL */
         end
      select                                                   /* @CB */
       when RCLASS='APPCLU'   then OTHER_LIST='SESSION'        /* @CB */
@@ -958,10 +958,10 @@ GETD:
      /*
      if (OTHER_LIST <> '') then do                            /* @CB */
       if (SETMADMN = "YES") then                              /* @CB */
-         SELCMDS = "ÝS¨Show,ÝL¨list,ÝC¨Change,"||,            /* @CB */
-                    "ÝA¨Add,ÝR¨Remove,ÝO¨Other,ÝM¨Member"     /* @CB */
+         SELCMDS = "ÝS¨ShowÝL¨listÝC¨Change"||                /* @CB */
+                    "ÝA¨AddÝR¨RemoveÝO¨OtherÝM¨Member"        /* @CB */
       else                                                    /* @CB */
-               SELCMDS = "ÝS¨Show,ÝL¨list,ÝO¨Other"           /* @CB */
+               SELCMDS = "ÝS¨ShowÝL¨listÝO¨Other"             /* @CB */
      end                                                      /* @CB */
      */
      if (audit = ' ') then

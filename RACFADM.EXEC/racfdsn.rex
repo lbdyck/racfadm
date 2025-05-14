@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CX  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @CW  250315  TRIDJK   M line cmd - modify selected dataset segments*/
 /* @CV  250114  TRIDJK   Added OWNER and UACC to TABLEA               */
 /* @CU  241202  TRIDJK   Added line cmd 'P=Profile' for TABLEA        */
@@ -145,22 +146,22 @@ ADDRESS ISPEXEC                                               /* @AJ */
   end                                                         /* @BV */
 
   If (SETMADMN = "YES") then do                               /* @B2 */
-     SELCMDS2 = "ÝS¨Show,ÝL¨List,ÝM¨Mod,ÝC¨Change,"||,        /* @CW */
-                "ÝA¨Add,ÝR¨Remove,ÝP¨Profile,ÝW¨When"         /* @CU */
+     SELCMDS2 = "ÝS¨ShowÝL¨ListÝM¨ModifyÝC¨Change"||,         /* @CW */
+                "ÝA¨AddÝR¨RemoveÝP¨ProfileÝW¨When"            /* @CU */
      IF (SETMIRRX = "YES") THEN                               /* @BR */
-        SELCMDS5 = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,           /* @BH */
-                   "ÝC¨Chg Access,ÝA¨Add Access,"||,          /* @BH */
+        SELCMDS5 = "ÝS¨ShowÝL¨ListÝP¨Profile"||,              /* @BH */
+                   "ÝC¨Chg AccessÝA¨Add Access"||,            /* @BH */
                    "ÝR¨Rem Access"                            /* @BH */
      ELSE                                                     /* @BR */
-        SELCMDS5 = "ÝS¨Show,ÝL¨List,"||,                      /* @BR */
-                   "ÝC¨Change,ÝA¨Add,ÝR¨Remove"               /* @BR */
+        SELCMDS5 = "ÝS¨ShowÝL¨List"||,                        /* @BR */
+                   "ÝC¨ChangeÝA¨AddÝR¨Remove"                 /* @BR */
   end
   else do
-     SELCMDS2 = "ÝS¨Show,ÝL¨list,ÝD¨Dsn"                      /* @B9 */
+     SELCMDS2 = "ÝS¨ShowÝL¨ListÝD¨Dsn"                        /* @B9 */
      IF (SETMIRRX = "YES") THEN                               /* @CD */
-        SELCMDS5 = "ÝS¨Show,ÝL¨list,ÝP¨Profile"               /* @CD */
+        SELCMDS5 = "ÝS¨ShowÝL¨ListÝP¨Profile"                 /* @CD */
      ELSE                                                     /* @CD */
-        SELCMDS5 = "ÝS¨Show,ÝL¨list"                          /* @B9 */
+        SELCMDS5 = "ÝS¨ShowÝL¨List"                           /* @B9 */
   end
 
   Rfilter  = SETGFLTR                                         /* @AC */
@@ -274,6 +275,22 @@ PROFL:
                 end                                           /* @AL */
              end                                              /* @AL */
         END                                                   /* @AL */
+        WHEN (ABBREV("EXCLUDE",ZCMD,2) = 1) THEN DO /*UNDOC*/ /* @CX */
+             find_str = translate(parm)                       /* @CX */
+             'tbtop ' TABLEA                                  /* @CX */
+             'tbskip' TABLEA                                  /* @CX */
+             do forever                                       /* @CX */
+                str = translate(dataset type owner uacc)      /* @CX */
+                if (pos(find_str,str) > 0) then               /* @CX */
+                  'tbdelete' TABLEA                           /* @CX */
+                else nop                                      /* @CX */
+                'tbskip' TABLEA                               /* @CX */
+                if (rc > 0) then do                           /* @CX */
+                   'tbtop' TABLEA                             /* @CX */
+                   leave                                      /* @CX */
+                end                                           /* @CX */
+             end                                              /* @CX */
+        END                                                   /* @CX */
         WHEN (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @AL */
              if (parm <> '') then                             /* @C4 */
                 rfilter = parm                                /* @C4 */

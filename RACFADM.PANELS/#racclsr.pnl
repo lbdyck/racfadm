@@ -19,9 +19,10 @@
 %  CLASSes          +View supplied RACF General Resource Classes
 %  CDT parm         +Invoke SDSF RACF CDT display (opt parm=active|inactive)
 %  RCLS             +Invoke MXI RACF CDT display
+%  ALL              +Display all classes for z/OS
 +
 +Line Commands
-%  S  !Show         +Select a class from the list of active classes
+%  S  !Show         +Select a class from the list of classes
 %  L  !List         +Issue RLIST command
 %  R  !Refresh      +Issue a RACLIST refresh on the class
 )PROC

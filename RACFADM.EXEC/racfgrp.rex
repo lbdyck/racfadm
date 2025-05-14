@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @D9  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @D8  250315  TRIDJK   M line cmd - modify selected group segments  */
 /* @D7  241117  TRIDJK   Display connects in TABLEA                   */
 /* @D6  240826  LBD      Support FILter as alist of Reset             */
@@ -156,18 +157,18 @@ ADDRESS ISPEXEC                                               /* @AO */
 
   If (SETMADMN = "YES") then                                  /* @B2 */
      If (SETMIRRX = "YES") then                               /* @BS */
-        SELCMDS = "ÝS¨Show,ÝL¨List,ÝP¨Profile,"||,            /* @BH */
-                  "ÝC¨Change,ÝA¨Add,"||,                      /* @BH */
-                  "ÝR¨Remove,ÝM¨Mod,ÝY¨Acc"                   /* @D8 */
+        SELCMDS = "ÝS¨ShowÝL¨ListÝP¨Profile"||,               /* @BH */
+                  "ÝC¨ChangeÝA¨Add"||,                        /* @BH */
+                  "ÝR¨RemoveÝM¨ModifyÝY¨Access"               /* @D8 */
      Else                                                     /* @BS */
-        SELCMDS = "ÝS¨Show,ÝL¨List,"||,                       /* @BS */
-                  "ÝC¨Change,ÝA¨Add,"||,                      /* @BS */
-                  "ÝR¨Remove,ÝM¨Mod,ÝY¨Acc"                   /* @D8 */
+        SELCMDS = "ÝS¨ShowÝL¨List"||,                         /* @BS */
+                  "ÝC¨ChangeÝA¨Add"||,                        /* @BS */
+                  "ÝR¨RemoveÝM¨ModifyÝY¨Access"               /* @D8 */
   else do                                                     /* @CM */
      If (SETMIRRX = "YES") then                               /* @CM */
-        SELCMDS = "ÝS¨Show,ÝL¨list,ÝP¨Profile"                /* @CM */
+        SELCMDS = "ÝS¨ShowÝL¨listÝP¨Profile"                  /* @CM */
      else                                                     /* @CM */
-        SELCMDS = "ÝS¨Show,ÝL¨list"                           /* @AJ */
+        SELCMDS = "ÝS¨ShowÝL¨list"                            /* @AJ */
   end                                                         /* @CM */
 
   rlv    = SYSVAR('SYSLRACF')
@@ -262,6 +263,22 @@ PROFL:
                 end                                           /* @AP */
              end                                              /* @AP */
         END                                                   /* @AP */
+        WHEN (ABBREV("EXCLUDE",ZCMD,2) = 1) THEN DO           /* @D9 */
+             find_str = translate(parm)                       /* @D9 */
+             'tbtop ' TABLEA                                  /* @D9 */
+             'tbskip' TABLEA                                  /* @D9 */
+             do forever                                       /* @D9 */
+                str = translate(group supgrp owner gcnt data) /* @D9 */
+                if (pos(find_str,str) > 0) then               /* @D9 */
+                  'tbdelete' TABLEA                           /* @D9 */
+                else nop                                      /* @D9 */
+                'tbskip' TABLEA                               /* @D9 */
+                if (rc > 0) then do                           /* @D9 */
+                   'tbtop' TABLEA                             /* @D9 */
+                   leave                                      /* @D9 */
+                end                                           /* @D9 */
+             end                                              /* @D9 */
+        END                                                   /* @D9 */
         When (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @D6 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @D6 */
              if (parm <> '') then                             /* @CD */

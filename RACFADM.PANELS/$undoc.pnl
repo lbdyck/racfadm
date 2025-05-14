@@ -2,7 +2,6 @@
 
 Command   Description
 
-NOTONLY   The reverse of ONLY
 NOINT     Generate PASSWORD NOINTERVAL commands for tablea entries
 CKPW      Generate password change date for tablea entries
 ALT       Display alternate panel in User Profile display
