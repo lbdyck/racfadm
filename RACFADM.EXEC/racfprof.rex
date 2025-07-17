@@ -14,6 +14,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @B3  250710  TRIDJK   Change RACF.PROFILE to PROFILE               */
 /* @B2  241214  TRIDJK   Handle IRRXUTIL error codes                  */
 /* @B1  240906  TRIDJK   Handle _SETROPTS class and profile           */
 /* @B0  230908  TRIDJK   Handle irrcerta et al "anchor" user profiles */
@@ -117,7 +118,7 @@ ADDRESS ISPEXEC
   end
 
   /* Print header */
-  call sez "Profile: "RACF.PROFILE,                           /* @AJ */
+  call sez "Profile: "PROFILE,                                /* @B3 */
            " Segments: "||,                                   /* @AD */
            right(RACF.0,2,"0")
 

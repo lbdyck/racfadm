@@ -374,6 +374,7 @@
       D,'CMD(%RACFDSL)'
       E,'CMD(%RACFENQS)'
       G,'CMD(%RACFGEN)'
+ /*  GA,'CMD(%RACFGENA)' */
       H,'CMD(%RACFHELP)'
  /*   I,'CMD(%RACFLOG $ISSUES)'    Known issues (PMRs)         Hidden */
       L,'CMD(%RACFLOG ISPLOG &OPERAND)' /* R to reverse LOG date order*/

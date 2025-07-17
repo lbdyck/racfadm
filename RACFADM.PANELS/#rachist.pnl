@@ -29,4 +29,5 @@
 !
 )PROC
   &ZUP     = #RACHIST
+  &ZCONT   = #RACERA
 )END

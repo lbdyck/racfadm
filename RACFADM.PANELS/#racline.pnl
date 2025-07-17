@@ -74,6 +74,17 @@
    } R           {Remove profile from RACF
    } S           {List of permits defined for this profile
    } U           {Modify selected resource profile segments
++
+%                          Digital certificates
++
++Line Command     Description
+   } S           {Issue RACDCERT CERTAUTH LIST LABEL command
+   } X           {Issue RACDCERT CERTAUTH EXPORT LABEL command
+   } H           {Issue RACDCERT CERTAUTH LISTCHAIN LABEL command
+   } A           {Issue RACDCERT CERTAUTH ADD WITHLABEL command
+   } D           {Issue RACDCERT CERTAUTH DELETE LABEL command
+   } G           {Issue RACDCERT CERTAUTH GENCERT WITHLABEL cmd
++
 )INIT
   &ZUP     = #RACLINE
 )PROC

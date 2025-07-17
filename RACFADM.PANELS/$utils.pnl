@@ -36,7 +36,7 @@ IRRUT100  RACF cross-reference utility.
 
           IRRUT100 lists all occurrences of a specified userid or
           group name that appear in a RACF database. This can help
-          discovering the relationships between various users and
+          discover the relationships between various users and
           groups, and learn other important information about
           users, groups, and the resources they control. Generic
           profile names will be followed by the letter "G" in

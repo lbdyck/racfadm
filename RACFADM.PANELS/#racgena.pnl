@@ -1,0 +1,17 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Generate Profile Source+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%  Generate profile source for ALL "active" general resource profiles
++
++  Enter!ALL+for the CLASS on the input panel.
++
++  The result is a file consisting of the!RDEFINE+and!PERMIT+
++  commands for all active classes.
+)PROC
+  &ZUP     = #RACGEN1
+)END

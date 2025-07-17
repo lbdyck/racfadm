@@ -39,6 +39,7 @@
  #RACENQ   Tutorial       Enqueue information
  #RACERA   History        Nico Rizzuto's original menu for ERA
  #RACFPP   Tutorial       Word or Phrase Report
+ #RACGENA  Tutorial       Generate profile source for all general resource profs
  #RACGEN1  Tutorial       Generate profile source
  #RACGRP5  Tutorial       Group's userids profiles
  #RACGRP8  Tutorial       Group profile

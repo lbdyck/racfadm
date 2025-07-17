@@ -24,6 +24,9 @@
 +  currently exist.  This file can then be edited to change the
 +  high-level qualifier or sent to another system before re-execution.
 +  It can also be used for report generation purposes.
++
++ \ \ (press%ENTER+to continue) \ \
 )PROC
   &ZUP     = #RACGEN1
+  &ZCONT   = #RACGENA
 )END

@@ -21,7 +21,7 @@
 %  EXclude text     +Do not display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
-%  Next             +Cycle between normal and alternate list user display
+%  LEFT/RIGHT       +Cycle between normal and alternate list user display
 %  CERTS/RINGS      +List Digital cert/ring information for users in table
 %
 +Line Commands

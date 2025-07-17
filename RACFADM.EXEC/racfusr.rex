@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FE  250519  TRIDJK   Add LEFT/RIGHT primary commands              */
 /* @FD  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @LD  250306  LBDYCK   Check for automount                          */
 /* @PV  250213  PVELS    Support 16 character PASSPHRASES             */
@@ -297,7 +298,9 @@ ADDRESS ISPEXEC                                               /* @BC */
      call Profl
      if (called <> 'YES') then
         "DISPLAY PANEL("PANEL01")"                            /* @BL */
-  End
+     else                    /* END not recognized if CALLed     @JK */
+        leave                /* and CONTROL PASSTHRU LRSCROLL    @JK */
+  End                        /* is used.                             */
 
   If (SETMTRAC <> 'NO') then do                               /* @DK */
      Say "*"COPIES("-",70)"*"                                 /* @DK */
@@ -309,6 +312,7 @@ EXIT
 /*  Show all profiles for a filter                                    */
 /*--------------------------------------------------------------------*/
 PROFL:
+  'control passthru lrscroll pason'                           /* @FE */
   call CREATE_TABLEA                                          /* @BE */
   if (USER = 'INVALID') | (USER = 'NONE') THEN DO             /* @EP */
      "TBEND" tablea                                           /* @EW */
@@ -500,6 +504,13 @@ PROFL:
           else                                                /* @FA */
             panel02 = 'RACFUSR2'                              /* @FA */
         END                                                   /* @FA */
+        WHEN (ABBREV("LEFT",ZCMD,4) = 1 |,                    /* @FE */
+              ABBREV("RIGHT",ZCMD,5) = 1) THEN DO             /* @FE */
+          if panel02 = 'RACFUSR2' then                        /* @FE */
+            panel02 = 'RACFUS2A'                              /* @FE */
+          else                                                /* @FE */
+            panel02 = 'RACFUSR2'                              /* @FE */
+        END                                                   /* @FE */
         WHEN (ABBREV("ALTUSER",ZCMD,7) = 1) THEN DO /*UNDOC*/ /* @JK */
           call racfaltu parm                                  /* @JK */
         END                                                   /* @JK */
@@ -647,6 +658,7 @@ PROFL:
      End
      'control display restore'                                /* @EE */
   end  /* Do forever) */                                      /* @EE */
+  'control passthru lrscroll pasoff'                          /* @FE */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Process primary command FIND for TABLEA                      @ED  */

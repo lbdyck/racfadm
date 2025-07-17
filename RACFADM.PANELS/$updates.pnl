@@ -7,6 +7,25 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  17 Jul 2025 - V40R2
+     - Tutorial (Option T)
+       -- Updated panel #RACLINE to document Digital certificate
+          line commands
+     - User Profiles (Option 1)
+       -- Updated RACFUSR to add LEFT/RIGHT primary commands to
+          allow scrolling of tablea
+     - Generate profile source (Option G)
+       -- Updated RACFGEN exec to use LRECL=300 if general resource
+          profile names are greater than 52 in length.  If so,
+          use RACRUN.
+       -- Added RACFGENA exec to generate profile source for ALL
+          "active" resource profiles if ALL is entered as the class
+          on the input panel.
+       -- Added #RACGENA tutorial panel.
+     - Other Items
+       -- Updated exec RACFPROF to print header line correctly
+          when processing a long profile name.
+
   13 May 2025 - V40R1
      - General Cleanup
        -- Changed various panel Select fields to eliminate commas
@@ -341,7 +360,7 @@
      - Fix Panel RACFUSR2 to correct missing VER options of C and D
 
   25 Apr 2024 - V37R2
-     - If the IRRXIUTIL option in settings is not set to Y then remove
+     - If the IRRXUTIL option in settings is not set to Y then remove
        option P on the menu.
 
   23 Apr 2024 - V37R1

@@ -10,6 +10,7 @@
 +
 +FILTER %===>_FILTER                                                         @Z
 +CLASS  %===>_CLASS   + {DATASET or General Resource Class
++                       %ALL{for all "active" General Resource Classes
 +
 +
 {Enter a valid filter for the SEARCH command.  For example,
@@ -24,6 +25,8 @@
   .CURSOR = FILTER
   &ZCMD   = ' '
 )PROC
+  IF (&FILTER = ' ')
+    &FILTER = '**'
   VER (&FILTER,NB)
 )FIELD
   FIELD(FILTER) IND(SCIND,'<>') LEN(246)

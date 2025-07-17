@@ -1,13 +1,11 @@
 /*%NOCOMMENT====================* REXX *==============================*/
-/*PURPOSE:  RACFADM - Generate Profile Source, Option G               */
+/*PURPOSE:  RACFADM - Generate Profile Source for all "active"        */
+/*                    Resource Classes, Option GA                     */
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @A1  250717  Janko    If CLASS = ALL then call RACFGENA            */
-/* @A0  250503  Janko    IRRXUTIL verson                              */
+/* @A0  250707  Janko    IRRXUTIL verson                              */
 /*====================================================================*/
-PANEL01     = "RACFGEN1"   /* Set filter, menu option G    */
-PANELD1     = "RACFDISP"   /* Display report with colors   */
 EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
@@ -25,35 +23,6 @@ If (SETMTRAC <> 'NO') then do
    if (SETMTRAC <> 'PROGRAMS') THEN
       interpret "Trace "SUBSTR(SETMTRAC,1,1)
 end
-
-/* Produce list of profiles for filter */
-Display_panel:
-  do while disp_rc < 8
-  "display panel("panel01")" /* get filter and class */
-  disp_rc = rc
-  if disp_rc = 8 then
-    exit
-
-  if class = 'ALL' then do                                    /* @A1 */
-    call RACFGENA                                             /* @A1 */
-    exit                                                      /* @A1 */
-    end                                                       /* @A1 */
-
-  if class = ' ' then
-     class = 'DATASET'
-  x = outtrap('ser.')
-  cmd = "SEARCH FILTER("FILTER") CLASS("CLASS")"
-  Address TSO cmd
-  cmd_rc = rc
-  x = outtrap('off')
-  IF SETMSHOW <> 'NO' THEN
-     CALL SHOWCMD
-  if cmd_rc > 0 then do
-    call racfmsgs 'ERR16'
-    end
-  else
-    leave
-  end
 
 cmd. = ""
 y = 0
@@ -80,12 +49,32 @@ cmd.y = "//SYSTSPRT DD  SYSOUT=*"
 y = y + 1
 cmd.y = "//SYSTSIN  DD  *"
 
-lrecl = 80
+/* Get all active resource classes */
+myrc=IRRXUTIL("EXTRACT","_SETROPTS","_SETROPTS","CLS")
+if (word(myrc,1)<>0) then do
+   say "MYRC="myrc
+   say "An IRRXUTIL or R_admin error occurred"
+end
+
+/* Generate profile source for all active resource classes */
+do t = 4 to CLS.BASE.CLASSACT.0     /* Skip DATASET, USER, GROUP */
+  filter = "**"
+  class = cls.base.classact.t
+  skip_class = "DIGTCERT DIGTRING EJBROLE"  /* Use lower-case names */
+  if wordpos(class,skip_class) > 0 then
+    iterate
+
+  x = outtrap('ser.')
+  cmd = "SEARCH FILTER("FILTER") CLASS("CLASS")"
+  Address TSO cmd
+  cmd_rc = rc
+  x = outtrap('off')
+  IF SETMSHOW <> 'NO' THEN
+     CALL SHOWCMD
+
 do s = 1 to ser.0
   profile = strip(ser.s)
   lprof = length(profile)
-  if lprof > 52 then
-    lrecl = 300
   if lprof > 3 then
     if substr(profile,lprof-3,4) = ' (G)' then
       profile = substr(profile,1,lprof-4)
@@ -93,9 +82,6 @@ do s = 1 to ser.0
   Address TSO
   rxrc=IRRXUTIL("EXTRACT",class,profile,"RACF","")
   if (word(rxrc,1) <> 0) then do
-     /* Probably a discrete profile defined as generic
-     say 'IRRXUTIL return code:'rxrc
-     */
      iterate
      end
 
@@ -107,10 +93,7 @@ do s = 1 to ser.0
     segment=RACF.i
     if segment = 'BASE' then do
       y = y + 1
-      if class = 'DATASET' then
-        cmd.y = " ADDSD "profile"" "-"
-      else
-        cmd.y = " RDEFINE "class profile"" "-"
+      cmd.y = " RDEFINE "class profile"" "-"
       y = y + 1
       cmd.y = "  LEVEL("racf.base.level.1")" "-"
       y = y + 1
@@ -151,39 +134,29 @@ do s = 1 to ser.0
       end
 
   if RACF.0 = 1 then
-    cmd.y = strip(cmd.y,t,'-')
+    cmd.y = strip(cmd.y,'T','-')
 
   if racf.base.aclcnt.repeatcount <> '' then do
     do a=1 to racf.base.aclcnt.repeatcount
       y = y + 1
-      if class = 'DATASET' then
-        cmd.y = " PERMIT '"profile"' CLASS("class")",
-            "ID("racf.base.aclid.a")",
-            "ACC("racf.base.aclacs.a")" type
-      else
-        cmd.y = " PERMIT "profile" CLASS("class")",
-            "ID("racf.base.aclid.a")",
-            "ACC("racf.base.aclacs.a")" type
+      cmd.y = " PERMIT "profile" CLASS("class")",
+          "ID("racf.base.aclid.a")",
+          "ACC("racf.base.aclacs.a")" type
       end
     end
   if racf.base.acl2cnt.repeatcount <> '' then do
     do a=1 to racf.base.acl2cnt.repeatcount
       y = y + 1
-      if class = 'DATASET' then
-        cmd.y = " PERMIT '"profile"' CLASS("class")",
-            "ID("racf.base.acl2id.a")",
-            "ACC("racf.base.acl2acs.a")" type "-"
-      else
-        cmd.y = " PERMIT "profile" CLASS("class")",
-            "ID("racf.base.acl2id.a")",
-            "ACC("racf.base.acl2acs.a")" type "-"
+      cmd.y = " PERMIT "profile" CLASS("class")",
+          "ID("racf.base.acl2id.a")",
+          "ACC("racf.base.acl2acs.a")" type "-"
       y = y + 1
       cmd.y = "   WHEN("racf.base.acl2cond.a"("racf.base.acl2ent.a"))"
       end
     end
     drop racf.
   end
-
+  end
     cmd.0 = y
     call Display_Commands
     Address ISPExec
@@ -266,6 +239,7 @@ SHOWCMD:
   IF (SETMSHOW = "BOTH") | (SETMSHOW = "LOG") THEN DO
      zerrsm = "RACFADM "REXXPGM" RC="cmd_rc
      zerrlm = cmd
+     Address ISPExec
      'log msg(isrz003)'
   END
 RETURN
@@ -274,7 +248,7 @@ RETURN
 /*--------------------------------------------------------------------*/
 Display_Commands:
   Address TSO "alloc f("ddname") new reuse",
-              "lrecl("lrecl") blksize(0) recfm(v b)",
+              "lrecl(300) blksize(0) recfm(v b)",
               "unit(vio) space(5 15) cylinders release"
   Address TSO "execio * diskw "ddname" (stem cmd. finis"
   drop cmd.

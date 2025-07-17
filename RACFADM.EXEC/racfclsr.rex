@@ -618,16 +618,16 @@ ALL_Classes:
   last_line = sourceline()
   do i = last_line to 1 by -1
     line = sourceline(i)
-    if line = "/* Ben Marino */" then leave
+    if line = "/* All Classes */" then leave
     end
   last_line = sourceline()
 
   do j = i+1 to last_line
     line = sourceline(j)
-    if line = "/* Ben Marino */" then leave
+    if line = "/* All Classes */" then leave
     if left(line,2) = 'c.' then do
-      class = substr(line,3,8)
-      cdesc = substr(line,15,57)
+      class = strip(substr(line,3,8))
+      cdesc = c.class
       "TBMOD" TABLEA "ORDER"
       end
     end
@@ -637,6 +637,7 @@ RETURN
 /*--------------------------------------------------------------------*/
 Class_desc:                                                   /* @BH */
 c.         = ""
+/* All Classes */
 /* Ben Marino */
 c.$ZEMFCLS = "Controls zEMF SMF Exits Management Facility              "
 c.$ZRMSCLS = "Controls zRMS Resource Monitor Subsystem                 "
@@ -645,6 +646,8 @@ c.APICLASS = "Controls zXPC System Events Listener API                 "
 c.AUDITSVC = "Controls zXPC System Events Listener API                 "
 c.ECFCLASS = "Controls zECF Event Capture Facility                     "
 c.XPCCLASS = "Controls zXPC System Events Listener API                 "
+/* Emma       */
+c.SEARTEST = "Security API for RACF                                    "
 
 c.ACEECHK  = "Configuration of RACF ACEE Privilege Escalation Detection"
 c.ALCSAUTH = "Supports the Airline Control System/MVS (ALCS/MVS)       "

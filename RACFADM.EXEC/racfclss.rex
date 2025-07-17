@@ -754,6 +754,8 @@ c.APICLASS = "Controls zXPC System Events Listener API                 "
 c.AUDITSVC = "Controls zXPC System Events Listener API                 "
 c.ECFCLASS = "Controls zECF Event Capture Facility                     "
 c.XPCCLASS = "Controls zXPC System Events Listener API                 "
+/* Emma       */
+c.SEARTEST = "Security API for RACF                                    "
 
 c.ACEECHK  = "Configuration of RACF ACEE Privilege Escalation Detection"
 c.ALCSAUTH = "Supports the Airline Control System/MVS (ALCS/MVS)       "
