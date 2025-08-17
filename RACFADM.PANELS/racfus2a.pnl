@@ -2,11 +2,10 @@
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRUSER)
   02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRNAME)
   03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRDEFG)
-  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRDATE)
-  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLROWNE)
-  06  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRREVO)
-  07  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRATTR)
-  08  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRTSOU)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRGRPC)
+  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRPSWD)
+  06  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRINTP)
+  07  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRPHRS)
    $  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(TURQ)     JUST(LEFT)
    `  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(GREEN)    JUST(LEFT)
    ^  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(RED)      JUST(LEFT)
@@ -23,12 +22,12 @@
 +FILTER: $RFILTER ¬SELCMD2B                                                    ¬
 +SELECT: ¬SELCMD2A                                                             ¬
 %
-%S         ~Userid  ~Name              ~Group   ~Logon     ~PswDt ~PswInt~PhrsDt
+%S         ~Userid  ~Name              ~Group     ~Grps    ~PswDt ~PswInt~PhrsDt
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z ^Z      Z       Z                 Z       Z         `Z     `Z     `Z
+_Z ^Z      Z       Z                 Z         Z       	Z     Z     Z
 )INIT
-  .ZVARS = '(OPTA ACTION USER NAME DEFGRP DATELGN +
+  .ZVARS = '(OPTA ACTION USER NAME DEFGRP GRPCNT +
              DATEPASS INTPASS DATEPHRS)'
   .HELP  = #RACUSR2
   &ZCMD  = ' '
@@ -57,10 +56,10 @@ _Z ^Z      Z       Z                 Z       Z         `Z     `Z     `Z
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT USERID')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT NAME')
   FIELD(ZPS00003) VAR(ZCMD) VAL('SORT GROUP')
-  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT LOGON')
-  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT DATEPASS')
-  FIELD(ZPS00006) VAR(ZCMD) VAL('SORT INTPASS')
-  FIELD(ZPS00007) VAR(ZCMD) VAL('SORT DATEPHRS')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT GRPS')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT PSWDT')
+  FIELD(ZPS00006) VAR(ZCMD) VAL('SORT PSWINT')
+  FIELD(ZPS00007) VAR(ZCMD) VAL('SORT PHRSDT')
 )END
 +FILTER: $RFILTER                ¬SELCMD2B                                     ¬
 /*--------------------------------------------------------------------*/

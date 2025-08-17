@@ -21,7 +21,8 @@
  RACFPRMS  Parameter      RACF parameters
  RACFRIN1  Rings          Save display to a dataset
  RACFRIN2  Rings          Save display to a dataset
- RACFRPTS  Reports        RACF reports, All reports
+ RACFRPTD  Reports        RACF reports, All reports (PDSOUT)
+ RACFRPTS  Reports        RACF reports, All reports (SYSOUT)
  RACFRPTU  Reports        RACF reports, IRRDBU00 unload utility
  RACFUSR2  User           List userids
  RACFUS2A  User           List userids (alternate panel)

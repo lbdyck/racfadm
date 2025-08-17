@@ -1,0 +1,6 @@
+*---------- Undocumented Reports Primary Commands ----------*
+
+Command   Description
+
+PDSOUT    Generate RACF reports to a PDS
+UNDOC     What you are reading now

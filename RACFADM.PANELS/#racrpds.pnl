@@ -1,0 +1,25 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE) HILITE(USCORE)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Report Generation PDS Datasets+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%
++  This pop-up prompting panel will allow you to define PDS dataset
++  names used for report generation.
++
++  The first step of generated JCL will%allocate+the PDS datasets
++  if the%COND=ONLY+parameter is removed.
++
+!  //ALLOC    EXEC  PGM=IEFBR14,COND=ONLY   (--- REMOVE COND TO ALLOCATE
+!  //ICETOOL  DD  DSN=TRIDJK.RACFADM.ICETOOL,DISP=(,CATLG,DELETE),
+!  //             SPACE=(CYL,(5,5,15),RLSE),UNIT=SYSALLDA
+!  //DSMON    DD  DSN=TRIDJK.RACFADM.DSMON,DISP=(,CATLG,DELETE),
+!  //             SPACE=(CYL,(1,1,15),RLSE),UNIT=SYSALLDA
++
+)PROC
+  &ZUP     = #RACRPDS
+)END

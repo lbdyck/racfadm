@@ -75,6 +75,13 @@
    } S           {List of permits defined for this profile
    } U           {Modify selected resource profile segments
 +
+%                          RACF Reports
++
++Line Command     Description
+   } S           {Select report
+   } R           {Unselect report
+   } B           {Browse report on &zuser..RACFADM.ICETOOL/DSMON
++
 %                          Digital certificates
 +
 +Line Command     Description

@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A8  250814  TRIDJK   Add $ATTLS   - AT-TLS implentation           */
 /* @A7  250327  TRIDJK   X line cmd - Exclude a command from the list */
 /* @A6  250325  TRIDJK   Add $UTILS   - RACF Utilites                 */
 /* @A5  241120  TRIDJK   Add $GLOSSRY - RACF Tech terms and abbrevs   */
@@ -1627,6 +1628,7 @@ SYSHelp:                                                      /* @A4 */
 /* Group LOCAL is for local help members */
 /* enclosed as a REXX comment to avoid REXX syntax errors
 RACF:
+$ATTLS     AT-TLSv1.2 implementation for RACF
 $GLOSSRY   Technical terms and abbreviations for RACF
 $UTILS     RACF Utilities
 ADDGROUP   Add group profile

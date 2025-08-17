@@ -7,6 +7,24 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  15 Aug 2025 - V40R3
+     - Reporting (Option R)
+       -- Updated RACFRPTS to add the primary commands EXclude and
+          PDSOut - Generate reports to PDS output
+       -- Added line command 'B' to browse PDS report outputs
+       -- Updated panel #RACRPT2 to document new commands
+       -- Added RACFRPDS panel to specify report PDS Datasets
+       -- Added #RACRPDS tutorial panel
+     - User Profiles (Option 1)
+       -- Updated RACFUSR to sort new fields in panel RACFUS2A
+          (Grps, PswDt, PswInt, PhrsDt)
+     - Updated RACFHELP (Option H)
+       -- Added pseudo help member $ATTLS which is a SHARE presentation
+          "Implementing AT-TLSv1.2" from Tom Conley.  It has all the
+          RACF commands, TCPIP, TN3270, and PAGENT statements needed
+          for AT-TLS implementation.  Copy this member to the
+          SYSHELP concatenation.
+
   17 Jul 2025 - V40R2
      - Tutorial (Option T)
        -- Updated panel #RACLINE to document Digital certificate

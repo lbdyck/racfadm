@@ -9,6 +9,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @JK  250729  TRIDJK   Added primary command PDSOUT                 */
+/* @JK  250729  TRIDJK   Added line command 'B'                       */
+/* @JK  250722  TRIDJK   Added primary command EXCLUDE                */
 /* @LD  211101  LBD      Fix EDIT on temp dataset                     */
 /* @AH  200701  RACFA    Unload - GDG BASE, relative, G#V#, make (+1) */
 /* @AG  200630  RACFA    Allow TSO PREFIX has HLQ in dsname           */
@@ -164,6 +167,40 @@ DISP_PANEL:
                 end
              end
         END
+        WHEN (ABBREV("EXCLUDE",ZCMD,2) = 1) THEN DO           /* @JK */
+             find_str = translate(parm)                       /* @JK */
+             'tbtop ' TABLEA                                  /* @JK */
+             'tbskip' TABLEA                                  /* @JK */
+             do forever                                       /* @JK */
+                str = translate(rec name pgm desc)            /* @JK */
+                if (pos(find_str,str) > 0) then               /* @JK */
+                  'tbdelete' TABLEA                           /* @JK */
+                else nop                                      /* @JK */
+                'tbskip' TABLEA                               /* @JK */
+                if (rc > 0) then do                           /* @JK */
+                   'tbtop' TABLEA                             /* @JK */
+                   leave                                      /* @JK */
+                end                                           /* @JK */
+             end                                              /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("PDSOUT",ZCMD,4) = 1) THEN DO            /* @JK */
+             Address ISPExec                                  /* @JK */
+             'control display save'                           /* @JK */
+             'addpop row(6) column(4)'                        /* @JK */
+             'display panel(racfrpds)'                        /* @JK */
+             xrc = rc                                         /* @JK */
+             'rempop'                                         /* @JK */
+             'control display restore'                        /* @JK */
+             if xrc > 0 then                                  /* @JK */
+               nop                                            /* @JK */
+             else do                                          /* @JK */
+               skeleton3 = 'RACFRPTD'                         /* @JK */
+               racflmsg = "PDS output requested."             /* @JK */
+               "control display lock"                         /* @JK */
+               "display msg(RACF011)"                         /* @JK */
+               Address 'SYSCALL' 'SLEEP (2)'                  /* @JK */
+               end                                            /* @JK */
+        END                                                   /* @JK */
         WHEN (ABBREV("RESET",ZCMD,1) = 1) THEN DO
              if (parm <> '') then
                 rfilter = parm
@@ -221,6 +258,9 @@ DISP_PANEL:
              doit = ' '                                       /* @AE */
              'tbput' tablea                                   /* @AE */
         end                                                   /* @AE */
+        when (opta = 'B') then do                             /* @JK */
+             call Browse_icetool_pds                          /* @JK */
+        end                                                   /* @JK */
         otherwise nop
      End
      'control display restore'
@@ -341,6 +381,27 @@ SORTSEQ:
      end
   end
   INTERPRET "SORT"SUBSTR(SORTCOL,1,4)" = TMPSEQ"
+RETURN
+/*--------------------------------------------------------------------*/
+/*  Browse ICETOOL and DSMON PDS members                              */
+/*--------------------------------------------------------------------*/
+Browse_icetool_pds:
+Address ISPExec
+'vget (racipds racdpds)'
+if rec > 900 then do
+  dsn = strip(racdpds,T,"'")
+  dsn = dsn"("name")'"
+  end
+else do
+  if rec = 'ALL' then
+    dsn = racipds
+  else do
+    dsn = strip(racipds,T,"'")
+    dsn = dsn"(RPT"rec")'"
+    end
+  end
+"control errors return"
+"browse dataset("dsn")"
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Create Batch job                                                  */

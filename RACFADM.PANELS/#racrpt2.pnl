@@ -12,18 +12,17 @@
 %  Sort column A/D  +Sort column, ascending/descending, cols are point-and-shoot
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
+%  EXclude text     +Do not display rows with text string
 %  Reset            +Redisplay all rows and sort first column
 %  Unload           +Unload the RACF database using IRRDBU00
 %  Job              +Define JOB card and parameters (UNIT, SPACE, etc.)
 %  SUbmit           +Submit the job
+%  PDSOut           +Generate reports to PDS
 +
 +Line Commands
 %  S  !Select       +Select report
 %  R  !Reset        +Unselect report
-+
-+
-+
-+
+%  B  !Browse       +Browse report on PDS
 +
 +
 )PROC

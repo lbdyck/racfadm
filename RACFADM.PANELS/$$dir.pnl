@@ -5,6 +5,7 @@
   Member      Subject                   Description
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
+ $ATTLS    How To         Tom Conley "Implementing AT-TLSv1.2" commands
  $CLASSES  Information    Document general resource classes
  $DEFSETG  Settings       Default site settings for new users
  $GLOSSRY  TSO Help       Technical terms and abbreviations for RACF
@@ -15,6 +16,7 @@
  $UTILS    TSO HELP       RACF Utilities
  #RACACC   Tutorial       DSN/Resource Access Report
  #RACACKN  Tutorial       Acknowledgements
+ #RACACK2  Tutorial       Acknowledgements, Developers
  #RACAMTC  Tutorial       OMVS Home Directory Automount Check
  #RACCERA  Tutorial       Add new certificate
  #RACCERG  Tutorial       Generate a Digital Certificate
@@ -158,6 +160,7 @@
  RACFRINC  Rings          Add new label to ring
  RACFRIN1  Rings          List digital rings
  RACFRIN2  Rings          List digital rings
+ RACFRPDS  Reports        Report Generation PDS datasets (pop-up)
  RACFRPTS  Reports        RACF reports, display reports
  RACFRPTJ  Reports        RACF reports, Job card and JCL parameters
  RACFSAVE  Save Cmd       Save display to dataset (primary command)

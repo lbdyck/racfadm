@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FF  250809  TRIDJK   Sort and color new fields in panel RACFUS2A  */
 /* @FE  250519  TRIDJK   Add LEFT/RIGHT primary commands              */
 /* @FD  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @LD  250306  LBDYCK   Check for automount                          */
@@ -542,6 +543,8 @@ PROFL:
                      call sortseq 'USER'                      /* @CX */
                 when (ABBREV("NAME",PARM,1) = 1) then
                      call sortseq 'NAME'                      /* @CX */
+                when (ABBREV("GRPS",PARM,4) = 1) then         /* @FF */
+                     call sortseq 'GRPCNT'                    /* @FF */
                 when (ABBREV("GROUP",PARM,1) = 1) then        /* @BI */
                      call sortseq 'DEFGRP'                    /* @CX */
                 when (ABBREV("LOGON",PARM,1) = 1) then        /* @BI */
@@ -554,16 +557,30 @@ PROFL:
                      call sortseq 'ATTR2'                     /* @CX */
                 when (ABBREV("TSO",PARM,1) = 1) then          /* @BI */
                      call sortseq 'TSOUSER'                   /* @CX */
+                when (ABBREV("PSWDT",PARM,4) = 1) then        /* @FF */
+                     call sortseq 'DATEPASS'                  /* @FF */
+                when (ABBREV("PSWINT",PARM,4) = 1) then       /* @FF */
+                     call sortseq 'INTPASS'                   /* @FF */
+                when (ABBREV("PHRSDT",PARM,4) = 1) then       /* @FF */
+                     call sortseq 'DATEPHRS'                  /* @FF */
                 otherwise NOP                                 /* @A5 */
            END                                                /* @A5 */
+
            CLRUSER  = "GREEN"; CLRNAME = "GREEN"              /* @EE */
            CLRDEFG  = "GREEN"; CLRDATE = "GREEN"              /* @EE */
            CLROWNE  = "GREEN"; CLRREVO = "GREEN"              /* @EE */
            CLRATTR  = "GREEN"; CLRTSOU = "GREEN"              /* @EE */
+           CLRGRPC  = "GREEN"; CLRINTP = "GREEN"              /* @FF */
+           CLRPSWD  = "GREEN"; CLRPHRS = "GREEN"              /* @FF */
            PARSE VAR SORT LOCARG "," .                        /* @EE */
            INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"       /* @EE */
+           IF LOCARG = "DATEPASS" THEN                        /* @FF */
+             CLRPSWD = "TURQ"                                 /* @FF */
+           IF LOCARG = "DATEPHRS" THEN                        /* @FF */
+             CLRPHRS = "TURQ"                                 /* @FF */
            "TBSORT "TABLEA" FIELDS("sort")"                   /* @EE */
            "TBTOP  "TABLEA                                    /* @EE */
+
         END                                                   /* @AT */
         otherwise NOP
      End /* Select */
@@ -1349,6 +1366,8 @@ GETD:
         datepass 'PASS-INTERVAL=' Intpass,                    /* @FA */
         'PHRASEDATE=' datephrs                                /* @FA */
 
+  call GETCONN                                                /* @FF */
+
   parse var details.3 'ATTRIBUTES='attribute1                 /* @AB */
   parse var details.4 'ATTRIBUTES='attribute2                 /* @AB */
   attr = STRIP(attribute1) STRIP(attribute2)                  /* @AB */
@@ -1556,7 +1575,8 @@ CREATE_TABLEA:                                                /* @BE */
   "TBCREATE" TABLEA ,
        "KEYS(USER) NAMES(ACTION NAME OWNER DEFGRP DATELGN DATECRE",
                         "REVOKED ATTR TSOUSER DATA ATTR2",
-                        "DATEPASS INTPASS DATEPHRS)",         /* @FA */
+                        "DATEPASS INTPASS DATEPHRS",          /* @FA */
+                        "GRPCNT)",                            /* @FF */
                         "REPLACE NOWRITE"
   /*
   TRACE I
@@ -1661,12 +1681,16 @@ CREATE_TABLEA:                                                /* @BE */
   sortdefg = 'A'; sortdate = 'D'                              /* @EE */
   sortowne = 'A'; sortrevo = 'D'                              /* @EE */
   sortattr = 'D'; sorttsou = 'D'                              /* @EE */
+  sortgrpc = 'A'; sortintp = 'A'                              /* @FF */
   CLRUSER  = "TURQ" ; CLRNAME = "GREEN"  /* Col colors */     /* @EE */
   CLRDEFG  = "GREEN"; CLRDATE = "GREEN"                       /* @EE */
   CLROWNE  = "GREEN"; CLRREVO = "GREEN"                       /* @EE */
   CLRATTR  = "GREEN"; CLRTSOU = "GREEN"                       /* @EE */
+  CLRGRPC  = "GREEN"; CLRINTP = "GREEN"                       /* @FF */
+  CLRPSWD  = "GREEN"; CLRPHRS = "GREEN"                       /* @FF */
   "TBSORT " TABLEA "FIELDS("sort")"                           /* @EE */
   "TBTOP  " TABLEA                                            /* @EE */
+
 RETURN                                                        /* @BE */
 /*--------------------------------------------------------------------*/
 /*  Add new profile                                              @DT  */
@@ -1968,6 +1992,20 @@ RETURN                                                        /* @D4 */
     temp = left(temp,2)||'A'                                  /* @F5 */
   attr2 = temp                                                /* @F5 */
 RETURN                                                        /* @F5 */
+/*--------------------------------------------------------------------*/
+/*  Get connects number                                               */
+/*--------------------------------------------------------------------*/
+GETCONN:                                                      /* @FF */
+    myrc = IRRXUTIL('EXTRACT','USER',user,'RACF',)            /* @FF */
+    if (word(myrc,1) <> 0) then do                            /* @FF */
+      grpcnt = '    '                                         /* @FF */
+      return                                                  /* @FF */
+      end                                                     /* @FF */
+    grpcnt = racf.base.connects.repeatcount                   /* @FF */
+    if grpcnt = '' then                                       /* @FF */
+      grpcnt = 0                                              /* @FF */
+    grpcnt = format(grpcnt,4)                                 /* @FF */
+RETURN                                                        /* @FF */
 /* ------------------------------------------------- *        /* @LD */
  | Check to verify if the target home base directory |        /* @LD */
  | is automounted and if not tell the user           |        /* @LD */

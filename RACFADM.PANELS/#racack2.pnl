@@ -1,0 +1,31 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Acknowledgements+)\-\%Tutorial
+%Command ===>_ZCMD
+%
++  Some development notes.  In 2019,!William Smith+discovered!Nico
+   Rizzuto's+web site in Italy.  He downloaded Nico's "ERA, Enhanced
++  RACF Administration: ISPF-based facility for RACF" dialog.  He
++  alerted the ISPF Cabal about his discovery and presented it at
++  SHARE 134, February 2020, in session Bit Bucket x'3B'.
++
++  Cabal members!Bruce Koss, Lionel Dyck,+and!Janko Kalinic+kick
++  started the development of%RACFADM+and made many enhancements and
++  fixes to the original dialog.
++
++  In 2024,!Giovanni Andreani+added digital certificate and ring
++  support to%RACFADM.+
++
++  In 2025,!Peter Vels+added 16 character PASSPHRASES support to
++ %RACFADM.+
++
++  As a local frozen custard owner used to say, "it really is good,
++  guys and gals".  Enjoy.
++
+)PROC
+  &ZUP     = #RACACKN
+)END

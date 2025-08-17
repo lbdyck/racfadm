@@ -13,7 +13,7 @@
 %Command ==>_ZCMD                                                  %Scr =>_Z   +
 +
 +Commands: %Unload+- JCL for RACF DB Unload or%Job+- Set Batch Job Card
-+Select:   %S+Select or%R+Reset                           %F3+- Edit/Submit Job
++Select:   %S+Select%R+Reset%B+Browse                     %F3+- Edit/Submit Job
 +
 +IRRDBU00 Dsn:_SETDRPTU                                    + Edit JCL:_Z{ (Y/N)
 +

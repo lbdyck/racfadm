@@ -1,0 +1,287 @@
+)F FUNCTION -
+ This help member has information about implementing AT-TLSv1.2.
+
+Bit Bucket x'36'
+Tom Conley, pinncons@rochester.rr.com
+
+SHARE 129
+Session 20844
+Providence, RI
+11 Aug 2017
+
+
+Implementing AT-TLSv1.2:
+
+In hindsight, TLS implementation fairly straightforward
+  TCPIP PROFILE changes
+  TN3270 config changes
+  Generate certificate
+  Create AT-TLS policy (manually or z/OSMF Config Assistant)
+  Enable PAGENT (Policy AGENT) started task
+  Create SERVAUTH security profiles
+  Use following examples to implement AT-TLS in 1-2 hours
+
+
+TCPIP required profile changes for AT-TLS:
+
+Add TTLS parm to TCPIPCONFIG
+  TCPCONFIG RESTRICTLOWPORTS TTLS
+
+Add PAGENT to AUTOLOG so it starts with TCPIP
+  AUTOLOG 5
+  ...
+  PAGENT ; Policy Agent
+
+Add DELAYSTART TTLS to AUTOLOG tasks needing TTLS
+  PORTMAP DELAYSTART TTLS ; Portmap Server
+
+
+TN3270 Config Changes:
+
+TN3270 configuration changes less extensive
+Use TTLSport statement in TelnetParms
+  TelnetParms ; AT-TLS TN3270E Telnet server port
+    TTLSport 992
+  ; Conntype secure
+  ; ClientAuth None
+  ; SSLtimeout 10
+  EndTelnetParms
+
+  Comment out or delete other options
+  All other options specified in AT-TLS PAGENT policy
+
+
+Generate Certificate:
+
+Existing SSL Certificate may suffice
+
+RACF commands to generate self-signed certificates:
+
+  racdcert gencert certauth -
+    subjectsdn(cn('TN3720 Certificate Authority (CA)') -
+    o('Pinnacle Consulting Group, Inc.') -
+    ou('TN3270 Cert Org Unit') c('US')) -
+    RSA size(2048) -
+    notbefore(date(2015-09-11)) -
+    notafter(date(2050-09-11)) -
+    keyusage(certsign) -
+    withlabel('TN3270 CA')
+
+  racdcert gencert site -
+    subjectsdn(cn('TN3270 Site Certificate') -
+    o('Pinnacle Consulting Group, Inc.') -
+    ou('TN3270 Site Org Unit') c('US')) -
+    RSA size(2048) -
+    notbefore(date(2015-09-11)) -
+    notafter(date(2050-09-11)) -
+    withlabel('TN3270 SharedSite1') -
+    signwith(certauth label('TN3270 CA')
+
+  setropts raclist(digtring) refresh
+  setropts raclist(digtcert) refresh
+
+Create keyring and connect certificates and users:
+
+  racdcert id(START1) addring(TCPIPRing1)
+  racdcert id(START1) connect(CERTAUTH -
+    label('TN3270 CA') ring(TCPIPRing1) -
+    usage(certauth) )
+  racdcert id(START1) connect(SITE -
+    label('TN3270 SharedSite1') ring(TCPIPRing1) -
+    default usage(personal) )
+
+  setropts raclist(digtring) refresh
+  setropts raclist(digtcert) refresh
+
+  rlist facility IRR.DIGTCERT.LISTRING all
+  PERMIT IRR.DIGTCERT.LISTRING CL(FACILITY) -
+    ID(START1) ACCESS(read)
+  SETROPTS RACLIST(FACILITY) REFRESH
+
+  rlist facility IRR.DIGTCERT.LISTRING all
+  RLIST FACILITY IRR.DIGTCERT.GENCERT ALL
+  RDEFINE FACILITY IRR.DIGTCERT.GENCERT UACC(NONE) -
+    OWNER(SYS1)
+  PERMIT IRR.DIGTCERT.GENCERT CL(FACILITY) -
+    ID(START1) ACCESS(CONTROL)
+  SETROPTS RACLIST(FACILITY) REFRESH
+
+  RLIST FACILITY IRR.DIGTCERT.GENCERT ALL
+
+
+Generate AT-TLS Policy:
+
+  I used z/OSMF Configuration Assistant to create policy
+  Really unnecessary, generated policy is cookie cutter
+
+  By default, you'll need two USS files:
+    /etc/pagent.conf
+    /etc/pagent_TTLS.conf
+  IBM provides samples for both files
+    /usr/lpp/tcpip/samples/pagent.conf
+    /usr/lpp/tcpip/samples/pagent_TTLS.conf
+  Updating samples likely easier than Config Assistant
+
+  /usr/lpp/tcpip/samples/pagent.conf nearly all comments
+  You only really need two lines (remove all QoS statements):
+    CommonTTLSConfig /etc/pagent_TTLS.conf
+    TTLSConfig /etc/pagent_TTLS.conf FLUSH PURGE
+
+  FLUSH PURGE deletes TTLS rules if PAGENT comes down
+  /usr/lpp/tcpip/samples/pagent_TTLS.conf
+  pagent_TTLS sample contains FTP, Rexec, etc.
+
+
+Following is pagent_TTLS.conf for TN3270 only:
+
+##
+## AT-TLS Policy Agent Configuration file for:
+## Image: SYSA
+## Stack: TCPIP
+##
+## Created by the IBM Configuration Assistant for z/OS Communications Server
+## Version 2 Release 2
+## Backing Store = Conley
+## Install History:
+## 2017-03-28 18:12:04 : Save To Disk
+## 2017-03-28 17:28:43 : Save To Disk
+##
+## TLS default rules: Default_TN3270-Server|
+## End TLS default rules
+##
+## End of Configuration Assistant information
+Generate AT-TLS Policy
+TTLSRule Default_TN3270-Server~1
+{
+LocalAddr ALL
+RemoteAddr ALL
+LocalPortRangeRef portR1
+RemotePortRangeRef portR2
+Direction Inbound
+Priority 255
+TTLSGroupActionRef gAct1~TN3270-Server
+TTLSEnvironmentActionRef eAct1~TN3270-Server
+}
+TTLSGroupAction gAct1~TN3270-Server
+{
+TTLSEnabled On
+}
+Generate AT-TLS Policy
+TTLSEnvironmentAction eAct1~TN3270-Server
+{
+HandshakeRole Server
+EnvironmentUserInstance 0
+TTLSKeyringParmsRef keyR~SYSA
+TTLSCipherParmsRef cipher1~AT-TLS__Platinum
+TTLSEnvironmentAdvancedParmsRef eAdv1~TN3270-Server
+}
+TTLSEnvironmentAdvancedParms eAdv1~TN3270-Server
+{
+ApplicationControlled On
+HandshakeTimeout 10
+SecondaryMap Off
+SSLv3 On
+TLSv1 On
+TLSv1.1 On
+TLSv1.2 On
+}
+Generate AT-TLS Policy
+TTLSKeyringParms keyR~SYSA
+{
+Keyring TCPIPRing1
+}
+TTLSCipherParms cipher1~AT-TLS__Platinum
+{
+V3CipherSuites TLS_DH_DSS_WITH_AES_256_GCM_SHA384
+V3CipherSuites TLS_DHE_DSS_WITH_AES_256_GCM_SHA384
+V3CipherSuites TLS_DH_RSA_WITH_AES_256_GCM_SHA384
+V3CipherSuites TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+V3CipherSuites TLS_RSA_WITH_AES_256_GCM_SHA384
+V3CipherSuites TLS_RSA_WITH_AES_256_CBC_SHA
+V3CipherSuites TLS_RSA_WITH_AES_128_CBC_SHA
+V3CipherSuites TLS_RSA_WITH_DES_CBC_SHA
+}
+Generate AT-TLS Policy
+##
+## The last three cipher suites are required for legacy devices. They
+## can be removed when those devices no longer exist.
+##
+PortRange portR1
+{
+Port 992
+}
+PortRange portR2
+{
+Port 1024-65535
+}
+
+
+Enable PAGENT Started Task:
+
+  Sample PAGENT proc in TCPIP.SEZAINST(PAGENT)
+  Can run "as-is", will use /etc/pagent.conf as input
+
+  Create userid and STARTED class profile:
+
+  ADDUSER PAGENT OWNER(SYS1) NOPASSWORD NAME('PAGENT STARTED TASK') -
+    OMVS(UID(0) HOME('/') PROGRAM('/bin/sh')
+  RDEFINE STARTED PAGENT.* OWNER(SYS1) UACC(NONE) -
+    STDATA(USER(PAGENT) GROUP(SYS1))
+  SETROPTS RACLIST(STARTED) REFRESH
+
+
+Create SERVAUTH Class Profiles
+
+  SERVAUTH class profiles required to grant access to TLS
+  Format EZB.INITSTACK.<sysname>.TCPIP
+
+  Grant READ authority for started task id's requiring TLS
+  Define for TCPIP-related tasks
+
+    TCPIP, PAGENT, TN3270, FTPSERVE, PORTMAP, LPSERVE
+    NFS
+    CICS
+    DB2 DIST regions
+    MQ MSTR's and CHIN's, Qpasa
+    CA-ESP job scheduler
+    OPENSSH
+    SYSLOGD
+    CSSMTP
+    Etc. (your site may have other tasks needing this profile)
+
+
+Create SERVAUTH Class Profiles:
+
+  Define for TCPIP-related tasks
+
+  RDEFINE SERVAUTH EZB.INITSTACK.SYSA.TCPIP UACC(NONE) OWNER(SYS1) -
+    FROM(EZB.INITSTACK.SYST.TCPIP)
+  RDEFINE SERVAUTH EZB.INITSTACK.SYSB.TCPIP UACC(NONE) OWNER(SYS1) -
+    FROM(EZB.INITSTACK.SYST.TCPIP)
+  SETROPTS RACLIST(SERVAUTH) REFRESH
+
+  PERMIT EZB.INITSTACK.CPUA.TCPIP CL(SERVAUTH) AC(R) ID(CICSA1)
+  PERMIT EZB.INITSTACK.CPUA.TCPIP CL(SERVAUTH) AC(R) ID(DB2P)
+  PERMIT EZB.INITSTACK.CPUA.TCPIP CL(SERVAUTH) AC(R) ID(MQPRCHIN)
+  PERMIT EZB.INITSTACK.CPUC.TCPIP CL(SERVAUTH) AC(R) ID(MQPRMSTR)
+  PERMIT EZB.INITSTACK.CPUA.TCPIP CL(SERVAUTH) AC(R) ID(QPMON)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(TCPIP)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(TN3270E)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(FTPSERVE)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(PAGENT)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(NFS)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(OPENSSH)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(SYSLOGD)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(LPSERVE)
+  PERMIT EZB.INITSTACK.SYSK.TCPIP CL(SERVAUTH) AC(R) ID(PORTMAP)
+
+  SETROPTS RACLIST(SERVAUTH) REFRESH
+
+
+OBEYFILE to Implement:
+
+  You can issue OBEYFILE commands to implement
+    S PAGENT
+    OBEYFILE TCPIP PROFILE
+    OBEYFILE TN3270 PROFILE
+  Don't forget to change TCPIP and TN3270 procs

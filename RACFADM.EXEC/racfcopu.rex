@@ -174,6 +174,8 @@ do i=1 to RACF.0 /* get the segment names */
 
   if tso = 'Y' then do                                        /* @A7 */
     /* Allocate ISPF profile */                               /* @A7 */
+    if settprof = "" then                                     /* @JK */
+      settprof = "ISPF.ISPPROF"                               /* @JK */
     y = y + 1                                                 /* @A7 */
     cmd.y = " ALLOC FI(PROF) DA('"cluser"."SETTPROF"') -"     /* @A7 */
     y = y + 1                                                 /* @A7 */

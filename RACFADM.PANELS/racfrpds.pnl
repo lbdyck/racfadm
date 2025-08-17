@@ -1,0 +1,28 @@
+)Attr Default(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
+)Body window(77,06) expand(\\)
+%Command ===>_zcmd
++
++ICETOOL Report PDS%===>_racipds                                       +
++DSMON   Report PDS%===>_racdpds                                       +
++
+%ENTER+to continue or%F3+to cancel
+)Init
+  &ZCMD    = ' '
+  .cursor  = racipds
+  .HELP    = #RACRPDS
+  &ZWINTTL = 'RACFADM - Report Generation PDS Datasets'
+  if (&racipds = '')
+    &racipds = '''&zuser..RACFADM.ICETOOL'''
+  if (&racdpds = '')
+    &racdpds = '''&zuser..RACFADM.DSMON'''
+)Proc
+  ver (&racipds,nb,dsname)
+  ver (&racdpds,nb,dsname)
+  vput (racipds racdpds) profile
+  &ZWINTTL = ''
+)End

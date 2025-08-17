@@ -59,9 +59,9 @@
   500E @WNGR  ICETOOL  General resources in WARNING mode
   503  ICE53  ICETOOL  General resources with dupl. trans. in mbr list
   505  GRACC  ICETOOL  General resource access
-  505A @IGRS  ICETOOL  General resource access w/ ID(*) other than NONE
+  505A @IGRS  ICETOOL  General resource std ACLs w/ ID(*) other than NONE
   505U GRACCG ICETOOL  General resource access by group
-  507A @IGRC  ICETOOL  General resource access w/ ID(*) other than NONE
+  507A @IGRC  ICETOOL  General resource cond ACLs w/ ID(*) other than NONE
   540  GRST   ICETOOL  Started task segment
   560  #CEXP  ICETOOL  Expired or nearly expired certificates
   901  SYSTEM DSMON    System information
