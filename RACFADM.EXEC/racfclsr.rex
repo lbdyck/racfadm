@@ -114,6 +114,7 @@ SELECT_CLASS:
   call get_act_class
   sort     = 'CLASS,C,A'                                      /* @B6 */
   sortclas = 'D'                                              /* @B6 */
+  CLRCLAS  = "TURQ"; CLRCDES = "GREEN"   /* Col colors */     /* @JK */
   "TBSORT " TABLEA "FIELDS("sort")"                           /* @B6 */
   "TBTOP  " TABLEA                                            /* @B6 */
 RETURN
@@ -282,11 +283,20 @@ DISPLAY_TABLE:
              TMPSKELT = SKELETON1                             /* @B8 */
              call do_SAVE                                     /* @B8 */
         END                                                   /* @B8 */
-        WHEN (ABBREV("SORT",ZCMD,1) = 1) THEN DO              /* @B6 */
-             call sortseq 'CLASS'                             /* @AR */
-             "TBSORT" TABLEA "FIELDS("sort")"                 /* @B6 */
-             "TBTOP " TABLEA                                  /* @B6 */
-        END
+        WHEN (ABBREV("SORT",ZCMD,1) = 1) THEN DO              /* @AN */
+             SELECT                                           /* @JK */
+                when (ABBREV("CLASS",PARM,1) = 1) then        /* @JK */
+                     call sortseq 'CLASS'                     /* @JK */
+                when (ABBREV("DESCRIPTION",PARM,1) = 1) then  /* @JK */
+                     call sortseq 'CDESC'                     /* @JK */
+                otherwise NOP                                 /* @JK */
+             END                                              /* @JK */
+             CLRCLAS = "GREEN"; CLRCDES = "GREEN"             /* @JK */
+             PARSE VAR SORT LOCARG "," .                      /* @JK */
+             INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"     /* @JK */
+             "TBSORT "TABLEA "FIELDS("sort")"                 /* @JK */
+             "TBTOP  "TABLEA                                  /* @JK */
+        END                                                   /* @JK */
         OTHERWISE NOP                                         /* @A8 */
      End
      ZCMD = ""; PARM = ""                                     /* @B6 */

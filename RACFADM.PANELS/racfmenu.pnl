@@ -383,6 +383,7 @@
       O,'CMD(%RACFOMVS)'
       P,&mpcmd
       R,'CMD(%RACFRPTS)'
+     CO,'CMD(%RACFRPTS CO)'          /* CARLota */
       S,'CMD(%RACFLOG $STNDARD)'
       T,'PGM(ISPTUTOR) PARM(#RACMENU)'
       U,'CMD(%RACFLOG $UPDATES)'

@@ -64,6 +64,15 @@ ADDRESS ISPEXEC
   IF (SETJRPTS = "") THEN                                     /* @A2 */
      SETJRPTS = "(CYL,(100,100))"                             /* @A2 */
 
+  parse arg parm                                              /* @JK */
+  if parm = 'CO' then do                                      /* @JK */
+    racflmsg = "Introducting CARLota -",                      /* @JK */
+               "For easy RACF reporting"                      /* @JK */
+    "control display lock"                                    /* @JK */
+    "display msg(RACF011)"                                    /* @JK */
+    Address 'SYSCALL' 'SLEEP (3)'                             /* @JK */
+    end                                                       /* @JK */
+
   ZSCROLLD = "CSR"
   "VPUT (ZSCROLLD)"
 
@@ -261,6 +270,9 @@ DISP_PANEL:
         when (opta = 'B') then do                             /* @JK */
              call Browse_icetool_pds                          /* @JK */
         end                                                   /* @JK */
+        when (opta = 'V') then do                             /* @JK */
+             call Browse_icetool_pds                          /* @JK */
+        end                                                   /* @JK */
         otherwise nop
      End
      'control display restore'
@@ -401,7 +413,11 @@ else do
     end
   end
 "control errors return"
-"browse dataset("dsn")"
+if opta = 'B' then
+  "browse dataset("dsn")"
+else
+  if opta = 'V' then
+    "view   dataset("dsn")"
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Create Batch job                                                  */

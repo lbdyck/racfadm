@@ -1,6 +1,8 @@
 )ATTR DEFAULT(%+_)
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
   02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRTYPE)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLROWNE)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRUACC)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
@@ -18,7 +20,7 @@
 %S  ~Profile                                     ~Type      ~Owner    ~UACC
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                                           Z         Z        Z
+_Z+ Z                                           Z         Z        Z
 )INIT
   .ZVARS   = '(OPTA DATASET TYPE OWNER UACC)'
   .HELP    = #RACDSN2

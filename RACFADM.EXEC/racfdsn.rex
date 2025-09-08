@@ -315,6 +315,7 @@ PROFL:
                 otherwise NOP                                 /* @AN */
              END                                              /* @AN */
              CLRDATA = "GREEN"; CLRTYPE = "GREEN"             /* @CA */
+             CLROWNE = "GREEN"; CLRUACC = "GREEN"             /* @JK */
              PARSE VAR SORT LOCARG "," .                      /* @CA */
              INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"     /* @CA */
              "TBSORT "TABLEA "FIELDS("sort")"                 /* @CA */
@@ -684,10 +685,15 @@ DISD:
                         call sortseq 'ID'                     /* @BM */
                    when (ABBREV("ACCESS",PARM,1) = 1) then    /* @BM */
                         call sortseq 'ACC'                    /* @BM */
+                   when (ABBREV("CLASS",PARM,1) = 1) then     /* @JK */
+                        call sortseq 'CLS'                    /* @JK */
+                   when (ABBREV("ENTITY",PARM,1) = 1) then    /* @JK */
+                        call sortseq 'ENT'                    /* @JK */
                    otherwise NOP                              /* @BM */
                 END                                           /* @BM */
                 PARSE VAR SORT LOCARG "," .                   /* @CA */
                 CLRID = "GREEN"; CLRACC = "GREEN"             /* @CA */
+                CLRCLS = "GREEN"; CLRENT = "GREEN"            /* @JK */
                 INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"  /* @CA */
                 "TBSORT" TABLEB "FIELDS("sort")"              /* @CA */
                 "TBTOP " TABLEB                               /* @CA */
@@ -845,6 +851,7 @@ CREATE_TABLEB:                                                /* @BM */
   sort   = 'ID,C,A'                                           /* @CA */
   sortid = 'D'; sortacc = 'A'        /* Sort order */         /* @CA */
   CLRID  = "TURQ"; CLRACC = "GREEN"  /* Col colors */         /* @CA */
+  CLRCLS = "GREEN"; CLRENT = "GREEN" /* Col colors */         /* @JK */
   "TBSORT " TABLEB "FIELDS("sort")"                           /* @CA */
   "TBTOP  " TABLEB                                            /* @CA */
 RETURN                                                        /* @BM */
@@ -1258,6 +1265,7 @@ CREATE_TABLEA:
   sort     = 'DATASET,C,A'                                    /* @CA */
   sortdata = 'D'; sorttype = 'A'         /* Sort order */     /* @CA */
   CLRDATA  = "TURQ"; CLRTYPE = "GREEN"   /* Col colors */     /* @CA */
+  CLROWNE  = "GREEN"; CLRUACC = "GREEN"                       /* @JK */
   "TBSORT " TABLEA "FIELDS("sort")"                           /* @CA */
   "TBTOP  " TABLEA                                            /* @CA */
 RETURN

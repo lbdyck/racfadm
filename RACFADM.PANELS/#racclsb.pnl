@@ -1,32 +1,34 @@
-)ATTR DEFAULT(%+~)
+)ATTR DEFAULT(%+_)
    $  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
-   ~  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
    }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   ~  AREA(SCRL) EXTEND(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - General Resources+)\-\%Tutorial
-%Command ===>~ZCMD                                              +
+%Command ===>_ZCMD                                              +
 %
-+Change+RACF%GSDSF   +profile: %RALTER+ADDMEM/DELMEM command
-+
-+PROFILE:$JANKO
-+CLASS:  $GSDSF
-+TYPE:   $DISCRETE
-+UACC:   $READ     {(Default access)     +OWNER:   TRIDJK   {(Owner of profile)
-+WARNING:$YES      {(YES/NO)             +AUDIT:   FAILURES(READ)
-+DATA:   $
-+
-+SELECT: %A+Add     %ADDMEM+to member list
-+        %R+Remove  %DELMEM+from member list
-+
-%S    Member
-%-----------------------------------------------------------------------
-}_+  $'AD.CMDLIB'/CBTU03/NOPADCHK
-}_+  $'TRIDJK.LOAD'/CBTU03/NOPADCHK
-}_+  $CBTMBR
-)INIT
-  &ZUP     = #RACCLSB
-  &ZCMD    = ' '
-)PROC
++Change+RACF+profile: %RALTER+ADDMEM/DELMEM command
+~DCMEM -----------------------------------------------------------------------~
+)AREA DCMEM
++RACF ignores the%ADDMEM+operand if the class name you specify is not a
+ resource grouping class, SECLABEL, GLOBAL, SECDATA, NODES, or PROGRAM.
+
+% Grouping class:+
+{    ADDMEM(member)
+% SECLABEL:+
+{    ADDMEM(system-identifier)
+% GLOBAL:+
+{    ADDMEM(member/access-level)
+% SECDATA:+
+{    ADDMEM(category or seclevel)
+% NODES:+
+{    ADDMEM(userid or group-name or security-labels)
+% PROGRAM:+
+{    ADDMEM(library-name/volume-serial/PADCHK or NOPADCHK)
+
+}Note:+ When it is necessary to define a specific profile for a program
+        in the LPA,%'LPALST'+should be used as the library name and the
+        volume serial should be omitted.
 )END

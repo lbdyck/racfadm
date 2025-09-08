@@ -15,10 +15,10 @@
 +
 +
 +
-+MEMBER %===>_ID                                      {(Member to be added)
-+
-+
-+
++MEMBER %===>_ID                                                             $Z
+
+
+
 +
 +
 +
@@ -28,14 +28,25 @@
 +
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
-  .ZVARS  = '(SCIND)'
+  .ZVARS  = '(SCIND SCIND2)'
   .CURSOR = ID
   .HELP   = #RACMENU
   IF (&ID = NONE)
       &ID = ' '
   &OLDID = &ID
 )PROC
+  &resp = .resp
+  *REXX (ID, RACFSMSG RACFLMSG RESP)
+     if resp = 'END' then return
+       if left(id,7) = 'ADDMEM(' then do
+         zrxrc  = 8
+         RACFSMSG = 'Remove ADDMEM'
+         RACFLMSG = 'The ADDMEM keyword will be added by the dialog'
+         zrxmsg = 'RACF011'
+         end
+  *ENDREXX
   VER (&ID,NB)
 )FIELD
   FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
+  FIELD(ID)      IND(SCIND2,'<>') LEN(252)
 )END

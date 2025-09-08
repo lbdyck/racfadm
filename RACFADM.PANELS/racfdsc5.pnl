@@ -1,7 +1,8 @@
 )ATTR DEFAULT(%+_)
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRID)
   02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRACC)
-  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRCLS)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRENT)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
@@ -27,7 +28,7 @@
 %S  ~Group/ID  ~Access  ~Class    ~Entity Name
 %-------------------------------------------------------------------------------
 )MODEL
-_Z+ Z         Z       Z        Z
+_Z+ Z         Z       Z        Z
 )INIT
   .ZVARS   ='(OPTB ID ACC CLS ENT)'
   .HELP    = #RACDSN5
@@ -59,6 +60,8 @@ _Z+ Z         Z       Z        Z
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT GROUP')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT ACCESS')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT CLASS')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT ENTITY')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

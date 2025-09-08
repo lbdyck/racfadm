@@ -21,9 +21,9 @@
 %S    Member
 %-------------------------------------------------------------------------------
 )MODEL
-_Z+  $Z                             +
+_Z+  $Z                                                                      $Z
 )INIT
-  .ZVARS   = '(SCIND OPTB ID)'
+  .ZVARS   = '(SCIND OPTB ID SCIND2)'
   .CURSOR  = OPTB
   .HELP    = #RACCLSB
   &ZCMD    = ' '
@@ -41,6 +41,7 @@ _Z+  $Z                             +
   VER (&OPTB,LIST,A,R)
 )FIELD
   FIELD(PROFILE) IND(SCIND,'<>') LEN(246)
+  FIELD(ID)      IND(SCIND2,'<>') LEN(252)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

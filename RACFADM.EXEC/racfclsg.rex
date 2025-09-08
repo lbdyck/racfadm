@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @CG  250828  TRIDJK   Process PROGRAM member data                  */
 /* @CF  250416  TRIDJK   Add Other segments to L(ist) line command    */
 /* @CE  250416  TRIDJK   K line cmd - clone resource profile          */
 /* @CD  250406  TRIDJK   U line cmd - modify selected user segments   */
@@ -500,6 +501,7 @@ RETURN
 DISM:
   if (profile = 'NONE') then
      return
+  tmprsels  = rsels                                           /* @JK */
   "TBCREATE" TABLEB "KEYS(ID) NAMES(ACC) REPLACE NOWRITE"
   id = 'NONE'
   /* Populate table */
@@ -551,6 +553,7 @@ DISM:
      'control display restore'                                /* @BW */
   end  /* Do forever) */                                      /* @BW */
   "TBEND" TABLEB
+  rsels  = tmprsels                                           /* @JK */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Add member                                                        */
@@ -605,15 +608,30 @@ GETM:
   rsce_end = 0
   save_rsce_beg = 0                                           /* @CD */
   Do dism_count=0 to dism_max
-     rsce_beg = POS('RESOURCES IN GROUP',var.dism_count)
+     if rclass = 'PROGRAM' then                               /* @CG */
+       rsce_beg = POS('DATA SET NAME',var.dism_count)         /* @CG */
+     else
+       rsce_beg = POS('RESOURCES IN GROUP',var.dism_count)
      if rsce_beg then do                                      /* @CD */
         save_rsce_beg = rsce_beg                              /* @CD */
         do until rsce_end
            dism_count = dism_count+1
-           parse var var.dism_count id rest
+           parse var var.dism_count id vol pad                /* @CG */
            rsce_end = POS('LEVEL  OWNER',var.dism_count)
-           if (id <> '') & (id <> '---------') & ^rsce_end
-             then "TBMOD" TABLEB
+           if (id <> '') & (left(id,9) <> '---------') &,     /* @CG */
+               ^rsce_end                                      /* @CG */
+             then do                                          /* @CG */
+               if rclass = 'PROGRAM' then do                  /* @CG */
+                 if vol = 'YES' | vol = 'NO' then do          /* @CG */
+                   pad = vol                                  /* @CG */
+                   vol = ''                                   /* @CG */
+                   end                                        /* @CG */
+                 if pad = 'YES' then pad = 'PADCHK'           /* @CG */
+                 if pad = 'NO'  then pad = 'NOPADCHK'         /* @CG */
+                 id = "'"id"'/"vol"/"pad                      /* @CG */
+                 end                                          /* @CG */
+               "TBMOD" TABLEB
+               end
         end
      end                                                      /* @CD */
   end                                                         /* @CD */

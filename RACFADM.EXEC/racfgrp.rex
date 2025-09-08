@@ -308,6 +308,7 @@ PROFL:
              PARSE VAR SORT LOCARG "," .                      /* @CJ */
              CLRGROU = "GREEN"; CLRDATA = "GREEN"             /* @CJ */
              CLRSUPG = "GREEN"; CLROWNE = "GREEN"             /* @CJ */
+             CLRGCNT = "GREEN"                                /* @JK */
              INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"     /* @CJ */
              "TBSORT" TABLEA "FIELDS("sort")"                 /* @CJ */
              "TBTOP " TABLEA                                  /* @CJ */
@@ -1078,6 +1079,7 @@ CREATE_TABLEA:                                                /* @AP */
   sortowne = 'A'; sortdata = 'A'                              /* @CJ */
   CLRGROU  = "TURQ";  CLRDATA = "GREEN"  /* Col colors */     /* @CJ */
   CLRSUPG  = "GREEN"; CLROWNE = "GREEN"                       /* @CJ */
+  CLRGCNT  = "GREEN"                                          /* @JK */
   "TBSORT " TABLEA "FIELDS("sort")"                           /* @CJ */
   "TBTOP  " TABLEA                                            /* @CJ */
 RETURN                                                        /* @AP */

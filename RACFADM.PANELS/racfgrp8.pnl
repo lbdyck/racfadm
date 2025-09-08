@@ -3,6 +3,8 @@
   02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
   03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRSUPG)
   04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLROWNE)
+  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRGCNT)
+  06  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRDATA)
    @  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)
    ?  TYPE(OUTPUT)  INTENS(LOW)  COLOR(WHITE) CAPS(OFF)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
@@ -22,7 +24,7 @@
 %S  ~Group    ~SupGrp   ~Owner    ~Conn~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z        Z        Z        Z   Z                                    @z
+_Z+ Z        Z        Z        	Z   Z                                    @z
 )INIT
   .ZVARS   = '(OPTA GROUP SUPGRP OWNER GCNT DATA SCIND)'
   .HELP    = #RACGRP8

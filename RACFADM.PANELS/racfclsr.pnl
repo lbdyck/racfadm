@@ -1,4 +1,6 @@
 )ATTR DEFAULT(%+_)
+  01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRCLAS)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON)   COLOR(&CLRCDES)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
@@ -17,7 +19,7 @@
 %S  ~Class          ~Description
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ $Z        ^Z    #Z
+_Z+ Z        ^Z    Z
 )INIT
   .ZVARS   = '(OPTA CLASS ACTION CDESC)'
   .HELP    = #RACCLSR
@@ -37,6 +39,7 @@ _Z+ $Z        ^Z    #Z
      VER (&OPTA,LIST,S,L)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT CLASS')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT DESC')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

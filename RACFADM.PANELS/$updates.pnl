@@ -7,6 +7,19 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  01 Sep 2025 - V40R4
+     - Group Profiles (Option 2)
+       -- Updated RACFGRP to sort/color new fields
+       -- Updated panel RACFGRP8
+     - Dataset Profiles (Option 3)
+       -- Updated RACFDSN to sort/color new fields
+       -- Updated panels RACFDSN2 and RACFDSC5
+     - General resources (Option 4)
+       -- Updated RACFCLSR to sort/color new fields
+       -- Updated RACFCLSG to process PROGRAM member data
+       -- Updated panels RACFCLSB, RACFCLSC, and RACFCLSR
+       -- Updated tutorial panel #RACCLSB
+
   15 Aug 2025 - V40R3
      - Reporting (Option R)
        -- Updated RACFRPTS to add the primary commands EXclude and
@@ -22,8 +35,7 @@
        -- Added pseudo help member $ATTLS which is a SHARE presentation
           "Implementing AT-TLSv1.2" from Tom Conley.  It has all the
           RACF commands, TCPIP, TN3270, and PAGENT statements needed
-          for AT-TLS implementation.  Copy this member to the
-          SYSHELP concatenation.
+          for AT-TLS implementation.
 
   17 Jul 2025 - V40R2
      - Tutorial (Option T)
@@ -65,8 +77,7 @@
   15 Apr 2025 - V40R0
      - Updated RACFHELP (Option H)
        -- Added pseudo help member $UTILS which is information
-          about RACF Utilities.  Copy this member to the
-          SYSHELP concatenation.
+          about RACF Utilities.
        -- Updated exec RACFHELP
        -- Added TSO Help updates to document the new DFP(ENCRYPTTYPES)
           parameter (ADDSDE and ALTDSDE)
@@ -237,8 +248,7 @@
        -- Update skeleton RACFGRP8 to include Conn(ects) header
      - Updated RACFHELP (Option H)
        -- Added pseudo help member $GLOSSRY which is a list of
-          technical terms and abbreviations for RACF.  Copy this
-          member to the SYSHELP concatenation.
+          technical terms and abbreviations for RACF.
      - Added Generate profile source (Option G)
        -- Added RACFGEN exec to generate ADDSD/RDEFINE and
           PERMIT commands for a filter and class
