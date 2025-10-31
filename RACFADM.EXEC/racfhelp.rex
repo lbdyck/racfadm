@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A9  250924  TRIDJK   Add $CALLS   - RACF callable services        */
 /* @A8  250814  TRIDJK   Add $ATTLS   - AT-TLS implentation           */
 /* @A7  250327  TRIDJK   X line cmd - Exclude a command from the list */
 /* @A6  250325  TRIDJK   Add $UTILS   - RACF Utilites                 */
@@ -167,8 +168,6 @@
  |         4. If ISPF Settings have Tab to Point and Shoot enabled   |
  |            then the user can tab to the PNS fields and press      |
  |            Enter (or double click) to activate                    |
- | ----------------------------------------------------------------- |
- | Copyleft (c) All Wrongs Reserved                                  |
  * ----------------------------------------------------------------- */
 
  arg helpcmd
@@ -1629,6 +1628,7 @@ SYSHelp:                                                      /* @A4 */
 /* enclosed as a REXX comment to avoid REXX syntax errors
 RACF:
 $ATTLS     AT-TLSv1.2 implementation for RACF
+$CALLS     RACF callable services
 $GLOSSRY   Technical terms and abbreviations for RACF
 $UTILS     RACF Utilities
 ADDGROUP   Add group profile

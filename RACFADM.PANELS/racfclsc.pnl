@@ -30,7 +30,7 @@
 )INIT
   .ZVARS  = '(SCIND SCIND2)'
   .CURSOR = ID
-  .HELP   = #RACMENU
+  .HELP   = #RACCLSC
   IF (&ID = NONE)
       &ID = ' '
   &OLDID = &ID

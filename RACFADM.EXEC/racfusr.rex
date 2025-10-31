@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FG  251004  TRIDJK   Correct LRSCROLL logic (LEFT/RIGHT)          */
 /* @FF  250809  TRIDJK   Sort and color new fields in panel RACFUS2A  */
 /* @FE  250519  TRIDJK   Add LEFT/RIGHT primary commands              */
 /* @FD  250508  TRIDJK   Add EXCLUDE primary command                  */
@@ -313,7 +314,6 @@ EXIT
 /*  Show all profiles for a filter                                    */
 /*--------------------------------------------------------------------*/
 PROFL:
-  'control passthru lrscroll pason'                           /* @FE */
   call CREATE_TABLEA                                          /* @BE */
   if (USER = 'INVALID') | (USER = 'NONE') THEN DO             /* @EP */
      "TBEND" tablea                                           /* @EW */
@@ -330,9 +330,13 @@ PROFL:
         'tbskip' tablea 'number('xtdtop')'                    /* @EE */
         radmrfnd = 'PASSTHRU'                                 /* @EE */
         'vput (radmrfnd)'                                     /* @EE */
+        'control passthru lrscroll pason'                     /* @FG */
         "TBDISPL" TABLEA "PANEL("PANEL02")"                   /* @EE */
      end                                                      /* @EE */
-     else 'tbdispl' tablea                                    /* @EE */
+     else do                                                  /* @EE */
+        'control passthru lrscroll pason'                     /* @FG */
+        'tbdispl' tablea                                      /* @EE */
+        end
         if (rc > 4) then do                                   /* @EW */
            src = rc                                           /* @EW */
            'tbclose' tablea                                   /* @EW */
@@ -355,6 +359,7 @@ PROFL:
         'tbtop ' TABLEA                                       /* @ED */
         'tbskip' TABLEA 'number('last_find')'                 /* @ED */
      end                                                      /* @ED */
+     'control passthru lrscroll pasoff'                       /* @FG */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @ED */
              call do_finda                                    /* @ED */

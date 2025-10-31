@@ -8,3 +8,9 @@ ALT       Display alternate panel in User Profile display
 NORM      Display normal panel in User Profile display
 ALTUSER   Alter user selected segments
 UNDOC     What you are reading now
+
+*---------- Undocumented User Profile Line Commands -------------*
+
+Command   Description
+
+XR        Run IRRUT100 Cross Reference Report in Foreground

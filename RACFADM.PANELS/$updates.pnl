@@ -7,6 +7,15 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  23 Oct 2025 - V40R5
+     - Updated RACFHELP (Option H)
+       -- Added pseudo help member $CALLS which is the list of
+          RACF Callable Services.
+     - User Profiles (Option 1)
+       -- Updated RACFUSR to correct LRSCROLL logic
+       -- Update skeleton RACFUS2A to include Grps header
+       -- Update panel $UNDOC
+
   01 Sep 2025 - V40R4
      - Group Profiles (Option 2)
        -- Updated RACFGRP to sort/color new fields
@@ -661,7 +670,7 @@
        -- Removed line command 'L-List', was an alias to 'S-Select',
           not needed
        -- Fixed sorting Start/End Date' and change color of sorted
-          column to turquois
+          column to turquoise
        -- Update tutorial to reflect changes
 
   29 Sep 2020 - V34R0
@@ -1546,7 +1555,7 @@
        -- Fixed displaying error messages
        -- Standardized code, made default address ISPEXEC, etc.
      - ISPLog (Option L)
-       -- When paging right, display column header as Turquois,
+       -- When paging right, display column header as turquoise,
           prior was green
 
   14 May 2020 - V24R7
@@ -2555,7 +2564,7 @@
             userid's name, reduce memory usage
      - General Resources (Option 4)
        -- Fixed issuing a command on panel RACFCLS5 and changing the
-          sorted column color to green, when it should be Turquois
+          sorted column color to green, when it should be turquoise
      - Other Items
        -- REXX programs
           * Programs viewing/editing a file

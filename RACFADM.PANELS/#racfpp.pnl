@@ -14,7 +14,7 @@
 +   @**+     For all userids
 +   @A*+     For all userids starting with A
 +   @*A*+    For all userids with an A
-+   @%A*+    For all userids with an A as the 2nd charactert
++   @%A*+    For all userids with an A as the 2nd character
 +
 )PROC
   &ZUP     = #RACFPP

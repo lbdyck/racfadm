@@ -6,6 +6,7 @@
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
  $ATTLS    How To         Tom Conley "Implementing AT-TLSv1.2" commands
+ $CALLS    Information    RACF callable services
  $CLASSES  Information    Document general resource classes
  $DEFSETG  Settings       Default site settings for new users
  $GLOSSRY  TSO Help       Technical terms and abbreviations for RACF
@@ -23,6 +24,7 @@
  #RACCERT  Tutorial       Digital certificates
  #RACCLSA  Tutorial       Add/Change class profile
  #RACCLSB  Tutorial       ADDMEM/DELMEM to/from member list
+ #RACCLSC  Tutorial       ADDMEM to class profile
  #RACCLSF  Tutorial       List group/ids and access (SEarch, Option 1)
  #RACCLSR  Tutorial       List classes (show, refresh)
  #RACCLS2  Tutorial       List classes

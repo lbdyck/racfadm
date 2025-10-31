@@ -1,0 +1,33 @@
+)ATTR DEFAULT(%+_)
+   $  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
+   _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   ~  AREA(SCRL) EXTEND(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - General Resources+)\-\%Tutorial
+%Command ===>_ZCMD                                              +
+%
++Change+RACF+profile: %RALTER+ADDMEM command
+~DCMEM -----------------------------------------------------------------------~
+)AREA DCMEM
++RACF ignores the%ADDMEM+operand if the class name you specify is not a
+ resource grouping class, SECLABEL, GLOBAL, SECDATA, NODES, or PROGRAM.
+
+% Grouping class:+
+{    ADDMEM(member)
+% SECLABEL:+
+{    ADDMEM(system-identifier)
+% GLOBAL:+
+{    ADDMEM(member/access-level)
+% SECDATA:+
+{    ADDMEM(category or seclevel)
+% NODES:+
+{    ADDMEM(userid or group-name or security-labels)
+% PROGRAM:+
+{    ADDMEM(library-name/volume-serial/PADCHK or NOPADCHK)
+
+}Note:+ Do not enter the%ADDMEM+keyword in the%MEMBER ===>+field.
+        The ADDMEM keyword will be added by the dialog.
+)END

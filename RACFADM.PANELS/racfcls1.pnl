@@ -21,7 +21,6 @@
 +Filter examples:!**           DBW%.*            BMC.**
 +                !EE.CEF.*     GS.ABC*.*         ISF*.**
 +
-+
 +Wild cards:     !%  {Indicates one character
 !                 *  {Indicates one or more characters
 !                 ** {Indicates any number of qualifiers

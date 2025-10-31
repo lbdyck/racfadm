@@ -4,6 +4,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A1  251013  Janko    Skip classes per RDEFINE documentation       */
 /* @A0  250707  Janko    IRRXUTIL verson                              */
 /*====================================================================*/
 EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
@@ -60,7 +61,15 @@ end
 do t = 4 to CLS.BASE.CLASSACT.0     /* Skip DATASET, USER, GROUP */
   filter = "**"
   class = cls.base.classact.t
-  skip_class = "DIGTCERT DIGTRING EJBROLE"  /* Use lower-case names */
+  skip_class = "DCEUUIDS",          /* Skip per RDEFINE */    /* @A1 */
+               "DIGTCERT",          /* "    "   "       */    /* @A1 */
+               "DIGTNMAP",          /* "    "   "       */    /* @A1 */
+               "DIGTRING",          /* "    "   "       */    /* @A1 */
+               "IDIDMAP ",          /* "    "   "       */    /* @A1 */
+               "NDSLINK ",          /* "    "   "       */    /* @A1 */
+               "NOTELINK",          /* "    "   "       */    /* @A1 */
+               "ROLE    ",          /* "    "   "       */    /* @A1 */
+               "UNIXMAP "           /* "    "   "       */    /* @A1 */
   if wordpos(class,skip_class) > 0 then
     iterate
 

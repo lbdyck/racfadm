@@ -46,7 +46,7 @@ _Z+ Z        ^Z    Z
 /*--------------------------------------------------------------------*/
 /*                                                                    */
 /*  1) The 'SELECT' field is a dynamic field, allowing the REXX       */
-/*     program to display only the commands accessable/useable        */
+/*     program to display only the commands accessible/useable        */
 /*     depending on the below users Settings (menu option 0):         */
 /*       Administrator ..... Y or N                                   */
 /*       Admin RACF API .... Y or N                                   */
