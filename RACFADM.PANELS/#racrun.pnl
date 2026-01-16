@@ -17,7 +17,6 @@
 + %C +for a single record
 + %C#+for the current and # records (e.g. C4)
 + %CC+for the 1st record to select and CC on the last record to define a range
-+
 +Records with%*+in column 1 will be ignored as will all blank records.
 +
 ~VIEW            AD.RACF.COMMANDS(LWB) - 01.85              Columns 00001 00072
@@ -29,8 +28,12 @@
 ~Command ===>}                                                ~Scroll ===>}CSR +
 +000001 USER=LADY  NAME=WHISTLE BLOWER        OWNER=JANKO     CREATED=24.180
 +000002  DEFAULT-GROUP=DOOL     PASSDATE=24.180 PASS-INTERVAL=250 PHRASEDATE=N/A
++
++ \ \ (press%ENTER+to continue) \ \
++
 )INIT
 )PROC
   &ZUP     = #RACRUN
+  &ZCONT   = #RACVUEL
 )END
 ****** ***************************** Top of Data ***********************

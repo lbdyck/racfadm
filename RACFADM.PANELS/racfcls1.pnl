@@ -15,8 +15,8 @@
 +
 +
 +RACF Filter+===>_RFILTER                                {(Enter search string)
-+
-+
++  Fast List~===>_FAS{                                    (Enter YES or NO)
+!                 Enter YES for Fast processing (profile details suppressed)
 +
 +Filter examples:!**           DBW%.*            BMC.**
 +                !EE.CEF.*     GS.ABC*.*         ISF*.**
@@ -25,11 +25,11 @@
 !                 *  {Indicates one or more characters
 !                 ** {Indicates any number of qualifiers
 +
-+
 +\ \Press~ENTER+to process or~END+to exit\ \
 )INIT
   .CURSOR = RFILTER
   .HELP   = #RACMENU
 )PROC
   VER  (&RFILTER,NB)
+  VER  (&FAS,LIST,YES,NO)
 )END

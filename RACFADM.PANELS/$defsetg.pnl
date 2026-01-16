@@ -54,9 +54,9 @@ SETGBTCH = Y       /* Enable Batch        (Y=Yes, N=No)              */
 *  Management                                                         *
 *---------------------------------------------------------------------*
 SETRMGT  = N /* Force refresh of 'Management' variables (Y=Yes,N=No) */
-SETMADMN = N       /* Administrator  (Y=Yes, N=No)                   */
-SETMIRRX = N       /* Admin RACF API (Y=Yes, N=No)                   */
-SETMIBMM = N       /* IBM RACF menu options 6, 7 and 8 (Y=Yes, N=No) */
+SETMADMN = Y       /* Administrator  (Y=Yes, N=No)                   */
+SETMIRRX = Y       /* Admin RACF API (Y=Yes, N=No)                   */
+SETMIBMM = Y       /* IBM RACF menu options 6, 7 and 8 (Y=Yes, N=No) */
 SETMIBMD = N       /* Define IBM RACF ALTLIB/LIBDEF datasets         */
 SETMSHOW = N       /* RACF commands (D=Display, L=Log, B=Both, N=No) */
 SETMTRAC = N       /* REXX trace (L=Labels, P=Pgms, R=Results, N=No) */

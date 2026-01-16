@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
+/* @MW  251122  TSGMW    Add FAST Option to list profiles             */
 /* @CG  250828  TRIDJK   Process PROGRAM member data                  */
 /* @CF  250416  TRIDJK   Add Other segments to L(ist) line command    */
 /* @CE  250416  TRIDJK   K line cmd - clone resource profile          */
@@ -110,6 +112,7 @@ DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @BP */
 NULL        = ''                                              /* @BV */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @BO */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @BO */
+FAS = 'No'                                                    /* @MW */
 
 ADDRESS ISPEXEC                                               /* @AG */
   Arg Rclass Rfilter Rdisp
@@ -220,6 +223,7 @@ PROFL:
         'tbtop ' TABLEA                                       /* @BV */
         'tbskip' TABLEA 'number('last_find')'                 /* @BV */
      end                                                      /* @BV */
+     if zcmd /= null then                                     /* @L2 */
      Select                                                   /* @AK */
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @BV */
              call do_finda                                    /* @BV */
@@ -282,7 +286,27 @@ PROFL:
              "TBSORT" TABLEA "FIELDS("sort")"                 /* @BW */
              "TBTOP " TABLEA                                  /* @BW */
         END                                                   /* @AK */
-        otherwise NOP                                         /* @AK */
+        WHEN (ABBREV("CLONE",ZCMD,5) = 1 ) THEN DO            /* @CY */
+             clss_taba = ''                                   /* @CY */
+             'tbtop ' TABLEA                                  /* @CY */
+             do forever                                       /* @CY */
+                'tbskip' TABLEA                               /* @CY */
+                if (rc = 0) then do                           /* @CY */
+                   clss_taba = clss_taba profile              /* @CY */
+                   end                                        /* @CY */
+                else do                                       /* @CY */
+                   call RACFCOPC rclass clss_taba             /* @CY */
+                   'tbtop' TABLEA                             /* @CY */
+                   leave                                      /* @CY */
+                   end                                        /* @CY */
+                end                                           /* @CY */
+        END                                                   /* @CY */
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      END /* Select */                                         /* @AK */
      ZCMD = ""; PARM = ""                                     /* @BW */
      'control display save'                                   /* @BW */
@@ -915,6 +939,8 @@ GETD:
   data   = ' '
   warn   = ' '
   memcls = ' '
+  if fas = 'YES' then                                         /* @MW */
+   return                                                     /* @MW */
   cmd    = "RLIST "RCLASS PROFILE                             /* @AF */
   x = OUTTRAP('getd_var.')
   address TSO cmd                                             /* @AF */

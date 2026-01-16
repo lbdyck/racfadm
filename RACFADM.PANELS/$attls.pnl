@@ -236,6 +236,7 @@ Create SERVAUTH Class Profiles
   Format EZB.INITSTACK.<sysname>.TCPIP
 
   Grant READ authority for started task id's requiring TLS
+
   Define for TCPIP-related tasks
 
     TCPIP, PAGENT, TN3270, FTPSERVE, PORTMAP, LPSERVE
@@ -284,4 +285,5 @@ OBEYFILE to Implement:
     S PAGENT
     OBEYFILE TCPIP PROFILE
     OBEYFILE TN3270 PROFILE
+
   Don't forget to change TCPIP and TN3270 procs

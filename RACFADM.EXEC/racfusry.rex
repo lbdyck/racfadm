@@ -143,7 +143,7 @@ Address ISPExec
   if (rc ^= 0) then do
      racfsmsg = 'Allocation error'
      racflmsg = 'LMINIT failed for SYSUT2'
-     'setmsg msg(racf001)'
+     'setmsg msg(racf011)'
      call Goodbye
   end
   Select

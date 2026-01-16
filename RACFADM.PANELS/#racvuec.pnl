@@ -1,0 +1,30 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ~  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE) HILITE(USCORE)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - View Digital Certificates+)\-\%Tutorial
+%Command ===>_ZCMD
+%
++  This pop-up prompting panel will allow you to select the parameter
++  option used for!VUECERTS+
++
+!  CMDS +to generate RACDCERT LIST commands for diagnosing certificate issues
+!  VERB +to display IRRSEQ00 call parameters and profiles
+!  INDEX+to generate a list of all Digital Certificates
+!  USERS+to generate a list of userids with personal certificates (with count)
+!  RINGS+to display Keyrings and their Certificates
++
++  Any blank parameter will list~ALL+Digital Certificates along with an
++  extensive analysis:
++
+%  o+Unexpired, trusted root certificates and their chains of trust
+%  o+Expired root certificates and their chains of trust
+%  o+Unexpired but untrusted root certificates and their chains of trust
+%  o+Self-signed end-entity certificates
+%  o+Certificates with an incomplete chain of trust
++
+)PROC
+  &ZUP     = #RACVUEC
+)END

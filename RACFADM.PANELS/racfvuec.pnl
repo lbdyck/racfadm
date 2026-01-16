@@ -1,0 +1,48 @@
+)Attr Default(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN)
+)Body Window(34,8) Expand(\\)
++
++Select One Option Only:
++
++CMDS     _z+       +VERB     _z+
++INDEX    _z+       +USERS    _z+
++RINGS    _z+
++
+%ENTER+to continue or%F3+to cancel
+)Init
+  .zvars = 'vuec vuev vuei vueu vuer'
+  .cursor  = vuec
+  .HELP    = #RACVUEC
+  &vuec  = ''
+  &vuev  = ''
+  &vuei  = ''
+  &vueu  = ''
+  &vuer  = ''
+  &ZWINTTL = 'RACFADM - View Certs Options'
+  &racfsmsg = &z
+)Reinit
+  Refresh(*)
+)Proc
+ &resp = .resp
+*rexx(* racfsmsg racflmsg vopt resp)
+ if resp = 'END' then return
+ if words(vuec vuev vuei vueu vuer) > 1 then do
+    zrxrc  = 8
+    racfsmsg = 'Error.'
+    racflmsg = 'You may only select 1 option. Try again.'
+    zrxmsg = 'RACF011'
+    end
+ else Select
+        When vuec  /= '' then vopt = 'CMDS'
+        When vuev  /= '' then vopt = '{"VERBOSE":TRUE}'
+        When vuei  /= '' then vopt = 'INDEX'
+        When vueu  /= '' then vopt = 'USERS'
+        When vuer  /= '' then vopt = 'RINGS'
+        Otherwise nop
+        end
+*endrexx
+)End

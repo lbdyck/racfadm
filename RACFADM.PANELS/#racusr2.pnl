@@ -23,6 +23,7 @@
 %  SAve             +Save display to a dataset
 %  LEFT/RIGHT       +Cycle between normal and alternate list user display
 %  CERTS/RINGS      +List Digital cert/ring information for users in table
+%  CLONE            +Clone User Profiles for users in table
 %
 +Line Commands
 %  /  !             +Display line command prompt panel (pop-up)

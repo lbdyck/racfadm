@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @BR  241212  TRIDJK   Add description to TABLEA                    */
 /* @BQ  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @BP  220317  LBD      Close table on exit                          */
@@ -194,6 +195,7 @@ DISPLAY_TABLE_PERMIT:
         'tbtop ' TABLEB                                       /* @BH */
         'tbskip' TABLEB 'number('last_find')'                 /* @BH */
      end                                                      /* @BH */
+     if zcmd /= null then                                     /* @L2 */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @BH */
              call do_findb                                    /* @BH */
@@ -244,7 +246,13 @@ DISPLAY_TABLE_PERMIT:
              "TBSORT "TABLEB" FIELDS("SORT")"                 /* @BI */
              "TBTOP  "TABLEB                                  /* @BI */
         END                                                   /* @BI */
-        otherwise locvar=''
+        Otherwise Do                                          /* @L2 */
+          locvar = ''                                         /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End
      ZCMD = ""; PARM = ""                                     /* @BI */
      'control display save'                                   /* @BI */

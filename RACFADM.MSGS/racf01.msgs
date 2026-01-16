@@ -6,3 +6,5 @@ RACF013  'Only F is allowed' .WINDOW=NORESP
 'Only Foreground processing is allowed per Site Defaults)'
 RACF014  'Only A is allowed' .WINDOW=NORESP
 'Only Add is allowed on null (NONE/NO) entries'
+RACF015  '                        ' .WINDOW=NORESP
+'Processing profile &profile                                           '

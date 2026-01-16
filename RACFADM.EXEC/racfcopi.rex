@@ -1,44 +1,23 @@
 /*%NOCOMMENT====================* REXX *==============================*/
-/*PURPOSE:  RACFADM - Clone a Userid, line command K                  */
+/*PURPOSE:  RACFADM - Clone all Userids in Table A, command CLONE     */
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @A7  250304  TRIDJK   Allocate ISPF Profile if TSO segment exists  */
-/* @A6  250217  TRIDJK   Change OMVS HOME user to clone userid        */
-/* @A5  250213  TRIDJK   Support PHRASE operand                       */
-/* @A4  250201  TRIDJK   Log Clone message                            */
-/* @A3  250122  TRIDJK   Add OWNER to CONNECT                         */
-/* @A2  250120  TRIDJK   Display MSG about RACRUN macro               */
-/* @A1  241223  TRIDJK   Process base attributes correctly            */
-/* @A0  241208  TRIDJK   Creation                                     */
+/* @A0  251129  TRIDJK   Creation                                     */
 /*====================================================================*/
-PANELCL     = 'RACFCOPU'           /* Clone prompt popup panel */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
 
-Arg user name
+Arg users
 
 Address ISPexec
 "CONTROL ERRORS RETURN"
 "VGET (SETGSTA  SETGSTAP SETGDISP SETMADMN",
       "SETMIRRX SETMSHOW SETMTRAC SETTPSWD",
       "SETTPROF SETTUDSN SETMPHRA SETTCTLG) PROFILE"
-
-cluser = user
-clname = name
-clucat = settctlg
-'vput (cluser clname clucat)'
-saveuser = user                                               /* @A4 */
-
-'addpop'
-'display panel('PANELCL')'
- disprc = RC
-'rempop'
-if (disprc > 0) then do
-   exit
-   end
+"vget (radmclon) shared"
 
 If (SETMTRAC <> 'NO') then do
    Say "*"COPIES("-",70)"*"
@@ -48,6 +27,19 @@ If (SETMTRAC <> 'NO') then do
       interpret "Trace "SUBSTR(SETMTRAC,1,1)
    end
 
+cmd. = ""
+y = 0
+ucat = settctlg
+
+user_cnt = words(users)
+
+Do n = 1 to user_cnt
+  parse var users user users
+  user = strip(user)
+  racf_ids = 'IRRCERTA IRRMULTI IRRSITEC'
+  if wordpos(user,racf_ids) > 0 then
+    iterate
+
 Address TSO
 rxrc=IRRXUTIL("EXTRACT","USER",user,"RACF","")
 if (word(rxrc,1) <> 0) then do
@@ -55,13 +47,11 @@ if (word(rxrc,1) <> 0) then do
    exit
 end
 
-tso  = 'N'                                                    /* @A7 */
-cmd. = ""
-y = 0
+tsoseg  = 'N'
 do i=1 to RACF.0 /* get the segment names */
   segment=RACF.i
-  if segment = 'TSO' then tso = 'Y'                           /* @A7 */
-  if segment = 'BASE' then do                                 /* @A1 */
+  if segment = 'TSO' then tsoseg = 'Y'
+  if segment = 'BASE' then do
     clat = ''
     if racf.base.special.1 = 'TRUE' then clat = clat || 'SPECIAL '
     if racf.base.oper.1    = 'TRUE' then clat = clat || 'OPERATIONS '
@@ -71,45 +61,19 @@ do i=1 to RACF.0 /* get the segment names */
     if racf.base.rest.1    = 'TRUE' then clat = clat || 'RESTRICTED '
     if racf.base.adsp.1    = 'TRUE' then clat = clat || 'ADSP '
 
-    Address ISPexec
-    'vget (zllgjob1 zllgjob2 zllgjob3 zllgjob4) profile'
     y = y + 1
-    cmd.y = zllgjob1
-    if zllgjob2 <> '' then do
-      y = y + 1
-      cmd.y = zllgjob2
-      end
-    if zllgjob3 <> '' then do
-      y = y + 1
-      cmd.y = zllgjob3
-      end
-    if zllgjob4 <> '' then do
-      y = y + 1
-      cmd.y = zllgjob4
-      end
+    cmd.y = " ADDUSER " user "NAME('"racf.base.name.1"')" "-"
     y = y + 1
-    cmd.y = "//TSO      EXEC  PGM=IKJEFT01"
+    cmd.y = "    PASSWORD("SETTPSWD")" "-"
+/*  cmd.y = "    PHRASE("SETTPSWD")" "-" */
     y = y + 1
-    cmd.y = "//SYSTSPRT DD  SYSOUT=*"
+    cmd.y = "    "clat "-"
     y = y + 1
-    cmd.y = "//SYSTSIN  DD  *"
+    cmd.y = "    OWNER("racf.base.owner.1")" "-"
     y = y + 1
-    cmd.y = " ADDUSER " cluser "NAME('"clname"')" "-"
+    cmd.y = "    DFLTGRP("racf.base.dfltgrp.1")" "-"
     y = y + 1
-    if length(clpswd) < 9 then
-      cmd.y = "  PASSWORD("clpswd")" "-"                      /* @A5 */
-    else                                                      /* @A5 */
-      cmd.y = "  PHRASE("clpswd")" "-"                        /* @A5 */
-    y = y + 1
-    cmd.y = "  "clat "-"
-    y = y + 1
-    cmd.y = "  OWNER("racf.base.owner.1")" "-"
-    y = y + 1
-    cmd.y = "  DFLTGRP("racf.base.dfltgrp.1")" "-"
-    if cldata <> '' then do
-      y = y + 1
-      cmd.y = "  DATA('"cldata"')" "-"
-      end
+    cmd.y = "  DATA('"strip(left(racf.base.data.1,56))"')" "-"
     iterate
     end
 
@@ -123,16 +87,16 @@ do i=1 to RACF.0 /* get the segment names */
       iterate
     if field = 'UID' then do
       y = y + 1
-      cmd.y = "  AUTOUID" "-"
+      cmd.y = "    AUTOUID" "-"
       iterate
       end
-    if field = 'HOME' then do                                 /* @A6 */
-      homeuser = translate(cluser,"abcdefghijklmnopqrstuvwxyz", ,
+    if field = 'HOME' then do
+      homeuser = translate(user,"abcdefghijklmnopqrstuvwxyz", ,
                                   "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
       lslash = lastpos('/',racf.segment.field.1)
       homedir = substr(racf.segment.field.1,1,lslash)||homeuser
       y = y + 1
-      cmd.y = "  "field"("homedir")" "-"
+      cmd.y = "    "field"("homedir")" "-"
       iterate
       end
     if field = 'AUTOLOG' then
@@ -147,7 +111,7 @@ do i=1 to RACF.0 /* get the segment names */
     if racf.segment.field.1 = 'FALSE' then
       racf.segment.field.1 = 'NO'
     y = y + 1
-    cmd.y = "  "aufld"("racf.segment.field.1")" "-"
+    cmd.y = "    "aufld"("racf.segment.field.1")" "-"
     end
     if i = racf.0 then do
       y = y + 1
@@ -165,40 +129,43 @@ do i=1 to RACF.0 /* get the segment names */
     if racf.base.coper.i    = 'TRUE' then cnat = cnat || 'OPERATIONS '
     if racf.base.cauditor.i = 'TRUE' then cnat = cnat || 'AUDITOR '
     y = y + 1
-    cmd.y = " CONNECT" cluser "GROUP("racf.base.cgroup.i") -"
+    cmd.y = " CONNECT" user "GROUP("racf.base.cgroup.i") -"
     y = y + 1
-    cmd.y = "  OWNER("racf.base.cowner.i")" cnat              /* @A3 */
+    cmd.y = "  OWNER("racf.base.cowner.i")" cnat
     end
 
   y = y + 1
-  cmd.y = " ADDSD ('"cluser".**') UACC(READ) OWNER("||,
+  cmd.y = " ADDSD ('"user".**') UACC(READ) OWNER("||,
     racf.base.dfltgrp.1")"
 
   y = y + 1
-  cmd.y = " DEFINE ALIAS (NAME('"cluser"') RELATE('"clucat"'))"
+  cmd.y = " DEFINE ALIAS (NAME('"user"') RELATE('"ucat"'))"
 
-  if tso = 'Y' then do                                        /* @A7 */
-    /* Allocate ISPF profile */                               /* @A7 */
+  if tsoseg = 'Y' then do
+    /* Allocate ISPF profile */
     if settprof = "" then                                     /* @JK */
       settprof = "ISPF.ISPPROF"                               /* @JK */
-    y = y + 1                                                 /* @A7 */
-    cmd.y = " ALLOC FI(PROF) DA('"cluser"."SETTPROF"') -"     /* @A7 */
-    y = y + 1                                                 /* @A7 */
-    cmd.y = "   NEW SPACE(5,5) CYLINDERS -"                   /* @A7 */
-    y = y + 1                                                 /* @A7 */
-    cmd.y = "   BLKSIZE(0) LRECL(80) RECFM(F B) -"            /* @A7 */
-    y = y + 1                                                 /* @A7 */
-    cmd.y = "   CATALOG DIR(250) REUSE"                       /* @A7 */
-    end                                                       /* @A7 */
+    y = y + 1
+    cmd.y = " ALLOC FI(PROF) DA('"user"."SETTPROF"') -"
+    y = y + 1
+    cmd.y = "     NEW SPACE(5,5) CYLINDERS -"
+    y = y + 1
+    cmd.y = "     BLKSIZE(0) LRECL(80) RECFM(F B) -"
+    y = y + 1
+    cmd.y = "     CATALOG DIR(250) REUSE"
+    end
 
-  if clperm = 'Y' then
-    call Datasets
+    if radmclon = 'KLONE' then
+      call Datasets       /* Generate PERMITs */
+End
 
-  cmd.0 = y
-  call Display_Commands
-  zerrsm = "RACFADM "REXXPGM" RC=0"                           /* @A4 */
-  zerrlm = "CLONE "cluser" FROM("saveuser")"                  /* @A4 */
-  'log msg(isrz003)'                                          /* @A4 */
+cmd.0 = y
+call Display_Commands
+
+Address ISPExec
+zerrsm = "RACFADM "REXXPGM" RC=0"
+zerrlm = "CLONE TABLE A USER PROFILES"
+'log msg(isrz003)'
 exit
 
 /* Adjust operand names to ADDUSER conventions */
@@ -226,12 +193,15 @@ return
 /*  Edit information                                                  */
 /*--------------------------------------------------------------------*/
 Display_Commands:
+  if cmd.0 = 0 then
+    return
   Address TSO "alloc f("ddname") new reuse",
               "lrecl(80) blksize(0) recfm(f b)",
               "unit(vio) space(1 5) cylinders"
   Address TSO "execio * diskw "ddname" (stem cmd. finis"
   drop cmd.
 
+  Address ISPExec
   "lminit dataid(cmddatid) ddname("ddname")"
   "edit dataid("cmddatid") macro("editmacr")"
   Address TSO "free fi("ddname")"
@@ -261,7 +231,7 @@ if racf.base.aclcnt.repeatcount <> '' then do
   do a=1 to racf.base.aclcnt.repeatcount
     if user = racf.base.aclid.a then do
       y = y + 1
-      cmd.y = " PERMIT '"profile"' ID("cluser")",
+      cmd.y = " PERMIT '"profile"' ID("user")",
           "ACC("racf.base.aclacs.a")" type
       end
     end
@@ -270,12 +240,12 @@ if racf.base.acl2cnt.repeatcount <> '' then do
   do a=1 to racf.base.acl2cnt.repeatcount
     if user = racf.base.acl2id.a then do
       y = y + 1
-      cmd.y = " PERMIT '"profile"' ID("cluser")",
+      cmd.y = " PERMIT '"profile"' ID("user")",
           "ACC("racf.base.acl2acs.a")",
           "WHEN("racf.base.acl2cond.a"("racf.base.acl2ent.a"))",
            type
       end
     end
+    drop racf.
   end
-drop racf.
 return

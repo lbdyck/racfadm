@@ -20,6 +20,7 @@
 %  EXclude text     +Do not display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
+%  CLONE            +Clone Group Profiles for groups in table
 %
 +Line Commands
 %  S  !Show         +List of users connected to the group

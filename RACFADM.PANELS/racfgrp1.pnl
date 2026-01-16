@@ -14,8 +14,8 @@
 +
 +
 +RACF Filter~===>_RFILTER {                               (Enter search string)
-+
-+
++  Fast List~===>_FAS{                                    (Enter YES or NO)
+!                 Enter YES for Fast processing (profile details suppressed)
 +
 +Filter examples:!CTL*         DTI*            FTP*
 +                !POL*         WIACA*          WIS*
@@ -25,11 +25,11 @@
 !                 ** {Indicates any number of qualifiers
 +
 +
-+
 +\ \Press~ENTER+to process or~END+to exit\ \
 )INIT
   .CURSOR = RFILTER
   .HELP   = #RACMENU
 )PROC
   VER  (&RFILTER,NB)
+  VER  (&FAS,list,YES,NO)
 )END

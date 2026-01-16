@@ -15,6 +15,7 @@
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
+%  CLONE            +Clone Resource Profiles for users in table
 +
 +Line Commands
 %  S  !Show         +List of permits defined for this profile

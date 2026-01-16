@@ -3,6 +3,7 @@
   02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTDA)
   03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRENDA)
   04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTAT)
+  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRCOND)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
@@ -15,18 +16,36 @@
 +\-\(%RACFADM - Digital Certificates &type   +)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+SELECT: ¬SELCMDS                                                              ¬
++Commands: %SITE+- Show SITE certs %CA+- Show CA certs %PERS+- Show PERS certs
++Select:   ¬SELCMDS                                                            ¬
 %
-%S  ~Label                           ~StDate    ~EnDate    ~Status   ~State
+%S  ~Label                           ~StDate    ~EnDate    ~Status   ~Cond/ID
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                               Z         Z         Z        Z
+_Z+ Z                               Z         Z         Z        	Z
 )INIT
-  .ZVARS   = '(OPTA LABEL STDATE ENDATE STATUS State)'
+  .ZVARS   = '(OPTA LABEL STDATE ENDATE STATUS COND)'
   .HELP    = #RACCERT
   &ZCMD    = ' '
   IF (&SAMT = ' ')
       &SAMT = &ZSCED
+  *rexx(* type)
+    cmd  = 'LISTUSER 'type
+    x    = outtrap('lu.')
+    Address TSO cmd
+    x    = outtrap('off')
+
+    selcmds = strip(selcmds)
+    if (type = 'PERSONAL' | lu.0 > 1) &,
+      right(selcmds,7) = 'Gencert' then
+      selcmds = selcmds||'ba'x||'M'||'bb'x||'Map'||,
+                         'ba'x||'R'||'bb'x||'Ring'
+    if (type = 'SITE' | type = 'CERTAUTH') &,
+      right(selcmds,4) = 'Ring' then
+      selcmds = substr(selcmds,1,length(selcmds)-13)
+  *endrexx
+)REINIT
+  refresh(*)
 )PROC
   &SROW = &Z
   IF (&ZCMD = &Z)
@@ -35,7 +54,7 @@ _Z+ Z                               Z         Z         Z        Z
         IF (&SROW ^= 0)
            &OPTA = S
   IF (&SETMADMN = YES)
-   VER (&OPTA,LIST,S,X,H,A,D,G)
+   VER (&OPTA,LIST,S,X,H,A,D,G,M,R)
   ELSE
    VER (&OPTA,LIST,S,X,H)
 )PNTS
@@ -43,7 +62,7 @@ _Z+ Z                               Z         Z         Z        Z
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT STDATE')
   FIELD(ZPS00003) VAR(ZCMD) VAL('SORT ENDATE')
   FIELD(ZPS00004) VAR(ZCMD) VAL('SORT STATUS')
-  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT STATE')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT COND')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

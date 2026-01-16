@@ -1,4 +1,8 @@
+** FIND     RACFCERT
+             call RACFVUE  parm seq
+
 ** FIND     RACFCLSG
+             call RACFCOPC rclass clss_taba
              call RACFPROF rclass profile
              call RACFALTR rclass profile
              call RACFCOPR rclass profile
@@ -13,13 +17,18 @@
              call RACFCLSG class '**' 'YES'
 
 ** FIND     RACFDSN
+             call RACFCOPD dsns_taba
              call RACFPROF 'DATASET' dataset
              call RACFALTD dataset
              call RACFPROF 'GROUP' id
              call RACFUSR id
              call RACFGRP id
 
+** FIND     RACFGEN
+             call RACFGENA
+
 ** FIND     RACFGRP
+             call RACFCOPG groups_taba
              call RACFUSRX group JCC
              call RACFUSRY group
              call RACFALTG group
@@ -37,6 +46,7 @@
              call racfring user ring
 
 ** FIND     RACFUSR
+             call RACFCOPI users_taba
              call RACFCHKP DATEPASS INTPASS DATEPHRS LID
              call RACFALTU parm
              call RACFLOG $undoc

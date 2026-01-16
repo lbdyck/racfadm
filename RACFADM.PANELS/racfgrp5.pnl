@@ -35,8 +35,8 @@ _Z+ Z         Z
   &ZCMD = ' '
   *Rexx(* SELCMDS)
      SELCMDX = STRIP(SELCMDS)
-     IF RIGHT(SELCMDX,13) = "ÝM¨Mod,ÝY¨Acc" THEN
-        SELCMDX = SUBSTR(SELCMDX,1,LENGTH(SELCMDX)-13)||,
+     IF RIGHT(SELCMDX,18) = "ÝM¨ModifyÝY¨Access" THEN
+        SELCMDX = SUBSTR(SELCMDX,1,LENGTH(SELCMDX)-18)||,
                             "ÝX¨XrefÝY¨Acc"
   *EndRexx
 )PROC

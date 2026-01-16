@@ -1,0 +1,37 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   ~  TYPE(TEXT)    INTENS(LOW)  COLOR(TURQ)  SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(RED)   SKIP(ON) HILITE(USCORE)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - VUECERTL Edit Macro+)\-\%Tutorial
+%Command ===>_ZCMD
++
++The%VUECERTL+ISPF Edit macro will execute a~RACDCERT LIST+command
++on the selected certificate label within the VUECERTS report
++(including in diagnostic messages and the keyring section).
++
++Note: You can assign it to a PF key for ease of use.
++
+~VIEW       SYS25325.T120712.RA000.TRIDJK.R0100839          Columns 00001 00072
+~Command ===>}vuecertl                                        ~Scroll ===>}CSR +
++
+%    Place Cursor on label
+%            |
+%            |
+%            |
+%            v
++CERTAUTH 'zOSMFCA'                                  CN=z/OSMF CertAuth for Secu
++   |                 On keyrings (3), (7) and (8)
++   IZUSVR   'DefaultzOSMFCert.IZUDFLT'              CN=10.100.0.36
++   |                 On keyring (7)
++   IZUSVR   'DefaultzOSMFCert2.IZUDFLT'             CN=10.100.0.36
++                     On keyring (8)
+)INIT
+)PROC
+  &ZUP     = #RACRUN
+)END
+****** ***************************** Top of Data ***********************

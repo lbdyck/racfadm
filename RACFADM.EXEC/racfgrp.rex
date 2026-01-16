@@ -3,6 +3,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* L2   251216  LBDyck   Add error on invalid commands                */
+/* @DA  251201  TRIDJK   Add CLONE primary command                    */
+/* @MW  251122  TSGMW    Add FAST Option to list profiles             */
 /* @D9  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @D8  250315  TRIDJK   M line cmd - modify selected group segments  */
 /* @D7  241117  TRIDJK   Display connects in TABLEA                   */
@@ -134,6 +137,7 @@ datesep     = racfdsep()   /* Date separator char          */ /* @D5 */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @C8 */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @C8 */
 NULL        = ''                                              /* @CH */
+FAS         = 'NO'                                            /* @MW */
 
 ADDRESS ISPEXEC                                               /* @AO */
   Rclass = 'GROUP'
@@ -228,6 +232,7 @@ PROFL:
         'tbtop ' TABLEA                                       /* @CH */
         'tbskip' TABLEA 'number('last_find')'                 /* @CH */
      end                                                      /* @CH */
+     if zcmd /= null then                                     /* @L2 */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @CH */
              call do_finda                                    /* @CH */
@@ -279,6 +284,21 @@ PROFL:
                 end                                           /* @D9 */
              end                                              /* @D9 */
         END                                                   /* @D9 */
+        WHEN (ABBREV("CLONE",ZCMD,5) = 1 ) THEN DO            /* @DA */
+             groups_taba = ''                                 /* @DA */
+             'tbtop ' TABLEA                                  /* @DA */
+             do forever                                       /* @DA */
+                'tbskip' TABLEA                               /* @DA */
+                if (rc = 0) then do                           /* @DA */
+                   groups_taba = groups_taba group            /* @DA */
+                   end                                        /* @DA */
+                else do                                       /* @DA */
+                   call RACFCOPG groups_taba                  /* @DA */
+                   'tbtop' TABLEA                             /* @DA */
+                   leave                                      /* @DA */
+                   end                                        /* @DA */
+                end                                           /* @DA */
+        END                                                   /* @DA */
         When (Abbrev("FILTER",zcmd,3) = 1) | ,                /* @D6 */
              (ABBREV("RESET",ZCMD,1) = 1) THEN DO             /* @D6 */
              if (parm <> '') then                             /* @CD */
@@ -313,7 +333,12 @@ PROFL:
              "TBSORT" TABLEA "FIELDS("sort")"                 /* @CJ */
              "TBTOP " TABLEA                                  /* @CJ */
         END                                                   /* @AF */
-        otherwise NOP
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End  /* Select */
      ZCMD = ""; PARM = ""                                     /* @CJ */
      'control display save'                                   /* @CJ */
@@ -522,6 +547,7 @@ DISD:
            'tbtop ' TABLEB                                    /* @CH */
            'tbskip' TABLEB 'number('last_find')'              /* @CH */
         end                                                   /* @CH */
+        if zcmd /= null then                                  /* @L2 */
         Select                                                /* @BM */
            When (abbrev("FIND",zcmd,1) = 1) then              /* @CH */
                 call do_findb                                 /* @CH */
@@ -582,7 +608,12 @@ DISD:
                 "TBSORT" TABLEB "FIELDS("sort")"              /* @CJ */
                 "TBTOP " TABLEB                               /* @CJ */
            END                                                /* @BM */
-           otherwise NOP                                      /* @BM */
+           Otherwise Do                                       /* @L2 */
+             racfsmsg = 'Error.'                              /* @L2 */
+             racflmsg = zcmd 'is not a recognized command.' , /* @L2 */
+                        'Try again.'                          /* @L2 */
+             'setmsg msg(RACF011)'                            /* @L2 */
+           End                                                /* @L2 */
         End  /* Select */                                     /* @BM */
         ZCMD = ""; PARM = ""                                  /* @CJ */
         'control display save'                                /* @CJ */
@@ -759,6 +790,8 @@ GETD:
   owner  = ' '
   data   = ' '
   supgrp = ' '
+  if FAS = 'YES' Then                                         /* @MW */
+  return                                                      /* @MW */
   cmd    = "LG "group                                         /* @AN */
   x = OUTTRAP('details.')
   address TSO cmd                                             /* @AN */
@@ -1087,6 +1120,10 @@ RETURN                                                        /* @AP */
 /*  Get connects to group number                                 @D7  */
 /*--------------------------------------------------------------------*/
 GETCONN:                                                      /* @D7 */
+  if FAS = 'YES' Then do                                      /* @MW */
+   gcnt = ''                                                  /* @MW */
+   return                                                     /* @MW */
+  end                                                         /* @MW */
     myrc = IRRXUTIL('EXTRACT','GROUP',group,'RACF',)          /* @D7 */
     if (word(myrc,1) <> 0) then do                            /* @D7 */
       gcnt = '    '                                           /* @D7 */

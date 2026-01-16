@@ -97,8 +97,10 @@
   &mgdesc = 'Generate'
   &mu = 'U'
   &mudesc = 'Updates'
+  &mca = 'CS'
+  &mcadesc = 'CertSite'
   &mca = 'CA'
-  &mcadesc = 'CertAuth'
+  &mcadesc = 'Certs'
   &ZPRIM  = YES              /* Make a primary option menu */
 
   VGET (SETGSTA  SETGSTAP SETGDISP SETGCONF SETGMVS SETGMVSD SETGPREF +
@@ -371,6 +373,7 @@
       B,'CMD(%BOOKMGR SHELF(''EOYBOOK.ICHZBKC0.BKSHELF''))' /* Hidden */
       C,'CMD(%RACFCMDS)'
      CA,'CMD(%RACFCERT)'
+     CS,'CMD(%RACFCERT)'
       D,'CMD(%RACFDSL)'
       E,'CMD(%RACFENQS)'
       G,'CMD(%RACFGEN)'

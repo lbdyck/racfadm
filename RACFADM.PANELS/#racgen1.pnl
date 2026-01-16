@@ -20,7 +20,7 @@
 +  defaults to DATASET but can also be a general resource class name.
 +
 +  The result is a file consisting of the!ADDSD/RDEFINE+and!PERMIT+
-+  commands that, if re- executed, would create the same profiles that
++  commands that, if re-executed, would create the same profiles that
 +  currently exist.  This file can then be edited to change the
 +  high-level qualifier or sent to another system before re-execution.
 +  It can also be used for report generation purposes.

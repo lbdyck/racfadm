@@ -16,6 +16,7 @@
 %  EXclude text     +Do not display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
 %  SAve             +Save display to a dataset
+%  CLONE            +Clone Dataset Profiles for users in table
 +
 +Line Commands
 %  S  !Show         +List of standard access permits defined for this profile

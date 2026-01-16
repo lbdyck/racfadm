@@ -79,7 +79,7 @@ Address ISPExec
   if (rc ^= 0) then do
      racfsmsg = 'Allocation error'                            /* @A3 */
      racflmsg = 'LMINIT failed for SYSPRINT'                  /* @A3 */
-     'setmsg msg(racf001)'                                    /* @A3 */
+     'setmsg msg(racf011)'                                    /* @A3 */
      call Goodbye                                             /* @DK */
   end
   Select                                                      /* @A7 */

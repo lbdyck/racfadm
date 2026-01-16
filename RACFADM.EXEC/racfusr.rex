@@ -11,6 +11,10 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L3  251216  LBDyck   Fix blank selection error                    */
+/* @L2  251203  LBDyck   Report invalid commands on RACFUSR2/3        */
+/* @FH  251129  TRIDJK   Add CLONE primary command                    */
+/* @MW  251122  TSGMW    Add FAST Option to list profiles             */
 /* @FG  251004  TRIDJK   Correct LRSCROLL logic (LEFT/RIGHT)          */
 /* @FF  250809  TRIDJK   Sort and color new fields in panel RACFUS2A  */
 /* @FE  250519  TRIDJK   Add LEFT/RIGHT primary commands              */
@@ -228,6 +232,7 @@ certind     = racfdcer()   /* Digital cert indicator       */ /* @F8 */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @DZ */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @DZ */
 NULL        = ''                                              /* @ED */
+FAS         = 'NO'                                            /* @MW */
 
 ADDRESS ISPEXEC                                               /* @BC */
   Arg Rfilter
@@ -360,6 +365,7 @@ PROFL:
         'tbskip' TABLEA 'number('last_find')'                 /* @ED */
      end                                                      /* @ED */
      'control passthru lrscroll pasoff'                       /* @FG */
+     if zcmd /= null then                                     /* @L2 */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @ED */
              call do_finda                                    /* @ED */
@@ -455,6 +461,24 @@ PROFL:
                    end                                        /* @F7 */
                 end                                           /* @F7 */
         END                                                   /* @F7 */
+        WHEN (ABBREV("CLONE",ZCMD,5) = 1 |,                   /* @FH */
+              ABBREV("KLONE",ZCMD,5) = 1) THEN DO   /*UNDOC*/ /* @JK */
+             radmclon = zcmd                                  /* @JK */
+             'vput (radmclon) shared'                         /* @JK */
+             users_taba = ''                                  /* @FH */
+             'tbtop ' TABLEA                                  /* @FH */
+             do forever                                       /* @FH */
+                'tbskip' TABLEA                               /* @FH */
+                if (rc = 0) then do                           /* @FH */
+                   users_taba = users_taba user               /* @FH */
+                   end                                        /* @FH */
+                else do                                       /* @FH */
+                   call RACFCOPI users_taba                   /* @FH */
+                   'tbtop' TABLEA                             /* @FH */
+                   leave                                      /* @FH */
+                   end                                        /* @FH */
+                end                                           /* @FH */
+        END                                                   /* @FH */
         WHEN (ABBREV("NOINT",ZCMD,5) = 1) THEN DO   /*UNDOC*/ /* @JK */
              y = 0                                            /* @JK */
              cmdrec. = ''                                     /* @JK */
@@ -587,7 +611,12 @@ PROFL:
            "TBTOP  "TABLEA                                    /* @EE */
 
         END                                                   /* @AT */
-        otherwise NOP
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End /* Select */
      ZCMD = ""; PARM = ""                                     /* @EE */
      'control display save'                                   /* @EE */
@@ -1153,6 +1182,7 @@ DISD:
            'tbtop ' TABLEB                                    /* @ED */
            'tbskip' TABLEB 'number('last_find')'              /* @ED */
         end                                                   /* @ED */
+        if zcmd /= null then                                  /* @L2 */
         Select                                                /* @CY */
            When (abbrev("FIND",zcmd,1) = 1) then              /* @ED */
                 call do_findb                                 /* @ED */
@@ -1211,7 +1241,12 @@ DISD:
                 "TBSORT" TABLEB "FIELDS("sort")"              /* @EE */
                 "TBTOP " TABLEB                               /* @EE */
            END                                                /* @CY */
-           otherwise NOP                                      /* @CY */
+           Otherwise Do                                       /* @L2 */
+             racfsmsg = 'Error.'                              /* @L2 */
+             racflmsg = zcmd 'is not a recognized command.' , /* @L2 */
+                        'Try again.'                          /* @L2 */
+             'setmsg msg(RACF011)'                            /* @L2 */
+           End                                                /* @L2 */
         End /* Select */                                      /* @CY */
         ZCMD = ""; PARM = ""                                  /* @EE */
         'control display save'                                /* @EE */
@@ -1330,6 +1365,13 @@ GETD:
   attroper = 'N'      /* Operations: Y=Yes, N=No */           /* @CH */
   attraudi = 'N'      /* Auditor:    Y=Yes, N=No */           /* @CH */
   cmd      = "LU "USER" TSO"                                  /* @BB */
+
+ if FAS = 'YES' then do                                       /* @MW */
+  attr2    = ''                                               /* @MW */
+  revoked  = ''                                               /* @MW */
+  grpcnt   = ''                                               /* @MW */
+  return                                                      /* @MW */
+ end                                                          /* @MW */
 
   x        = OUTTRAP('details.')
   address TSO cmd                                             /* @BB */
@@ -1672,12 +1714,14 @@ CREATE_TABLEA:                                                /* @BE */
      /* Get further info                           -*/
      /*---------------------------------------------*/
      call GETD
-     x = outtrap("lcert.")                                    /* @F8 */
-     cmd = 'racdcert list id('user')'                         /* @F8 */
-     Address TSO cmd                                          /* @F8 */
-     x = outtrap("off")                                       /* @F8 */
-     if lcert.0 > 1 then                                      /* @F8 */
-       tsouser = left(tsouser,2)||certind /* Digital Certs */ /* @F8 */
+     if FAS = 'NO' then do                                    /* @MW */
+       x = outtrap("lcert.")                                  /* @F8 */
+       cmd = 'racdcert list id('user')'                       /* @F8 */
+       Address TSO cmd                                        /* @F8 */
+       x = outtrap("off")                                     /* @F8 */
+       if lcert.0 > 1 then                                    /* @F8 */
+         tsouser = left(tsouser,2)||certind /* DigiCerts */   /* @F8 */
+       end                                                    /* @MW */
      "TBMOD" TABLEA
   end  /* Do i=1 to var.0 */
 

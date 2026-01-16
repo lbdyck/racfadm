@@ -3,6 +3,7 @@
 )CM*------------------------------------------------------------------*
 )CM*  FLG  YYMMDD  USERID   DESCRIPTION
 )CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A4  251218  TRIDJK   Changed State field to Cond
 )CM*  @A3  240918  TRIDJK   Added State field
 )CM*  @A2  240111  GA       Added info on ID for user certificate
 )CM*  @A1  200929  TRIDJK   Added capability to SAve file as TXT/CSV
@@ -10,7 +11,7 @@
 )SEL &RACFSFIL = T
  &ZDATESTD ------( RACFADM - Digital Certificates &type )----- &ZTIME
 )BLANK
- Label                            StDate     EnDate     Status    State
+ Label                            StDate     EnDate     Status    Cond
  --------------------------------------------------------------------------
 )TB 2 35 46 57 67
 )DOT &TABLEA
@@ -19,20 +20,20 @@
 )SETF STDATE  = &LEFT(&STDATE,10, )
 )SETF ENDATE  = &LEFT(&ENDATE,10, )
 )SETF STATUS  = &LEFT(&STATUS,9, )
-)SETF STATE   = &LEFT(&STATE,9, )
-!&LABEL!&STDATE!&ENDATE!&STATUS!&STATE
+)SETF COND    = &LEFT(&COND,9, )
+!&LABEL!&STDATE!&ENDATE!&STATUS!&COND
 )ENDDOT
 )ENDSEL
 )SEL &RACFSFIL = C
 RACFADM - Digital Certificates &type
-Label,StDate,EnDate,Status,State
+Label,StDate,EnDate,Status,Cond
 -----,------,------,------,-----
 )DOT &TABLEA
 )SETF LABEL   = &STRIP(&LABEL,, )
 )SETF STDATE  = &STRIP(&STDATE,, )
 )SETF ENDATE  = &STRIP(&ENDATE,, )
 )SETF STATUS  = &STRIP(&STATUS,, )
-)SETF STATE   = &STRIP(&STATE,, )
-&LABEL,&STDATE,&ENDATE,&STATUS,&STATE
+)SETF COND    = &STRIP(&COND,, )
+&LABEL,&STDATE,&ENDATE,&STATUS,&COND
 )ENDDOT
 )ENDSEL

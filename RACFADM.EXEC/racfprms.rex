@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @B1  240827  TRIDJK   Fixed audit special & terminal uacc values   */
 /* @AZ  240206  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @AY  200730  TRIDJK   Added Generic prof chk/Generic cmd proc      */
@@ -103,6 +104,7 @@ ADDRESS ISPEXEC                                               /* @A4 */
         'tbtop' tablea                                        /* @AL */
         'tbskip' tablea 'number('last_find')'                 /* @AL */
      end                                                      /* @AL */
+     if zcmd /= null then                                     /* @L2 */
      Select                                                   /* @AG */
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @AL */
              call do_find                                     /* @AL */
@@ -126,7 +128,12 @@ ADDRESS ISPEXEC                                               /* @A4 */
              if (abbrev('VALUE',PARM,1)) THEN                 /* @AG */
                 call do_sort 'VALUE'                          /* @AG */
         end                                                   /* @AG */
-        otherwise nop                                         /* @AG */
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      end                                                      /* @AG */
   end                                                         /* @AE */
   'tbend' TABLEA                                              /* @AE */

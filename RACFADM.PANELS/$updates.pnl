@@ -7,6 +7,54 @@
 * add that library to your SYSHELP allocation.                         *
 *----------------------------------------------------------------------*
 
+  08 Jan 2026 - V40R6
+     - Certs (Option CA)
+       -- Added RACFVUE exec to run VUECERTS (Charles Mills)
+       -- Added RACFVUEC panel to prompt for VUECERTS parameters:
+            CMDS  - to generate RACDCERT LIST commands for diagnosing
+                    certificate issues
+            VERB  - to display IRRSEQ00 call parameters and profiles
+            INDEX - to generate a list of all Digital Certificates
+            USERS - to generate a list of users with Personal
+                    Certificates with counts
+            RINGS - to display Keyrings and their Certificates
+            blank - to list *ALL* Digital Certificates along with an
+                    extensive analysis
+       -- Added #RACVUEC tutorial panel
+       -- Updated RACFCERT to add VUE and PERS primary commands
+          which run VUECERTS (Charles Mills)
+       -- Updated RACFCERT to change "State" field name to "Cond"
+       -- Updated RACFCERT to add CHECK primary command
+       -- Added RACFVMAC Edit macro to position to Keyrings in
+          VUECERTS output
+     - Tutorial (Option T)
+       -- Updated panel #RACMENU
+       -- Created help panel #RACVUEP to document VUECERTS RACF
+          permissions
+     - Other Items
+       -- Updated $STUB and RACFADM execs to add an ISPLLIB LIBDEF
+          for hlq.RACFADM.LOADLIB
+     - User Profiles (Option 1)
+       -- Updated RACFUSR to add Fast List processing (Mark Wilson)
+       -- Updated panels RACFUSR1 and #RACUSR2
+       -- Updated RACFUSR to add CLONE primary command
+       -- Added RACFCOPI exec to clone userids in table
+     - Group Profiles (Option 2)
+       -- Updated RACFGRP to add Fast List processing (Mark Wilson)
+       -- Updated panels RACFGRP1 and #RACGRP8
+       -- Updated RACFGRP to add CLONE primary command
+       -- Added RACFCOPG exec to clone groups in table
+     - Dataset Profiles (Option 3)
+       -- Updated RACFDSN to add Fast List processing (Mark Wilson)
+       -- Updated panels RACFDSN1 and #RACDSN2
+       -- Updated RACFDSN to add CLONE primary command
+       -- Added RACFCOPD exec to clone datasets in table
+     - General resources (Option 4)
+       -- Updated RACFCLSG to add Fast List processing (Mark Wilson)
+       -- Updated panels RACFCLS1 and #RACCLS2
+       -- Updated RACFCLSG to add CLONE primary command
+       -- Added RACFCOPC exec to clone resources in table
+
   23 Oct 2025 - V40R5
      - Updated RACFHELP (Option H)
        -- Added pseudo help member $CALLS which is the list of

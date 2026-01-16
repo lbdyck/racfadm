@@ -16,17 +16,17 @@
 +which an authorization is granted.
 +
 +The following topics are presented in sequence, or may be selected by number:
-+
-+ %1 ~Menu                %11~RACF parameters     %21~RACF reports
-+ %2 ~Settings            %12~RACF IBM options    %22~Generate profile source
-+ %3 ~User profiles       %13~Execute RACF cmds   %23~Digital certificates
-+ %4 ~Group profiles      %14~Dataset list        %24~DSN/Res access authority
-+ %5 ~Dataset profiles    %15~Dataset enqueues    %25~RACFADM line commands
-+ %6 ~General resources   %16~RACF help commands  %26~Publications
-+ %7 ~Password reset      %17~ISPF log file       %27~Installation notes
-+ %8 ~Group tree report   %18~RACF messages       %28~Acknowledgements
-+ %9 ~RACF data (Showmvs) %19~OMVS RACF commands  %29~History
-+ %10~RACF databases      %20~RACF Pswd/Phrase Rpt%30~RACFADM edit macros
++ %1 ~Menu                %12~RACF IBM options      %23~Digital certificates
++ %2 ~Settings            %13~Execute RACF cmds     %24~DSN/Res access authority
++ %3 ~User profiles       %14~Dataset list          %25~RACFADM line commands
++ %4 ~Group profiles      %15~Dataset enqueues      %26~Publications
++ %5 ~Dataset profiles    %16~RACF help commands    %27~Installation notes
++ %6 ~General resources   %17~ISPF log file         %28~Acknowledgements
++ %7 ~Password reset      %18~RACF messages         %29~History
++ %8 ~Group tree report   %19~OMVS RACF commands    %30~RACFADM edit macros
++ %9 ~RACF data (Showmvs) %20~RACF Pswd/Phrase Rpt  %31~VUECERTS permissions
++ %10~RACF databases      %21~RACF reports
++ %11~RACF parameters     %22~Generate profile source
 )PROC
   &ZSEL = TRANS(&ZCMD 1,#RACMEN1  2,#RACSET1  3,#RACUSR2  4,#RACGRP8
                       5,#RACDSN2  6,#RACCLSR  7,#RACPSWD  8,#RACGTRE
@@ -35,40 +35,41 @@
                      17,#RACLOG  18,#RACMSG  19,#RACOMVS 20,#RACFPP
                      21,#RACRPT1 22,#RACGEN1 23,#RACCERT 24,#RACDSNA
                      25,#RACLINE 26,#RACPUB1 27,#RACNOT1 28,#RACACKN
-                     29,#RACHIST 30,#RACMACS
+                     29,#RACHIST 30,#RACMACS 31,#RACVUEP
                       *,'?')
   &ZUP  = #RACMENU
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('1')
-  FIELD(ZPS00002) VAR(ZCMD) VAL('11')
-  FIELD(ZPS00003) VAR(ZCMD) VAL('21')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('12')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('23')
   FIELD(ZPS00004) VAR(ZCMD) VAL('2')
-  FIELD(ZPS00005) VAR(ZCMD) VAL('12')
-  FIELD(ZPS00006) VAR(ZCMD) VAL('22')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('13')
+  FIELD(ZPS00006) VAR(ZCMD) VAL('24')
   FIELD(ZPS00007) VAR(ZCMD) VAL('3')
-  FIELD(ZPS00008) VAR(ZCMD) VAL('13')
-  FIELD(ZPS00009) VAR(ZCMD) VAL('23')
+  FIELD(ZPS00008) VAR(ZCMD) VAL('14')
+  FIELD(ZPS00009) VAR(ZCMD) VAL('25')
   FIELD(ZPS00010) VAR(ZCMD) VAL('4')
-  FIELD(ZPS00011) VAR(ZCMD) VAL('14')
-  FIELD(ZPS00012) VAR(ZCMD) VAL('24')
+  FIELD(ZPS00011) VAR(ZCMD) VAL('15')
+  FIELD(ZPS00012) VAR(ZCMD) VAL('26')
   FIELD(ZPS00013) VAR(ZCMD) VAL('5')
-  FIELD(ZPS00014) VAR(ZCMD) VAL('15')
-  FIELD(ZPS00015) VAR(ZCMD) VAL('25')
+  FIELD(ZPS00014) VAR(ZCMD) VAL('16')
+  FIELD(ZPS00015) VAR(ZCMD) VAL('27')
   FIELD(ZPS00016) VAR(ZCMD) VAL('6')
-  FIELD(ZPS00017) VAR(ZCMD) VAL('16')
-  FIELD(ZPS00018) VAR(ZCMD) VAL('26')
+  FIELD(ZPS00017) VAR(ZCMD) VAL('17')
+  FIELD(ZPS00018) VAR(ZCMD) VAL('28')
   FIELD(ZPS00019) VAR(ZCMD) VAL('7')
-  FIELD(ZPS00020) VAR(ZCMD) VAL('17')
-  FIELD(ZPS00021) VAR(ZCMD) VAL('27')
+  FIELD(ZPS00020) VAR(ZCMD) VAL('18')
+  FIELD(ZPS00021) VAR(ZCMD) VAL('29')
   FIELD(ZPS00022) VAR(ZCMD) VAL('8')
-  FIELD(ZPS00023) VAR(ZCMD) VAL('18')
-  FIELD(ZPS00024) VAR(ZCMD) VAL('28')
+  FIELD(ZPS00023) VAR(ZCMD) VAL('19')
+  FIELD(ZPS00024) VAR(ZCMD) VAL('30')
   FIELD(ZPS00025) VAR(ZCMD) VAL('9')
-  FIELD(ZPS00026) VAR(ZCMD) VAL('19')
-  FIELD(ZPS00027) VAR(ZCMD) VAL('29')
+  FIELD(ZPS00026) VAR(ZCMD) VAL('20')
+  FIELD(ZPS00027) VAR(ZCMD) VAL('31')
   FIELD(ZPS00028) VAR(ZCMD) VAL('10')
-  FIELD(ZPS00029) VAR(ZCMD) VAL('20')
-  FIELD(ZPS00030) VAR(ZCMD) VAL('30')
+  FIELD(ZPS00029) VAR(ZCMD) VAL('21')
+  FIELD(ZPS00030) VAR(ZCMD) VAL('11')
+  FIELD(ZPS00031) VAR(ZCMD) VAL('22')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

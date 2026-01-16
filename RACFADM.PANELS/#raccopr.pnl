@@ -13,6 +13,11 @@
 +
 + }PERMIT(s)+for the cloned resource profile will be generated.
 +
++  A TSO batch job will be created with the following commands:
++
++    {RDEFINE
++    {PERMIT(s)
++
 )INIT
 )PROC
   &ZUP     = #RACCOPR

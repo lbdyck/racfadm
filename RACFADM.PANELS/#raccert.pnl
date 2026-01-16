@@ -3,10 +3,17 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   Ý  TYPE(DATAOUT) INTENS(LOW)  COLOR(TURQ)
+   ~  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
+   #  TYPE(DATAOUT) INTENS(LOW)  COLOR(WHITE)
+   ?  TYPE(DATAOUT) INTENS(LOW)  COLOR(RED)
+   ]  AREA(DYNAMIC) EXTEND(OFF)
+   ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
 %Command ===>_ZCMD
-%
+^Linec ------------------------------------------------------------------------^
+)Area Linec
 +Primary Commands
 %  Find text        +Find a text string
 %  Sort column A/D  +Sort a column, in ascending or descending order
@@ -14,8 +21,16 @@
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
 %  Reset            +Redisplay all rows and sort first column
-%  Type             +Switch certificate list from CERTAUTH to SITE
+%  SITE/CA/PERS     +Switch certificate list to SITE/CERTAUTH/PERS
+%  VUEcerts parm    +Display certificates (CERTAUTH/SITE/PERSONAL)
+%                     !CMDS+ - generate RACDCERT LIST commands
+%                     !VERB+ - display IRRSEQ00 call parameters and profiles
+%                     !INDEX+- index of all certificates
+%                     !USERS+- userids with personal certificates (with count)
+%                     !RINGS+- display Keyrings and their Certificates
+%                     !blank+- display all certificates with an analysis
 %  SAve             +Save display to a dataset
+%  CHECK            +Check certificate or certificate chain
 +
 +Line Commands
 %  S  !Show         +Issue RACDCERT &certtype LIST LABEL command
@@ -24,6 +39,20 @@
 %  A  !Add          +Issue RACDCERT &certtype ADD WITHLABEL command @(Admin)
 %  D  !Delete       +Issue RACDCERT &certtype DELETE LABEL command  @(Admin)
 %  G  !Gencert      +Issue RACDCERT &certtype GENCERT WITHLABEL cmd @(Admin)
+]listmap                                                                       ]
+]listrng                                                                       ]
++
+)INIT
+  &listmap = ''
+  &listrng = ''
+  &mapa    = 'LISTMAP command        ?(Admin)'
+  &mapr    = 'LISTRING command       ?(Admin)'
+  if (&certtype = 'SITE' | &certtype = 'CERTAUTH')
+  else
+    &listmap = '#  M  ÝMap          ~Issue RACDCERT &certtype &mapa'
+  if (&certtype = 'SITE' | &certtype = 'CERTAUTH')
+  else
+    &listrng = '#  R  ÝRing         ~Issue RACDCERT &certtype &mapr'
 )PROC
   &ZUP     = #RACCERT
 )END

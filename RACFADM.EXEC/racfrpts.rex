@@ -9,6 +9,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @JK  250729  TRIDJK   Added primary command PDSOUT                 */
 /* @JK  250729  TRIDJK   Added line command 'B'                       */
 /* @JK  250722  TRIDJK   Added primary command EXCLUDE                */
@@ -137,6 +138,7 @@ DISP_PANEL:
         'tbtop ' TABLEA
         'tbskip' TABLEA 'number('last_find')'
      end
+     if zcmd /= null then                                     /* @L2 */
      SELECT
         When (abbrev("FIND",zcmd,1) = 1) then
              call do_finda
@@ -253,7 +255,12 @@ DISP_PANEL:
         END                                                   /* @AF */
         WHEN ABBREV("UNLOAD",ZCMD,1) = 1 THEN
              CALL CREATE_JCL
-        otherwise NOP
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End /* Select */
      ZCMD = ""; PARM = ""
      'control display save'

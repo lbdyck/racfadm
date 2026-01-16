@@ -16,6 +16,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L1  251114  LBD      Add libdef to loadlib                        */
 /* @A3  250228  LBD      Return to RACFADM menu if entered via option */
 /* @A2  200622  LBD      Support a passed option                      */
 /* @AC  200619  RACFA    Initialize the variable NULL                 */
@@ -55,6 +56,7 @@ ADDRESS ISPEXEC
   'Select Panel('PANEL01') Opt('radmopt')' ,                  /* @A2 */
          'NewAppl(RADM) PassLib'                              /* @A2 */
   if (RAOPT <> "NA") THEN DO                                  /* @A9 */
+     'libdef ispllib'                                         /* @L1 */
      'libdef ispmlib'
      'libdef ispplib'
      'libdef ispslib'                                         /* @AA */
@@ -86,15 +88,19 @@ SETUP:
   panels = "'"subword(dsname,1,words(dsname)-1)" PANELS'"
   skels  = "'"subword(dsname,1,words(dsname)-1)" SKELS'"      /* @AB */
   msgs   = "'"subword(dsname,1,words(dsname)-1)" MSGS'"
+  llib   = "'"subword(dsname,1,words(dsname)-1)" LOADLIb'"    /* @L1 */
   plib   = "'"subword(dsname,1,words(dsname)-1)" ISPPLIB'"    /* @A1 */
   slib   = "'"subword(dsname,1,words(dsname)-1)" ISPSLIB'"    /* @AA */
   mlib   = "'"subword(dsname,1,words(dsname)-1)" ISPMLIB'"    /* @A1 */
   panels = translate(panels,'.',' ')
   msgs   = translate(msgs,'.',' ')
   skels  = translate(skels,'.',' ')                            /*@AB */
+  llib   = translate(llib,'.',' ')                            /* @L1 */
   plib   = translate(plib,'.',' ')                            /* @A1 */
   slib   = translate(slib,'.',' ')                            /* @AA */
   mlib   = translate(mlib,'.',' ')                            /* @A1 */
+  x = listdsi(llib)                                           /* @L1 */
+  if (x = 0) then llib = llib                                 /* @L1 */
   x = listdsi(plib)                                           /* @A1 */
   if (x = 0) then panels = plib                               /* @A1 */
   x = listdsi(slib)                                           /* @AA */
@@ -102,6 +108,7 @@ SETUP:
   x = listdsi(mlib)                                           /* @A1 */
   if (x = 0) then msgs = mlib                                 /* @A1 */
   Address TSO 'Altlib Act app(Exec) Dataset('exec')'
+  'Libdef ISPLLIB dataset id('llib') Stack'                   /* @L1 */
   'Libdef ISPMLIB dataset id('msgs') Stack'
   'Libdef ISPPLIB dataset id('panels') Stack'
   'Libdef ISPSLIB dataset id('skels') Stack'                  /* @AB */

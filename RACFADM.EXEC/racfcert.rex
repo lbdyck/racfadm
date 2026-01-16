@@ -3,13 +3,19 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AD  260101  TRIDJK   Add M (Listmap) and R (Listring) line cmds   */
+/* @AC  251221  TRIDJK   Add CHECK primary command (CHECKCERT)        */
+/* @AB  251218  TRIDJK   Color Cond/ID column                         */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
+/* @AA  251119  TRIDJK   Add PERS     primary command, Charles Mills  */
+/* @A9  251109  TRIDJK   Add VUEcerts primary command, Charles Mills  */
 /* @A8  241027  TRIDJK   Add G (Gencert) line command                 */
 /* @A7  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @A6  240126  GA       Add new function Chain,Add,Delete,Export,Type*/
 /* @A5  240117  GA       Add NO row for certificate not found         */
 /* @A4  240111  GA       List ca or user certificate                  */
 /* @A3  220317  LBD      Close open table on exit                     */
-/* @A2  210309  LBD      Add State (expired) to table                 */
+/* @A2  210309  LBD      Add Cond (expired) to table                  */
 /* @A1  201118  TRIDJK   Add X (CA Export) line command               */
 /* @A0  200929  TRIDJK   Created REXX                                 */
 /*====================================================================*/
@@ -19,6 +25,7 @@ PANEL29     = "RACFCERG"   /* Generate certificate         */ /* @A8 */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */
 PANELXP     = "RACFEXP"    /* Export DSN prompt            */ /* @A1 */
+PANELCK     = "RACFCHK"    /* Check DSN prompt             */ /* @AC */
 SKELETON1   = "RACFCERT"   /* Save tablea to dataset       */
 EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */
 TABLEA      = 'TA'RANDOM(0,99999)  /* Unique table name A  */
@@ -90,12 +97,17 @@ EXIT
 SELECT_LABEL:
   seconds = time('S')
   "TBCREATE" TABLEA "KEYS(LABEL)",
-                  "NAMES(STDATE ENDATE STATUS STATE)" ,       /* @A2 */
+                  "NAMES(STDATE ENDATE STATUS COND)" ,        /* @A2 */
                   "REPLACE NOWRITE"                           /* @A2 */
-  call get_cert_labels
+
+  if type = 'PERSONAL' then                                   /* @AA */
+    call get_pers_cert_labels                                 /* @AA */
+  else                                                        /* @JK */
+    call get_cert_labels                                      /* @JK */
+
   sort     = 'LABEL,C,A'
   CLRLABE  = "TURQ" ; CLRSTDA = "GREEN"
-  CLRENDA  = "GREEN"; CLRSTAT = "GREEN"
+  CLRENDA  = "GREEN"; CLRSTAT = "GREEN"; CLRCOND = "GREEN"    /* @AB */
   "TBSORT " TABLEA "FIELDS("sort")"
   "TBTOP  " TABLEA
 RETURN
@@ -126,8 +138,8 @@ GET_CERT_LABELS:
       parse value endate with ey'/'em'/'ed                    /* @A2 */
       tendate = ey''em''ed                                    /* @A2 */
       if tendate < date('s')                                  /* @A2 */
-         then state = '*Expired*'                             /* @A2 */
-         else state = null                                    /* @A2 */
+         then cond = '*Expired*'                              /* @A2 */
+         else cond = null                                     /* @A2 */
       "TBMOD" TABLEA
       end
     end
@@ -136,7 +148,7 @@ GET_CERT_LABELS:
     status  = ''                                              /* @A5 */
     stdate  = ''                                              /* @A5 */
     endate  = ''                                              /* @A5 */
-    state   = ''                                              /* @A5 */
+    cond    = ''                                              /* @A5 */
     "TBMOD" TABLEA                                            /* @A5 */
   end
 RETURN
@@ -181,6 +193,7 @@ DISPLAY_TABLE:
         'tbtop ' TABLEA
         'tbskip' TABLEA 'number('last_find')'
      end
+     if zcmd /= null then                                     /* @L2 */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then
              call do_find
@@ -206,7 +219,7 @@ DISPLAY_TABLE:
              'tbtop ' TABLEA
              'tbskip' TABLEA
              do forever
-                str = translate(label stdate endate status state)
+                str = translate(label stdate endate status cond)
                 if (pos(find_str,str) > 0) then nop
                 else 'tbdelete' TABLEA
                 'tbskip' TABLEA
@@ -229,24 +242,44 @@ DISPLAY_TABLE:
              SELECT
                 when (ABBREV("LABEL",PARM,1) = 1) then
                      call sortseq 'LABEL'
-                when (ABBREV("STDATE",PARM,1) = 1) then
+                when (ABBREV("STDATE",PARM,3) = 1) then
                      call sortseq 'STDATE'
                 when (ABBREV("ENDATE",PARM,1) = 1) then
                      call sortseq 'ENDATE'
-                when (ABBREV("STATUS",PARM,1) = 1) then
+                when (ABBREV("STATUS",PARM,5) = 1) then
                      call sortseq 'STATUS'
-                when (ABBREV("STATE",PARM,1) = 1) then        /* @A2 */
-                     call sortseq 'STATE'
+                when (ABBREV("COND",PARM,4) = 1) then         /* @AB */
+                     call sortseq 'COND'
                 otherwise NOP
            END
         END
         WHEN (ABBREV("TYPE",ZCMD,1) = 1) THEN DO              /* @A6 */
          CALL SWTT                                            /* @A6 */
         END                                                   /* @A6 */
-        OTHERWISE NOP
+        WHEN (ABBREV("SITE",ZCMD,4) = 1) THEN DO              /* @JK */
+         CALL SITE                                            /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("CA",ZCMD,2) = 1) THEN DO                /* @JK */
+         CALL CERT                                            /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("PERS",ZCMD,4) = 1) THEN DO              /* @AA */
+         CALL PERS                                            /* @AA */
+        END                                                   /* @JK */
+        When (abbrev("VUECERTS",zcmd,3) = 1) then DO          /* @A9 */
+         CALL RACFVUE  parm seq                               /* @A9 */
+        END                                                   /* @A9 */
+        WHEN (ABBREV("CHECK",ZCMD,5) = 1) THEN DO             /* @AC */
+         CALL CHECKC                                          /* @AC */
+        END                                                   /* @AC */
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End /* Select */
      CLRLABE  = "GREEN"; CLRSTDA = "GREEN"
-     CLRENDA  = "GREEN"; CLRSTAT = "GREEN"
+     CLRENDA  = "GREEN"; CLRSTAT = "GREEN"; CLRCOND = "GREEN" /* @AB */
      PARSE VAR SORT LOCARG "," .
      INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"
      "TBSORT" TABLEA "FIELDS("sort")"
@@ -260,6 +293,8 @@ DISPLAY_TABLE:
         when (opta = 'A') then call addl                      /* @A6 */
         when (opta = 'D') then call dell                      /* @A6 */
         when (opta = 'G') then call genc                      /* @A8 */
+        when (opta = 'M') then call listm                     /* @AD */
+        when (opta = 'R') then call listm                     /* @AD */
         otherwise nop
      End
      'control display restore'
@@ -360,7 +395,10 @@ LISTL:
         cmd_rc = 8                                            /* @A1 */
         RETURN                                                /* @A1 */
      end                                                      /* @A1 */
-     cmd = "racdcert "certtype" export(label('"LABEL"'))"     /* @A6 */
+     if certtype = "PERSONAL" then                            /* @AA */
+      cmd = "racdcert id("cond") export(label('"LABEL"'))"    /* @JK */
+     else                                                     /* @JK */
+      cmd = "racdcert "certtype" export(label('"LABEL"'))"    /* @A6 */
      cmd = cmd || " dsn("xdsn")"                              /* @A6 */
      if (formatx <> NULL) then                                /* @A6 */
       cmd = cmd || " FORMAT("formatx")"                       /* @A6 */
@@ -383,10 +421,19 @@ LISTL:
      DROP CMDREC.                                             /* @A6 */
   END                                                         /* @A1 */
   ELSE DO                                                     /* @A1 */
-     IF (OPTA = "S") THEN                                     /* @A6 */
-      cmd = "racdcert "certtype" list(label('"LABEL"'))"      /* @A4 */
-     ELSE                                                     /* @A6 */
-      cmd = "racdcert "certtype" listchain(label('"LABEL"'))" /* @A6 */
+     if certtype = "PERSONAL" then do                         /* @AA */
+     IF (OPTA = "S") THEN                                     /* @JK */
+      cmd = "racdcert id("cond") list(label('"LABEL"'))"      /* @JK */
+     ELSE                                                     /* @JK */
+      cmd = "racdcert id("cond") listchain(label('"LABEL"'))"
+      END                                                     /* @JK */
+     ELSE DO                                                  /* @JK */
+      IF (OPTA = "S") THEN                                    /* @A6 */
+       cmd = "racdcert "certtype" list(label('"LABEL"'))"     /* @A4 */
+      ELSE                                                    /* @A6 */
+       cmd = "racdcert "certtype" listchain(label('"LABEL"'))"
+       END                                                    /* @JK */
+
      X = OUTTRAP("CMDREC.")
      ADDRESS TSO cmd
      cmd_rc = rc
@@ -416,6 +463,47 @@ LISTL:
         CALL racfmsgs "ERR10" /* Generic failure */
   END
 RETURN
+/*--------------------------------------------------------------------*/
+/*  Check certificate or certificate chain                            */
+/*--------------------------------------------------------------------*/
+CHECKC:
+     'ADDPOP'                                                 /* @AC */
+     'DISPLAY PANEL('panelck')'                               /* @AC */
+     disprc = RC                                              /* @AC */
+     'REMPOP'                                                 /* @AC */
+     if (disprc > 0) then do                                  /* @AC */
+        cmd_rc = 8                                            /* @AC */
+        RETURN                                                /* @AC */
+     end                                                      /* @AC */
+     X = OUTTRAP("CMDREC.")                                   /* @AC */
+     cmd = "racdcert checkcert("cdsn")"                       /* @AC */
+     ADDRESS TSO cmd                                          /* @AC */
+     cmd_rc = rc                                              /* @AC */
+     X = OUTTRAP("OFF")                                       /* @AC */
+     if (SETMSHOW <> 'NO') then                               /* @AC */
+        call SHOWCMD                                          /* @AC */
+     DO J = 1 TO CMDREC.0                                     /* @AC */
+        CMDREC.J = SUBSTR(CMDREC.J,1,80)                      /* @AC */
+     END                                                      /* @AC */
+     ADDRESS TSO "ALLOC F("DDNAME") NEW REUSE",               /* @AC */
+                 "LRECL(80) BLKSIZE(0) RECFM(F B)",           /* @AC */
+                 "UNIT(VIO) SPACE(1 5) CYLINDERS"             /* @AC */
+     ADDRESS TSO "EXECIO * DISKW "DDNAME" (STEM CMDREC. FINIS"/* @AC */
+     DROP CMDREC.                                             /* @AC */
+                                                              /* @AC */
+     "LMINIT DATAID(CMDDATID) DDNAME("DDNAME")"               /* @AC */
+     SELECT                                                   /* @AC */
+        WHEN (SETGDISP = "VIEW") THEN                         /* @AC */
+             "VIEW DATAID("CMDDATID") MACRO("EDITMACR")"      /* @AC */
+        WHEN (SETGDISP = "EDIT") THEN                         /* @AC */
+             "EDIT DATAID("CMDDATID") MACRO("EDITMACR")"      /* @AC */
+        OTHERWISE                                             /* @AC */
+             "BROWSE DATAID("CMDDATID")"                      /* @AC */
+     END                                                      /* @AC */
+     ADDRESS TSO "FREE FI("DDNAME")"                          /* @AC */
+     if (cmd_rc > 0) then                                     /* @AC */
+        CALL racfmsgs "ERR10" /* Generic failure */           /* @AC */
+RETURN                                                        /* @AC */
 /*--------------------------------------------------------------------*/
 /*  Keep only DSN characters                                     @A1  */
 /*--------------------------------------------------------------------*/
@@ -653,6 +741,9 @@ DELL:                                                         /* @A6 */
    msg    ='You are about to delete 'label                    /* @A6 */
    Sure_? = RACFMSGC(msg)                                     /* @A6 */
    if (sure_? = 'YES') then do                                /* @A6 */
+   if certtype = "PERSONAL" then                              /* @AA */
+    cmd = "racdcert delete(label('"LABEL"')) id("cond")"      /* @JK */
+   else                                                       /* @JK */
     cmd = "RACDCERT DELETE(LABEL('"LABEL"')) "certtype        /* @A6 */
     x = OUTTRAP('var.')                                       /* @A6 */
     address TSO cmd                                           /* @A6 */
@@ -669,7 +760,7 @@ DELL:                                                         /* @A6 */
      stdate  = ''                                             /* @A6 */
      endate  = ''                                             /* @A6 */
      status  = ''                                             /* @A6 */
-     state   = ''                                             /* @A6 */
+     cond    = ''                                             /* @A6 */
      "TBMOD" TABLEA                                           /* @A6 */
     end                                                       /* @A6 */
    end                                                        /* @A6 */
@@ -677,6 +768,49 @@ DELL:                                                         /* @A6 */
    CALL racfmsgs "ERR27" var.1 /* error deleting cert. */     /* @A6 */
    end                                                        /* @A6 */
 RETURN                                                        /* @A6 */
+/*--------------------------------------------------------------------*/
+/*  LISTMAP/RING                                                 @AD  */
+/*--------------------------------------------------------------------*/
+LISTM:
+   if opta = "M" then
+     action = "listmap"
+   if opta = "R" then
+     action = "listring(*)"
+
+   if certtype = "PERSONAL" then
+     cmd = "racdcert "action" id("cond")"
+   else
+     if left(certtype,3) = "id(" then
+       cmd = "racdcert "action certtype
+     else
+       return
+
+   X = OUTTRAP("CMDREC.")
+   ADDRESS TSO cmd
+   cmd_rc = rc
+   X = OUTTRAP("OFF")
+   if (SETMSHOW <> 'NO') then
+      call SHOWCMD
+   DO J = 1 TO CMDREC.0
+      CMDREC.J = SUBSTR(CMDREC.J,1,80)
+   END
+   ADDRESS TSO "ALLOC F("DDNAME") NEW REUSE",
+               "LRECL(80) BLKSIZE(0) RECFM(F B)",
+               "UNIT(VIO) SPACE(1 5) CYLINDERS"
+   ADDRESS TSO "EXECIO * DISKW "DDNAME" (STEM CMDREC. FINIS"
+   DROP CMDREC.
+
+   "LMINIT DATAID(CMDDATID) DDNAME("DDNAME")"
+   SELECT
+      WHEN (SETGDISP = "VIEW") THEN
+           "VIEW DATAID("CMDDATID") MACRO("EDITMACR")"
+      WHEN (SETGDISP = "EDIT") THEN
+           "EDIT DATAID("CMDDATID") MACRO("EDITMACR")"
+      OTHERWISE
+           "BROWSE DATAID("CMDDATID")"
+   END
+   ADDRESS TSO "FREE FI("DDNAME")"
+RETURN
 /*--------------------------------------------------------------------*/
 /*  Switch type CERTAUTH - SITE                                       */
 /*--------------------------------------------------------------------*/
@@ -690,3 +824,59 @@ SWTT:                                                         /* @A6 */
    call select_label                                          /* @A6 */
   end                                                         /* @A6 */
 RETURN                                                        /* @A6 */
+SITE:                                                         /* @JK */
+   certtype = 'SITE'                                          /* @JK */
+   type = certtype                                            /* @JK */
+   call select_label                                          /* @JK */
+RETURN                                                        /* @JK */
+CERT:                                                         /* @JK */
+   certtype = 'CERTAUTH'                                      /* @JK */
+   type = certtype                                            /* @JK */
+   call select_label                                          /* @JK */
+RETURN                                                        /* @JK */
+PERS:                                                         /* @AA */
+   certtype = 'PERSONAL'                                      /* @AA */
+   type = certtype                                            /* @AA */
+   call select_label                                          /* @AA */
+RETURN                                                        /* @AA */
+/*--------------------------------------------------------------------*/
+/*  Display digital certificate personal labels                       */
+/*--------------------------------------------------------------------*/
+GET_PERS_CERT_LABELS:                                         /* @AA */
+Address TSO                                                   /* @AA */
+"ALLOC F(INDEX) UNIT(VIO) NEW REUSE SPACE(1,1) TRACKS",       /* @AA */
+  "LRECL(256) RECFM(F B)"                                     /* @AA */
+"ALLOC F(SYSPRINT) UNIT(VIO) NEW REUSE SPACE(15,15) TRACKS",  /* @AA */
+  "LRECL(200) RECFM(F B)"                                     /* @AA */
+                                                              /* @AA */
+Address ISPEXEC                                               /* @AA */
+'Select pgm(vuecertp) parm('index')'                          /* @AA */
+if rc = 20 then do                                            /* @AA */
+  RACFSMSG = "VUE not found"                                  /* @AA */
+  RACFLMSG = "VUECERTP program not found"                     /* @AA */
+  "SETMSG MSG(RACF011)"                                       /* @AA */
+  Address TSO                                                 /* @AA */
+  "FREE  F(INDEX)"                                            /* @AA */
+  "ALLOC F(SYSPRINT) DA(*) SHR REUSE"                         /* @AA */
+  RETURN                                                      /* @AA */
+  end                                                         /* @AA */
+                                                              /* @AA */
+Address TSO                                                   /* @AA */
+"EXECIO * DISKR INDEX (STEM INDEX. FINIS"                     /* @AA */
+"FREE F(INDEX)"                                               /* @AA */
+"ALLOC F(SYSPRINT) DA(*) SHR REUSE"                           /* @AA */
+                                                              /* @AA */
+do x = 1 to index.0                                           /* @AA */
+  parse var index.x . id stdate endate status . . label       /* @AA */
+  if left(id,2) <> 'ID' then                                  /* @AA */
+    iterate                                                   /* @AA */
+  label = strip(label)                                        /* @AA */
+  label = strip(label,,"'")                                   /* @AA */
+  status = left(status,7)                                     /* @AA */
+  parse var id "(" id ")"                                     /* @AA */
+  cond = id                                                   /* @AA */
+  Address ISPExec                                             /* @AA */
+  "TBMOD" TABLEA                                              /* @AA */
+  end                                                         /* @AA */
+drop index.                                                   /* @AA */
+RETURN                                                        /* @AA */

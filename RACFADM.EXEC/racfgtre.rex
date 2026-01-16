@@ -107,7 +107,7 @@ Address ISPExec
   if (rc ^= 0) then do
      racfsmsg = 'Allocation error'
      racflmsg = 'LMINIT failed for 'DDNAME                    /* @A5 */
-     'setmsg msg(racf001)'
+     'setmsg msg(racf011)'
      call Goodbye
   end
   vtype = 'TREE'                                              /* @AI */

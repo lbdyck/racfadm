@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @A1  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @A0  240117  GA       Created REXX                                 */
 /*====================================================================*/
@@ -197,6 +198,7 @@ DISPLAY_TABLE:
         'tbtop ' TABLEA
         'tbskip' TABLEA 'number('last_find')'
      end
+     if zcmd /= null then                                     /* @L2 */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then
              call do_find
@@ -272,7 +274,12 @@ DISPLAY_TABLE:
               END
             end
         END
-        OTHERWISE NOP
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End /* Select */
      CLRRING  = "GREEN"; CLROWNE = "GREEN"
      CLRLABE  = "GREEN"; CLRUSAG = "GREEN"; CLRDEFA = "GREEN"

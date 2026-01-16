@@ -1,0 +1,54 @@
+)ATTR DEFAULT(%+~)
+   ~  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   [  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ^ area(SCRL) Extend(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
+%Command ===>~ZCMD                                                             +
+^Linec ------------------------------------------------------------------------^
+)Area Linec
+%VUECERTS+does not require APF authorization.%VUECERTS+requires the
+ following RACF permissions.
+
+@READ+authority to!IRR.RADMIN.RLIST+or!IRR.RADMIN.*+in the FACILITY
+ class.
+
+ And either
+
+ If the!*.IRR_VIRTUAL_KEYRING.LST+profile or any
+!userid.IRR_VIRTUAL_KEYRING.LST+profile exists in the RDATALIB class,
+ then@READ+authority to the!*.IRR_VIRTUAL_KEYRING.LST profile.+
+
+ Otherwise@UPDATE+authority to!IRR.DIGTCERT.LISTRING+in the FACILITY
+ class.
+
+ For keyring access (if "keyrings": is specified as or defaulted to
+ true):
+
+@UPDATE+authority to!IRR.DIGTCERT.LISTRING+in the FACILITY class.
+
+ If any keyring profiles exist in the RDATALIB class, then@READ+
+ authority to!*.*.LST+in RDATALIB.
+
+ In addition, for certificate list detail using the VUECERTL command:
+
+@CONTROL+authority to!IRR.DIGTCERT.LIST+
+
+ (For access only to your own certificates,@READ+authority is
+ sufficient.  For access only to other than CERTAUTH and SITE
+ certificates,@UPDATE+authority is sufficient.)
+
+ If these profiles are not authorized as indicated then expect errors
+ CMC0030E Error from RACF callable service R_admin (IRRSEQ00): Caller
+ not authorized and/or CMC0047E More RACDCERT profiles (nn) than
+ Certificates retrieved from certificate database (RACF or gskkyman)
+ (nn).
+
+ If preferred, the[RACF SPECIAL+attribute is a sufficient alternative
+ to these explicit permissions.
+)PROC
+  &ZUP     = #RACVUEP
+)END

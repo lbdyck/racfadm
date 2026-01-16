@@ -3,6 +3,9 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
+/* @CY  251202  TRIDJK   Add CLONE primary command                    */
+/* @MW  251122  TSGMW    Add FAST Option to list profiles             */
 /* @CX  250508  TRIDJK   Add EXCLUDE primary command                  */
 /* @CW  250315  TRIDJK   M line cmd - modify selected dataset segments*/
 /* @CV  250114  TRIDJK   Added OWNER and UACC to TABLEA               */
@@ -130,6 +133,7 @@ DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */ /* @C2 */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @C1 */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @C1 */
 NULL        = ''                                              /* @C9 */
+FAS         = 'NO'                                            /* @MW */
 
 ADDRESS ISPEXEC                                               /* @AJ */
   Rclass = 'DATASET'
@@ -147,7 +151,7 @@ ADDRESS ISPEXEC                                               /* @AJ */
 
   If (SETMADMN = "YES") then do                               /* @B2 */
      SELCMDS2 = "ÝS¨ShowÝL¨ListÝM¨ModifyÝC¨Change"||,         /* @CW */
-                "ÝA¨AddÝR¨RemoveÝP¨ProfileÝW¨When"            /* @CU */
+                "ÝA¨AddÝR¨RemoveÝP¨ProfileÝW¨WhenÝD¨Dsn"      /* @JK */
      IF (SETMIRRX = "YES") THEN                               /* @BR */
         SELCMDS5 = "ÝS¨ShowÝL¨ListÝP¨Profile"||,              /* @BH */
                    "ÝC¨Chg AccessÝA¨Add Access"||,            /* @BH */
@@ -240,6 +244,7 @@ PROFL:
         'tbtop ' TABLEA                                       /* @C9 */
         'tbskip' TABLEA 'number('last_find')'                 /* @C9 */
      end                                                      /* @C9 */
+     if zcmd /= null then                                     /* @L2 */
      Select                                                   /* @AL */
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @C9 */
              call do_finda                                    /* @C9 */
@@ -321,7 +326,27 @@ PROFL:
              "TBSORT "TABLEA "FIELDS("sort")"                 /* @CA */
              "TBTOP  "TABLEA                                  /* @CA */
         END                                                   /* @AN */
-        otherwise NOP                                         /* @AM */
+        WHEN (ABBREV("CLONE",ZCMD,5) = 1 ) THEN DO            /* @CY */
+             dsns_taba = ''                                   /* @CY */
+             'tbtop ' TABLEA                                  /* @CY */
+             do forever                                       /* @CY */
+                'tbskip' TABLEA                               /* @CY */
+                if (rc = 0) then do                           /* @CY */
+                   dsns_taba = dsns_taba dataset              /* @CY */
+                   end                                        /* @CY */
+                else do                                       /* @CY */
+                   call RACFCOPD dsns_taba                    /* @CY */
+                   'tbtop' TABLEA                             /* @CY */
+                   leave                                      /* @CY */
+                   end                                        /* @CY */
+                end                                           /* @CY */
+        END                                                   /* @CY */
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      END /* Select */                                         /* @AL */
      ZCMD = ""; PARM = ""                                     /* @CA */
      'control display save'                                   /* @CA */
@@ -623,6 +648,7 @@ DISD:
            'tbtop' TABLEB                                     /* @C9 */
            'tbskip' TABLEB 'number('last_find')'              /* @C9 */
         end                                                   /* @C9 */
+        if zcmd /= null then                                  /* @L2 */
         Select                                                /* @BM */
            When (abbrev("FIND",zcmd,1) = 1) then              /* @C9 */
                 call do_findb                                 /* @C9 */
@@ -698,7 +724,12 @@ DISD:
                 "TBSORT" TABLEB "FIELDS("sort")"              /* @CA */
                 "TBTOP " TABLEB                               /* @CA */
            END                                                /* @BM */
-           otherwise NOP                                      /* @BM */
+           Otherwise Do                                       /* @L2 */
+             racfsmsg = 'Error.'                              /* @L2 */
+             racflmsg = zcmd 'is not a recognized command.' , /* @L2 */
+                        'Try again.'                          /* @L2 */
+             'setmsg msg(RACF011)'                            /* @L2 */
+           End                                                /* @L2 */
         END /* Select */                                      /* @BM */
         ZCMD = ""; PARM = ""                                  /* @CA */
         'control display save'                                /* @CA */
@@ -1399,6 +1430,11 @@ RETURN                                                        /* @CL */
 /*  Get Owner and UACC from DSD profile                               */
 /*--------------------------------------------------------------------*/
 GET_OWNER_UACC:                                               /* @CV */
+  if Fas = 'YES' then do                                      /* @MW */
+   owner = ''                                                 /* @MW */
+   uacc = ''                                                  /* @MW */
+   return                                                     /* @MW */
+  end                                                         /* @MW */
   cmd  = "LISTDSD DA('"DATASET"') AUTH"                       /* @CV */
   x = OUTTRAP('VARO.')                                        /* @CV */
   address TSO cmd                                             /* @CV */

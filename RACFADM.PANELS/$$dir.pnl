@@ -85,6 +85,7 @@
  #RACPUB1  Tutorial       RACF publications and downloads (1 of 2)
  #RACPUB2  Tutorial       RACF educational websites (2 of 2)
  #RACRING  Tutorial       Digital rings
+ #RACRPDS  Tutorial       Report Generation PDS datasets
  #RACRPT1  Tutorial       RACF reports (1 of 2)
  #RACRPT2  Tutorial       RACF reports (2 of 2)
  #RACRUN   Tutorial       User profile (Edit macro to run RACF commands)
@@ -97,6 +98,9 @@
  #RACUSR5  Tutorial       User profile
  #RACUS5A  Tutorial       User profile
  #RACUSR6  Tutorial       User profile
+ #RACVUEC  Tutorial       Digital certificates
+ #RACVUEL  Tutorial       VUECERTL edit macro
+ #RACVUEP  Tutorial       VUECERTS RACF permissions
  ADDSDE    TSO Help       Updates for DFP(ENCRYPTTYPES) parameter
  ALTDSDE   TSO Help       Updates for DFP(ENCRYPTTYPES) parameter
  OPERMIT   TSO Help       Unix Access Control List, like PERMIT
@@ -107,6 +111,7 @@
  RACFCERA  Certificates   Add new certificate
  RACFCERG  Certificates   Generate a Digital Certificate
  RACFCERT  Certificates   Digital certificates, menu opt CA
+ RACFCHK   Certificates   Check certificate or certificate chain
  RACFCLSB  Class          List members
  RACFCLSC  Class          Add class
  RACFCLSD  Class          List class profiles
@@ -179,6 +184,7 @@
  RACFUS5A  User           Alter selected user segments
  RACFUSR6  User           Add/Change user
  RACFUSR7  User           Change connection
+ RACFVUEC  Certificates   View certificates (VUECERTS)
 
  Notes:
    - Class is 'General Resources'

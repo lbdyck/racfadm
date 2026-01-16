@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @BJ  250513  TRIDJK   Add primary command ALL                      */
 /* @BI  241022  TRIDJK   Add primary command CDT                      */
 /* @BH  240914  TRIDJK   Add Description to TABLEA and *Action for L/S*/
@@ -208,6 +209,7 @@ DISPLAY_TABLE:
         'tbtop ' TABLEA                                       /* @B5 */
         'tbskip' TABLEA 'number('last_find')'                 /* @B5 */
      end                                                      /* @B5 */
+     if zcmd /= null then                                     /* @L2 */
      Select
         When (abbrev("FIND",zcmd,1) = 1) then                 /* @B5 */
              call do_find                                     /* @B5 */
@@ -297,7 +299,12 @@ DISPLAY_TABLE:
              "TBSORT "TABLEA "FIELDS("sort")"                 /* @JK */
              "TBTOP  "TABLEA                                  /* @JK */
         END                                                   /* @JK */
-        OTHERWISE NOP                                         /* @A8 */
+        Otherwise Do                                          /* @L2 */
+          racfsmsg = 'Error.'                                 /* @L2 */
+          racflmsg = zcmd 'is not a recognized command.' ,    /* @L2 */
+                     'Try again.'                             /* @L2 */
+          'setmsg msg(RACF011)'                               /* @L2 */
+        End                                                   /* @L2 */
      End
      ZCMD = ""; PARM = ""                                     /* @B6 */
      'control display save'                                   /* @B6 */

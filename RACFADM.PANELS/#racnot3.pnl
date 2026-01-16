@@ -2,6 +2,7 @@
    _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - Installation Notes - 3 of 3+)\-\%Tutorial
 %Command ===>_ZCMD
@@ -21,9 +22,6 @@
 +
 ! 10)%RACFDSEP+in the REXX dataset may be updated to change the default date
 +     separator for the USERID and GROUP displays. (default is /)
-+
-+
-+
 +
 )PROC
   &ZUP     = #RACNOT1

@@ -1,16 +1,16 @@
 /*%NOCOMMENT====================* REXX *==============================*/
-/*PURPOSE:  RACFADM - Generate Profile Source for all "active"        */
-/*                    Resource Classes, Option GA                     */
+/*PURPOSE:  RACFADM - Clone General Resource Profiles in table        */
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
-/* @A1  251013  Janko    Skip classes per RDEFINE documentation       */
-/* @A0  250707  Janko    IRRXUTIL verson                              */
+/* @A0  251202  Janko    Creation                                     */
 /*====================================================================*/
 EDITMACR    = "RACFMRUN"   /* Edit Macro, RACRUN MSG       */
 DDNAME      = 'RACFA'RANDOM(0,999) /* Unique ddname        */
 parse source . . REXXPGM .         /* Obtain REXX pgm name */
 REXXPGM     = LEFT(REXXPGM,8)
+
+Arg profiles
 
 Address ISPEXEC
 "CONTROL ERRORS RETURN"
@@ -27,76 +27,21 @@ end
 
 cmd. = ""
 y = 0
-Address ISPexec
-'vget (zllgjob1 zllgjob2 zllgjob3 zllgjob4) profile'
-y = y + 1
-cmd.y = zllgjob1
-if zllgjob2 <> '' then do
-  y = y + 1
-  cmd.y = zllgjob2
-  end
-if zllgjob3 <> '' then do
-  y = y + 1
-  cmd.y = zllgjob3
-  end
-if zllgjob4 <> '' then do
-  y = y + 1
-  cmd.y = zllgjob4
-  end
-y = y + 1
-cmd.y = "//TSO      EXEC  PGM=IKJEFT01"
-y = y + 1
-cmd.y = "//SYSTSPRT DD  SYSOUT=*"
-y = y + 1
-cmd.y = "//SYSTSIN  DD  *"
 
-/* Get all active resource classes */
-myrc=IRRXUTIL("EXTRACT","_SETROPTS","_SETROPTS","CLS")
-if (word(myrc,1)<>0) then do
-   say "MYRC="myrc
-   say "An IRRXUTIL or R_admin error occurred"
-end
+cmd. = ""
+y = 0
 
-/* Generate profile source for all active resource classes */
-do t = 4 to CLS.BASE.CLASSACT.0     /* Skip DATASET, USER, GROUP */
-  filter = "**"
-  class = cls.base.classact.t
-  skip_class = "DCEUUIDS",          /* Skip per RDEFINE */    /* @A1 */
-               "DIGTCERT",          /* "    "   "       */    /* @A1 */
-               "DIGTNMAP",          /* "    "   "       */    /* @A1 */
-               "DIGTRING",          /* "    "   "       */    /* @A1 */
-               "IDIDMAP ",          /* "    "   "       */    /* @A1 */
-               "NDSLINK ",          /* "    "   "       */    /* @A1 */
-               "NOTELINK",          /* "    "   "       */    /* @A1 */
-               "ROLE    ",          /* "    "   "       */    /* @A1 */
-               "UNIXMAP "           /* "    "   "       */    /* @A1 */
-  if wordpos(class,skip_class) > 0 then
-    iterate
+parse var profiles class profiles
+profile_cnt = words(profiles)
 
-  x = outtrap('ser.')
-  cmd = "SEARCH FILTER("FILTER") CLASS("CLASS")"
-  Address TSO cmd
-  cmd_rc = rc
-  x = outtrap('off')
-  IF SETMSHOW <> 'NO' THEN
-     CALL SHOWCMD
-
-do s = 1 to ser.0
-  profile = strip(ser.s)
-  lprof = length(profile)
-  if lprof > 3 then
-    if substr(profile,lprof-3,4) = ' (G)' then
-      profile = substr(profile,1,lprof-4)
+Do n = 1 to profile_cnt
+  parse var profiles profile profiles
 
   Address TSO
   rxrc=IRRXUTIL("EXTRACT",class,profile,"RACF","")
   if (word(rxrc,1) <> 0) then do
      iterate
      end
-
-  type = ''
-  if pos('*',profile) > 0 then
-    type = 'GEN'
 
   do i=1 to RACF.0 /* get the segment names */
     segment=RACF.i
@@ -143,14 +88,14 @@ do s = 1 to ser.0
       end
 
   if RACF.0 = 1 then
-    cmd.y = strip(cmd.y,'T','-')
+    cmd.y = strip(cmd.y,t,'-')
 
   if racf.base.aclcnt.repeatcount <> '' then do
     do a=1 to racf.base.aclcnt.repeatcount
       y = y + 1
       cmd.y = " PERMIT "profile" CLASS("class")",
           "ID("racf.base.aclid.a")",
-          "ACC("racf.base.aclacs.a")" type
+          "ACC("racf.base.aclacs.a")"
       end
     end
   if racf.base.acl2cnt.repeatcount <> '' then do
@@ -158,19 +103,19 @@ do s = 1 to ser.0
       y = y + 1
       cmd.y = " PERMIT "profile" CLASS("class")",
           "ID("racf.base.acl2id.a")",
-          "ACC("racf.base.acl2acs.a")" type "-"
+          "ACC("racf.base.acl2acs.a") -"
       y = y + 1
       cmd.y = "   WHEN("racf.base.acl2cond.a"("racf.base.acl2ent.a"))"
       end
     end
     drop racf.
   end
-  end
+
     cmd.0 = y
     call Display_Commands
     Address ISPExec
     zerrsm = "RACFADM "REXXPGM" RC=0"
-    zerrlm = "GENERATE ALL RESOURCE CLASS PROFILES"
+    zerrlm = "CLONE TABLE A RESOURCE CLASS PROFILES"
     'log msg(isrz003)'
   exit
 
@@ -248,7 +193,6 @@ SHOWCMD:
   IF (SETMSHOW = "BOTH") | (SETMSHOW = "LOG") THEN DO
      zerrsm = "RACFADM "REXXPGM" RC="cmd_rc
      zerrlm = cmd
-     Address ISPExec
      'log msg(isrz003)'
   END
 RETURN
