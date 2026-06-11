@@ -1,13 +1,11 @@
 )ATTR DEFAULT(%+_)
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRLABE)
-  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTDA)
-  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRENDA)
-  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTAT)
-  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRCOND)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRISSU)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
    #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
    {  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
    ¬  AREA(DYNAMIC) EXTEND(OFF)
    ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
@@ -20,12 +18,12 @@
 +Commands: %SITE+- Show SITE certs %CA+- Show CA certs %PERS+- Show PERS certs
 +Select:   ¬SELCMDS                                                            ¬
 %
-%S  ~Label                           ~StDate    ~EnDate    ~Status   {chdr
+%S  ~Label                           ~Issuer
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                               Z         Z         Z        	Z
+_Z+ Z                               Z                                      @Z
 )INIT
-  .ZVARS   = '(OPTA LABEL STDATE ENDATE STATUS COND)'
+  .ZVARS   = '(OPTA LABEL ISSUER SCIND2)'
   .HELP    = #RACCERT
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -62,12 +60,11 @@ _Z+ Z                               Z         Z         Z        	Z
    VER (&OPTA,LIST,S,X,H,A,D,G,M,R,Q)
   ELSE
    VER (&OPTA,LIST,S,X,H)
+)FIELD
+  FIELD(ISSUER)  IND(SCIND2,'<>') LEN(2048)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT LABEL')
-  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT STDATE')
-  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT ENDATE')
-  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT STATUS')
-  FIELD(CHDR)     VAR(ZCMD) VAL('SORT COND')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT ISSUER')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

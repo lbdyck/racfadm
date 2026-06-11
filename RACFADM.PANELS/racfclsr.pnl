@@ -34,9 +34,9 @@ _Z+ Z        ^Z    Z
         IF (&SROW ^= 0)
            &OPTA = S
   IF (&SETMADMN = YES)
-     VER (&OPTA,LIST,S,L,R)
+     VER (&OPTA,LIST,S,L,R,I)
   ELSE
-     VER (&OPTA,LIST,S,L)
+     VER (&OPTA,LIST,S,L,I)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT CLASS')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT DESC')

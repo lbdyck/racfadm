@@ -1,0 +1,34 @@
+)Attr Default(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON)  JUST(LEFT)   HILITE(USCORE)
+   ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(BLUE)
+   }  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)  COLOR(GREEN)
+)Body window(77,10) expand(\\)
+%Command ===>_zcmd
++
++Export DSN%===>_xdsn                                          +
++Format    %===>_FORMATX  +        {(CERTB64/DER,PKCS7B64/DER,PKCS12B64/DER)
++Password  %===>¬PWDX                                                      +
++Edit Cert %===>_Z+                {(Y/N)
++
+}WARNING:+Export dataset will be{deleted+and then{re-allocated+
++
+%ENTER+to continue or%F3+to cancel
+)Init
+  .cursor  = xdsn
+  .HELP    = #RACGCER
+  .ZVARS   = '(EDITXP)'
+  IF (&EDITXP = '')
+   &EDITXP = 'N'
+  IF (&FORMATX = '')
+   &FORMATX = 'CERTB64'
+  &ZWINTTL = 'RACFADM - Certificate Export DSN'
+)Proc
+  ver (&xdsn,nb,dsname)
+  ver (&formatx,nb,list,CERTB64,CERTDER,PKCS7B64,PKCS7DER,PKCS12B64,PKCS12DER)
+  if (&FORMATX = 'PKCS12B64' | &FORMATX = 'PKCS12DER')
+   ver(&pwdx,nb)
+  vput (editxp) profile
+  &ZWINTTL = ''
+)End

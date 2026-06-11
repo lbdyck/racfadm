@@ -84,6 +84,10 @@
           When substr(zdata,i+8,5) = 'Note:' then do   /* Rings      */
                zshadow = overlay(colorw,zshadow,i+8,zwidth-8)
                end
+          When substr(zdata,i+12,25) = 'certificates connected to' then
+               do
+               zshadow = overlay(colort,zshadow,i+8,zwidth-8)
+               end
           When substr(zdata,i+10,8) = 'Warning:' then do  /* Updates */
                zshadow = overlay(colorr,zshadow,i+8,zwidth-8)
                end

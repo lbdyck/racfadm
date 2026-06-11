@@ -21,7 +21,7 @@
  RACFALTG  Group          Alter selected group segments
  RACFALTR  Class          Alter selected resource segments
  RACFALTU  User           Alter selected user segments
- RACFCERT  Certs          Display Digital Certificates, menu opt CS
+ RACFCERT  Certs          Display Digital Certificates, menu opt CA.2
  RACFCHKP  User           Check the days until the password changes
  RACFCLOG  Documentation  Determine LOG type (rc=0 SYSLOG, rc=1 OPERLOG)
  RACFCLSA  Authorization  Display authorization on profile, menu opt 9
@@ -52,6 +52,7 @@
  RACFGTRE  Group Tree     Execute/display DSMON group tree rpt, opt 6
  RACFHELP  Help           Display TSO HELP on RACF commands
  RACFIBM   IBM's RACF     RACF Menu options: System, RRSF, Certificates
+ RACFIMAC  Edit Macro     Position to class in $CLASSES
  RACFLOG   Documentation  Display changes/issues/isplog, opt C/I/L
  RACFLOGR  Logger         General Command Logger to ZFS file (Prototype)
  RACFMRUN  Edit Macro     Display MSG line about RACRUN
@@ -78,6 +79,7 @@
  RACFUSRX  User           Userid cross reference report (line cmd X)
  RACFUSRY  User           Userid dsn/rsrc access report (line cmd Y)
  RACFVUE   Certs          Display *ALL* Digital Certificates (primary cmd VUE)
+ RACGCERT  Certs          Display Digital Certificates, menu opt CA.1
  RACRINGS  Certs          Display Digital Rings
  RACRUN    Edit Macro     Run RACF commands in Edit buffer
  VUECERTL  Edit Macro     Run RACDCERT LIST commands on VUECERTS output

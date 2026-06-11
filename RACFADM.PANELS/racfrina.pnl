@@ -32,6 +32,7 @@
 )INIT
   .ZVARS   = '(SCIND)'
   .HELP    = #RACMENU
+  &ZCMD    = ' '
 )PROC
   VER(&RINGA,NB)
 )FIELD

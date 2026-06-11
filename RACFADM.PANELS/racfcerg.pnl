@@ -32,6 +32,7 @@
 +    Parms  %===>¬PARMG                                                      @Z
 +
 )INIT
+  &ZCMD    = ' '
   .HELP    = #RACCERG
   .ZVARS   ='(SCIND1,SCIND2,SCIND3,SCIND4,SCIND5,SCIND6,SCIND7,SCIND8)'
   IF (&OWNERG = '')
@@ -57,7 +58,7 @@
   FIELD(CITYG ) IND(SCIND5,'<>') LEN(64)
   FIELD(STG   ) IND(SCIND6,'<>') LEN(64)
   FIELD(CTRYG ) IND(SCIND7,'<>') LEN(64)
-  FIELD(PARMG ) IND(SCIND8,'<>') LEN(255)
+  FIELD(PARMG ) IND(SCIND8,'<>') LEN(2048)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

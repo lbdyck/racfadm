@@ -1,54 +1,36 @@
 )ATTR DEFAULT(%+_)
   01  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRLABE)
-  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTDA)
-  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRENDA)
-  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRSTAT)
-  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRCOND)
+  02  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRNOTB)
+  03  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRNOTA)
+  04  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRKEYA)
+  05  TYPE(OUTPUT)  INTENS(LOW)  SKIP(ON) COLOR(&CLRCERT)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
-   #  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(GREEN)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
    {  TYPE(OUTPUT)  PAS(ON)      CAPS(OFF)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
+   #  TYPE(TEXT)    INTENS(LOW)  JUST(LEFT) COLOR(BLUE)
    ¬  AREA(DYNAMIC) EXTEND(OFF)
    ¨  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
    Ý  TYPE(DATAOUT) INTENS(HIGH)
    ~  TYPE(PS)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - Digital Certificates &type   +)\-\
++\-\(%RACFADM - Digital Certificates (GetCerts)+)\-\
 %Command ===>_ZCMD                                              +Scroll==>_SAMT+
 %
-+Commands: %SITE+- Show SITE certs %CA+- Show CA certs %PERS+- Show PERS certs
 +Select:   ¬SELCMDS                                                            ¬
++          ¬SELCMD2                                                            ¬
 %
-%S  ~Label                           ~StDate    ~EnDate    ~Status   {chdr
+%S ~Label                           ~NotBefore ~NotAfter  ~KeyAlgo   ~CertUser
 %-------------------------------------------------------------------------------
 )MODEL CLEAR(OPTA)
-_Z+ Z                               Z         Z         Z        	Z
+_Z+Z                               Z         Z         Z         	Z
 )INIT
-  .ZVARS   = '(OPTA LABEL STDATE ENDATE STATUS COND)'
-  .HELP    = #RACCERT
+  .ZVARS   = '(OPTA LABEL NOTBEF NOTAFT KEYALGO CERTUSER)'
+  .HELP    = #RACGCER
   &ZCMD    = ' '
   IF (&SAMT = ' ')
       &SAMT = &ZSCED
-  *rexx(* type chdr)
-    if (type = 'SITE' | type = 'CERTAUTH') then
-      chdr = 'Cond'
-    else
-      chdr = 'User'
-    cmd  = 'LISTUSER 'type
-    x    = outtrap('lu.')
-    Address TSO cmd
-    x    = outtrap('off')
-
-    selcmds = strip(selcmds)
-    if (type = 'PERSONAL' | lu.0 > 1) &,
-      right(selcmds,6) = 'Delete' then
-      selcmds = selcmds||'ba'x||'M'||'bb'x||'Map'||,
-                         'ba'x||'R'||'bb'x||'Ring'
-    if (type = 'SITE' | type = 'CERTAUTH') &,
-      right(selcmds,4) = 'Ring' then
-      selcmds = substr(selcmds,1,length(selcmds)-13)
-  *endrexx
 )REINIT
   refresh(*)
 )PROC
@@ -59,15 +41,15 @@ _Z+ Z                               Z         Z         Z        	Z
         IF (&SROW ^= 0)
            &OPTA = S
   IF (&SETMADMN = YES)
-   VER (&OPTA,LIST,S,X,H,A,D,G,M,R,Q)
+   VER (&OPTA,LIST,L,S,X,H,A,D,G,M,R,Q)
   ELSE
-   VER (&OPTA,LIST,S,X,H)
+   VER (&OPTA,LIST,L,S,X,H)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT LABEL')
-  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT STDATE')
-  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT ENDATE')
-  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT STATUS')
-  FIELD(CHDR)     VAR(ZCMD) VAL('SORT COND')
+  FIELD(ZPS00002) VAR(ZCMD) VAL('SORT NOTBEF')
+  FIELD(ZPS00003) VAR(ZCMD) VAL('SORT NOTAFT')
+  FIELD(ZPS00004) VAR(ZCMD) VAL('SORT KEYALGO')
+  FIELD(ZPS00005) VAR(ZCMD) VAL('SORT CERTUSER')
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

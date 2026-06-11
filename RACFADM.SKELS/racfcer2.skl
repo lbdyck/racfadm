@@ -1,0 +1,30 @@
+)CM*------------------------------------------------------------------*
+)CM*  Purpose:  RACFADM - Digital Certificates - SAve command
+)CM*------------------------------------------------------------------*
+)CM*  FLG  YYMMDD  USERID   DESCRIPTION
+)CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A1  260216  TRIDJK   Added capability to SAve file as TXT/CSV
+)CM*------------------------------------------------------------------*
+)SEL &RACFSFIL = T
+ &ZDATESTD ------( RACFADM - Digital Certificates &type )----- &ZTIME
+)BLANK
+ Label                            Issuer
+ -----------------------------------------------------------------------
+)TB 2 35
+)DOT &TABLEA
+)SETF LABEL   = &STRIP(&LABEL,, )
+)SETF LABEL   = &LEFT(&LABEL,32, )
+)SETF ISSUER  = &LEFT(&ISSUER,41, )
+!&LABEL!&ISSUER
+)ENDDOT
+)ENDSEL
+)SEL &RACFSFIL = C
+RACFADM - Digital Certificates &type
+Label,Issuer
+-----,------,-----,-----,-----
+)DOT &TABLEA
+)SETF LABEL   = &STRIP(&LABEL,, )
+)SETF ISSUER  = &STRIP(&ISSUER,, )
+&LABEL,&ISSUER
+)ENDDOT
+)ENDSEL

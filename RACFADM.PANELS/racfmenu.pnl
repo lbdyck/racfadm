@@ -97,8 +97,6 @@
   &mgdesc = 'Generate'
   &mu = 'U'
   &mudesc = 'Updates'
-  &mca = 'CS'
-  &mcadesc = 'CertSite'
   &mca = 'CA'
   &mcadesc = 'Certs'
   &ZPRIM  = YES              /* Make a primary option menu */
@@ -372,12 +370,10 @@
      99,'CMD(%RACFCLSA)'        /* Analyze - Verify ACL */  /* Hidden */
       B,'CMD(%BOOKMGR SHELF(''EOYBOOK.ICHZBKC0.BKSHELF''))' /* Hidden */
       C,'CMD(%RACFCMDS)'
-     CA,'CMD(%RACFCERT)'
-     CS,'CMD(%RACFCERT)'
+     CA,'PANEL(RACFCMEN)'
       D,'CMD(%RACFDSL)'
       E,'CMD(%RACFENQS)'
       G,'CMD(%RACFGEN)'
- /*  GA,'CMD(%RACFGENA)' */
       H,'CMD(%RACFHELP)'
  /*   I,'CMD(%RACFLOG $ISSUES)'    Known issues (PMRs)         Hidden */
       L,'CMD(%RACFLOG ISPLOG &OPERAND)' /* R to reverse LOG date order*/

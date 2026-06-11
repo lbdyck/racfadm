@@ -29,6 +29,7 @@
 +
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
+  &ZCMD    = ' '
   .HELP    = #RACCERA
   .ZVARS   ='(SCIND1,SCIND2)'
   &OWNERA = &TYPE

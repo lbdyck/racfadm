@@ -3,6 +3,7 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
    Ý  TYPE(DATAOUT) INTENS(LOW)  COLOR(TURQ)
    ~  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
    #  TYPE(DATAOUT) INTENS(LOW)  COLOR(WHITE)
@@ -10,7 +11,7 @@
    ]  AREA(DYNAMIC) EXTEND(OFF)
    ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
-%Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
+%Tutorial+\-\(%RACFADM - Digital Certificates (GetCerts)+)\-\%Tutorial
 %Command ===>_ZCMD
 ^Linec ------------------------------------------------------------------------^
 )Area Linec
@@ -18,38 +19,29 @@
 %  Find text        +Find a text string
 %  Sort column A/D  +Sort a column, in ascending or descending order
 +                   +(Column headers are point-and-shoot sort fields)
+{                    LABE   NOTB   NOTA   CERT   DADD   UADD   CAUS
+{                    PRIV   SELF   TRUS   SUBJ   ISSU   KEYA   CERN
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
 %  Reset            +Redisplay all rows and sort first column
-%  SITE/CA/PERS     +Switch certificate list to SITE/CERTAUTH/PERS
-%  SAve             +Save display to a dataset
 %  LEFT/RIGHT       +Cycle between certificate displays
 %  EXPAND           +Expand an ISPF scrollable field to full screen display
 %  GENcert          +Generate a digital certificate
 %  ADDcert          +Add a digital certificate
 %  CHECK            +Check certificate or certificate chain
-%  RINGS            +Display Keyrings and their Certificates
+%  RINGS            +Display Keyrings and their Certificates (RINGSUMM)
 +
 +Line Commands
-%  S  !Show         +Issue RACDCERT &certtype LIST LABEL command
+%  L  !List         +Issue RACDCERT &certtype LIST LABEL command
+%  S  !Show         +Issue GETCERTS  CERTSUMM and CERTDETL routines
 %  Q  !Genreq       +Issue RACDCERT &certtype GENREQ LABEL command
 %  X  !Export       +Issue RACDCERT &certtype EXPORT LABEL command
 %  H  !Chain        +Issue RACDCERT &certtype LISTCHAIN LABEL command
 %  D  !Delete       +Issue RACDCERT &certtype DELETE LABEL command  @(Admin)
-]listmap                                                                       ]
-]listrng                                                                       ]
+%  M  !Map          +Issue RACDCERT &certtype MAP LABEL command     @(Admin)
+%  R  !Ring         +Invoke Keyring dialog                          @(Admin)
 +
 )INIT
-  &listmap = ''
-  &listrng = ''
-  &mapa    = 'LISTMAP command        ?(Admin)'
-  &mapr    = '                       ?(Admin)'
-  if (&certtype = 'SITE' | &certtype = 'CERTAUTH')
-  else
-    &listmap = '#  M  ÝMap          ~Issue RACDCERT &certtype &mapa'
-  if (&certtype = 'SITE' | &certtype = 'CERTAUTH')
-  else
-    &listrng = '#  R  ÝRing         ~Invoke Keyring dialog   &mapr'
 )PROC
-  &ZUP     = #RACCERT
+  &ZUP     = #RACGCER
 )END

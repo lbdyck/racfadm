@@ -533,6 +533,12 @@ PROFL:
           else                                                /* @FA */
             panel02 = 'RACFUSR2'                              /* @FA */
         END                                                   /* @FA */
+        WHEN (ABBREV("1",ZCMD,1) = 1) THEN DO       /*UNDOC*/ /* @FA */
+          panel02 = 'RACFUSR2'                                /* @FA */
+        END                                                   /* @FA */
+        WHEN (ABBREV("2",ZCMD,1) = 1) THEN DO       /*UNDOC*/ /* @FA */
+          panel02 = 'RACFUS2A'                                /* @FA */
+        END                                                   /* @FA */
         WHEN (ABBREV("LEFT",ZCMD,4) = 1 |,                    /* @FE */
               ABBREV("RIGHT",ZCMD,5) = 1) THEN DO             /* @FE */
           if panel02 = 'RACFUSR2' then                        /* @FE */
@@ -704,6 +710,8 @@ PROFL:
              action = '*Modify'                               /* @FC */
              "TBMOD" TABLEA                                   /* @FC */
              end                                              /* @FC */
+        when (opta = 'Z') then                                /* @JK */
+             "TBDELETE" TABLEA                                /* @JK */
         otherwise nop
      End
      'control display restore'                                /* @EE */

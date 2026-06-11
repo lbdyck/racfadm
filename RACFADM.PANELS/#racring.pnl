@@ -15,17 +15,17 @@
 %  Only text        +Only display rows with text string
 %  Reset            +Redisplay all rows and sort first column
 %  SAve             +Save display to a dataset
+%  ADDring          +Add a keyring
+%  CONnect          +Connect a certificate to a keyring
 +
 +Line Commands for Ring
 %  L  !List         +Issue RACDCERT ID(User) LISTRING(Ring)
-%  A  !Add          +Issue RACDCERT ID(User) ADDRING(Ring)           @(Admin)
 %  D  !Del          +Issue RACDCERT ID(User) DELRING(Ring)           @(Admin)
 %
 +Line Commands for Labels connected to a Ring
 %  S  !Show         +Issue RACDCERT Owner LIST LABEL command
 %  X  !Export       +Issue RACDCERT Owner EXPORT LABEL command
 %  H  !Chain        +Issue RACDCERT Owner LISTCHAIN LABEL command
-%  C  !Connect      +Issue RACDCERT CONNECT LABEL RING command       @(Admin)
 %  R  !Remove       +Issue RACDCERT REMOVE LABEL RING command        @(Admin)
 )PROC
   &ZUP     = #RACRING

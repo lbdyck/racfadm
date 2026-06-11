@@ -12,7 +12,7 @@
 +USERID %===>_USER    +
 +
 {Use this function to determine if and how a user is authorized to a given
-{resource.
+{general resource.
 +
 {Enter the information above and press enter to start the analysis.
 +

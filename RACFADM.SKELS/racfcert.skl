@@ -11,7 +11,7 @@
 )SEL &RACFSFIL = T
  &ZDATESTD ------( RACFADM - Digital Certificates &type )----- &ZTIME
 )BLANK
- Label                            StDate     EnDate     Status    Cond
+ Label                            StDate     EnDate     Status    &CHDR
  --------------------------------------------------------------------------
 )TB 2 35 46 57 67
 )DOT &TABLEA

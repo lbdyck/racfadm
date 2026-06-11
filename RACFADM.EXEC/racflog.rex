@@ -65,6 +65,12 @@ LOG_FILE:
   end                                                         /* @A9 */
   DSNAME = "'"STRIP(DSNAME,,"'")"("MEMBER")'"                 /* @A5 */
 
+  if member = "$CLASSES" & operand <> "" then do              /* @JK */
+    editmacr = "RACFIMAC"                                     /* @JK */
+    iclass = operand                                          /* @JK */
+    "VPUT (ICLASS)"                                           /* @JK */
+    end                                                       /* @JK */
+
   SELECT                                                      /* @A1 */
      WHEN (SETGDISP = "VIEW") THEN                            /* @A1 */
           "VIEW DATASET("DSNAME") MACRO("EDITMACR")",         /* @AH */
@@ -74,6 +80,7 @@ LOG_FILE:
                "PANEL("PANEL01")"                             /* @AH */
      OTHERWISE                                                /* @A1 */
           "BROWSE DATASET("DSNAME")"                          /* @A1 */
+
   END                                                         /* @A1 */
 RETURN                                                        /* @AA */
 /*--------------------------------------------------------------------*/

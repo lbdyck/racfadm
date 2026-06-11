@@ -1,0 +1,23 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+   Ý  TYPE(DATAOUT) INTENS(LOW)  COLOR(TURQ)
+   ~  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
+   #  TYPE(DATAOUT) INTENS(LOW)  COLOR(WHITE)
+   ?  TYPE(DATAOUT) INTENS(LOW)  COLOR(RED)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%
++  This menu displays Options to process Digital Certificates.
++
+%   1 !GetCerts+ Digital Certificate Information{(Charles Mills)
+%   2 !Certs   + Digital Certificate Processing {(CA/SITE/PERSONAL)
+%   3 !IBMCert + Digital Certificates and Related Functions
+)PROC
+  &ZUP     = #RACGMEN
+)END

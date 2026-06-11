@@ -134,6 +134,7 @@ parse source . . REXXPGM .         /* Obtain REXX pgm name */ /* @C1 */
 REXXPGM     = LEFT(REXXPGM,8)                                 /* @C1 */
 NULL        = ''                                              /* @C9 */
 FAS         = 'NO'                                            /* @MW */
+GENDISC     = 'NO'                 /* Allow GEN without %* */ /* @JK */
 
 ADDRESS ISPEXEC                                               /* @AJ */
   Rclass = 'DATASET'
@@ -485,8 +486,12 @@ ADDD:
      xtr = xtr "DATA('"data"')"
   if verify(dataset,'*%','M') > 0 then                        /* @CS */
     type = 'GEN'                                              /* @CS */
-  else                                                        /* @CS */
-    type = ' '                                                /* @CS */
+  else do                                                     /* @JK */
+    if GENDISC = 'YES' then /* Allow GEN without wildcards */ /* @JK */
+      nop                                                     /* @JK */
+    else                                                      /* @JK */
+      type = ' '                                              /* @JK */
+    end                                                       /* @JK */
   call EXCMD "ADDSD '"DATASET"' OWN("OWNER")",
              "UACC("UACC")" type aud xtr era                  /* @CQ */
   if (cmd_rc <> 0) then do                                    /* @CR */
@@ -842,11 +847,9 @@ CREATE_TABLEB:                                                /* @BM */
      if (data = ' ') then
         if (substr(temp,2,17) = 'INSTALLATION DATA') then do
            i    = i + 2
-           temp = var.i
-           data = temp
+           data = strip(var.i)
            i    = i + 1
-           temp = var.i
-           data = data || substr(temp,2)
+           data = data||strip(var.i)
         end
      if (flags = 'ON') then do
         if (l = 1) | (l = 2) then
@@ -897,7 +900,7 @@ GETD:
   uacc  = ' '
   audit = ' '
   data  = ' '
-  cmd   = "LISTDSD DA('"DATASET"')"                           /* @AI */
+  cmd   = "LISTDSD DA('"DATASET"') ALL"                       /* @JK */
   x = OUTTRAP('VAR.')
   address TSO cmd                                             /* @AI */
   cmd_rc = rc                                                 /* @AZ */
@@ -926,15 +929,9 @@ GETD:
      if (data = ' ') then
         if (substr(temp,2,17) = 'INSTALLATION DATA') then do
            i    = i + 2
-           temp = var.i
-           if (rlv > '1081') then  /* RACF 1.9 add blank */
-              temp = ' 'temp
-           data = subword(temp,1)
+           data = strip(var.i)
            i    = i + 1
-           temp = var.i
-           if (rlv > '1081') then  /* RACF 1.9 add blank */
-              temp = ' 'temp
-           data = data || substr(temp,2)
+           data = data||strip(var.i)
         end
   end /* i= 1 do */
   a = INDEX(audit,'ALL')

@@ -33,7 +33,7 @@
                       9,#RACMVS  10,#RACDB   11,#RACPRMS 12,#RACIBM
                      13,#RACCMDS 14,#RACDSL  15,#RACENQ  16,#RACHEL1
                      17,#RACLOG  18,#RACMSG  19,#RACOMVS 20,#RACFPP
-                     21,#RACRPT1 22,#RACGEN1 23,#RACCERT 24,#RACDSNA
+                     21,#RACRPT1 22,#RACGEN1 23,#RACCMEN 24,#RACDSNA
                      25,#RACLINE 26,#RACPUB1 27,#RACNOT1 28,#RACACKN
                      29,#RACHIST 30,#RACMACS 31,#RACVUEP
                       *,'?')

@@ -1,0 +1,36 @@
+)ATTR DEFAULT(%+_)
+   _  TYPE(INPUT)   INTENS(HIGH) CAPS(ON) JUST(LEFT)   HILITE(USCORE)
+   !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
+   @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(BLUE)
+   Ý  TYPE(DATAOUT) INTENS(LOW)  COLOR(TURQ)
+   ~  TYPE(DATAOUT) INTENS(LOW)  COLOR(GREEN)
+   #  TYPE(DATAOUT) INTENS(LOW)  COLOR(WHITE)
+   ?  TYPE(DATAOUT) INTENS(LOW)  COLOR(RED)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
+%Command ===>_ZCMD
+%
+%
++ This menu displays Options to process Digital Certificates.
++
+% 1 !GetCerts+is a set of Rexx functions that retrieve digital
++    certificate information for *ALL* certificates from the RACF
++    Database, some of which is not available via RACDCERT.
++
+% 2 !Certs+is Digital Certificate Processing dialog that displays
++    digital certificates by category (CERTAUTH, SITE and PERSONAL)
++    using RACDCERT commands.
++
+% 3 !IBMCert+is the{IBM+RACF Digital Certificates and Related
++    Functions dialog.
++
+% 4 !VueCerts+is a Digital Certificate Inventory and Display Program
++    that will analyze and report on certificates and rings.
++
+)PROC
+  &ZSEL = TRANS(&ZCMD 1,#RACGCER  2, #RACCERT 3,ICHH70  4,#RACVUEC
+                      *,'?')
+  &ZUP     = #RACCMEN
+)END

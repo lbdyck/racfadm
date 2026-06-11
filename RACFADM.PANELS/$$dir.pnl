@@ -5,6 +5,7 @@
   Member      Subject                   Description
  --------  -------------  --------------------------------------------
  $$DIR     Directory      Document members
+ $ALTNAME  Information    Certificate Generation for Multiple SANs
  $ATTLS    How To         Tom Conley "Implementing AT-TLSv1.2" commands
  $CALLS    Information    RACF callable services
  $CLASSES  Information    Document general resource classes
@@ -32,6 +33,7 @@
  #RACCLS8  Tutorial       List classes
  #RACCLS9  Tutorial       List classes
  #RACCMDS  Tutorial       Execute, save and delete TSO commands
+ #RACCMEN  Tutorial       Digital certificates
  #RACCOPR  Tutorial       Clone a Resource Profile, (line cmd K)
  #RACCOPU  Tutorial       Clone a User Profile, (line cmd K)
  #RACDB    Tutorial       RACF database information
@@ -43,6 +45,7 @@
  #RACENQ   Tutorial       Enqueue information
  #RACERA   History        Nico Rizzuto's original menu for ERA
  #RACFPP   Tutorial       Word or Phrase Report
+ #RACGCER  Tutorial       Digital certificates
  #RACGENA  Tutorial       Generate profile source for all general resource profs
  #RACGEN1  Tutorial       Generate profile source
  #RACGRP5  Tutorial       Group's userids profiles
@@ -110,7 +113,9 @@
  RACFAMTC  User           OMVS Home Directory Automount Check
  RACFCERA  Certificates   Add new certificate
  RACFCERG  Certificates   Generate a Digital Certificate
- RACFCERT  Certificates   Digital certificates, menu opt CA
+ RACFCERO  Certificates   Add new certificate (Getcerts)
+ RACFCERT  Certificates   Digital certificates, menu opt CA.2
+ RACFCER2  Certificates   Digital certificates, menu opt CA.2 alternate
  RACFCHK   Certificates   Check certificate or certificate chain
  RACFCLSB  Class          List members
  RACFCLSC  Class          Add class
@@ -185,6 +190,10 @@
  RACFUSR6  User           Add/Change user
  RACFUSR7  User           Change connection
  RACFVUEC  Certificates   View certificates (VUECERTS)
+ RACGCERT  Certificates   Digital certificates, menu opt CA.1
+ RACGCER2  Certificates   Digital certificates, menu opt CA.1 alternate
+ RACGCER3  Certificates   Digital certificates, menu opt CA.1 alternate
+ RACGCMEN  Certificates   Digital certificates menu
 
  Notes:
    - Class is 'General Resources'

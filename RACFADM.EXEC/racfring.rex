@@ -3,6 +3,8 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A2  260611  TRIDJK   Added CONNECT primary command                */
+/* @A2  260610  TRIDJK   Added ADDRING primary command                */
 /* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @A1  240204  TRIDJK   Set MSG("ON") if PF3 in SAVE routine         */
 /* @A0  240117  GA       Created REXX                                 */
@@ -59,12 +61,12 @@ ADDRESS ISPEXEC
   */
   if (ringf = NULL) then
    if (SETMADMN = 'YES') then
-    SELCMDS = "ÝL¨ListÝA¨AddÝD¨Delete"
+    SELCMDS = "ÝL¨ListÝD¨Delete"
    else
     SELCMDS = "ÝL¨List"
   else
    if (SETMADMN = 'YES') then
-    SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨ChainÝC¨ConnectÝR¨Remove"
+    SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨ChainÝR¨Remove"
    else
     SELCMDS = "ÝS¨ShowÝX¨ExportÝH¨Chain"
 
@@ -244,6 +246,12 @@ DISPLAY_TABLE:
              else
               sort     = 'LABEL,C,A'
              xtdtop   = 1
+        END
+        WHEN (abbrev("ADDRING",zcmd,3) = 1) then DO
+             call addr
+        END
+        WHEN (abbrev("CONNECT",zcmd,3) = 1) then DO
+             call conl
         END
         WHEN (abbrev("SAVE",zcmd,2) = 1) then DO
              if (ringf = NULL) then

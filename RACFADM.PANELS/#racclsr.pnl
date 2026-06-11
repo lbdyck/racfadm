@@ -26,6 +26,7 @@
 %  S  !Show         +Select a class from the list of classes
 %  L  !List         +Issue RLIST command
 %  R  !Refresh      +Issue a RACLIST refresh on the class
+%  I  !Info         +More info on the class description
 )PROC
   &ZUP     = #RACCLSR
 )END

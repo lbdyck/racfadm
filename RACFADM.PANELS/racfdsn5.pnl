@@ -20,6 +20,7 @@
 +WARNING:$WARN    { (Warn or fail access, YES/NO)
 +ERASE:  $ERASE   { (Erase the contents when deleted, YES/NO)
 +AUDIT:  $AUDIT
++DATA:   $DATA                                                               $Z
 +                                           +
 +SELECT: ¬SELCMDS5                                                             ¬
 +
@@ -28,7 +29,7 @@
 )MODEL
 _Z+ Z         Z
 )INIT
-  .ZVARS   ='(OPTB ID ACC)'
+  .ZVARS   ='(SCIND OPTB ID ACC)'
   .HELP    = #RACDSN5
   &ZCMD    = ' '
   IF (&SAMT = ' ')
@@ -58,6 +59,8 @@ _Z+ Z         Z
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT GROUP')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT ACCESS')
+)FIELD
+  FIELD(DATA) IND(SCIND,'<>') LEN(255)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */

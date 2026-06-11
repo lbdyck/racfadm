@@ -1,0 +1,620 @@
+)F FUNCTION -
+ This help member has information about GETCERTS - RACFADM Certificate
+ Helper
+
+GETCERTS - RACFADM Certificate Helper
+Preliminary Documentation
+
+April 23, 2026
+
+GETCERTS is a library module that returns RACF certificate information
+to a Rexx program.
+
+
+
+Table of Contents
+Overview of the Hypothetical Rexx Program ............................ 3
+Loading and Calling GETCERTS ......................................... 5
+Initialization ....................................................... 5
+Information Retrieval ................................................ 6
+Termination .......................................................... 6
+Certificate and Ring Information Retrieval ........................... 6
+Linkage .............................................................. 6
+Returned Information ................................................. 6
+Data Formats ......................................................... 7
+GETCERTS Functions ................................................... 7
+Detail Description of GETCERTS Functions ............................. 8
+Common Parameters .................................................... 8
+CERTSUMM  Get Certificate Summary .................................... 8
+RINGSUMM  Get Keyring Summary ....................................... 11
+CERTDETL  Get Certificate Detail .................................... 12
+RINGCONN  Get Keyring Connected Certificates  ....................... 13
+Some Loose Ends and Further Documentation Requirements .............. 14
+
+
+GETCERTS  RACFADM Certificate Library Module Page 2
+
+
+
+Overview of the Hypothetical Rexx Program The concept is an ISPF
+application  presumably to be developed that would provide an advanced
+X.509 certificate display on z/OS.  The application might be an
+enhancement to RACFADM or might be a new application.  For convenience
+in this paper I will refer to the ISPF application as RACFADM.
+
+In addition we might make GETCERTS available to the z/OS community as a
+standalone CBT application. Users could develop their own certificate
+reports or other applications as they chose.
+
+In the following discussion I will reference the sample Rexx EXEC,
+TGETCERT. It is found in CHARLES.ALPHA.EXEC(TGETCERT).
+
+The envisioned ISPF application, or RACFADM, would start by installing
+GETCERTS as a Rexx environment. That process, and the basic calls to
+GETCERTS using Rexx ADDRESS, are documented below under Loading and
+Calling GETCERTS, and illustrated in the sample Rexx script, TGETCERT,
+RACFADM would start by calling the CERTSUMM function, which is a
+prerequisite to any other functions.
+
+RACFADM would start by displaying a panel modeled after the SDSF job
+displays.  Each detail line of the display would represent one
+certificate. The user could scroll up and down, and/or left and right.
+The fields to be displayed would be chosen at the discretion of the
+developer, selected from the fields listed below under CERTSUMM. Some of
+the fields may be as wide as 67 characters, so RACFADM would probably
+truncate them and/or allow user-variable column widths similar to what
+SDSF does. The display of some fields might be deferred, at the
+discretion of the implementer, to any Certificate Detail request.
+
+A primary command would let the user alternatively display keyrings, one
+per detail line. To obtain the data for the display, RACFADM would call
+the RINGSUMM function. RINGSUMM returns only three Rexx stem variables,
+so the panel design would be somewhat simpler (although one of the
+fields, the keyring name, may be up to 237 characters wide, and may
+contain special characters).
+
+An important concept is certificate and keyring index numbers. An index
+number is an integer, starting with 1, that is used as the tail of the
+various compound variables for the certificate or keyring. The index
+number is also used by GETCERTS to identify other certificates or
+keyrings, such as in the CONCERT# keyring variable, which lists the
+index numbers of the certificates connected to the ring, separated by
+blanks.  Thus WORDS(CONCERT#.tail) would give the number of certificates
+connected to
+
+GETCERTS  RACFADM Certificate Library Module Page 3
+
+
+
+the keyring with a keyring index of tail, and WORD( CONCERT#.tail, 1)
+would be the index number of the first certificate connected to the
+keyring. The sample Rexx script TGETCERT illustrates this logic. (All
+GETCERT returned variables with stem names ending in # are similar lists
+of index numbers.)
+
+It is envisioned that the certificate and keyring primary displays would
+support various line commands similar to the SDSF S line command
+(subject to the discretion of the RACFADM author). The anticipated
+commands, and a brief summary of how they might be implemented, are
+listed below.
+
+Certificate Line Command Functions:
+
+    List Detail. This would be implemented by performing the CERTDETL
+function, passing the index number of the certificate. I will leave it
+to the discretion of the implementor how to display the various returned
+data, including any data deferred from the primary certificate display.
+
+    List Chain. This would be implemented by following the certificate
+chain in ISSUER# for each certificate. Note that a certificate could
+have multiple issuers. It is unlikely, but it is possible.1 There is an
+example of how a List Chain would work in the sample Rexx EXEC,
+TGETCERT.
+
+    List Dependents. This is the reverse of List Chain and is
+implemented by displaying the certificates listed in the certificates
+LEAF#. The sample script, TGETCERT, has examples.
+
+    List Connected Keyrings. This function would require that a
+RINGSUMM function had been called. The list of connected keyrings is
+found in KEYRING#.
+
+Keyring Line Command Functions
+
+    List Connected Certificate Detail. This function would be
+implemented by calling the RINGCONN function and displaying the returned
+data.
+
+
+1
+https://scotthelme.co.uk/cross-signing-alternate-trust-paths-how-they-
+      work/
+https://www.ssltrust.com.au/blog/understanding-certificate-cross-signing
+
+GETCERTS  RACFADM Certificate Library Module Page 4
+
+
+
+Loading and Calling GETCERTS
+GETCERTS is invoked by a Rexx program as a Rexx ADDRESS environment.
+RACFADM would install GETCERTS as a Rexx environment using the separate
+program EZSUBCOM.
+
+EZSUBCOM must be available to the Rexx program. It may reside in
+ISPLLIB.  GETCERTS must reside in the MVS content management chain
+(STEPLIB, etc.).  ISPLLIB is not searched for GETCERTS. EZSUBCOM is
+separately documented but the following is an overview of using EZSUBCOM
+to install GETCERTS as a Rexx environment.
+
+EZSUBCOM must be invoked with Rexx CALL; it cannot be invoked with ISPF
+SELECT PGM.
+
+Initialization
+ADDRESS ISPEXEC "LIBDEF ISPLLIB DATASET ID(ezsubcom.loadlib) STACK"
+ADDRESS TSO "ALLOC FI(loadlbdd) DA(getcerts.loadlib) SHR"
+ADDRESS TSO 'ALLOC FI(GCPRINT) desired alloc operands'
+Call 'EZSUBCOM' 'ADDLESUB', 'GETCERTS', , , 'loadlibdd'
+
+GCPRINT may be allocated to the terminal, to DUMMY or to a dataset as
+the RACFADM author prefers. It must be allocated before the call to
+EZSUBCOM ADDLESUB. If GETCERTS cannot open GCPRINT then the ADDLESUB
+call will fail.  GETCERTS opens GCPRINT RECFM=VBA, LRECL=133.
+
+Rexx will load EZSUBCOM from ISPLLIB but not GETCERTS. If GETCERTS is
+not in the STEPLIB chain then you must allocate a DD to the appropriate
+load library and pass it as a parameter to EZSUBCOM as shown above.
+
+CALL EZSUBCOM returns its result in the Rexx special variable RESULT.
+RESULT is a string consisting of a  return code 0, 4, 8, 12 or 16
+following the usual MVS conventions and, if the return code is non-zero,
+a string describing the error or warning condition. Sample Rexx code:
+
+Retvalue = RESULT
+Parse var Retvalue retcode errmsg
+If retcode <> 0 Then Do
+  Say 'EZSUBCOM' retcode errmsg
+  If retcode > 4 Then /* Deal with error */
+  End
+
+GETCERTS  RACFADM Certificate Library Module Page 5
+
+
+
+Information Retrieval
+See Certificate and Ring Information Retrieval below.
+
+Termination
+CALL 'EZSUBCOM' 'DELETE', 'GETCERTS'
+ADDRESS TSO 'FREE FI(GCPRINT)'
+ADDRESS TSO 'FREE FI(loadlbdd)'
+
+See Initialization above for EZSUBCOM return result information.
+
+Certificate and Ring Information Retrieval
+
+Linkage
+ADDRESS GETCERTS function parameters
+
+The various functions and parameters are documented in detail below.
+
+ADDRESS is limited to returning a single value, the Rexx special
+variable RC. If the CEEPIPI call returns a non-zero value (which in our
+experience is unlikely) then EZSUBCOM returns the CEEPIPI return code;
+otherwise EZSUBCOM returns the return code from the module. CEEPIPI
+subroutine invocation return codes are documented here:
+https://www.ibm.com/docs/en/zos/3.2.0?topic=csis-return- codes . All of
+the non-zero values are should-not-occur conditions.
+
+GETCERTS logs all error and warning conditions to the GCPRINT data set.
+In a future enhancement GETCERTS will return error and warning
+conditions that it detects in Rexx variables. GETCERTS returns :
+
+    0  Successful function, no error or warning conditions detected
+    4  One or more warning conditions detected.
+    8  One or more error conditions detected in the RACF certificate
+       store.
+    12 One or more error conditions detected in the parameters passed
+       on ADDRESS or in executing them.
+    16  Fatal error condition in GETCERTS. GETCERTS could not continue.
+
+Returned Information
+Certificate and keyring data is returned to RACFADM in Rexx variables.
+RACFADM may specify name prefixes  a character string to be prepended to
+the defined variable names.
+
+GETCERTS  RACFADM Certificate Library Module Page 6
+
+
+
+Data Formats Date and Time Format. Dates and times are returned in ISO
+8601 (2026-02- 21T11:46:33): its a standard, its sortable, its
+unambiguous for international customers, and its easy to truncate to 10
+characters if time is not needed.
+
+Hexadecimal Format. Unpunctuated uppercase hex is common on the
+mainframe:  08C6A634815E296535A4¦ Uppercase hex with colon as a byte
+separator is used by RACF: 7A:2B:6A:F3:C4:91:DF:D3... in some places and
+unpunctuated lowercase hex in others. Lowercase hex with colon as a byte
+separator is used by OpenSSL:  08:c6:a6:34:81:5e:29:65:21:35:a4¦
+Gskkyman uses uppercase hex with blank as a byte separator in some
+places and unpunctuated lowercase hex in others.  GETCERTS follows RACFs
+lead and uses 7A:2B:6A:F3:C4:91:DF:D3... but I am open to suggestions.
+
+True/False Format. TRUE and FALSE are returned as 1 and 0 for convenient
+usage from Rexx. RACFADM might choose to display the values as
+TRUE/FALSE, YES/NO, TRUST/NOTRUST or otherwise.
+
+GETCERTS Functions
+RACFADM will call the CERTSUMM (Get Certificate Summary) and RINGSUMM
+(Get Ring Summary) functions once and display summary information. Then,
+if the user asks for detail for a particular certificate, RACFADM will
+call CERTDETL (Get Certificate Detail) for that certificate. Or if a
+user asks for the connected certificates for a particular keyring then
+RACFADM would call RINGCONN (Get Keyring Connected Certificates).
+
+If the user wished to refresh the certificate or ring data it should be
+possible to call the CERTSUMM and/or RINGSUMM functions again, but this
+has not been tested.
+
+Summary information is returned in a set of Rexx compound variables with
+a defined stem name and a numerical tail.
+
+For example, assuming a certificate variable prefix of C_, the label
+information for the certificates will be returned in C_LABEL.1,
+C_LABEL.2, C_LABEL.3 and so forth, with a count of certificates in
+C_LABEL.0. Similarly, the not after date for the certificates will be
+returned in C_NOTAFTER.1, C_NOTAFTER.2, C_NOTAFTER.3, and so forth.
+
+In this paper I will refer to the Rexx stem variable tail value (1, 2
+and 3 in the examples above) as the certificates or keyrings index
+number.
+
+GETCERTS  RACFADM Certificate Library Module Page 7
+
+
+
+The detail information would similarly be returned in a set of Rexx
+variables, but the detail variables would for the most part be simple
+Rexx variables. The certificate detail data would apply to only the one
+certificate so there would be no need for compound qualification. The
+exception would be several pieces of detail information that might
+repeat a variable number of times. That information would be returned in
+compound variables using the usual .1, .2, .3 and .0 convention.
+
+Why not simply return all of the certificates or keyrings data in the
+summary variables? Two reasons:
+
+1. The data is potentially voluminous. The subject and issuer names may
+be up to 2048 characters each. One of our RACFADM users has over 2000
+certificates. Thats a lot of data.
+
+2. Some of the detail data repeats in stem variables with numeric tails.
+As the summary data already repeats in stem variables with numeric
+tails, that would imply double numeric tails        variables like
+C_SAN.37.3 for the third SAN (Subject Alternate Name) for certificate
+number 37. I feel that would be confusing.
+
+Why a separate RINGINFO call? Because ring retrieval requires additional
+permissions beyond those required for certificate retrieval, and some
+users might not have those permissions and would prefer not to get
+security violations.
+
+Detail Description of GETCERTS Functions
+
+Common Parameters
+These parameters may be specified with any of the functions.
+
+PREFIX prefix specifies an optional prefix to be prepended to the
+returned Rexx variable names. For example, assuming a certificate
+variable prefix of C_, the label information for the certificates will
+be returned in C_LABEL.1, C_LABEL.2, C_LABEL.3 and so forth, with a
+count of certificates in C_LABEL.0. The prefix may be any length but
+prefixes longer than four characters may have a slight negative effect
+on performance.
+
+VERBOSE specifies that additional informational messages are to be
+output to GCPRINT by GETCERTS. The VERBOSE output is potentially
+voluminous.
+
+CERTSUMM  Get Certificate Summary
+CERTSUMM retrieves certificate summary information for all certificates.
+
+ADDRESS GETCERTS CERTSUMM [PREFIX prefix] [VERBOSE]
+
+GETCERTS  RACFADM Certificate Library Module Page 8
+
+
+
+CERTSUMM is required as the first parameter. It specifies the
+certificate summary function.
+
+See also Common Parameters above.
+
+The remaining parameters are optional and may be specified in any order.
+
+The CERTSUMM function requires the following RACF permissions:
+
+    READ authority to IRR.RADMIN.RLIST (or IRR.RADMIN.*) in the FACILITY
+    class.  READ authority to CSFOWH in the CSFSERV class; or
+    CSF.CSFSERV.AUTH.CSFOWH.DISABLE resource profile defined in the
+    XFACILIT class.
+
+And either
+
+If the *.IRR_VIRTUAL_KEYRING.LST profile or any
+userid.IRR_VIRTUAL_KEYRING.LST profile exists in the RDATALIB class,
+then READ authority to the *.IRR_VIRTUAL_KEYRING.LST profile.
+
+    Otherwise UPDATE authority to IRR.DIGTCERT.LISTRING in the FACILITY
+    class.
+
+Rexx variables set by CERTSUMM are listed in the table below. The Rexx
+stem names are prefixed as described above. RACFADM might choose to
+defer some of these fields to any detail display.
+
+
+Rexx Stem  Description Notes
+
+CERTDADD
+Date certificate added to RACF. See Date and Time Format above.
+
+CERTUADD
+RACF ID of user who actually added certificate to RACF. Not
+necessarily the same as the certificate's CERTUSER.
+
+AUTHKID
+Authority Key Identifier. See Hexadecimal Format above.
+
+CAUSAGE
+From basic constraints. 1 if CA:TRUE; 0 if CA: FALSE
+
+CERTUSER
+Certificate owner. 1 to 8 characters. CERTAUTH and SITE
+returned as irrcerta and irrsitec (lower case) respectively.
+
+FINGERPR
+SHA-256 fingerprint of the certificate.  32 bytes, reported as
+95 characters, as of the certificate reported by RACF. See Hexadecimal
+Format above.
+
+GETCERTS  RACFADM Certificate Library Module Page 9
+
+
+
+Rexx Stem  Description Notes
+
+ISSUER#
+Index number(s) of issuer certificates. Normally at most one
+issuer, but because of cross-signing, expired intermediates and other
+somewhat unusual circumstances a certificate may have multiple issuers.
+(See footnotes under Overview of the Hypothetical Rexx Program.)
+Multiple Issuer index numbers are separated by blanks. Empty string if
+no issuer certificate present. Empty string for self-signed
+certificates.
+
+ISSUER$
+Short issuer name.  Issuer name shortened to most significant
+RDN by algorithm. Up to 67 characters, but RACFADM may display less if
+so chooses.
+
+KEYALGO
+Public key algorithm. Name such as rsaEncryption.
+
+KEYLEN
+Public key length in bits.
+
+LABEL
+Certificate label 1 to 32 characters. May include embedded special
+characters, including blanks and quotes. Quotes are not doubled by
+GETCERTS.
+
+LEAF#
+Index numbers of Empty string if none. Multiple index certificates
+signed numbers separated by blanks. Self not by this certificate
+included for self-signed certificates.
+
+NOTAFTER
+Certificate expiration date and time.  See Date and Time Format
+above.
+
+NOTBEFOR
+Certificate start date and time.  See Date and Time Format
+above.
+
+PRIVKEY
+Is there a private 1 if private key in RACF, 0 if not. (Note 2)
+
+SELFSIGN
+Certificate is self- 1 if self-signed; 0 if not signed
+
+SERIAL
+Certificate serial number. See Hexadecimal Format above.
+
+Note 2:  Meaningful only if certain RACF facilities are permitted;
+otherwise will return 0.  See Usage note 4 in
+https://www.ibm.com/docs/en/zos/3.2.0?topic=library-usage-notes
+
+
+
+GETCERTS  RACFADM Certificate Library Module Page 10
+
+
+
+Rexx Stem  Description Notes
+
+SIGALGO
+Signature algorithm A name like sha256WithRSAEncryption
+
+SUBJECT$
+Short subject name.  Subject name shortened to most significant
+RDN by algorithm. Up to 67 characters, but RACFADM may display less if
+so chooses.
+
+SUBJKID
+Subject Key Identifier. See Hexadecimal Format above.
+
+THUMBPR
+SHA-1 Thumbprint 20 bytes, formatted as 39 characters (used by
+Windows). See Hexadecimal Format above.
+
+TRUST
+Certificate trust status. 1 if trusted; 0 if not status
+
+
+
+RINGSUMM  Get Keyring Summary
+
+RINGSUMM retrieves keyring summary information below for all rings and
+certificate ring connections. May not precede the CERTSUMM call.
+
+ADDRESS GETCERTS RINGSUMM [PREFIX prefix] [VERBOSE]
+
+RINGSUMM is required as the first parameter. It specifies the keyring
+summary function.
+
+See also Common Parameters above.
+
+The remaining parameters are optional and may be specified in any order.
+
+RINGSUMM requires the following additional RACF permissions:
+
+    UPDATE authority to IRR.DIGTCERT.LISTRING in the FACILITY class.  If
+    any keyring profiles exist in the RDATALIB class, then READ
+    authority to *.*.LST in RDATALIB.
+
+Rexx variables set by RINGSUMM are listed in the tables below. RACFADM
+might choose to defer displaying some of these fields to any certificate
+detail function.
+
+Additional certificate variables, indexed by certificate index number:
+
+Rexx Stem  Description Notes
+KEYRING#
+Keyring index Integers separated by blanks. Empty numbers of
+string if none or if Get Ring Summary connected keyrings has not been
+called. Sorted into ascending keyring index sequence.
+
+
+GETCERTS  RACFADM Certificate Library Module Page 11
+
+
+
+Keyring variables, indexed by a keyring index number as a tail; for
+example, RINGUSER.9. The .0 tails contain a count of elements.
+
+Rexx Stem  Description Notes
+CONCERT#
+Certificate index Zero or more integers separated by blanks,
+numbers of sorted into ascending sequence. An empty connected string if
+no connected certificates. RACFADM certificates. may access the userid,
+label and so forth of the certificates as desired using the returned
+certificate index number and the appropriate Rexx variables.
+
+NAME
+Keyring name 1 to 237 characters. May contain lowercase
+and special characters.
+
+RINGUSER
+Keyring owner 1 to 8 characters. Never irrcerta or irrsitec.
+
+
+CERTDETL  Get Certificate Detail
+CERTDETL retrieves certificate detail information for one certificate,
+specified by certificate index number. The function may be called
+multiple times to retrieve information for multiple certificates.
+
+ADDRESS GETCERTS CERTDETL CERTINDX index [PREFIX prefix] [VERBOSE]
+
+
+CERTDETL is required as the first parameter. It specifies the
+certificate detail function.
+
+CERTINDX index is required and specifies the certificate index number of
+the certificate for which detail information is to be returned.
+
+See also Common Parameters above.
+
+The remaining parameters are optional and may be specified in any order.
+
+The detail information variables ISSUER and SUBJECT are not compound
+variables.  The remaining certificate detail variables are stem
+variables following the usual Rexx convention. Assuming no change in
+prefix, each call to the CEERTDETL function overwrites the variables
+from the previous call.
+
+GETCERTS  RACFADM Certificate Library Module Page 12
+
+
+
+Rexx Description Notes
+
+EXTUSAGE
+Extended key usage Stem variable. May be multiple usages.
+
+ISSUER
+Full issuer name May be up to 2048 characters
+
+KEYUSAGE
+Key usage Stem variable. May be multiple usages.  Character
+strings like HANDSHAKE, DATAENCRYPT, DOCSIGN or CERTSIG.
+
+SAN
+Subject Alternative Stem variable; may be dozens or more. Format
+Names DNS: www.foobar.com
+
+SUBJECT
+Full subject name May be up to 2048 characters
+
+
+RINGCONN  Get Keyring Connected Certificates
+RINGCONN retrieves a list of connected certificates and their attributes
+for one keyring, specified by keyring index number. The function may be
+called multiple times to retrieve information for multiple keyrings.
+
+ADDRESS GETCERTS RINGCONN RINGINDX index [PREFIX prefix] [VERBOSE]
+
+
+RINGCONN is required as the first parameter. It specifies the ring
+connections function.
+
+RINGINDX index is required and specifies the keyring index number of the
+keyring for which connection information is to be returned.
+
+See also Common Parameters above.
+
+The remaining parameters are optional and may be specified in any order.
+
+RINGCONN requires the following RACF permissions:
+
+    READ authority to <virtual ring owner>.IRR_VIRTUAL_KEYRING.LST in
+    the FACILITY class.
+
+A list of connected certificates and their attributes are  returned as
+Rexx compound variables with a numeric tail, following the usual
+conventions. Each tail number represents the attributes of one connected
+certificate. A keyring may have no connected certificates, in which case
+all of the listed Rexx Stems will have a tail .0 with a value of 0.
+Assuming no change in prefix, each call to the RINGCONN function
+overwrites the variables from the previous call.
+
+GETCERTS  RACFADM Certificate Library Module Page 13
+
+
+
+Rexx Stem  Description Notes
+CERTIF#
+Certificate index RACFADM may access the userid, label and so
+number  forth of the certificate as desired using the returned
+certificate index number and the appropriate Rexx variables.
+
+DEFAULT
+Whether certificate 1 = default; 0 = not the default. Note that
+a is the default on the keyring has at most one, and may have no keyring
+default certificate.
+
+USAGE
+Certificate usage on may be CERTAUTH, PERSONAL, SITE or NONE.
+
+* * *
+
+GETCERTS  RACFADM Certificate Library Module Page 14

@@ -87,9 +87,9 @@ ADDRESS ISPEXEC                                               /* @A7 */
   end                                                         /* @AW */
 
   If (SETMADMN = "YES") then                                  /* @AC */
-      SELCMDS = "ÝS¨ShowÝL¨ListÝR¨Refresh"                    /* @AL */
+      SELCMDS = "ÝS¨ShowÝL¨ListÝR¨RefreshÝI¨Info"             /* @JK */
   else                                                        /* @AC */
-      SELCMDS = "ÝS¨ShowÝL¨List"                              /* @AL */
+      SELCMDS = "ÝS¨ShowÝL¨ListÝI¨Info"                       /* @JK */
 
   rlv = SYSVAR('SYSLRACF')
   if (class = '') then DO                                     /* @A9 */
@@ -314,6 +314,8 @@ DISPLAY_TABLE:
      ZCMD = ""; PARM = ""                                     /* @B6 */
      'control display save'                                   /* @B6 */
      Select
+        when (opta = 'I') then                                /* @JK */
+             call RACFLOG $CLASSES CLASS                      /* @JK */
         when (opta = 'L') then call lisp                      /* @AL */
         when (opta = 'R') then call REFRESH
         when (opta = 'S') then do   /* call generic */
@@ -673,7 +675,7 @@ Add_Class:                                                    /* @JK */
     "TBMOD" TABLEA "ORDER"                                    /* @JK */
     if rc < 12 then do
       racfsmsg = class 'added'                                /* @JK */
-      racflmsg = 'The class 'class' was added to the table'   /* @JK */
+      racflmsg = 'The 'class' class was added to the table'   /* @JK */
       'setmsg msg(RACF011)'                                   /* @JK */
       end
     end                                                       /* @JK */

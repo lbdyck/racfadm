@@ -1627,8 +1627,10 @@ SYSHelp:                                                      /* @A4 */
 /* Group LOCAL is for local help members */
 /* enclosed as a REXX comment to avoid REXX syntax errors
 RACF:
+$ALTNAME   Certificate Generation to Support Multiple SANs
 $ATTLS     AT-TLSv1.2 implementation for RACF
 $CALLS     RACF callable services
+$GETCERT   GETCERTS Rexx function package doc (Charles Mills)
 $GLOSSRY   Technical terms and abbreviations for RACF
 $UTILS     RACF Utilities
 ADDGROUP   Add group profile

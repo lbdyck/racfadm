@@ -259,7 +259,9 @@
               and the corresponding DCE principal UUID. Also, used to
               enable encrypted password support for Distributed File
               Service (DFS) Server Message Block (SMB) users.
+
                   Enterprise Identity Mapping (EIM) class
+
   RAUDITX     Controls auditing for Enterprise Identity Mapping (EIM).
 
                        Enterprise Java Beans classes

@@ -25,6 +25,7 @@
    } U           {Alias for M
    } X           {Create JCL for Cross Reference Report
    } Y           {User/Group Access Report
+   } Z           {Exclude a user profile from the list
    }CK           {Check the days until the password changes
    }LC           {List certificates for user
    }LR           {List rings for user
@@ -85,12 +86,12 @@
 %                          Digital certificates
 +
 +Line Command     Description
-   } S           {Issue RACDCERT CERTAUTH LIST LABEL command
-   } X           {Issue RACDCERT CERTAUTH EXPORT LABEL command
-   } H           {Issue RACDCERT CERTAUTH LISTCHAIN LABEL command
-   } A           {Issue RACDCERT CERTAUTH ADD WITHLABEL command
-   } D           {Issue RACDCERT CERTAUTH DELETE LABEL command
-   } G           {Issue RACDCERT CERTAUTH GENCERT WITHLABEL cmd
+   } S           {Issue RACDCERT type LIST LABEL command
+   } X           {Issue RACDCERT type EXPORT LABEL command
+   } H           {Issue RACDCERT type LISTCHAIN LABEL command
+   } A           {Issue RACDCERT type ADD WITHLABEL command
+   } D           {Issue RACDCERT type DELETE LABEL command
+   } G           {Issue RACDCERT type GENCERT WITHLABEL command
 +
 )INIT
   &ZUP     = #RACLINE

@@ -44,14 +44,14 @@ _Z ^Z      Z       Z                 Z       Z         	Z       Z  Z  
   /* Line command: XR is not displayed (hidden) */
   IF (&SETMADMN = YES)
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL,K,CK,U,M)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,C,A,R,RS,RV,PW,X,XR,Y,AL,K,CK,U,M,Z)
      ELSE
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,XR,Y,AL,CK)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,A,D,C,R,RS,RV,PW,X,XR,Y,AL,CK,Z)
   ELSE
      IF (&SETMIRRX = YES)
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,K,CK)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,P,D,K,CK,Z)
      ELSE
-        VER (&OPTA,LIST,/,S,SE,L,LC,LR,D,CK)
+        VER (&OPTA,LIST,/,S,SE,L,LC,LR,D,CK,Z)
 )PNTS
   FIELD(ZPS00001) VAR(ZCMD) VAL('SORT USERID')
   FIELD(ZPS00002) VAR(ZCMD) VAL('SORT NAME')

@@ -1,23 +1,22 @@
 )ATTR DEFAULT(%+_)
    $  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) COLOR(TURQ)
-   /  TYPE(OUTPUT)  INTENS(LOW)  JUST(LEFT) CAPS(off) COLOR(TURQ)
    _  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(ON)     HILITE(USCORE)
    ¬  TYPE(INPUT)   INTENS(HIGH) JUST(LEFT) CAPS(OFF)    HILITE(USCORE)
    {  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(BLUE)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON)   COLOR(GREEN)
    @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
 )BODY EXPAND(\\)
-+\-\(%RACFADM - Digital Rings &user   +)\-\
++\-\(%RACFADM - Digital Certificates+)\-\
 %Command ===>_ZCMD
 %
-+  Add new%LABEL+to%RING+:/RING                                              @Z
-+
-+  LABEL  %===>¬LABELC                          +{(certificate label)
-+  OWNER  %===>_OWNERC  +                        {(cert-owner|CERTAUTH|SITE)
-+  USAGE  %===>_USAGEC  +                        {(PERSONAL|CERTAUTH|SITE)
-+  DEFAULT%===>_DFC+                             {(YES|NO)
-+
-+
++  Add new%certificate+
+%
++  DSN  %===>_DSNA                                            +{(Input DATASET)
++  OWNER%===>_OWNERA  +                        {(cert-owner|CERTAUTH|SITE)
++  TRUST%===>_TRUSTA   +                       {(TRUST|NOTRUST|HIGHTRUST)
++  LABEL%===>¬LABELA                          +{(Certificate LABEL)
++  PSWD %===>¬PWDA                                          @Z {(Cert.PASSWORD)
++  PKDS %===>_PKDSA                                         @Z {(PKDS-LABEL|*)
 +
 +
 +
@@ -30,23 +29,24 @@
 +
 +\ \Press%ENTER+to process or%END+to exit\ \
 )INIT
-  .ZVARS   = '(SCIND)'
-  .HELP    = #RACMENU
   &ZCMD    = ' '
+  .HELP    = #RACCERA
+  .ZVARS   ='(SCIND1,SCIND2)'
+)REINIT
+  REFRESH(*)
 )PROC
-  VER(&LABELC,NB)
-  VER(&OWNERC,NB)
-  IF (&USAGEC ^='')
-    VER(&USAGEC,NB,LIST,PERSONAL,SITE,CERTAUTH)
-  IF (&DFC    ^='')
-    VER(&DFC,NB,LIST,YES,NO)
+  VER(&DSNA,NB)
+  if (&TRUSTA ^= '')
+    VER(&TRUSTA,NB,LIST,TRUST,NOTRUST,HIGHTRUST)
+  VER(&LABELA,NB)
 )FIELD
-  FIELD(RING) IND(SCIND,'<>') LEN(237)
+  FIELD(PWDA) IND(SCIND1,'<>') LEN(255)
+  FIELD(PKDSA) IND(SCIND2,'<>') LEN(64)
 )END
 /*--------------------------------------------------------------------*/
 /*                             Comments                               */
 /*--------------------------------------------------------------------*/
 /*                                                                    */
-/*  1) The 'RING' field is a scrollable field                         */
+/*  1) The 'PWDA',PKDSA' fields are scrollable fields                 */
 /*                                                                    */
 /*--------------------------------------------------------------------*/
