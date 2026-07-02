@@ -46,7 +46,8 @@ xutil:
     say 'IRRXUTIL return code:'rxrc
     exit
     end
-  if pos('@',racf.base.data.1) > 0 then do
+  if racf.tso.proc.1 <> "" then do
+/*if pos('@',racf.base.data.1) > 0 then do*/
     c = report.0 + 1
     report.c = left(userid,8) strip(racf.base.data.1)
     report.0 = c

@@ -10,6 +10,7 @@
  $CALLS    Information    RACF callable services
  $CLASSES  Information    Document general resource classes
  $DEFSETG  Settings       Default site settings for new users
+ $GETCERT  Information    GETCERTS - Rexx Programmer Reference
  $GLOSSRY  TSO Help       Technical terms and abbreviations for RACF
  $REPORTS  Reports        ICETOOL/DSMON reports
  $STNDARD  Standards      Document coding and design
@@ -20,6 +21,7 @@
  #RACACKN  Tutorial       Acknowledgements
  #RACACK2  Tutorial       Acknowledgements, Developers
  #RACAMTC  Tutorial       OMVS Home Directory Automount Check
+ #RACBPXC  Tutorial       Report status of various UNIX-related settings
  #RACCERA  Tutorial       Add new certificate
  #RACCERG  Tutorial       Generate a Digital Certificate
  #RACCERT  Tutorial       Digital certificates
@@ -133,6 +135,7 @@
  RACFCLS8  Class          List classes and profiles
  RACFCLS9  Class          Alter selected resource segments
  RACFCMDS  Commands       Execute TSO RACF commands
+ RACFCMEN  Certificates   Digital certificates menu
  RACFCOPR  Class          Clone a Resource Profile, (line cmd K)
  RACFCOPU  User           Clone a User Profile, (line cmd K)
  RACFDISP  Display        GrpTree/RACFdb/Enque/Chgs/Issues/ISPLog/Stds
@@ -148,7 +151,9 @@
  RACFDSN7  Dataset        Add access
  RACFDSN8  Dataset        Alter selected dataset segments
  RACFEXP   Certificates   Certificate Export DSN
+ RACFEXPE  Certificates   Certificate Export DSN (Edit option)
  RACFGEN1  Generate       Generate profile source
+ RACFGREQ  Certificates   Generate Certificate Request DSN (Edit option)
  RACFGRP1  Group          Set filter, menu option 2
  RACFGRP2  Group          Add group
  RACFGRP4  Group          Alter profile
@@ -190,10 +195,10 @@
  RACFUSR6  User           Add/Change user
  RACFUSR7  User           Change connection
  RACFVUEC  Certificates   View certificates (VUECERTS)
+ RACFVUEP  Tutorial       VUECERTS RACF permissions pop-up
  RACGCERT  Certificates   Digital certificates, menu opt CA.1
  RACGCER2  Certificates   Digital certificates, menu opt CA.1 alternate
  RACGCER3  Certificates   Digital certificates, menu opt CA.1 alternate
- RACGCMEN  Certificates   Digital certificates menu
 
  Notes:
    - Class is 'General Resources'

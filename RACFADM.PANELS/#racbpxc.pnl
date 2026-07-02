@@ -1,0 +1,35 @@
+)ATTR DEFAULT(%+_)
+   %  TYPE(TEXT)    INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+   +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN) SKIP(ON)
+   ~  TYPE(TEXT)    INTENS(LOW)  COLOR(TURQ)  SKIP(ON)
+   {  TYPE(TEXT)    INTENS(LOW)  COLOR(BLUE)  SKIP(ON)
+   }  TYPE(TEXT)    INTENS(LOW)  COLOR(WHITE) SKIP(ON) HILITE(USCORE)
+   _  TYPE(INPUT)   INTENS(HIGH) COLOR(RED)   CAPS(ON) HILITE(USCORE)
+   @  TYPE(OUTPUT)  INTENS(HIGH) SKIP(ON)
+)BODY EXPAND(\\)
+%Tutorial+\-\(%RACFADM - BPXCHECK Rexx Exec+)\-\%Tutorial
+%Command ===>_ZCMD
++
++  The~BPXCHECK+Rexx exec uses IRRXUTIL to report the status of
++  various UNIX-related settings in RACF. It will aid in the
++  conversion from the use of the{BPX.DEFAULT.USER+profile to the use
++  of automatic OMVS segment assignment using{BPX.UNIQUE.USER+
++
++ %The following profiles/settings are analysed:+
++
++   -{AIM+stage of the RACF database
++   - Existence of{UNIXMAP+class mapping profile for UID 0, and
++     a calculation determining if you have too many superusers
++     to perform a successful AIM conversion
++   - Existence of{BPX.DEFAULT.USER+in the FACILITY class
++     - And of the model USER/GROUP profiles defined therein
++   - Existence of{SHARED.IDS+in the UNIXPRIV class
++   - Existence of{BPX.NEXT.USER+in the FACILITY class
++   - Existence of{BPX.UNIQUE.USER+in the FACILITY class
++     - And of the model USER profile defined therein
++
+)INIT
+)PROC
+  &ZUP     = #RACBPXC
+)END
+****** ***************************** Top of Data ***********************

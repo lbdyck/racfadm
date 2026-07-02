@@ -22,7 +22,7 @@
 /* @A0  200929  TRIDJK   Created REXX                                 */
 /*====================================================================*/
 PANEL27     = "RACFCERT"   /* List labels                  */
-PANEL28     = "RACFCERA"   /* Add certificate              */ /* @A6 */
+PANEL28     = "RACFCERO"   /* Add certificate              */ /* @A6 */
 PANEL29     = "RACFCERG"   /* Generate certificate         */ /* @A8 */
 PANELM2     = "RACFMSG2"   /* Display RACF command and RC  */
 PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */

@@ -13,6 +13,12 @@
 )AREA DCAREA
 +   %DSN+contains the digital certificate to be associated with
 +       the user ID specified. Up to 44 characters may be entered.
++       You must specify a cataloged data set, and it may not be a PDS
++       or a PDS member. The record format (RECFM) expected by
++       RACDCERT is variable-byte (VB). When you specify the ADD
++       function, RACDCERT dynamically allocates and opens the
++       specified data set, and reads the certificate from it as
++       binary data.
 +
 +   %Owner+specifies that the new certificate is either a user
 +       certificate associated with the specified user ID, a site

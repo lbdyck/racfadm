@@ -11,7 +11,7 @@
 %
 +  Add new%certificate+
 %
-+  DSN  %===>_DSNA                                            +{(Input DATASET)
++  DSN  %===>_DSNA                                          +{(Input, Recfm=VB)
 +  OWNER%===>_OWNERA  +                        {(cert-owner|CERTAUTH|SITE)
 +  TRUST%===>_TRUSTA   +                       {(TRUST|NOTRUST|HIGHTRUST)
 +  LABEL%===>¬LABELA                          +{(Certificate LABEL)
@@ -36,6 +36,7 @@
   REFRESH(*)
 )PROC
   VER(&DSNA,NB)
+  VER(&OWNERA,NB)
   if (&TRUSTA ^= '')
     VER(&TRUSTA,NB,LIST,TRUST,NOTRUST,HIGHTRUST)
   VER(&LABELA,NB)

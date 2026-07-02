@@ -2,6 +2,17 @@
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
 
+  02 Jul 2026 - V41R0
+     - Certs (Option CA.1)
+       -- Updated LC edit macro to process GetCerts RINGS input
+     - Main Menu
+       -- Add command BPXCHECK to report on BPX.DEFAULT.USER,
+          BPX.NEXT.USER, and BPX.UNIQUE.USER definitions
+     - Tutorial (Option T)
+       -- Updated panel #RACMENU
+       -- Created help panel #RACBPXC to document BPXCHECK Rexx
+          exec
+
   10 Jun 2026 - V40R9
      - Certs (Option CA)
        -- Added panel RACGCMEN to display Digital Certificates Menu

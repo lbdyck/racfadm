@@ -369,6 +369,8 @@
     &OPT6,&OPT6CMD
      99,'CMD(%RACFCLSA)'        /* Analyze - Verify ACL */  /* Hidden */
       B,'CMD(%BOOKMGR SHELF(''EOYBOOK.ICHZBKC0.BKSHELF''))' /* Hidden */
+    BPX,'CMD(%RACFTSOV BPXCHECK)'
+BPXCHECK,'CMD(%RACFTSOV BPXCHECK)'
       C,'CMD(%RACFCMDS)'
      CA,'PANEL(RACFCMEN)'
       D,'CMD(%RACFDSL)'

@@ -92,6 +92,7 @@
    } A           {Issue RACDCERT type ADD WITHLABEL command
    } D           {Issue RACDCERT type DELETE LABEL command
    } G           {Issue RACDCERT type GENCERT WITHLABEL command
+   } Q           {Issue RACDCERT type GENREQ LABEL command
 +
 )INIT
   &ZUP     = #RACLINE

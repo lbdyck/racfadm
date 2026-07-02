@@ -8,6 +8,7 @@
  $CALLS    Documentation  Calls to other RACFADM rexx programs
  $RACHELP  Documentation  RACF Help member descriptions
  $STUB     Invocation     Can place rexx in site's REXX dataset
+ BPXCHECK  IBM Rexx cmd   Display Unix-related settings in RACF
  LC        Edit Macro     RACDCERT LIST(LABEL('labelname')) ID(userid)
                           on User Profile CERTS/RINGS command output
  LR        Edit Macro     RACDCERT LISTRING(*) ID(userid)

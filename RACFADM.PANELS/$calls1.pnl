@@ -1,0 +1,58 @@
+)F FUNCTION -
+ This help member has information about RACF callable services.
+
+Callable service
+
+ck_access (IRRSKA00): Check access
+ck_file_owner (IRRSKF00): Check file owner
+ck_owner_two_files (IRRSC200): Check owner of two files
+ck_priv (IRRSKP00): Check privilege
+ck_process_owner (IRRSKO00): Check process owner
+ck_IPC_access (IRRSKI00): Check IPC access
+clear_setid (IRRSCS00): Clear set ID
+deleteUSP (IRRSDU00): Delete USP
+get_uid_gid_supgrps (IRRSGE00): Get UIDs, GIDs, and supplemental groups
+getGMAP (IRRSGM00): Get GID-to-Group-Name mapping
+getUMAP (IRRSUM00): Get UID-to-User-ID mapping
+initACEE (IRRSIA00): Initialize ACEE
+initUSP (IRRSIU00): Initialize USP
+make_root_FSP (IRRSMR00): Make root IFSP
+makeFSP (IRRSMF00): Make IFSP
+makeISP (IRRSMI00): Make IISP
+query_file_security_options (IRRSQF00): Query file security options
+query_system_security_options (IRRSQS00): Query system security options
+R_admin (IRRSEQ00): RACF administration API
+R_audit (IRRSAU00): Provide an audit interface
+R_auditx (IRRSAX00 or IRRSAX64): Audit a security-related event
+R_cacheserv (IRRSCH00): Cache services
+R_chaudit (IRRSCA00): Change audit options
+R_chmod (IRRSCF00): Change file mode
+R_chown (IRRSCO00): Change owner and group
+R_datalib (IRRSDL00 or IRRSDL64): OCSF data library
+R_dceauth (IRRSDA00): Check a user's authority
+R_dceinfo (IRRSDI00): Retrieve or set user fields
+R_dcekey (IRRSDK00): Retrieve or set a non-RACF password
+R_dceruid (IRRSUD00): Determine the ID of a client
+R_exec (IRRSEX00): Set effective and saved UIDs/GIDs
+R_fork (IRRSFK00): Fork a process
+R_getgroups (IRRSGG00): Get/Set supplemental groups
+R_getgroupsbyname (IRRSUG00): Get groups by name
+R_kerbinfo (IRRSMK00): Retrieve or set security server network auth
+R_proxyserv (IRRSPY00): LDAP interface
+R_ptrace (IRRSPT00): Ptrace authority check
+R_setegid (IRRSEG00): Set effective GID, set all GIDs
+R_seteuid (IRRSEU00): Set effective UID, set all UIDs
+R_setfacl (IRRSCL00):Unix access control lists
+R_setfsecl (IRRSSB00): Security label
+R_setgid (IRRSSG00): Set group name
+R_setuid (IRRSSU00): Set z/OS UNIX user identifier (UID)
+R_ticketserv (IRRSPK00): Parse or extract
+R_umask (IRRSMM00): Set file mode creation mask
+R_usermap (IRRSIM00): Map application user
+R_writepriv (IRRSWP00): Write-down privilege
+R_GenSec (IRRSGS00 or IRRSGS64): Generic security API interface
+R_GetInfo (IRRSGI00): Get security server fields
+R_IPC_ctl (IRRSCI00): Perform IPC control
+R_PgmSignVer (IRRSPS00): Program Sign and Verify
+R_PKIServ (IRRSPX00):  Request public key infrastructure (PKI) services
+R_SecMgtOper (IRRSMO00): Security Management Operations

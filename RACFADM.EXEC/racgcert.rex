@@ -642,6 +642,12 @@ If gcrings = 0 then do
 gcrings = 1
 gcert. = ''
 y = 0
+y = y + 1
+gcert.y = 'Note: Use LC edit macro with cursor on label line',
+          'to list certificate'
+y = y + 1
+gcert.y = ''
+
 Call RingsCosmetic
 gcert.0 = y
 Call ViewCerts

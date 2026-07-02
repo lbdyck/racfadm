@@ -7,7 +7,7 @@
 /* @A2  241129  TRIDJK   Add conditional access PERMITs               */
 /* @L1  241124  LBDYCK   Add comments and sample JCL                  */
 /* @A1  241122  TRIDJK   Set SRT flag correctly                       */
-/* @A0  241122  Xephon   CBT File 836 (RGENR)                         */
+/* @A0  241122  Xephon   CBT File 836 (RGENR) non-IRRXUTIL version    */
 /*====================================================================*/
 PANEL01     = "RACFGEN1"   /* Set filter, menu option G    */
 PANELD1     = "RACFDISP"   /* Display report with colors   */
