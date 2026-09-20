@@ -63,7 +63,7 @@
         ORLIST /u/brwells/myfile AUTH
 
    4) Write information for an entire directory to an output file
-      without diplaying it on the terminal
+      without displaying it on the terminal
         ORLIST /u/brwells/myfile RECURSIVE NODISPLAY
 
  End-Syntax

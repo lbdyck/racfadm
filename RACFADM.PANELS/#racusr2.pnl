@@ -6,7 +6,7 @@
    ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - User Profiles+)\-\%Tutorial
-%Command ===>_ZCMD
+%Command ===>_ZCMD                                                             +
 ^Linec -------------------------------------------------------------------^
 )Area Linec
 +Panel Legend
@@ -24,6 +24,7 @@
 %  LEFT/RIGHT       +Cycle between list user displays
 %  CERTS/RINGS      +List Digital cert/ring information for users in table
 %  CLONE            +Clone User Profiles for users in table
+%  UNDOC            +The name says it all
 %
 +Line Commands
 %  /  !             +Display line command prompt panel (pop-up)

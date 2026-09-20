@@ -2,6 +2,18 @@
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
 
+  11 Sep 2026 - V41R1
+     - User Profiles (Option 1)
+       -- Updated RACFUSR exec to leave PROTECTED and REVOKED in
+          attributes panel field
+       -- Added RACFUS2B panel (3rd user profile display)
+       -- Updated RACFUSR exec to process LEFT/RIGHT for RACFUS2B
+       -- Added RACFUS2B skeleton
+       -- Updated $UNDOC panel to add additional undocumented commands
+     - ISPLog (Option L)
+       -- Updated RACFLOG exec to test for non-zero return code from
+          ISFBROWSE
+
   02 Jul 2026 - V41R0
      - Certs (Option CA.1)
        -- Updated LC edit macro to process GetCerts RINGS input

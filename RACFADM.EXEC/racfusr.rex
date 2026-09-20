@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @FI  260711  TRIDJK   Don't DELSTR for REVOKED/PROTECTED attr      */
 /* @L3  251216  LBDyck   Fix blank selection error                    */
 /* @L2  251203  LBDyck   Report invalid commands on RACFUSR2/3        */
 /* @FH  251129  TRIDJK   Add CLONE primary command                    */
@@ -222,6 +223,7 @@ PANELS1     = "RACFSAVE"   /* Obtain DSName to SAVE        */ /* @EK */
 PANELD1     = "RACFDISP"   /* Display report with colors   */ /* @F7 */
 SKELETON1   = "RACFUSR2"   /* Save tablea to dataset       */ /* @EK */
 SKELETO1A   = "RACFUS2A"   /* Save tablea to dataset       */ /* @FA */
+SKELETO1B   = "RACFUS2B"   /* Save tablea to dataset       */ /* @JK */
 SKELETON2   = "RACFUSR3"   /* Save tableb to dataset       */ /* @EK */
 EDITMACR    = "RACFEMAC"   /* Edit Macro, turn HILITE off  */ /* @CZ */
 TABLEA      = 'TA'RANDOM(0,99999)  /* Unique table name A  */ /* @EB */
@@ -391,7 +393,9 @@ PROFL:
              'tbtop ' TABLEA                                  /* @BE */
              'tbskip' TABLEA                                  /* @BE */
              do forever                                       /* @BE */
-                str = translate(user name defgrp owner attr2) /* @BO */
+                str = translate(user name defgrp owner attr2, /* @FD */
+                                datepass intpass datephrs,    /* @JK */
+                                data)                         /* @JK */
                 if (pos(find_str,str) > 0) then nop           /* @BE */
                 else 'tbdelete' TABLEA                        /* @BE */
                 'tbskip' TABLEA                               /* @BE */
@@ -406,7 +410,9 @@ PROFL:
              'tbtop ' TABLEA                                  /* @FD */
              'tbskip' TABLEA                                  /* @FD */
              do forever                                       /* @FD */
-                str = translate(user name defgrp owner attr2) /* @FD */
+                str = translate(user name defgrp owner attr2, /* @FD */
+                                datepass intpass datephrs,    /* @JK */
+                                data)                         /* @JK */
                 if (pos(find_str,str) > 0) then               /* @FD */
                   'tbdelete' TABLEA                           /* @FD */
                 else nop                                      /* @FD */
@@ -521,31 +527,45 @@ PROFL:
                  end                                          /* @JK */
               end                                             /* @JK */
         END                                                   /* @JK */
-        WHEN (ABBREV("ALT",ZCMD,3) = 1) THEN DO     /*UNDOC*/ /* @FA */
-          panel02 = 'RACFUS2A'                                /* @FA */
-        END                                                   /* @FA */
-        WHEN (ABBREV("NORM",ZCMD,4) = 1) THEN DO    /*UNDOC*/ /* @FA */
-          panel02 = 'RACFUSR2'                                /* @FA */
-        END                                                   /* @FA */
         WHEN (ABBREV("NEXT",ZCMD,1) = 1) THEN DO              /* @FA */
-          if panel02 = 'RACFUSR2' then                        /* @FA */
-            panel02 = 'RACFUS2A'                              /* @FA */
-          else                                                /* @FA */
-            panel02 = 'RACFUSR2'                              /* @FA */
-        END                                                   /* @FA */
+          if panel02 = 'RACFUSR2' then                        /* @JK */
+            panel02 = 'RACFUS2A'                              /* @JK */
+          else                                                /* @JK */
+          if panel02 = 'RACFUS2A' then                        /* @JK */
+            panel02 = 'RACFUS2B'                              /* @JK */
+          else                                                /* @JK */
+          if panel02 = 'RACFUS2B' then                        /* @JK */
+            panel02 = 'RACFUSR2'                              /* @JK */
+        END                                                   /* @JK */
         WHEN (ABBREV("1",ZCMD,1) = 1) THEN DO       /*UNDOC*/ /* @FA */
           panel02 = 'RACFUSR2'                                /* @FA */
         END                                                   /* @FA */
         WHEN (ABBREV("2",ZCMD,1) = 1) THEN DO       /*UNDOC*/ /* @FA */
           panel02 = 'RACFUS2A'                                /* @FA */
         END                                                   /* @FA */
-        WHEN (ABBREV("LEFT",ZCMD,4) = 1 |,                    /* @FE */
-              ABBREV("RIGHT",ZCMD,5) = 1) THEN DO             /* @FE */
-          if panel02 = 'RACFUSR2' then                        /* @FE */
-            panel02 = 'RACFUS2A'                              /* @FE */
-          else                                                /* @FE */
-            panel02 = 'RACFUSR2'                              /* @FE */
-        END                                                   /* @FE */
+        WHEN (ABBREV("3",ZCMD,1) = 1) THEN DO       /*UNDOC*/ /* @JK */
+          panel02 = 'RACFUS2B'                                /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("LEFT",ZCMD,4) = 1) THEN DO              /* @JK */
+          if panel02 = 'RACFUSR2' then                        /* @JK */
+            panel02 = 'RACFUS2B'                              /* @JK */
+          else                                                /* @JK */
+          if panel02 = 'RACFUS2A' then                        /* @JK */
+            panel02 = 'RACFUSR2'                              /* @JK */
+          else                                                /* @JK */
+          if panel02 = 'RACFUS2B' then                        /* @JK */
+            panel02 = 'RACFUS2A'                              /* @JK */
+        END                                                   /* @JK */
+        WHEN (ABBREV("RIGHT",ZCMD,5) = 1) THEN DO             /* @JK */
+          if panel02 = 'RACFUSR2' then                        /* @JK */
+            panel02 = 'RACFUS2A'                              /* @JK */
+          else                                                /* @JK */
+          if panel02 = 'RACFUS2A' then                        /* @JK */
+            panel02 = 'RACFUS2B'                              /* @JK */
+          else                                                /* @JK */
+          if panel02 = 'RACFUS2B' then                        /* @JK */
+            panel02 = 'RACFUSR2'                              /* @JK */
+        END                                                   /* @JK */
         WHEN (ABBREV("ALTUSER",ZCMD,7) = 1) THEN DO /*UNDOC*/ /* @JK */
           call racfaltu parm                                  /* @JK */
         END                                                   /* @JK */
@@ -567,8 +587,10 @@ PROFL:
         When (abbrev("SAVE",zcmd,2) = 1) then DO              /* @EK */
              if panel02 = 'RACFUSR2' THEN                     /* @FA */
                TMPSKELT = SKELETON1                           /* @EK */
-             else                                             /* @FA */
-               TMPSKELT = SKELETO1A                           /* @FA */
+             if panel02 = 'RACFUS2A' THEN                     /* @FA */
+               TMPSKELT = SKELETO1A                           /* @EK */
+             if panel02 = 'RACFUS2B' THEN                     /* @FA */
+               TMPSKELT = SKELETO1B                           /* @EK */
              call do_SAVE                                     /* @EK */
         END                                                   /* @EK */
         WHEN (ABBREV("SORT",ZCMD,1) = 1) THEN DO              /* @AT */
@@ -597,6 +619,8 @@ PROFL:
                      call sortseq 'INTPASS'                   /* @FF */
                 when (ABBREV("PHRSDT",PARM,4) = 1) then       /* @FF */
                      call sortseq 'DATEPHRS'                  /* @FF */
+                when (ABBREV("DATA",PARM,4) = 1) then         /* @JK */
+                     call sortseq 'DATA'                      /* @JK */
                 otherwise NOP                                 /* @A5 */
            END                                                /* @A5 */
 
@@ -606,6 +630,7 @@ PROFL:
            CLRATTR  = "GREEN"; CLRTSOU = "GREEN"              /* @EE */
            CLRGRPC  = "GREEN"; CLRINTP = "GREEN"              /* @FF */
            CLRPSWD  = "GREEN"; CLRPHRS = "GREEN"              /* @FF */
+           CLRDATA  = "GREEN"                                 /* @JK */
            PARSE VAR SORT LOCARG "," .                        /* @EE */
            INTERPRET "CLR"SUBSTR(LOCARG,1,4)" = 'TURQ'"       /* @EE */
            IF LOCARG = "DATEPASS" THEN                        /* @FF */
@@ -745,7 +770,9 @@ DO_FINDA:                                                     /* @ED */
         'tbtop' TABLEA                                        /* @ED */
      end                                                      /* @ED */
      else do                                                  /* @ED */
-        testit = translate(user name)                         /* @ED */
+        testit = translate(user name defgrp owner attr2,      /* @JK */
+                           datepass intpass datephrs,         /* @JK */
+                           data)                              /* @JK */
         if (pos(findit,testit) > 0) then do                   /* @ED */
            'tbquery' TABLEA 'position(srow)'                  /* @ED */
            'tbtop'   TABLEA                                   /* @ED */
@@ -1433,7 +1460,7 @@ GETD:
   rev  = POS('REVOKED',attr)
   if (rev <> 0) then do                                       /* @BX */
      revoked = ' Y '                                          /* @BX */
-     attr = delstr(attr,rev,7)   /* Del 'REVOKED' */          /* @BX */
+  /* attr = delstr(attr,rev,7)   /* Del 'REVOKED' */ */       /* @FI */
   end                                                         /* @BX */
   none  = POS('NONE',attr)                                    /* @A9 */
   if (none <> 0) then                                         /* @BX */
@@ -1444,7 +1471,7 @@ GETD:
   end                                                         /* @A9 */
   call @aos                                                   /* @F5 */
   prot  = POS('PROTECTED',attr)                               /* @BX */
-  if (prot <> 0) then attr = delstr(attr,prot,9)              /* @BX */
+/*if (prot <> 0) then attr = delstr(attr,prot,9) */           /* @FI */
 
   parse var details.5 'LAST-ACCESS=' datelgn5                 /* @AI */
   parse var details.6 'LAST-ACCESS=' datelgn6                 /* @AI */
@@ -1467,6 +1494,8 @@ GETD:
   end                                                         /* @AN */
 
   parse var details.7 'INSTALLATION-DATA=' data
+  if data = '' then                                           /* @JK */
+    parse var details.8 'INSTALLATION-DATA=' data             /* @JK */
   TSOUSER = ' N '                                             /* @BQ */
   do getd_count=8 to getd_max
      if (details.getd_count = 'NO TSO INFORMATION') then leave
@@ -1744,6 +1773,7 @@ CREATE_TABLEA:                                                /* @BE */
   CLRATTR  = "GREEN"; CLRTSOU = "GREEN"                       /* @EE */
   CLRGRPC  = "GREEN"; CLRINTP = "GREEN"                       /* @FF */
   CLRPSWD  = "GREEN"; CLRPHRS = "GREEN"                       /* @FF */
+  CLRDATA  = "GREEN"                                          /* @JK */
   "TBSORT " TABLEA "FIELDS("sort")"                           /* @EE */
   "TBTOP  " TABLEA                                            /* @EE */
 

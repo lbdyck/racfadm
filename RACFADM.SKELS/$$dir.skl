@@ -26,7 +26,8 @@
  RACFRPTS  Reports        RACF reports, All reports (SYSOUT)
  RACFRPTU  Reports        RACF reports, IRRDBU00 unload utility
  RACFUSR2  User           List userids
- RACFUS2A  User           List userids (alternate panel)
+ RACFUS2A  User           List userids (2nd panel)
+ RACFUS2B  User           List userids (3rd panel)
  RACFUSR3  User           Show groups and access
  RACFXREF  User/Group     RACF IRRUT100 cross reference
 

@@ -1,0 +1,34 @@
+)CM*------------------------------------------------------------------*
+)CM*  Purpose:  RACFADM - User Profile - SAve command
+)CM*------------------------------------------------------------------*
+)CM*  FLG  YYMMDD  USERID   DESCRIPTION
+)CM*  ---  ------  -------  ------------------------------------------
+)CM*  @A0  260910  RACFA    Created skeleton
+)CM*------------------------------------------------------------------*
+)SEL &RACFSFIL = T
+ &ZDATESTD -----------( RACFADM - User Profiles )-------------- &ZTIME
+)BLANK
+)TB 2 11
+!FILTER:!&RFILTER
+)BLANK
+SUserid   Name               Installation Data
+ ---------------------------------------------------------------------
+)TB 2 11 30
+)DOT &TABLEA
+)SETF USER     = &LEFT(&USER,8, )
+)SETF NAME     = &LEFT(&NAME,18, )
+)SETF DATA     = &LEFT(&DATA,41, )
+!&USER!&NAME!&DATA
+)ENDDOT
+)ENDSEL
+)SEL &RACFSFIL = C
+RACFADM - User Profiles
+Userid,Name,Data
+------,----,-----
+)DOT &TABLEA
+)SETF USER     = &STRIP(&USER,, )
+)SETF NAME     = &STRIP(&NAME,, )
+)SETF DATA     = &STRIP(&DATA,, )
+&USER,&NAME,&DATA
+)ENDDOT
+)ENDSEL

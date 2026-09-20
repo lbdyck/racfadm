@@ -6,7 +6,7 @@
 /* @L5  230830  LBD      Use Grep to filter isfline (sdsf)            */
 /* @EEJ 230320  EEJ      Update by Ed Jaffe for (E)JES Support        */
 /* @L3  230319  LBD      Add ToDate along with FromDate               */
-/*                       Translae out x'00' in error message (ejes)   */
+/*                       Translate out x'00' in error message (ejes)  */
 /* @L2  230317  LBD      Use RACFCLOG to test for OPERLOG/SYSLOG      */
 /* @L1  230316  LBD      Fix Message Scan                             */
 /* @AJ  200918  RACFA    Fix 'Type=A', was displaying same msg        */
@@ -288,7 +288,7 @@ FOREGROUND_CREATE_JCL:
         CALL GDG_BASE_GET_GOVO                                /* @A6 */
         IF (TMPDMSG1 = "") THEN DO
            RACFSMSG = "Invalid Date"
-           RACFLMSG = "There are no GDG genarations",
+           RACFLMSG = "There are no GDG generations",
                       "with a date of "RACFMDAT"."
            "SETMSG MSG(RACF011)"
            RETURN

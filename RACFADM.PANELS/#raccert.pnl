@@ -11,7 +11,7 @@
    ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - Digital Certificates+)\-\%Tutorial
-%Command ===>_ZCMD
+%Command ===>_ZCMD                                                             +
 ^Linec ------------------------------------------------------------------------^
 )Area Linec
 +Primary Commands

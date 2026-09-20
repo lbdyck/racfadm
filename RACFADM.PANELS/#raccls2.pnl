@@ -3,10 +3,12 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
+   ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - General Resources+)\-\%Tutorial
-%Command ===>_ZCMD
-%
+%Command ===>_ZCMD                                                             +
+^Linec -----------------------------------------------------------------------^
+)Area Linec
 +Primary Commands
 %  Find text        +Find a text string
 %  Sort column A/D  +Sort a column, in ascending or descending order
@@ -14,6 +16,7 @@
 %  Locate text      +Locate text in the sorted column
 %  Only text        +Only display rows with text string
 %  Reset text       +Redisplay rows and pass a new search filter (optional)
+%  EXPAND           +Expand an ISPF scrollable field to full screen display
 %  SAve             +Save display to a dataset
 %  CLONE            +Clone Resource Profiles for users in table
 +

@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @AN  260812  TRIDJK   Test ISFBROWSE return code, exit if not zero */
 /* @AM  250124  TRIDJK   If Opt is "L R", then reverse LOG date order */
 /* @AL  200616  RACFA    Chg panel name RACFRPTS to RACFDISP          */
 /* @AK  200524  TRIDJK   Fixed displaying error message               */
@@ -206,6 +207,17 @@ DO_ISFCALLS:                                                  /* @AJ */
               do until isfnextlinetoken=''                    /* @AJ */
                  Address SDSF "ISFBROWSE ST",                 /* @AJ */
                               "TOKEN('"jds_TOKEN.jx"')"       /* @AJ */
+
+                 lrc=rc                                       /* @AN */
+                 if lrc<>0 then  /* If request failed */      /* @AN */
+                   do                                         /* @AN */
+                     say "** ISFBROWSE failed with rc="lrc"." /* @AN */
+                     do ix=1 to isfmsg2.0                     /* @AN */
+                       say isfmsg2.ix                         /* @AN */
+                       end                                    /* @AN */
+                     exit 20                                  /* @AN */
+                     end                                      /* @AN */
+
                  do kx=1 to isfline.0                         /* @AJ */
                     recin.ky = isfline.kx                     /* @AJ */
                     ky = ky + 1                               /* @AJ */

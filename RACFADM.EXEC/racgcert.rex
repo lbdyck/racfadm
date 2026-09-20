@@ -300,8 +300,6 @@ DISPLAY_TABLE:
                      call sortseq 'ISSUER'
                 when (ABBREV("KEYALGO",PARM,4) = 1) then
                      call sortseq 'KEYALGO'
-                when (ABBREV("KEYALGO",PARM,4) = 1) then
-                     call sortseq 'KEYALGO'
                 otherwise NOP
            END
         END

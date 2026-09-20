@@ -452,7 +452,7 @@ If noRun = 0 & scriptOK = 1 Then Do
   Else Do                                   /* Script in data set    */
     say 'Unable to execute shell script because you have saved it',
         'into a data set.  See the value of the outputFile',
-        'configuraton variable.'
+        'configuration variable.'
     say 'No changes were made.'
   End
 End   /* Not in noRun mode          */

@@ -7,6 +7,8 @@ Rexx Programmer Reference
 
 June 4, 2026
 
+Copyright 2026 Charles Mills Consulting, LLC
+
 GETCERTS is a library module that returns RACF certificate information
 to a Rexx program.
 
@@ -307,7 +309,7 @@ Data Formats
 Date and Time Format. Dates and times are returned in ISO 8601
 (2026-02- 21T11:46:33): it's a standard, it's sortable, it's
 unambiguous for international customers, and it's easy to truncate
-to 10 characters if time is not needed.  Certificate timstamps are
+to 10 characters if time is not needed.  Certificate timestamps are
 formatted as UTC.
 
 Hexadecimal Format. Unpunctuated uppercase hex is common on the
@@ -468,33 +470,40 @@ Rexx Stem
 Description Notes
 
 AUTHKID
-Authority Key See Hexadecimal Format above.
+Authority Key Identifier
+See Hexadecimal Format above.
 
 CAUSAGE
-From basic 1 if CA:TRUE; 0 if CA: FALSE constraints
+From basic constraints
+1 if CA:TRUE; 0 if CA: FALSE
 
 CERTDADD
-Date certificate See Date and Time Format above. No
-added to RACF time; only date. Time is recorded as
-00:00:00.
+Date certificate added to RACF
+See Date and Time Format above. No time; only date. Time is
+recorded as 00:00:00.
 
 CERTUADD
-RACF ID of user 1 to 8 characters. Never irrcerta or
-who actually added irrsitec. Not necessarily the same as the
-certificate to RACF certificate  s CERTUSER.
+RACF ID of user who actually added certificate to RACF
+1 to 8 characters.  Never irrcerta or irrsitec. Not necessarily
+the same as the certificate to RACF certificate's CERTUSER.
 
 CERTUSER
-Certificate owner 1 to 8 characters. CERTAUTH and SITE
-returned as irrcerta and irrsitec (lower
-case) respectively.
+Certificate owner
+1 to 8 characters. CERTAUTH and SITE returned as irrcerta and
+irrsitec (lower case) respectively.
 
 FINGERPR
-SHA-256 fingerprint 32 bytes, reported as 63 characters, as
-of the certificate reported by RACF. See Hexadecimal Format above.
+SHA-256 fingerprint of the certificate
+32 bytes, reported as 63 characters, as reported by RACF. See
+Hexadecimal Format above.
 
 ISSUER
-Full issuer name May be up to 2048 characters ISSUER# Index
-number(s) of Normally at most one issuer, but issuer certificates
+Full issuer name
+May be up to 2048 characters
+
+ISSUER#
+Index number(s) of issuer certificates
+Normally at most one issuer, but issuer certificates
 because of cross-signing, expired intermediates and other somewhat
 unusual circumstances a certificate may have multiple issuers. (See
 footnotes under Overview of the Hypothetical Rexx Program.) Multiple
@@ -503,29 +512,31 @@ issuer certificate present.  Empty string for self-signed
 certificates.
 
 ISSUER$
-Short issuer name Issuer name shortened to most significant
-RDN by algorithm. Up to 67 characters, but the Rexx program may
-display less if so chooses.
+Short issuer name
+Issuer name shortened to most significant RDN by algorithm. Up
+to 67 characters, but the Rexx program may display less if so
+chooses.
 
 KEYALGO
-Public key Name such as rsaEncryption algorithm
+Public key algorithm
+Name such as rsaEncryption
 
 KEYLEN
 Private key length in bits
 
 KEYTYPE
-Private key type Key type and location, such as    RSA (in
-RACF)
+Private key type
+Key type and location, such as RSA (in RACF)
 
 LABEL
-Certificate label 1 to 32 characters. May include embedded
-special characters, including blanks and quotes. Quotes are not
-doubled by GETCERTS.
+Certificate label
+1 to 32 characters. May include embedded special characters,
+including blanks and quotes. Quotes are not doubled by GETCERTS.
 
 LEAF#
-Index numbers of Empty string if none. Multiple index
-certificates signed numbers separated by blanks.  Self not by
-this certificate included for self-signed certificates.
+Index numbers of certificates signed by this certificate
+Empty string if none. Multiple index numbers separated by
+blanks. "Self" not included for self-signed certificates.
 
 GETCERTS     Rexx Certificate Library for RACF   Page 11
 
@@ -535,38 +546,50 @@ Rexx Stem
 Description Notes
 
 NOTAFTER
-Certificate See Date and Time Format above.  expiration date
-and time
+Certificate expiration date and time
+See Date and Time Format above.
 
 NOTBEFOR
-Certificate start See Date and Time Format above.  date and
-time
+Certificate start date and time
+See Date and Time Format above.
 
 PRIVKEY
-Is there a private 1 if private key in RACF, 0 if not.2 key
+Is there a private key
+1 if private key in RACF, 0 if not.
 
 SELFSIGN
-Certificate is self- 1 if self-signed; 0 if not signed
+Certificate is self-signed
+1 if self-signed; 0 if not
 
 SERIAL
-Certificate serial See Hexadecimal Format above.  number
+Certificate serial number
+See Hexadecimal Format above.
 
 SIGALGO
-Signature algorithm A name like sha256WithRSAEncryption
-SUBJECT Full subject name May be up to 2048 characters SUBJECT$ Short
-subject name Subject name shortened to most significant RDN by
-algorithm. Up to 67 characters, but the Rexx program may display less
-if so chooses.
+Signature algorithm
+A name like sha256WithRSAEncryption
+
+SUBJECT Full subject name
+May be up to 2048 characters
+
+SUBJECT$
+Short subject name
+Subject name shortened to most significant RDN by algorithm. Up
+to 67 characters, but the Rexx program may display less if so
+chooses.
 
 SUBJKID
-Subject Key See Hexadecimal Format above.  identifier
+Subject Key identifier
+See Hexadecimal Format above.
 
 THUMBPR
-SHA-1 Thumbprint 20 bytes, formatted as 39 characters (used by
-Windows). See Hexadecimal Format above.
+SHA-1 Thumbprint
+20 bytes, formatted as 39 characters (used by Windows). See
+Hexadecimal Format above.
 
 TRUST
-Certificate trust 1 if trusted; 0 if not status
+Certificate trust status
+1 if trusted; 0 if not
 
 RINGSUMM     Get Keyring Summary
 
@@ -611,11 +634,12 @@ Rexx Stem
 Description Notes
 
 KEYRING#
-Keyring index Integers separated by blanks. Empty numbers of
-string if none or if Get Ring Summary connected keyrings has not been
-called. Sorted into ascending keyring index sequence.
+Keyring index numbers of connected keyrings
+Integers separated by blanks. Empty string if none or if Get
+Ring Summary has not been called. Sorted into ascending keyring
+index sequence.
 
-
+Note:
 Keyring variables, indexed by a keyring index number as a tail;
 for example, RINGUSER.9. The .0 tails contain a count of elements.
 
@@ -623,28 +647,32 @@ Rexx Stem
 Description Notes
 
 CONCERT#
-Certificate index Zero or more integers separated by blanks,
-numbers of sorted into ascending sequence. An empty connected string
-if no connected certificates. The Rexx certificates. program may
-access the userid, label and so forth of the certificates as desired
-using the returned certificate index number and the appropriate Rexx
+Certificate index numbers of connected certificates
+Zero or more integers separated by blanks, sorted into ascending
+sequence. An empty connected string if no connected
+certificates. The Rexx certificates. program may access the
+userid, label and so forth of the certificates as desired using
+the returned certificate index number and the appropriate Rexx
 variables.
 
 NAME
-Keyring name 1 to 237 characters. May contain lowercase and
-special characters.
+Keyring name
+1 to 237 characters. May contain lowercase and special
+characters.
 
 RINGDADD
-Date keyring added See Date and Time Format above. No time;
-to RACF only date. Time is recorded as 00:00:00.
+Date keyring added
+See Date and Time Format above. No time; to RACF only date. Time
+is recorded as 00:00:00.
 
 RINGUADD
-RACF ID of user who 1 to 8 characters. Never irrcerta or
-irrsitec. Not actually added necessarily the same as the Keyring's
-keyring to RACF RINGUSER.
+RACF ID of user who actually added keyring to RACF
+1 to 8 characters. Never irrcerta or irrsitec. Not necessarily
+the same as the Keyring's RINGUSER.
 
 RINGUSER
-Keyring owner 1 to 8 characters. Never irrcerta or irrsitec.
+Keyring owner
+1 to 8 characters. Never irrcerta or irrsitec.
 
 
 GETCERTS     Rexx Certificate Library for RACF   Page 13
@@ -681,18 +709,21 @@ Rexx Description Notes
 Variable
 
 EXTUSAGE
-Extended key usage Stem variable. May be multiple usages.
-Character strings such as "Server Authentication", "Client
-Authentication", "Code Signing", etc.
+Extended key usage
+Stem variable. May be multiple usages.  Character strings such
+as "Server Authentication", "Client Authentication", "Code
+Signing", etc.
 
 KEYUSAGE
-Key usage Stem variable. May be multiple usages.  Character
-strings such as "Digital Signature", "Content Commitment", "Key
+Key usage
+Stem variable. May be multiple usages.  Character strings such
+as "Digital Signature", "Content Commitment", "Key
 Encipherment", etc.
 
 SAN
-Subject Alternative Stem variable; may be dozens or more. Format
-Names DNS: www.foobar.com
+Subject Alternative Names
+Stem variable; may be dozens or more. Format
+DNS: www.foobar.com
 
 
 
@@ -741,18 +772,19 @@ Rexx Stem
 Description Notes
 
 CERTIF#
-Certificate index The Rexx program may access the userid,
-label number  and so forth of the certificate as desired using the
-returned certificate index number and the appropriate Rexx variables.
+Certificate index number
+The Rexx program may access the userid, label and so forth of
+the certificate as desired using the returned certificate index
+number and the appropriate Rexx variables.
 
 DEFAULT
-Whether certificate 1 = default; 0 = not the default. Note
-that a is the default on the keyring has at most one and may have no
-keyring default certificate.
+Whether certificate is the default on the keyring
+1 = default; 0 = not the default. Note that a has at most one
+and may have no keyring default certificate.
 
 USAGE
-Certificate usage on CERTAUTH, PERSONAL or SITE keyring
-
+Certificate usage on keyring
+CERTAUTH, PERSONAL or SITE
 
 
 
