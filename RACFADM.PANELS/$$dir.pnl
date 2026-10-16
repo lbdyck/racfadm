@@ -98,6 +98,8 @@
  #RACSET2  Tutorial       Settings - Customize options (2 of 4)
  #RACSET3  Tutorial       Settings - Customize options (3 of 4)
  #RACSET4  Tutorial       Settings - Customize options (4 of 4)
+ #RACFSOH  Tutorial       System Options
+ RACFSOPP  Options        System Options
  #RACUSR2  Tutorial       User profile
  #RACUSR3  Tutorial       User profile
  #RACUSR5  Tutorial       User profile

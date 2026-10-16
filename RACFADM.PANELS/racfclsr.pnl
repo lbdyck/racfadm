@@ -34,7 +34,7 @@ _Z+ Z        ^Z    Z
         IF (&SROW ^= 0)
            &OPTA = S
   IF (&SETMADMN = YES)
-     VER (&OPTA,LIST,S,L,R,I)
+     VER (&OPTA,LIST,S,L,R,A,D,I)
   ELSE
      VER (&OPTA,LIST,S,L,I)
 )PNTS

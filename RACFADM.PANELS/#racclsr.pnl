@@ -3,10 +3,12 @@
    !  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(TURQ)
    +  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(GREEN)
    @  TYPE(TEXT)    INTENS(LOW)  SKIP(ON) COLOR(RED)
+   ^ area(SCRL) Extend(ON)
 )BODY EXPAND(\\)
 %Tutorial+\-\(%RACFADM - General Resources+)\-\%Tutorial
 %Command ===>_ZCMD
-%
+^Linec -----------------------------------------------------------------------^
+)Area Linec
 +Primary Commands
 %  Find text        +Find a text string
 %  Sort column A/D  +Sort a column, in ascending or descending order
@@ -26,6 +28,8 @@
 %  S  !Show         +Select a class from the list of classes
 %  L  !List         +Issue RLIST command
 %  R  !Refresh      +Issue a RACLIST refresh on the class
+%  A  !Activate     +Issue a CLASSACT on the class
+%  D  !Deactivate   +Issue a NOCLASSACT on the class
 %  I  !Info         +More info on the class description
 )PROC
   &ZUP     = #RACCLSR

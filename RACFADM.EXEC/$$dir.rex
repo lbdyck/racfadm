@@ -74,6 +74,7 @@
  RACFRVER  Version        Sets the version for this application
  RACFSETD  Settings       Set default settings (0) when RACFADM invoked
  RACFSETG  Settings       Customize settings, menu option 0
+ RACFSOPT  Options        RACF SETROPTS, menu option SO
  RACFTSOV  Documentation  Trap TSO command output and invoke ISPF View
  RACFUSR   User           Display userid profiles, menu option 1
  RACFUSRT  User           Add, delete and change TSO userid

@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @BL  260930  TRIDJK   Added line cmds 'A-Activate', 'D-Deactivate' */
 /* @BK  260201  TRIDJK   Add primary command ADD                      */
 /* @L2  251216  LBDyck   Report invalid commands on table panels      */
 /* @BJ  250513  TRIDJK   Add primary command ALL                      */
@@ -87,7 +88,8 @@ ADDRESS ISPEXEC                                               /* @A7 */
   end                                                         /* @AW */
 
   If (SETMADMN = "YES") then                                  /* @AC */
-      SELCMDS = "ÝS¨ShowÝL¨ListÝR¨RefreshÝI¨Info"             /* @JK */
+      SELCMDS = "ÝS¨ShowÝL¨ListÝR¨RefreshÝA¨Activate"||,      /* @JK */
+                "ÝD¨DeactivateÝI¨Info"                        /* @JK */
   else                                                        /* @AC */
       SELCMDS = "ÝS¨ShowÝL¨ListÝI¨Info"                       /* @JK */
 
@@ -318,6 +320,8 @@ DISPLAY_TABLE:
              call RACFLOG $CLASSES CLASS                      /* @JK */
         when (opta = 'L') then call lisp                      /* @AL */
         when (opta = 'R') then call REFRESH
+        when (opta = 'A') then call CLASSACT
+        when (opta = 'D') then call NOCLASSACT
         when (opta = 'S') then do   /* call generic */
              action = '*Shown'                                /* @BH */
              "TBMOD" TABLEA                                   /* @BH */
@@ -431,6 +435,44 @@ if (SETMIRRX = 'YES') then do                                 /* @BE */
         "TBMOD" TABLEA
      end
   end
+RETURN
+/*--------------------------------------------------------------------*/
+/*  Classact class                                                    */
+/*--------------------------------------------------------------------*/
+CLASSACT:
+if (SETMIRRX = 'YES') then do                                 /* @BL */
+  end                                                         /* @BL */
+  msg    = 'You are about to ACTIVATE class',                 /* @BL */
+            class                                             /* @BL */
+  Sure_? = RACFMSGC(msg)                                      /* @BL */
+  if (sure_? = 'YES') then do                                 /* @BL */
+     call EXCMD "SETR CLASSACT("class")"                      /* @BL */
+     if (cmd_rc <> 0) then                                    /* @BL */
+        call racfmsgs "ERR10" /* CMD FAILED */                /* @BL */
+     else do                                                  /* @BL */
+        action = '*Act'                                       /* @BL */
+        "TBMOD" TABLEA                                        /* @BL */
+     end                                                      /* @BL */
+  end                                                         /* @BL */
+RETURN
+/*--------------------------------------------------------------------*/
+/*  Noclassact class                                                  */
+/*--------------------------------------------------------------------*/
+NOCLASSACT:
+if (SETMIRRX = 'YES') then do                                 /* @BL */
+  end                                                         /* @BL */
+  msg    = 'You are about to DEACTIVATE class',               /* @BL */
+            class                                             /* @BL */
+  Sure_? = RACFMSGC(msg)                                      /* @BL */
+  if (sure_? = 'YES') then do                                 /* @BL */
+     call EXCMD "SETR NOCLASSACT("class")"                    /* @BL */
+     if (cmd_rc <> 0) then                                    /* @BL */
+        call racfmsgs "ERR10" /* CMD FAILED */                /* @BL */
+     else do                                                  /* @BL */
+        action = '*Nact'                                      /* @BL */
+        "TBDELETE" TABLEA                                     /* @BL */
+     end                                                      /* @BL */
+  end                                                         /* @BL */
 RETURN
 /*--------------------------------------------------------------------*/
 /*  Check RACLIST                                                     */

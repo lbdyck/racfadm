@@ -24,7 +24,7 @@
 +  @z {OPT1DESC ÝOPT1INFO               @z {modesc    +OMVS RACF commands
 +  @z {OPT2DESC ÝOPT2INFO               @z {mpdesc    ÝMPINFO
 +  @z {OPT3DESC ÝOPT3INFO               @z {mrdesc    +RACF reports
-+  @z {OPT4DESC ÝOPT4INFO               @z {msdesc    +Coding/design
++  @z {OPT4DESC ÝOPT4INFO               @z {msdesc    +System Options
 +  @z {OPT5DESC ÝOPT5INFO               @z {mudesc    +Version/updates
 +  @z {OPT6DESC ÝOPT6INFO               @z {mcadesc   +Digital certificates
 +                                       @z {mtdesc    Ýmthelp
@@ -84,7 +84,7 @@
   &mr = 'R'
   &mrdesc = 'Reports'
   &ms = 'S'
-  &msdesc = 'Standards'
+  &msdesc = 'Options'
 
   &mt = 'T'                  /*    Tutorial entry      */
   &mtdesc = 'Tutorial'       /*         "              */
@@ -385,7 +385,8 @@ BPXCHECK,'CMD(%RACFTSOV BPXCHECK)'
       P,&mpcmd
       R,'CMD(%RACFRPTS)'
      CO,'CMD(%RACFRPTS CO)'          /* CARLota */
-      S,'CMD(%RACFLOG $STNDARD)'
+    STD,'CMD(%RACFLOG $STNDARD)'
+      S,'CMD(%RACFSOPT)'
       T,'PGM(ISPTUTOR) PARM(#RACMENU)'
       U,'CMD(%RACFLOG $UPDATES)'
       X,'EXIT'

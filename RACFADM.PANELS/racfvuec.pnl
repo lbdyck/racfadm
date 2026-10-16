@@ -6,7 +6,7 @@
    +  TYPE(TEXT)    INTENS(LOW)  COLOR(GREEN)
 )Body Window(34,7) Expand(\\)
 +
-+Select One Option Only:
++Select only 1 option (or none):
 +
 +CMDS     _z+       +INDEX    _z+
 +RINGS    _z+       +USERS    _z+
@@ -31,7 +31,7 @@
  if words(vuec vuei vuer vueu) > 1 then do
     zrxrc  = 8
     racfsmsg = 'Error.'
-    racflmsg = 'You may only select 1 option. Try again.'
+    racflmsg = 'You may select only 1 option. Try again.'
     zrxmsg = 'RACF011'
     end
  else Select

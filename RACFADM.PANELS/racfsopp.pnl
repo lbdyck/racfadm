@@ -1,0 +1,279 @@
+)Attr
+ /* Panel using dynamic area to build scrollable or non-scrollable display */
+ /* History                                                                */
+ /*  2025-03-28  New, copied from ISPPDA#S, redefine shadow var feature    */
+ /*  2026-02-10  * as catch-all line command, still allows POS.            */
+ /*  2026-03-09  Add long shadow vars PDA@SVx to PDAATTR.                  */
+ /*  2026-03-10  Add warning for missing PDAMAX var.                       */
+ /*  2026-03-31  Add @PRESP to PROC, add tracing.                          */
+ /*  2026-07-28  Reposition cursor if beyond last line                     */
+ /*  2026-09-02  Fix point-and-shoot triggered by up-scroll of last line.  */
+ /*  2026-09-28  Add PDAVERB variable - copy of ZVERB or ENTER.            */
+ /*                                                                        */
+ /* Author                                                                 */
+ /*  Willy Jensen                                                          */
+ /*  mail: willy@harders-jensen.com                                        */
+ /*  web : http://harders-jensen.com                                       */
+ +  type(text   ) color(turq ) caps(off)
+ !  type(text   ) color(yellow) caps(off)
+ [  type(text   ) color(green ) caps(off)
+ ]  type(text   ) color(white ) caps(off)
+ _  type(input  ) color(red  ) caps(on )  hilite(uscore)
+ |  area(dynamic) extend(on) scroll(on)                   /* required      */
+ /* Specials   */
+ 01 type(dataout) color(blue  ) caps(off)                 /* line break    */
+ 02 type(datain ) color(red   ) caps(on ) hilite(uscore)  /* sel field     */
+ 03 type(datain ) color(red   ) caps(on ) hilite(uscore)  /* sel field     */
+ /* Standard input */
+ 04 type(datain ) color(blue  ) caps(off)                 /* PDA@IB  @IB   */
+ 05 type(datain ) color(green ) caps(off)                 /* PDA@IG  @IG   */
+ 06 type(datain ) color(pink  ) caps(off)                 /* PDA@IP  @IP   */
+ 07 type(datain ) color(red   ) caps(off)                 /* PDA@IR  @IR   */
+ 08 type(datain ) color(turq  ) caps(off)                 /* PDA@IT  @IT   */
+ 09 type(datain ) color(white ) caps(off)                 /* PDA@IW  @IW   */
+ 0A type(datain ) color(yellow) caps(off)                 /* PDA@IY  @IY   */
+ /* User-defined input, color and hilite have only the short form */
+ 0B type(datain ) color(&@ui1c ) caps(off) hilite(&@ui1h) /* PDA@UI1 @UI1  */
+ 0C type(datain ) color(&@ui2c ) caps(off) hilite(&@ui2h) /* PDA@UI2 @UI2  */
+ 0D type(datain ) color(&@ui3c ) caps(off) hilite(&@ui3h) /* PDA@UI2 @UI2  */
+ 0E type(datain ) color(&@ui4c ) caps(off) hilite(&@ui4h) /* PDA@UI3 @UI3  */
+ /* Standard output */
+ 0F type(dataout) color(blue  ) caps(off)                 /* PDA@OB  @OB   */
+ 10 type(dataout) color(green ) caps(off)                 /* PDA@OG  @OG   */
+ 11 type(dataout) color(pink  ) caps(off)                 /* PDA@OP  @OP   */
+ 12 type(dataout) color(red   ) caps(off)                 /* PDA@OR  @OR   */
+ 13 type(dataout) color(turq  ) caps(off)                 /* PDA@OT  @OT   */
+ 14 type(dataout) color(white ) caps(off)                 /* PDA@OW  @OW   */
+ 15 type(dataout) color(yellow) caps(off)                 /* PDA@OY  @OY   */
+ /* User-defined output, color and hilite have only the short form */
+ 16 type(dataout) color(&@ut1c ) caps(off) hilite(&@ut1h) /* PDA@ut1 @ut1  */
+ 17 type(dataout) color(&@ut2c ) caps(off) hilite(&@ut2h) /* PDA@ut2 @ut2  */
+ 18 type(dataout) color(&@ut3c ) caps(off) hilite(&@ut3h) /* PDA@ut3 @ut3  */
+ 19 type(dataout) color(&@ut4c ) caps(off) hilite(&@ut4h) /* PDA@ut4 @ut4  */
+ /* Shadow var defs, only color and hilite can be referenced, in short form*/
+ 1A type(char)    color(&@sv1c) hilite(&@sv1h)            /*               */
+ 1B type(char)    color(&@sv2c) hilite(&@sv2h)            /*               */
+ 1C type(char)    color(&@sv3c) hilite(&@sv3h)            /*               */
+ 1D type(char)    color(&@sv4c) hilite(&@sv4h)            /*               */
+)Body expand(\\) width(&pdascrw)
+%&pdahdr\ \+
+]Command ==>_zcmd \ \[Scrl_@sca+
+!&pdaplmsg \ \+
+|PDAAREA,PDASHADV\ \|
+)Init
+ &@errpos = &Z
+ if (&scrl  EQ &Z) &scrl  = 'CSR'
+ if (&@sv1c EQ &Z) &@sv1c = 'WHITE'              /* shadow color 1           */
+ if (&@sv2c EQ &Z) &@sv2c = 'YELLOW'             /* shadow color 2           */
+ if (&@sv3c EQ &Z) &@sv3c = 'BLUE'               /* shadow color 3           */
+ if (&@sv4c EQ &Z) &@sv4c = 'GREEN'              /* shadow color 4           */
+ /* &pdashadv = '@sv1c @sv2c @sv3c @sv4c @sv1h @sv2h @sv3h @sv4h'            */
+ &pdadpth = lvline(pdaarea)
+ vget (zscrmaxd zscrmaxw)
+ &pdamaxw = &zscrmaxw
+ &pdamaxd = &zscrmaxd
+ &@sca = 'CSR'
+*REXX(*,@pdascri pdascrw pdahdr @pdacsra @pdacsrp pdadpth @pdavmap,
+  pdamaxd pdamaxw pdacsrp pdashadc pdashadv pdaselc,
+  @pdaarea pdapos pdamax pdafixn pdavars &pdavars pdaattr pdatrace)
+ upper pdatrace
+ ?trc=(pdatrace='A' | pdatrace='I')
+ if ?trc then,
+   say 'pdapnl_init pdascrw('pdascrw') pdamaxw('pdamaxw')'
+ parse value xrange('1A'x,'1D'x),                /* shadow vars              */
+   with pda@sv1 +1 pda@sv2 +1 pda@sv3 +1 pda@sv4,
+      0    @sv1 +1    @sv2 +1    @sv3 +1    @sv4
+ if pdaattr='' then pdaattr=,
+ "pda@all=xrange('01'x,'1D'x);",
+ "parse var pda@all with",
+   "=1 pda@nl  +1 pda@sf  +1 pda@se ",           /* old long style           */
+   "+1 pda@ib  +1 pda@ig  +1 pda@ip  +1 pda@ir",
+   "+1 pda@it  +1 pda@iw  +1 pda@iy",
+   "+1 pda@ui1 +1 pda@ui2 +1 pda@ui3 +1 pda@ui4",
+   "+1 pda@tb  +1 pda@tg  +1 pda@tp  +1 pda@tr",
+   "+1 pda@tt  +1 pda@tw  +1 pda@ty",
+   "+1 pda@ut1 +1 pda@ut2 +1 pda@ut3 +1 pda@ut4",
+   "+1 pda@sv1 +1 pda@sv2 +1 pda@sv3 +1 pda@sv4 +1 .",
+   "=1 @nl  +1 @sf  +1 @se ",                    /* new short style          */
+   "+1 @ib  +1 @ig  +1 @ip  +1 @ir",
+   "+1 @it  +1 @iw  +1 @iy",
+   "+1 @ui1 +1 @ui2 +1 @ui3 +1 @ui4",
+   "+1 @tb  +1 @tg  +1 @tp  +1 @tr",
+   "+1 @tt  +1 @tw  +1 @ty",
+   "+1 @ut1 +1 @ut2 +1 @ut3 +1 @ut4",
+   "+1 @sv1 +1 @sv2 +1 @sv3 +1 @sv4 +1 .;",
+   "pda@inp=xrange(pda@ir,pda@ui4);@inp=pda@inp;",
+   "pdamaxd="pdamaxd";pdamaxw="pdamaxw
+ interpret pdaattr
+ /* re-build area of it contains line breaks          */
+ if pos(@nl,pdaarea)>0 then do                   /* expand area              */
+   a=pdaarea
+   pdaarea=''
+   do while a<>''
+     parse var a l (pda@nl) +1 a
+     if length(l)>pdascrw & ?trc then,
+       say 'pdapnl_init long line' l
+     pdaarea=pdaarea || left(l,pdascrw)
+   end
+ end
+ if pos(@nl,pdashadv)>0 then do                  /* expand shadow            */
+   a=pdashadv
+   pdashadv=''
+   do while a<>''
+     parse var a l (pda@nl) +1 a
+     pdashadv=pdashadv || left(l,pdascrw)
+   end
+ end
+ if pdashadv<>'' then pdashadv=translate(pdashadv,'1A1B1C1D'x,pdashadc)
+ /* compute some values */
+ pdahdr=center(strip(pdahdr),pdascrw-2)
+ if pdafixn='' then pdafixn=0
+ aln=length(pdaarea)/pdascrw                     /* total num of lines       */
+ /* map variables and fill in data */
+ @pdavmap=''
+ if pdavars<>'' then do
+   vl=translate(pdavars)
+   parse value 1 1 with p vln
+   do forever
+     p=Verify(pdaarea,pda@inp,'m',p)             /* locate target field      */
+     if p=0 then leave
+     if vl='' then do
+       say '*pnlvars overflow'
+       leave
+     end
+     m=Verify(pdaarea,pda@all,'m',p+1)           /* area end pos             */
+     l=m-p-1                                     /* area length              */
+     parse var vl vn vl                          /* get name                 */
+     pdaarea=overlay(value(vn),pdaarea,p+1,l,' ') /* insert value            */
+     if substr(pdaarea,p,1)<pda@tb then,
+       @pdavmap=@pdavmap vn p+1 l                /* add to map               */
+     p=m
+   end
+ end
+ /* some final settings */
+ @pdaarea=pdaarea || pda@tb                      /* save for later compare   */
+ if pdaarea<>'' then do                          /* reposition in select fld */
+   if @pdacsrp='' then @pdacsrp=0
+   n=((@pdacsrp%pdascrw)*pdascrw)+1              /* cursor line no           */
+   if substr(pdaarea,n,1)=pda@sf | substr(pdaarea,n,1)=pda@se,
+     then @pdacsrp=n+1
+   if pdacsrp<>'' then @pdacsrp=pdacsrp          /* override cursor pos      */
+   if pdacsrp<>'' then @pdacsra='PDAAREA'        /* override cursor area     */
+   if @pdacsra='PDAAREA' then,
+     if @pdacsrp>length(pdaarea) then,           /* re-position cursor       */
+       @pdacsrp=lastpos(@sf,pdaarea)+1           /* if beyond last line      */
+ end
+*ENDREXX
+ if (&pdahelp NE &Z)
+   .help = &pdahelp
+ if (&@pdacsra EQ 'PDAAREA')
+   .csrpos = &@pdacsrp
+   .cursor = &@pdacsra
+ else
+   .cursor = ZCMD
+   .csrpos = 1
+)Reinit
+ Refresh(*)
+)Proc
+ &@pdacsrp = .csrpos
+ &@pdacsra = .cursor
+ &@presp   = .resp
+ &pdaresp  = .resp
+ &pdaplmsg = &Z
+ &pdacsrp  = &Z
+ &zedlmsg  = ''
+ vget (zverb zscrolla zscrolln) shared
+*REXX(* @pdacsrp @pdacsra @errpos @pdavmap pdadpth,@pdaarea,@selp,
+        @presp,zverb zscrolla zscrolln zedlmsg,
+        pdascrw pdafixn pdapos pdamax pdaverb,
+        pdavars &pdavars pdaattr pdaselc pdalcmdl pdatrace)
+ upper pdatrace
+ ?trc=(pdatrace='A' | pdatrace='P')
+ if ?trc then say 'pdapnl_proc cmd('zcmd') verb('zverb')',
+     'scrolla('zscrolla') scrolln('zscrolln')'
+ errmsg=''
+ interpret pdaattr
+ parse value '' with pdasell pdaselv
+ if pdapos='' then pdapos=1
+
+ /* reset lcmd errors    */
+ do while @errpos<>''
+   parse var @errpos p @errpos
+   pdaarea=overlay(pda@sf,pdaarea,p)
+ end
+
+ /* pull variable data from top section */
+ vm=@pdavmap
+ do while vm<>''
+   parse var vm vn vp vl vm
+   zz=value(vn,strip(substr(pdaarea,vp,vl),'t'))
+ end
+
+ /* pull line command(s) */
+ selc=pdaselc
+ if zverb='' &,                                            /* fix 2026-09-02 */
+    left(selc,1)='=' then parse var selc =2 pas . =2 selc /* point-and-shoot */
+ else pas=''
+ pdaverb=word(zverb 'ENTER',1)                             /* add 2026-09-28 */
+ pdalcmdl=''
+ p=(pdafixn*pdascrw)+1
+ selchrs=pda@sf || pda@se
+ if wordpos(@presp,'END RETURN')=0 & length(pdaarea)>0 then do forever
+   p=verify(pdaarea,selchrs,'m',p)+1
+   if p=1 then leave
+   l=verify(pdaarea,pda@all,'m',p)-p
+   if l<=0 then leave
+   if substr(pdaarea,p,l)=substr(@pdaarea,p,l) then iterate
+   s=translate(strip(substr(pdaarea,p,l)))
+   if s<>'' & selc<>'' then,
+     if wordpos(s,selc)=0 & wordpos('*',selc)=0 then do
+     @errpos=p-1
+     errmsg='Bad linecmd' s
+     pdaarea=overlay(pda@se,pdaarea,@errpos)
+     @pdacsrp=@errpos+1
+   end
+   pdalcmdl=pdalcmdl || pdapos+((p%pdascrw)-pdafixn)','s','
+ end
+ if pas<>'' & pdalcmdl='',                      /* point-and-shoot           */
+  & wordpos(zverb,'DOWN MAX')=0 then do
+   n=(@pdacsrp%pdascrw)                         /* panel line nr             */
+   if pos(pda@sf,substr(pdaarea,(n*pdascrw)+1,pdascrw))>0, /* selfld in line?*/
+     then pdalcmdl=n-pdafixn+pdapos','pas','
+ end
+
+ /* handle scrolling     */
+ if errmsg='' & zverb<>'' & wordpos(@presp,'END RETURN')=0 then do
+   @csrline=(@pdacsrp%PDASCRW)+1
+   if @pdacsra='PDAAREA' & @csrline<=pdafixn then, /* cursor in fixed part   */
+     parse value 'CSR' pdadpth with zscrolla zscrolln
+   if wordpos(zverb,'DOWN UP')>0 & pdamax='' then,
+     say '*** Variable PDAMAX, required for scrolling, is not set'
+   select
+     when zverb zscrolla='DOWN MAX' then pdapos=pdamax-pdadpth+pdafixn+1
+     when zverb zscrolla='UP MAX' then pdapos=1
+     when zverb zscrolla='DOWN CSR' then pdapos=pdapos+zscrolln-pdafixn
+     when zverb zscrolla='UP CSR' then pdapos=pdapos-zscrolln+pdafixn
+     when zverb='DOWN' & datatype(zscrolla)='NUM' then,
+       pdapos=pdapos+zscrolla
+     when zverb='UP' & datatype(zscrolla)='NUM' then,
+       pdapos=pdapos-zscrolla
+     when zverb='DOWN' then pdapos=pdapos+zscrolln
+     when zverb='UP'   then pdapos=pdapos-zscrolln-pdafixn
+     otherwise nop
+   end
+   if pdapos<1 then pdapos=1
+   if pdapos>pdamax then pdapos=pdamax
+ end
+ if pdapos<1 then pdapos=1
+ if pdapos>pdamax then pdapos=pdamax
+ if ?trc then say 'pdapnl_proc pos('pdapos')'
+
+ if errmsg<>'' then do
+   if ?trc then say 'pdapnl_proc error('errmsg')'
+   zrxrc=8
+   zedlmsg=errmsg
+   zrxmsg='ISRZ000'
+ end
+ else @errpos=''
+*ENDREXX
+)End

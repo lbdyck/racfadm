@@ -2,6 +2,18 @@
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
 
+  06 Oct 2026 - V41R2
+     - General resources (Option 4)
+       -- Updated RACFCLSR exec to add ACTIVATE and DEACTIVATE
+       line commands
+       -- Updated RACFCLSR and #RACCLSR panels
+     - System Options (Option S)
+       -- Added RACFSOPT exec to display SETROPTS information
+          (from Willy Jensen)
+       -- Added RACFSOPP dynamic panel (from Willy Jensen)
+       -- Added #RACFSOH tutorial panel (from Willy Jensen)
+     - Standards option renamed to STD
+
   11 Sep 2026 - V41R1
      - User Profiles (Option 1)
        -- Updated RACFUSR exec to leave PROTECTED and REVOKED in

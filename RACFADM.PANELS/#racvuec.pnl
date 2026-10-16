@@ -15,8 +15,8 @@
 !  USERS+to generate a list of userids with personal certificates (with count)
 !  RINGS+to display Keyrings and their Certificates
 +
-+  Any blank parameter will list~ALL+Digital Certificates along with an
-+  extensive analysis:
++  If no parameter options are selected, then!VUECERTS+will list all
++  Digital Certificates along with an extensive analysis:
 +
 %  o+Unexpired, trusted root certificates and their chains of trust
 %  o+Expired root certificates and their chains of trust

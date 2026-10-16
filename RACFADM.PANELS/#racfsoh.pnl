@@ -1,0 +1,38 @@
+)Attr
+ + type(text   ) color(green) caps(off)
+ " type(text   ) color(blue ) caps(off)
+ _ type(input  ) color(red  ) caps(on ) hilite(uscore)
+ | area(dynamic) extend(on) scroll(on)  /* required */
+ /* Standard output (text) */
+ 0F type(dataout) color(blue  ) caps(off)   /* PDA@TB  @TB   */
+ 10 type(dataout) color(green ) caps(off)   /* PDA@OG  @OG   */
+ 11 type(dataout) color(pink  ) caps(off)   /* PDA@OP  @OP   */
+ 12 type(dataout) color(red   ) caps(off)   /* PDA@OR  @OR   */
+ 13 type(dataout) color(turq  ) caps(off)   /* PDA@OT  @OT   */
+ 14 type(dataout) color(white ) caps(off)   /* PDA@OW  @OW   */
+ 15 type(dataout) color(yellow) caps(off)   /* PDA@OY  @OY   */
+)Body expand(\\) width(&hlpscrw)
+%&hlphdr
+%ISPF cmd ==>_zcmd \ \+ +Scrl_@sca+
++
++
+|@hlparea\ \|
+)Init
+ .cursor = &hlpcsrf            /* set cursor in field        */
+ .csrpos = &hlpcsrp            /* set cursor pos in field    */
+ &@sca = 'CSR'
+*REXX(*,hlparea,hlpscrw,@nl)
+ ha=hlparea
+ @hlparea=''
+ do while ha<>''
+   parse var ha f (@nl) ha
+   @hlparea=@hlparea || left(f,hlpscrw)
+ end
+*ENDREXX
+ &zprev = #RACFSOH             /* me                         */
+ &zup   = #RACFSOH             /* me                         */
+)Proc
+ &hlpcsrp = .csrpos            /* get cursor pos in field    */
+ &hlpcsrf = .cursor            /* get fieldname of cursor    */
+ &hlplvl  = lvline(@hlparea)
+)End
