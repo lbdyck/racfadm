@@ -21,9 +21,10 @@ To begin using execute the RACFADM member found in the EXEC library.
 
 Details and usage are found in the ISPF Dialog Tutorials accessed using the F1 key.
 
-The package consists of 4 datasets:
+The package consists of 5 datasets:
 
         RACFADM.EXEC      - REXX Execs that drive the dialog
+        RACFADM.LOADLIB   - Load Library
         RACFADM.MSGS      - ISPF Messages
         RACFADM.PANELS    - ISPF Panels
         RACFADM.SKELS     - ISPF Skeletons
