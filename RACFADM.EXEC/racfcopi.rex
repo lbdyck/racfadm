@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A2  261016  TRIDJK   Don't generate CONNECT if = Default Group    */
 /* @A1  260121  TRIDJK   Generate PERMITs after ADDUSERs              */
 /* @A0  251129  TRIDJK   Creation                                     */
 /*====================================================================*/
@@ -140,6 +141,8 @@ do i=1 to RACF.0 /* get the segment names */
     if racf.base.cspecial.i = 'TRUE' then cnat = cnat || 'SPECIAL '
     if racf.base.coper.i    = 'TRUE' then cnat = cnat || 'OPERATIONS '
     if racf.base.cauditor.i = 'TRUE' then cnat = cnat || 'AUDITOR '
+    if racf.base.cgroup.i = racf.base.dfltgrp.1 then          /* @A2 */
+      iterate                                                 /* @A2 */
     y = y + 1
     cmd.y = " CONNECT" user "GROUP("racf.base.cgroup.i") -"
     y = y + 1

@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A8  261016  TRIDJK   Don't generate CONNECT if = Default Group    */
 /* @A7  250304  TRIDJK   Allocate ISPF Profile if TSO segment exists  */
 /* @A6  250217  TRIDJK   Change OMVS HOME user to clone userid        */
 /* @A5  250213  TRIDJK   Support PHRASE operand                       */
@@ -164,6 +165,8 @@ do i=1 to RACF.0 /* get the segment names */
     if racf.base.cspecial.i = 'TRUE' then cnat = cnat || 'SPECIAL '
     if racf.base.coper.i    = 'TRUE' then cnat = cnat || 'OPERATIONS '
     if racf.base.cauditor.i = 'TRUE' then cnat = cnat || 'AUDITOR '
+    if racf.base.cgroup.i = racf.base.dfltgrp.1 then          /* @A8 */
+      iterate                                                 /* @A8 */
     y = y + 1
     cmd.y = " CONNECT" cluser "GROUP("racf.base.cgroup.i") -"
     y = y + 1

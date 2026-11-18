@@ -18,7 +18,7 @@
 +       RACDCERT is variable-byte (VB). When you specify the ADD
 +       function, RACDCERT dynamically allocates and opens the
 +       specified data set, and reads the certificate from it as
-+       binary data.
++       binary data.  TSO prefix will be added if not quoted.
 +
 +   %Owner+specifies that the new certificate is either a user
 +       certificate associated with the specified user ID, a site

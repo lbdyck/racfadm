@@ -15,10 +15,11 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/*      261007  LBD      Add user name to report and filter out dups  */
 /*      250331  JK       Creation                                     */
 /*--------------------------------------------------------------------*/
   arg userid
-  parse value '' with null
+  parse value '' with null addrs
   if userid = null then
   userid = '**'
   x = outtrap("search.")
@@ -46,10 +47,13 @@ xutil:
     say 'IRRXUTIL return code:'rxrc
     exit
     end
-  if racf.tso.proc.1 <> "" then do
-/*if pos('@',racf.base.data.1) > 0 then do*/
+  if pos('@',racf.base.data.1) > 0 then do
+    email = strip(racf.base.data.1)
+    if wordpos(email,addrs) > 0 then return
+       addrs = addrs email
     c = report.0 + 1
-    report.c = left(userid,8) strip(racf.base.data.1)
+    report.c = left(userid,8) left(email,43) ,
+       strip(racf.base.name.1)
     report.0 = c
     end
   return

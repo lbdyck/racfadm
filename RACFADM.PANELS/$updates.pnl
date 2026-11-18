@@ -2,10 +2,19 @@
 *                          RACFADM - Updates                           *
 *----------------------------------------------------------------------*
 
+  17 Nov 2026 - V41R3
+     - User Profiles (Option 1)
+       -- Updated RACFCOPI and RACFCOPU clone execs to bypass creation
+          of a CONNECT command if the connect group name is the same
+          as the default group name
+     - Certs (Option CA.1)
+       -- Updated RACGCERT exec to correctly process CERNUM as a
+          subscript
+
   06 Oct 2026 - V41R2
      - General resources (Option 4)
        -- Updated RACFCLSR exec to add ACTIVATE and DEACTIVATE
-       line commands
+          line commands
        -- Updated RACFCLSR and #RACCLSR panels
      - System Options (Option S)
        -- Added RACFSOPT exec to display SETROPTS information

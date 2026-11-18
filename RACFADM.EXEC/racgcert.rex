@@ -3,6 +3,7 @@
 /*--------------------------------------------------------------------*/
 /* FLG  YYMMDD  USERID   DESCRIPTION                                  */
 /* ---  ------  -------  -------------------------------------------- */
+/* @A5  261117  TRIDJK   Only strip leading zeros on CERNUM           */
 /* @A4  260610  TRIDJK   Added Q (Genreq) line command                */
 /* @A3  260609  TRIDJK   Added ADDCERT and GENCERT primary commands   */
 /* @A2  260518  TRIDJK   Added CERTDETL function                      */
@@ -130,7 +131,7 @@ GET_CERT_LABELS:
     cnt = cnt + 1
 
   Do I = 1 To C_LABEL.0
-    CERNUM   = Right(i,4,'0')
+    CERNUM   = Right(i,6,'0')
     LABEL    = C_LABEL.i
     CERTUSER = C_CERTUSER.i
     NOTAFT   = Left(C_NOTAFTER.i,10)
@@ -618,7 +619,7 @@ RETURN
 GCCERTS:
 gcert. = ''
 y = 0
-indx = strip(cernum,,'0')
+indx = strip(cernum,'L','0')
 Call CertsCosmetic indx
 gcert.0 = y
 Call ViewCerts

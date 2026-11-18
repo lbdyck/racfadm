@@ -80,6 +80,7 @@
  RACFUSRT  User           Add, delete and change TSO userid
  RACFUSRX  User           Userid cross reference report (line cmd X)
  RACFUSRY  User           Userid dsn/rsrc access report (line cmd Y)
+ RACFVIEW  Miscellaneous  Invoke ISPF View on DSNAME
  RACFVUE   Certs          Display *ALL* Digital Certificates (primary cmd VUE)
  RACGCERT  Certs          Display Digital Certificates, menu opt CA.1
  RACRINGS  Certs          Display Digital Rings
