@@ -1,88 +1,88 @@
-## Using sftp from pc to z/OS                                           00010000
-                                                                        00020000
-### Using sftp on PC                                                    00030000
-                                                                        00040000
-Using Port 2022 and then your userid followed by the cbt IP address. In 00050000
-this example I'm using a hostname I've defined in my PC's hostname file 00060000
-so I don't have to remember the IP address.                             00070000
-                                                                        00080000
-Then using the `ls /+` syntax define the DCB and dsorg.                 00090000
-                                                                        00100000
-Next change the remote location to my TSO hlq and `put` the file.       00110000
-                                                                        00120000
-*Note* by default `sftp` does a binary transfer, use `ls /+ mode=text`  00130000
-to do a text transfer.                                                  00140000
-                                                                        00150000
-                                                                        00160000
-```                                                                     00170000
-d:\temp>sftp -P 2022 lbdyck1@cbt                                        00180000
-lbdyck1@cbt's password:                                                 00190000
-Connected to cbt.                                                       00200000
-sftp> ls /+ recfm=-fb,lrecl=80,blksize=0,dsorg=ps                       00210000
-/+/blksize=0     /+/dsorg=ps      /+/error.log     /+/gdgnt             00220000
-/+/ispfenq       /+/ispfstats     /+/loglevel=I                         00230000
-/+/lrecl=80      /+/mode=binary                                         00240000
-sftp> cd //lbdyck1                                                      00250000
-sftp> put VUELOAD.xmi*                                                  00260000
-Uploading VUELOAD.xmit to //LBDYCK1/VUELOAD.xmit                        00270000
-VUELOAD.xmit                               00%  709KB   1.1MB/s   00:00 00280000
-sftp> quit                                                              00290000
-```                                                                     00300000
-                                                                        00310000
-### Confirm on TSO using ISPF 3.2:                                      00320000
-```                                                                     00330000
-DSLIST - Data Sets Matching LBDYCK1.V*                       Row 1 of 1 00340000
-Command ===>                                           Scroll ===> CSR  00350000
-                                                                        00360000
-Command - Enter "/" to select action            Message         Volume  00370000
- Tracks  %     XT Device  Dsorg Recfm Lrecl Blksz  Created Referred     00380000
-          Catalog                                                       00390000
------------------------------------------------------------------------ 00400000
-    LBDYCK1.VUELOAD.XMIT                                        CBTU04  00410000
-     14 100     5 3390     PS   FB       80 27920 2025/12/12 2025/12/12 00420000
-     UCAT.CBT.TSOD                                                      00430000
-                                                                        00440000
-************************ End of Data Set list ************************* 00450000
-                                                                        00460002
-                              Data Set Information                      00470000
- Command ===>                                                           00480000
-                                                            More:     + 00490000
- Data Set Name . . . . : LBDYCK1.VUELOAD.XMIT                           00500000
-                                                                        00510000
- General Data                          Current Allocation               00520000
-  Management class . . : **None**       Allocated blocks  . : 28        00530000
-  Storage class  . . . : **None**       Allocated extents . : 5         00540000
-   Volume serial . . . : CBTU04                                         00550000
-   Device type . . . . : 3390                                           00560000
-  Data class . . . . . : **None**                                       00570000
-   Organization  . . . : PS            Current Utilization              00580000
-   Record format . . . : FB             Used blocks . . . . : 27        00590000
-   Record length . . . : 80             Used extents  . . . : 5         00600000
-   Block size  . . . . : 27920                                          00610000
-   1st extent blocks . : 2                                              00620000
-   Secondary blocks  . : 24            Dates                            00630000
-   Data set name type  :                Creation date . . : 2025/12/12  00640000
-   Data set encryption : NO             Referenced date . : 2025/12/12  00650000
-                                        Expiration date . : ***None***  00660000
-```                                                                     00670000
-### Do the TSD RECEIVE:                                                 00680000
-                                                                        00690000
-```                                                                     00700000
-INMR901I Dataset TCC021.CMC.LOADPDSE from TCC021 on N1                  00710000
-INMR902I Members: VUECERTS                                              00720000
-INMR154I The incoming data set is a 'PROGRAM LIBRARY'.                  00730000
-INMR906A Enter restore parameters or 'DELETE' or 'END' +                00740000
-                                                                        00750000
- IEBCOPY MESSAGES AND CONTROL STATEMENTS                      PAGE     100760000
- IEB1135I IEBCOPY  FMID HDZ3310  SERVICE LEVEL UJ96518  DATED 20250108  00770000
- DFSMS 03.01.00 z/OS    03.01.00 HBB77E0  CPU 3932                      00780000
- IEB1035I LBDYCK   TSOPROC  TSOPROC  07:37:24 FRI 12 DEC 2025 PARM=''   00790000
-  COPY INDD=((SYS00124,R)),OUTDD=SYS00123                               00800000
- IEB1013I COPYING FROM PDSU  INDD=SYS00124 VOL=WORK0B                   00810000
- DSN=SYS25346.T073724.RA000.LBDYCK1.R0104983                            00820000
- IEB1014I  TO PDSE OUTDD=SYS00123 VOL=CBTU02 DSN=LBDYCK1.CMC.LOADPDSE   00830001
- IGW01551I MEMBER VUECERTS HAS BEEN LOADED                              00840000
- IGW01550I 1 OF 1  MEMBERS WERE LOADED                                  00850000
- IEB147I END OF JOB - 0 WAS HIGHEST SEVERITY CODE                       00860000
- INMR001I Restore successful to dataset 'LBDYCK1.CMC.LOADPDSE'          00870000
- ```                                                                    00880000
+## Using sftp from pc to z/OS
+
+### Using sftp on PC
+
+Using Port 2022 and then your userid followed by the cbt IP address. In
+this example I'm using a hostname I've defined in my PC's hostname file
+so I don't have to remember the IP address.
+
+Then using the `ls /+` syntax define the DCB and dsorg.
+
+Next change the remote location to my TSO hlq and `put` the file.
+
+*Note* by default `sftp` does a binary transfer, use `ls /+ mode=text`
+to do a text transfer.
+
+
+```
+d:\temp>sftp -P 2022 lbdyck1@cbt
+lbdyck1@cbt's password:
+Connected to cbt.
+sftp> ls /+ recfm=-fb,lrecl=80,blksize=0,dsorg=ps
+/+/blksize=0     /+/dsorg=ps      /+/error.log     /+/gdgnt
+/+/ispfenq       /+/ispfstats     /+/loglevel=I
+/+/lrecl=80      /+/mode=binary
+sftp> cd //lbdyck1
+sftp> put VUELOAD.xmi*
+Uploading VUELOAD.xmit to //LBDYCK1/VUELOAD.xmit
+VUELOAD.xmit                               00%  709KB   1.1MB/s   00:00
+sftp> quit
+```
+
+### Confirm on TSO using ISPF 3.2:
+```
+DSLIST - Data Sets Matching LBDYCK1.V*                       Row 1 of 1
+Command ===>                                           Scroll ===> CSR
+
+Command - Enter "/" to select action            Message         Volume
+ Tracks  %     XT Device  Dsorg Recfm Lrecl Blksz  Created Referred
+          Catalog
+-----------------------------------------------------------------------
+    LBDYCK1.VUELOAD.XMIT                                        CBTU04
+     14 100     5 3390     PS   FB       80 27920 2025/12/12 2025/12/12
+     UCAT.CBT.TSOD
+
+************************ End of Data Set list *************************
+
+                              Data Set Information
+ Command ===>
+                                                            More:     +
+ Data Set Name . . . . : LBDYCK1.VUELOAD.XMIT
+
+ General Data                          Current Allocation
+  Management class . . : **None**       Allocated blocks  . : 28
+  Storage class  . . . : **None**       Allocated extents . : 5
+   Volume serial . . . : CBTU04
+   Device type . . . . : 3390
+  Data class . . . . . : **None**
+   Organization  . . . : PS            Current Utilization
+   Record format . . . : FB             Used blocks . . . . : 27
+   Record length . . . : 80             Used extents  . . . : 5
+   Block size  . . . . : 27920
+   1st extent blocks . : 2
+   Secondary blocks  . : 24            Dates
+   Data set name type  :                Creation date . . : 2025/12/12
+   Data set encryption : NO             Referenced date . : 2025/12/12
+                                        Expiration date . : ***None***
+```
+### Do the TSD RECEIVE:
+
+```
+INMR901I Dataset TCC021.CMC.LOADPDSE from TCC021 on N1
+INMR902I Members: VUECERTS
+INMR154I The incoming data set is a 'PROGRAM LIBRARY'.
+INMR906A Enter restore parameters or 'DELETE' or 'END' +
+
+ IEBCOPY MESSAGES AND CONTROL STATEMENTS                      PAGE     1
+ IEB1135I IEBCOPY  FMID HDZ3310  SERVICE LEVEL UJ96518  DATED 20250108
+ DFSMS 03.01.00 z/OS    03.01.00 HBB77E0  CPU 3932
+ IEB1035I LBDYCK   TSOPROC  TSOPROC  07:37:24 FRI 12 DEC 2025 PARM=''
+  COPY INDD=((SYS00124,R)),OUTDD=SYS00123
+ IEB1013I COPYING FROM PDSU  INDD=SYS00124 VOL=WORK0B
+ DSN=SYS25346.T073724.RA000.LBDYCK1.R0104983
+ IEB1014I  TO PDSE OUTDD=SYS00123 VOL=CBTU02 DSN=LBDYCK1.CMC.LOADPDSE
+ IGW01551I MEMBER VUECERTS HAS BEEN LOADED
+ IGW01550I 1 OF 1  MEMBERS WERE LOADED
+ IEB147I END OF JOB - 0 WAS HIGHEST SEVERITY CODE
+ INMR001I Restore successful to dataset 'LBDYCK1.CMC.LOADPDSE'
+ ```
